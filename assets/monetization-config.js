@@ -9,78 +9,78 @@ window.CRAFTLEAF_MONETIZATION = {
     "portalUrl": "https://963239327.github.io/craftleaf-studio/"
   },
   "tips": {
-    "kofiUrl": "https://ko-fi.com/",
-    "buyMeACoffeeUrl": "https://buymeacoffee.com/",
-    "stripeTipUrl": "https://963239327.github.io/craftleaf-studio/#support",
-    "afdianUrl": "https://afdian.com/"
+    "kofiUrl": "https://stardustdemo.gumroad.com/",
+    "buyMeACoffeeUrl": "https://stardustdemo.gumroad.com/",
+    "stripeTipUrl": "https://stardustdemo.gumroad.com/l/craftleaf-all-access",
+    "afdianUrl": "https://stardustdemo.gumroad.com/"
   },
   "products": {
     "allAccessPass": {
       "keyPrefix": "STUDIOALL",
       "priceUsd": "$19",
       "priceCny": "¥69",
-      "gumroadPermalink": "",
-      "checkoutUrlEn": "https://963239327.github.io/craftleaf-studio/#all-access",
-      "checkoutUrlZh": "https://963239327.github.io/craftleaf-studio/#all-access"
+      "gumroadPermalink": "craftleaf-all-access",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/craftleaf-all-access",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/craftleaf-all-access"
     },
     "idPhotoPro": {
       "keyPrefix": "IDPRO",
       "priceUsd": "$3.99",
       "priceCny": "¥12.9",
-      "gumroadPermalink": "",
-      "checkoutUrlEn": "https://963239327.github.io/craftleaf-studio/tools/id-photo/#unlock-pro",
-      "checkoutUrlZh": "https://963239327.github.io/craftleaf-studio/tools/id-photo/#unlock-pro"
+      "gumroadPermalink": "idphoto-pro",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/idphoto-pro",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/idphoto-pro"
     },
     "invoicePro": {
       "keyPrefix": "INVPRO",
       "priceUsd": "$9.00",
       "priceCny": "¥29.9",
-      "gumroadPermalink": "",
-      "checkoutUrlEn": "https://963239327.github.io/craftleaf-studio/tools/invoice/#unlock-pro",
-      "checkoutUrlZh": "https://963239327.github.io/craftleaf-studio/tools/invoice/#unlock-pro"
+      "gumroadPermalink": "invoice-studio-pro",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/invoice-studio-pro",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/invoice-studio-pro"
     },
     "cardsheetPro": {
       "keyPrefix": "CARDPRO",
       "priceUsd": "$9.00",
       "priceCny": "¥29.9",
-      "gumroadPermalink": "",
-      "checkoutUrlEn": "https://963239327.github.io/craftleaf-studio/cardsheet/#unlock-pro",
-      "checkoutUrlZh": "https://963239327.github.io/craftleaf-studio/cardsheet/#unlock-pro"
+      "gumroadPermalink": "cardsheet-pro",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/cardsheet-pro",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/cardsheet-pro"
     },
     "cleanPrintPro": {
       "keyPrefix": "CLEANPRO",
       "priceUsd": "$5.99",
       "priceCny": "¥19.9",
-      "gumroadPermalink": "",
-      "checkoutUrlEn": "https://963239327.github.io/craftleaf-studio/extensions/cleanprint/#pro",
-      "checkoutUrlZh": "https://963239327.github.io/craftleaf-studio/extensions/cleanprint/#pro"
+      "gumroadPermalink": "cleanprint-pro",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/cleanprint-pro",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/cleanprint-pro"
     },
     "pasteShieldPro": {
       "keyPrefix": "SHIELDPRO",
       "priceUsd": "$9.00",
       "priceCny": "¥29.9",
-      "gumroadPermalink": "",
-      "checkoutUrlEn": "https://963239327.github.io/craftleaf-studio/extensions/pasteshield/#pro",
-      "checkoutUrlZh": "https://963239327.github.io/craftleaf-studio/extensions/pasteshield/#pro"
+      "gumroadPermalink": "pasteshield-pro",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/pasteshield-pro",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/pasteshield-pro"
     },
     "pnpTrilogyBundle": {
       "priceUsd": "$7.99",
       "singlePriceUsd": "$3.99",
       "priceCny": "¥19.9",
-      "itchUrl": "https://itch.io/",
-      "gumroadUrl": "https://963239327.github.io/craftleaf-studio/#games",
-      "mianbaoduoUrl": "https://mbd.pub/"
+      "itchUrl": "https://stardustdemo.itch.io/star-chef-showdown",
+      "gumroadUrl": "https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy",
+      "mianbaoduoUrl": "https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy"
     },
     "freelancerOsKit": {
       "priceUsd": "$9.99",
-      "freeLiteUrl": "https://963239327.github.io/craftleaf-studio/templates/#free-lite",
-      "fullPackUrlEn": "https://963239327.github.io/craftleaf-studio/templates/#pro-pack",
-      "fullPackUrlZh": "https://mbd.pub/"
+      "freeLiteUrl": "https://stardustdemo.gumroad.com/l/solofounder-starter-kit",
+      "fullPackUrlEn": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro",
+      "fullPackUrlZh": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro"
     },
     "tabletopCreatorKit": {
       "priceUsd": "$12.99",
-      "itchUrl": "https://963239327.github.io/craftleaf-studio/#creator-kit",
-      "gumroadUrl": "https://963239327.github.io/craftleaf-studio/#creator-kit"
+      "itchUrl": "https://stardustdemo.itch.io/tabletop-pnp-creator-kit",
+      "gumroadUrl": "https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit"
     }
   },
   "affiliates": {

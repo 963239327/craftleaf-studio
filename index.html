@@ -434,10 +434,10 @@
       }
       if (prods.pnpTrilogyBundle) {
         Array.prototype.forEach.call(document.querySelectorAll('.pnp-bundle-link'), function (a) {
-          a.href = prods.pnpTrilogyBundle.itchUrl || prods.pnpTrilogyBundle.gumroadUrl || '#games';
+          a.href = prods.pnpTrilogyBundle.gumroadUrl || prods.pnpTrilogyBundle.itchUrl || '#games';
         });
         Array.prototype.forEach.call(document.querySelectorAll('.pnp-bundle-link-zh'), function (a) {
-          a.href = prods.pnpTrilogyBundle.mianbaoduoUrl || prods.pnpTrilogyBundle.gumroadUrl || '#games';
+          a.href = prods.pnpTrilogyBundle.gumroadUrl || prods.pnpTrilogyBundle.mianbaoduoUrl || '#games';
         });
       }
       if (tips.kofiUrl) {
