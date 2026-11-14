@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PasteShield — Reversible AI Prompt &amp; Clipboard Secret Sanitizer for VS Code &amp; Cursor</title>
+  <meta name="description" content="100% offline reversible secret sanitizer for VS Code &amp; Cursor. Redact API keys, JWTs, DB URIs, Azure/AWS credentials &amp; internal IPs into <OPENAI_KEY_1> placeholders before prompting ChatGPT or Claude, and restore AI code replies in 1 click.">
+  <link rel="icon" type="image/png" href="./icon.png">
+  <style>
+    :root {
+      --bg: #070c16;
+      --bg-elev: #0d1526;
+      --bg-card: #111b30;
+      --bg-code: #060a12;
+      --border: #1e2d47;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --emerald: #10b981;
+      --emerald-light: #6ee7b7;
+      --cyan: #06b6d4;
+      --cyan-light: #67e8f9;
+      --amber: #f59e0b;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #10223f 0%, var(--bg) 52%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--cyan-light); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 12, 22, 0.84);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 66px;
+      gap: 14px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 14px;
+    }
+    .nav-links a { color: #cbd5e1; font-weight: 500; }
+    .nav-links a:hover { color: #ffffff; text-decoration: none; }
+    .lang-btn {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .lang-btn:hover { border-color: var(--emerald); }
+
+    /* Hero */
+    .hero {
+      padding: 64px 0 42px;
+      text-align: center;
+    }
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.13);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--emerald-light);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(30px, 4.6vw, 50px);
+      font-weight: 850;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      max-width: 920px;
+      margin: 0 auto 18px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(90deg, #34d399, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p.lead {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      font-size: 17.5px;
+      color: var(--muted);
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14.5px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, opacity 0.12s ease;
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-1px); text-decoration: none; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--emerald), var(--cyan));
+      color: #04131a;
+      box-shadow: 0 10px 28px rgba(16, 185, 129, 0.28);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--cyan); }
+    .btn-amber {
+      background: linear-gradient(135deg, #fbbf24, #34d399);
+      color: #071318;
+    }
+    .quick-cmd {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 9px;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+    .copy-mini {
+      background: #1e293b;
+      color: var(--emerald-light);
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Interactive Playground */
+    .section {
+      padding: 40px 0;
+    }
+    .section-hdr {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+    .section-hdr h2 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .section-hdr p {
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0 auto;
+      font-size: 15.5px;
+    }
+    .playground-shell {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+    .preset-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .preset-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip-btn {
+      background: var(--bg-card);
+      color: #e2e8f0;
+      border: 1px solid var(--border);
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .chip-btn:hover, .chip-btn.active {
+      border-color: var(--emerald);
+      color: var(--emerald-light);
+      background: rgba(16, 185, 129, 0.12);
+    }
+    .vault-counter {
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--emerald-light);
+    }
+    .pg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+    }
+    .pg-col {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pg-col-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .pg-col-hdr h3 {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .step-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 5px;
+      text-transform: uppercase;
+    }
+    .sb-1 { background: rgba(239, 68, 68, 0.18); color: #fca5a5; }
+    .sb-2 { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; }
+    .sb-3 { background: rgba(6, 182, 212, 0.18); color: #67e8f9; }
+    textarea.code-area {
+      width: 100%;
+      min-height: 235px;
+      background: var(--bg-code);
+      color: #e2e8f0;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12.2px;
+      line-height: 1.55;
+      resize: vertical;
+    }
+    textarea.code-area:focus {
+      outline: none;
+      border-color: var(--emerald);
+    }
+    .pg-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .sm-btn {
+      padding: 7px 13px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #172540;
+      color: #f1f5f9;
+    }
+    .sm-btn.primary {
+      background: var(--emerald);
+      color: #041511;
+      border-color: transparent;
+    }
+    .sm-btn.cyan {
+      background: var(--cyan);
+      color: #04141c;
+      border-color: transparent;
+    }
+
+    /* Custom Pro Rule Bar inside Playground */
+    .custom-rule-bar {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 5px;
+    }
+    .field input {
+      width: 100%;
+      padding: 8px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-code);
+      color: var(--text);
+      font-family: "SF Mono", Menlo, monospace;
+      font-size: 12.5px;
+    }
+
+    /* Vault Table */
+    .vault-drawer {
+      margin-top: 16px;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .vault-drawer h4 {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 10px;
+    }
+    table.vault-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+    .vault-tbl th, .vault-tbl td {
+      text-align: left;
+      padding: 7px 10px;
+      border-bottom: 1px solid #162238;
+    }
+    .vault-tbl th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .tok-pill {
+      font-family: "SF Mono", Menlo, monospace;
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--emerald-light);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+
+    /* Screenshots */
+    .shots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    .shot-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .shot-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .shot-card .cap {
+      padding: 14px 16px;
+      font-size: 13.5px;
+      color: #cbd5e1;
+    }
+
+    /* Install & Shortcuts */
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .info-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .info-card h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+    .info-card ol, .info-card ul {
+      padding-left: 20px;
+      color: #cbd5e1;
+      font-size: 14.5px;
+    }
+    .info-card li { margin-bottom: 8px; }
+    .info-card code {
+      font-family: "SF Mono", Menlo, monospace;
+      background: var(--bg-code);
+      padding: 2px 6px;
+      border-radius: 5px;
+      color: var(--cyan-light);
+      font-size: 12.5px;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 22px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .price-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .price-card.featured {
+      border: 2px solid var(--emerald);
+      background: linear-gradient(180deg, #0f2138 0%, #0d1526 100%);
+      box-shadow: 0 20px 50px rgba(16, 185, 129, 0.18);
+    }
+    .price-tag {
+      font-size: 36px;
+      font-weight: 850;
+      margin: 10px 0 4px;
+    }
+    .price-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .feat-list {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 22px;
+      font-size: 14px;
+      color: #dbeafe;
+    }
+    .feat-list li {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(30, 45, 71, 0.6);
+    }
+    .unlock-box {
+      max-width: 680px;
+      margin: 26px auto 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .unlock-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .unlock-row input {
+      flex: 1;
+      min-width: 240px;
+      padding: 10px 14px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--bg-code);
+      color: var(--text);
+      font-family: "SF Mono", Menlo, monospace;
+      font-size: 13.5px;
+    }
+    .status-msg {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding: 28px 0 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    [data-lang="zh"] { display: none; }
+    body.lang-zh [data-lang="en"] { display: none !important; }
+    body.lang-zh [data-lang="zh"] { display: inline !important; }
+    div[data-lang="zh"], p[data-lang="zh"], section[data-lang="zh"], ul[data-lang="zh"], ol[data-lang="zh"] { display: none; }
+    body.lang-zh div[data-lang="zh"],
+    body.lang-zh p[data-lang="zh"],
+    body.lang-zh section[data-lang="zh"],
+    body.lang-zh ul[data-lang="zh"],
+    body.lang-zh ol[data-lang="zh"] { display: block !important; }
+    body.lang-zh div[data-lang="en"],
+    body.lang-zh p[data-lang="en"],
+    body.lang-zh section[data-lang="en"],
+    body.lang-zh ul[data-lang="en"],
+    body.lang-zh ol[data-lang="en"] { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="../../index.html">
+        <img src="./icon.png" alt="PasteShield icon">
+        <span>PasteShield</span>
+      </a>
+      <div class="nav-links">
+        <a href="#playground"><span data-lang="en">Live Playground</span><span data-lang="zh">在线实时沙盒</span></a>
+        <a href="#install"><span data-lang="en">VS Code &amp; Cursor</span><span data-lang="zh">安装指南</span></a>
+        <a href="#pro"><span data-lang="en">Pro Unlock ($9)</span><span data-lang="zh">Pro 终身版</span></a>
+        <button class="lang-btn" id="langToggleBtn" type="button">中文 / EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero container">
+    <div class="trust-pill">
+      <span data-lang="en">🛡️ 100% Local RAM Vault · Zero Cloud · Zero Dependencies · VS Code &amp; Cursor</span>
+      <span data-lang="zh">🛡️ 100% 纯本地内存保险箱 · 零联网 · 零第三方依赖 · 支持 VS Code 与 Cursor</span>
+    </div>
+
+    <h1>
+      <span data-lang="en">Never Leak Secrets to AI Again — <span class="grad">Sanitize &amp; Restore in 1 Click.</span></span>
+      <span data-lang="zh">告别向大模型误粘真实密钥 —— <span class="grad">一键脱敏提问，一键无损还原代码。</span></span>
+    </h1>
+
+    <p class="lead" data-lang="en">
+      PasteShield turns API keys, JWTs, database URIs, Azure/AWS credentials, PEM blocks, and internal IPs into deterministic semantic placeholders (<code>&lt;OPENAI_KEY_1&gt;</code>, <code>&lt;DB_URI_1&gt;</code>) — then restores your real values locally when you copy ChatGPT, Claude, or Cursor replies back.
+    </p>
+    <p class="lead" data-lang="zh">
+      不同于破坏上下文的 <code>***</code> 暴力打码，PasteShield 在本地内存中将 API Key、JWT、数据库连接串、云密钥与内网 IP 映射为语义化序号占位符（如 <code>&lt;OPENAI_KEY_1&gt;</code>），让 AI 依然能推理配置关联；复制 AI 回复代码后 1 秒无损还原真实值！
+    </p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#playground">
+        <span data-lang="en">⚡ Try Live Browser Playground</span>
+        <span data-lang="zh">⚡ 立即体验浏览器实时脱敏与还原</span>
+      </a>
+      <a class="btn btn-secondary" href="#install">
+        <span data-lang="en">Install in VS Code / Cursor (Free)</span>
+        <span data-lang="zh">免费安装到 VS Code / Cursor</span>
+      </a>
+      <a class="btn btn-amber" id="heroProBtn" href="#pro">
+        <span data-lang="en">Unlock Pro Pack ($9 One-Time)</span>
+        <span data-lang="zh">解锁 Pro 企业增强版 ($9 / ¥29.9 买断)</span>
+      </a>
+    </div>
+
+    <div class="quick-cmd">
+      <span>ext install craftleaf-studio.pasteshield-ai-secret-sanitizer</span>
+      <button class="copy-mini" id="copyExtCmdBtn" type="button">Copy</button>
+    </div>
+  </header>
+
+  <!-- LIVE IN-BROWSER PLAYGROUND -->
+  <section class="section container" id="playground">
+    <div class="section-hdr">
+      <h2>
+        <span data-lang="en">Interactive PasteShield Playground (Runs 100% in Your Browser)</span>
+        <span data-lang="zh">PasteShield 实时双向脱敏演练场（纯浏览器本地执行，断网可用）</span>
+      </h2>
+      <p data-lang="en">Paste any <code>.env</code>, stack trace, or config below — test deterministic redaction AND 1-click AI code reply restoration right here.</p>
+      <p data-lang="zh">在下方粘贴任意 <code>.env</code> 配置或报错日志，亲测「语义占位符脱敏 → 模拟 AI 回复代码 → 一键本地还原真实密钥」完整闭环。</p>
+    </div>
+
+    <div class="playground-shell">
+      <div class="preset-bar">
+        <div class="preset-btns">
+          <button class="chip-btn active" type="button" data-preset="dotenv">
+            <span data-lang="en">Preset 1: Production .env + Cloud Keys</span>
+            <span data-lang="zh">示例 1：生产 .env 与多云密钥</span>
+          </button>
+          <button class="chip-btn" type="button" data-preset="logs">
+            <span data-lang="en">Preset 2: Crash Log + JWT + SSH Key</span>
+            <span data-lang="zh">示例 2：崩溃日志 + JWT + 私钥块</span>
+          </button>
+          <button class="chip-btn" type="button" data-preset="corp">
+            <span data-lang="en">Preset 3: Pro Company Domain &amp; Ticket</span>
+            <span data-lang="zh">示例 3：Pro 企业内网域名与工单号</span>
+          </button>
+        </div>
+        <div class="vault-counter" id="vaultBadge">🛡️ Vault: 0 secrets in RAM</div>
+      </div>
+
+      <div class="pg-grid">
+        <!-- Pane 1: Raw Input -->
+        <div class="pg-col">
+          <div class="pg-col-hdr">
+            <h3>
+              <span data-lang="en">1. Raw Snippet / .env / Log</span>
+              <span data-lang="zh">1. 原始代码 / .env / 日志</span>
+            </h3>
+            <span class="step-badge sb-1">LOCAL ONLY</span>
+          </div>
+          <textarea class="code-area" id="rawInputArea" spellcheck="false"></textarea>
+          <div class="pg-actions">
+            <button class="sm-btn primary" id="runSanitizeBtn" type="button">
+              <span data-lang="en">🛡️ Sanitize for AI →</span>
+              <span data-lang="zh">🛡️ 一键安全脱敏 →</span>
+            </button>
+            <button class="sm-btn" id="clearVaultBtn" type="button">
+              <span data-lang="en">Reset Session Vault</span>
+              <span data-lang="zh">清空内存保险箱</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pane 2: Sanitized Output -->
+        <div class="pg-col">
+          <div class="pg-col-hdr">
+            <h3>
+              <span data-lang="en">2. Safe Prompt for ChatGPT / Claude</span>
+              <span data-lang="zh">2. 可安全发给 AI 的脱敏提示词</span>
+            </h3>
+            <span class="step-badge sb-2">0 SECRETS</span>
+          </div>
+          <textarea class="code-area" id="sanitizedOutputArea" spellcheck="false" readonly></textarea>
+          <div class="pg-actions">
+            <button class="sm-btn primary" id="copySanitizedBtn" type="button">
+              <span data-lang="en">📋 Copy Sanitized Prompt</span>
+              <span data-lang="zh">📋 复制脱敏后文本</span>
+            </button>
+            <button class="sm-btn" id="generateAiMockBtn" type="button">
+              <span data-lang="en">🤖 Simulate AI Code Reply →</span>
+              <span data-lang="zh">🤖 模拟 AI 代码回复 →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pane 3: AI Reply & Restore -->
+        <div class="pg-col">
+          <div class="pg-col-hdr">
+            <h3>
+              <span data-lang="en">3. AI Reply → 1-Click Local Restore</span>
+              <span data-lang="zh">3. AI 代码回复 → 一键本地还原</span>
+            </h3>
+            <span class="step-badge sb-3">REVERSIBLE</span>
+          </div>
+          <textarea class="code-area" id="restoreTestArea" spellcheck="false"></textarea>
+          <div class="pg-actions">
+            <button class="sm-btn cyan" id="runRestoreBtn" type="button">
+              <span data-lang="en">⚡ Restore Original Secrets</span>
+              <span data-lang="zh">⚡ 一键还原真实密钥</span>
+            </button>
+            <button class="sm-btn" id="copyRestoredBtn" type="button">
+              <span data-lang="en">📋 Copy Restored Code</span>
+              <span data-lang="zh">📋 复制还原后代码</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro Custom Rules Controls -->
+      <div class="custom-rule-bar">
+        <div class="field">
+          <label>
+            <span data-lang="en">[Pro] Internal Company Domains (comma-separated)</span>
+            <span data-lang="zh">[Pro] 企业内网域名后缀（逗号分隔）</span>
+          </label>
+          <input type="text" id="companyDomainsInput" value="corp.acme.internal, k8s.finops.local">
+        </div>
+        <div class="field">
+          <label>
+            <span data-lang="en">[Pro] Custom Regex Rule (NAME::pattern)</span>
+            <span data-lang="zh">[Pro] 自定义脱敏正则（占位符名::正则）</span>
+          </label>
+          <input type="text" id="customPatternInput" value="JIRA_TICKET::\bFINOPS-\d{4,6}\b">
+        </div>
+        <div>
+          <button class="sm-btn" id="applyCustomRulesBtn" type="button" style="width:100%;padding:9px 12px;">
+            <span data-lang="en">Re-Run with Custom Pro Rules</span>
+            <span data-lang="zh">应用 Pro 企业规则重新脱敏</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Session Vault Inspector -->
+      <div class="vault-drawer">
+        <h4>
+          <span data-lang="en">🔒 In-Memory Session Vault Inspector (Masked Preview — Never Leaves Browser RAM)</span>
+          <span data-lang="zh">🔒 本地内存映射表预览（敏感原值自动打码，关闭页面即销毁）</span>
+        </h4>
+        <div style="overflow-x:auto;">
+          <table class="vault-tbl">
+            <thead>
+              <tr>
+                <th>Placeholder</th>
+                <th>Detector</th>
+                <th>Severity</th>
+                <th>Masked Value in RAM</th>
+                <th>Length</th>
+              </tr>
+            </thead>
+            <tbody id="vaultTableBody">
+              <tr><td colspan="5" style="color:#64748b;">No secrets vaulted yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORE SCREENSHOTS -->
+  <section class="section container">
+    <div class="section-hdr">
+      <h2>
+        <span data-lang="en">Built Natively for VS Code, Cursor &amp; VSCodium</span>
+        <span data-lang="zh">原生集成 VS Code、Cursor 与 OpenVSX 全系编辑器</span>
+      </h2>
+      <p data-lang="en">Zero runtime npm dependencies — 40 KB auditable package with instant startup.</p>
+      <p data-lang="zh">零第三方 npm 依赖，安装包仅 40 KB，无供应链投毒风险，毫秒级启动。</p>
+    </div>
+    <div class="shots-grid">
+      <div class="shot-card">
+        <img src="./screenshot_1_before_after.png" alt="PasteShield Reversible Before and After Sanitization in VS Code" loading="lazy">
+        <div class="cap">
+          <span data-lang="en"><strong>Reversible 3-Step Workflow:</strong> Press <code>Cmd+Alt+C</code> to copy sanitized prompts, ask any LLM safely, and press <code>Cmd+Alt+R</code> to restore real credentials in 1ms.</span>
+          <span data-lang="zh"><strong>三步可逆闭环：</strong>按 <code>Cmd+Alt+C</code> 复制脱敏片段提问大模型，拿到重构代码后按 <code>Cmd+Alt+R</code> 瞬间还原真实配置。</span>
+        </div>
+      </div>
+      <div class="shot-card">
+        <img src="./screenshot_2_context_pack.png" alt="PasteShield Pro Multi-File AI Context Pack and Secret Leak Audit" loading="lazy">
+        <div class="cap">
+          <span data-lang="en"><strong>PasteShield Pro Power Tools:</strong> Export Multi-File Sanitized AI Markdown Context Packs with shared cross-file tokens + audit <code>git diff</code> before committing.</span>
+          <span data-lang="zh"><strong>PasteShield Pro 进阶利器：</strong>多文件共享占位符导出 AI Markdown 上下文包 + 提交前扫描 <code>git diff</code> 防密钥泄漏审计报告。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL INSTRUCTIONS -->
+  <section class="section container" id="install">
+    <div class="section-hdr">
+      <h2>
+        <span data-lang="en">Install in 15 Seconds (VS Code &amp; Cursor)</span>
+        <span data-lang="zh">15 秒极速安装指南（VS Code 与 Cursor）</span>
+      </h2>
+    </div>
+    <div class="two-col">
+      <div class="info-card">
+        <h3>
+          <span data-lang="en">Visual Studio Code &amp; Cursor (OpenVSX)</span>
+          <span data-lang="zh">VS Code 与 Cursor 在线或离线安装</span>
+        </h3>
+        <ol data-lang="en">
+          <li>Open Extensions (<code>Cmd+Shift+X</code> / <code>Ctrl+Shift+X</code>) in <strong>VS Code</strong> or <strong>Cursor</strong>.</li>
+          <li>Search <strong><code>PasteShield</code></strong> (Publisher: <code>craftleaf-studio</code>) and click <strong>Install</strong>.</li>
+          <li>Or press <code>Cmd+P</code> / <code>Ctrl+P</code> and run: <code>ext install craftleaf-studio.pasteshield-ai-secret-sanitizer</code>.</li>
+          <li>Air-gapped enterprise laptop? Run <code>Extensions: Install from VSIX...</code> with the standalone <code>.vsix</code> archive.</li>
+        </ol>
+        <ol data-lang="zh">
+          <li>在 <strong>VS Code</strong> 或 <strong>Cursor</strong> 中打开扩展面板（<code>Cmd+Shift+X</code> / <code>Ctrl+Shift+X</code>）。</li>
+          <li>搜索 <strong><code>PasteShield</code></strong>（发布者：<code>craftleaf-studio</code>）点击安装。</li>
+          <li>或按 <code>Cmd+P</code> / <code>Ctrl+P</code> 粘贴：<code>ext install craftleaf-studio.pasteshield-ai-secret-sanitizer</code>。</li>
+          <li>企业内网离线机器可通过 <code>Extensions: Install from VSIX...</code> 直接导入离线包。</li>
+        </ol>
+      </div>
+
+      <div class="info-card">
+        <h3>
+          <span data-lang="en">Default Keyboard Shortcuts</span>
+          <span data-lang="zh">核心快捷键一览</span>
+        </h3>
+        <ul data-lang="en">
+          <li><code>Cmd+Alt+C</code> / <code>Ctrl+Alt+C</code> — <strong>Copy Sanitized Selection for AI</strong></li>
+          <li><code>Cmd+Alt+R</code> / <code>Ctrl+Alt+R</code> — <strong>Restore Original Values from Clipboard / Selection</strong></li>
+          <li><code>Cmd+Alt+S</code> / <code>Ctrl+Alt+S</code> — <strong>Sanitize Current Editor In-Place</strong></li>
+          <li>Click Status Bar <strong><code>🛡️ PasteShield</code></strong> — Open Quick Menu, Context Pack Exporter &amp; Git Diff Scanner</li>
+        </ul>
+        <ul data-lang="zh">
+          <li><code>Cmd+Alt+C</code> / <code>Ctrl+Alt+C</code> — <strong>复制脱敏后选中内容（可直接发给 AI）</strong></li>
+          <li><code>Cmd+Alt+R</code> / <code>Ctrl+Alt+R</code> — <strong>从剪贴板或选区一键还原真实密钥</strong></li>
+          <li><code>Cmd+Alt+S</code> / <code>Ctrl+Alt+S</code> — <strong>将当前编辑器原地脱敏</strong></li>
+          <li>点击右下角状态栏 <strong><code>🛡️ PasteShield</code></strong> — 呼出快捷菜单、多文件打包与 Git Diff 扫描</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING & OFFLINE LICENSE ACTIVATION -->
+  <section class="section container" id="pro">
+    <div class="section-hdr">
+      <h2>
+        <span data-lang="en">Simple, Subscription-Free Pricing</span>
+        <span data-lang="zh">简单透明 · 买断制永久授权（拒绝订阅制）</span>
+      </h2>
+      <p data-lang="en">Core protection is 100% free forever. Upgrade once for enterprise custom rules &amp; multi-file AI workflows.</p>
+      <p data-lang="zh">10 大核心密钥脱敏与一键还原永久免费；一次买断即可解锁企业内网自定义规则与多文件打包审计。</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div>
+          <h3>Free Community</h3>
+          <div class="price-tag">$0</div>
+          <div class="price-sub">
+            <span data-lang="en">Free forever · MIT Open Core</span>
+            <span data-lang="zh">永久免费 · 零门槛使用</span>
+          </div>
+          <ul class="feat-list">
+            <li>✓ 10 Built-in Secret &amp; PII Detectors</li>
+            <li>✓ Deterministic <code>&lt;OPENAI_KEY_1&gt;</code> Placeholders</li>
+            <li>✓ 1-Click Clipboard &amp; Selection Restore</li>
+            <li>✓ Status Bar Shield &amp; Volatile RAM Vault</li>
+          </ul>
+        </div>
+        <a class="btn btn-secondary" href="#install">
+          <span data-lang="en">Install Free Extension</span>
+          <span data-lang="zh">免费安装插件</span>
+        </a>
+      </div>
+
+      <div class="price-card featured">
+        <div>
+          <h3>PasteShield Pro</h3>
+          <div class="price-tag" id="proPriceDisplay">$9.00 <span style="font-size:16px;font-weight:600;color:#94a3b8;">/ ¥29.9</span></div>
+          <div class="price-sub">
+            <span data-lang="en">One-time payment · Lifetime offline key · Works in VS Code, Cursor &amp; Web</span>
+            <span data-lang="zh">一次买断 · 离线激活码永久有效 · 通用于 VS Code / Cursor / 网页版</span>
+          </div>
+          <ul class="feat-list">
+            <li>✓ Everything in Free Community</li>
+            <li>✓ <strong>Custom Regex &amp; Company Domain Rules</strong> (<code>*.corp.internal</code> → <code>&lt;COMPANY_DOMAIN_1&gt;</code>)</li>
+            <li>✓ <strong>Export Multi-File Sanitized AI Markdown Context Pack</strong> across tabs/folders</li>
+            <li>✓ <strong>Workspace &amp; Git Diff Secret Leak Audit Report</strong></li>
+            <li>✓ Air-Gap Safe Offline Checksum Key (<code>SHIELDPRO-...</code>)</li>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <a class="btn btn-primary" id="buyProCheckoutBtn" href="#pro-unlock-box">
+            <span data-lang="en">Get PasteShield Pro License Key ($9)</span>
+            <span data-lang="zh">获取 PasteShield Pro 终身激活码 ($9 / ¥29.9)</span>
+          </a>
+          <a class="btn btn-secondary" id="buyAllAccessBtn" href="../../index.html#all-access" style="font-size:13px;padding:9px 14px;">
+            <span data-lang="en">Or get Studio All-Access Pass ($19 — unlocks ALL CraftLeaf tools)</span>
+            <span data-lang="zh">或选购工坊全通票 STUDIOALL ($19 / ¥69 解锁全部工具)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="unlock-box" id="pro-unlock-box">
+      <h3 style="font-size:16px;">
+        <span data-lang="en">🔑 Activate PasteShield Pro Key in Browser Playground</span>
+        <span data-lang="zh">🔑 在当前浏览器演练场激活 Pro 授权码</span>
+      </h3>
+      <p style="font-size:13px;color:var(--muted);margin-top:4px;" data-lang="en">
+        Already have a <code>SHIELDPRO-XXXX-XXXX-XXXXXX</code> or <code>STUDIOALL-XXXX-XXXX-XXXXXX</code> key? Activate below to unlock Pro Custom Company Domain &amp; Regex rules in the live playground (in VS Code / Cursor, run <code>PasteShield: Activate Pro License Key</code>).
+      </p>
+      <p style="font-size:13px;color:var(--muted);margin-top:4px;" data-lang="zh">
+        已购买 <code>SHIELDPRO-...</code> 或全通票 <code>STUDIOALL-...</code> 授权码？在下方输入即可解锁本页自定义企业域名与正则规则测试（在编辑器内请执行命令 <code>PasteShield: Activate Pro License Key</code>）。
+      </p>
+      <div class="unlock-row">
+        <input type="text" id="licenseKeyInput" placeholder="SHIELDPRO-XXXX-XXXX-XXXXXX">
+        <button class="btn btn-primary" id="activateKeyBtn" type="button" style="padding:10px 18px;">
+          <span data-lang="en">Verify &amp; Unlock Offline</span>
+          <span data-lang="zh">离线校验并解锁</span>
+        </button>
+      </div>
+      <div class="status-msg" id="licenseStatusMsg"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div style="margin-bottom:8px;">
+        <strong id="studioFooterName">CraftLeaf &amp; Pixel Studio</strong> ·
+        <a href="../../index.html"><span data-lang="en">All Studio Tools &amp; Games</span><span data-lang="zh">返回工坊作品主页</span></a>
+      </div>
+      <div>
+        <span data-lang="en">100% Client-Side Privacy Guarantee: PasteShield processes every character strictly inside local memory with zero analytics or servers.</span>
+        <span data-lang="zh">100% 纯本地隐私承诺：PasteShield 所有脱敏与还原均在本地内存中完成，零服务器上传、零遥测追踪。</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script src="./sanitizer-core.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var PRESETS = {
+        dotenv: [
+          '# Billing Microservice — Production .env',
+          'OPENAI_API_KEY=sk-proj-9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r',
+          'OPENAI_FALLBACK_KEY=sk-proj-9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r',
+          'AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE',
+          'GITHUB_RELEASE_TOKEN=ghp_1234567890abcdefghijklmnopqrstuvwxyzAB',
+          'DATABASE_URL="postgresql://svc_orders:Pr0dP4ssw0rd!2026@10.24.18.92:5432/ledger"',
+          'AZURE_BLOB_CONN="DefaultEndpointsProtocol=https;AccountName=craftprod;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;EndpointSuffix=core.windows.net"',
+          'REDIS_REPLICA_IP=192.168.42.19',
+          'SECOPS_ALERT_EMAIL=oncall-security@acme-cloud.io',
+          'STRIPE_WEBHOOK_SECRET="whsec_live_hmac_9876543210fedcba987654"'
+        ].join('\n'),
+
+        logs: [
+          '[2026-11-13T15:42:11Z] ERROR AuthGateway upstream 172.20.14.88:8443 rejected request',
+          'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfOTk0MSIsInJvbGUiOiJhZG1pbiJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+          'User principal: finance-admin@enterprise.io',
+          'Loaded signing key:',
+          '-----BEGIN OPENSSH PRIVATE KEY-----',
+          'b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW',
+          'QyNTUxOQAAACB8f3x/fH98f3x/fH98f3x/fH98f3x/fH98f3x/fH98fw==',
+          '-----END OPENSSH PRIVATE KEY-----'
+        ].join('\n'),
+
+        corp: [
+          '// Deploy Ticket FINOPS-8421 — Internal Payment Router',
+          'export const GATEWAY_URL = "https://payments-api.corp.acme.internal/v2/settle";',
+          'export const K8S_INGRESS = "https://ledger.k8s.finops.local/healthz";',
+          'export const OPENAI_KEY = "sk-proj-CorpInternalSecretKey1234567890abcd";',
+          'export const DB_CONN = "redis://default:R3d1sPr0dPass!@10.88.4.21:6379/0";'
+        ].join('\n')
+      };
+
+      var currentLang = 'en';
+      var vault = window.PasteShieldCore.createVault();
+
+      // Hydrate monetization config links & saved Pro status
+      var cfg = (window.CRAFTLEAF_MONETIZATION && window.CRAFTLEAF_MONETIZATION.products) || {};
+      var proCfg = cfg.pasteShieldPro || {};
+      var allCfg = cfg.allAccessPass || {};
+
+      function syncMonetizationLinks() {
+        var buyProBtn = document.getElementById('buyProCheckoutBtn');
+        var heroProBtn = document.getElementById('heroProBtn');
+        var buyAllBtn = document.getElementById('buyAllAccessBtn');
+        var priceEl = document.getElementById('proPriceDisplay');
+
+        if (proCfg.priceUsd && proCfg.priceCny && priceEl) {
+          priceEl.innerHTML = proCfg.priceUsd + ' <span style="font-size:16px;font-weight:600;color:#94a3b8;">/ ' + proCfg.priceCny + '</span>';
+        }
+        var targetProUrl = currentLang === 'zh' ? (proCfg.checkoutUrlZh || '#pro-unlock-box') : (proCfg.checkoutUrlEn || '#pro-unlock-box');
+        if (targetProUrl.indexOf('/extensions/pasteshield/#pro') !== -1) {
+          targetProUrl = '#pro-unlock-box';
+        }
+        if (buyProBtn) buyProBtn.href = targetProUrl;
+        if (heroProBtn) heroProBtn.href = '#pro';
+        if (buyAllBtn) {
+          buyAllBtn.href = currentLang === 'zh'
+            ? (allCfg.checkoutUrlZh || '../../index.html#all-access')
+            : (allCfg.checkoutUrlEn || '../../index.html#all-access');
+        }
+      }
+
+      // Restore previously saved Pro key from localStorage if present
+      try {
+        var rawSaved = localStorage.getItem('craftleaf_license_pasteShieldPro') || localStorage.getItem('craftleaf_license_allAccessPass');
+        if (rawSaved) {
+          var parsed = JSON.parse(rawSaved);
+          if (parsed && parsed.key) {
+            var chk = vault.activateLicense(parsed.key);
+            if (chk.valid) {
+              document.getElementById('licenseKeyInput').value = chk.key;
+              setLicenseBanner(true, chk.key);
+            }
+          }
+        }
+      } catch (_e) {}
+
+      function setLicenseBanner(ok, msgOrKey) {
+        var el = document.getElementById('licenseStatusMsg');
+        if (!el) return;
+        if (ok) {
+          el.style.color = '#6ee7b7';
+          el.textContent = currentLang === 'zh'
+            ? '✓ Pro 已离线激活 (' + msgOrKey + ') — 企业内网域名与自定义正则规则已启用！'
+            : '✓ PasteShield Pro Active (' + msgOrKey + ') — Custom Company Domain & Regex rules unlocked!';
+        } else {
+          el.style.color = '#fca5a5';
+          el.textContent = msgOrKey;
+        }
+      }
+
+      function getPlaygroundOptions() {
+        var domRaw = document.getElementById('companyDomainsInput').value || '';
+        var domains = domRaw.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+        var patRaw = (document.getElementById('customPatternInput').value || '').trim();
+        var patterns = patRaw ? [patRaw] : [];
+        return {
+          redactEmails: true,
+          redactInternalIps: true,
+          companyDomains: domains,
+          customPatterns: patterns
+        };
+      }
+
+      function renderVaultInspector() {
+        var entries = vault.entries();
+        var badge = document.getElementById('vaultBadge');
+        var proTag = vault.isPro() ? ' [PRO]' : '';
+        badge.textContent = '🛡️ Vault' + proTag + ': ' + entries.length + (currentLang === 'zh' ? ' 个敏感值在本地内存' : ' secret(s) in RAM');
+
+        var tbody = document.getElementById('vaultTableBody');
+        if (!entries.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="color:#64748b;">' +
+            (currentLang === 'zh' ? '当前会话内存保险箱为空。' : 'Session vault is currently empty.') + '</td></tr>';
+          return;
+        }
+        tbody.innerHTML = entries.map(function (e) {
+          var sevColor = e.severity === 'CRITICAL' ? '#fca5a5' : (e.severity === 'HIGH' ? '#fcd34d' : '#93c5fd');
+          return '<tr>' +
+            '<td><span class="tok-pill">' + escapeHtml(e.placeholder) + '</span></td>' +
+            '<td><code>' + escapeHtml(e.category) + '</code></td>' +
+            '<td style="font-weight:700;color:' + sevColor + ';">' + escapeHtml(e.severity) + '</td>' +
+            '<td><code>' + escapeHtml(e.preview) + '</code></td>' +
+            '<td>' + e.length + ' chars</td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function buildSimulatedAiSnippet(placeholders) {
+        var picked = placeholders.slice(0, 4);
+        if (!picked.length) {
+          return '// Paste or sanitize secrets on the left first!';
+        }
+        var lines = [
+          '// Simulated ChatGPT / Claude / Cursor refactored TypeScript reply:',
+          'export function createVerifiedRuntimeConfig() {',
+          '  return {'
+        ];
+        for (var i = 0; i < picked.length; i++) {
+          lines.push('    secret_' + (i + 1) + ': ' + JSON.stringify(picked[i]) + (i < picked.length - 1 ? ',' : ''));
+        }
+        lines.push('  };');
+        lines.push('}');
+        return lines.join('\n');
+      }
+
+      function runSanitize(notifyGated) {
+        var raw = document.getElementById('rawInputArea').value;
+        var res = vault.sanitize(raw, getPlaygroundOptions());
+        document.getElementById('sanitizedOutputArea').value = res.sanitizedText;
+        document.getElementById('restoreTestArea').value = buildSimulatedAiSnippet(res.placeholdersUsed);
+        renderVaultInspector();
+
+        if (notifyGated && res.proGatedCustomRules > 0 && !vault.isPro()) {
+          setLicenseBanner(
+            false,
+            currentLang === 'zh'
+              ? '提示：10 大内置脱敏规则已生效；自定义企业域名与正则属于 Pro 功能，请在下方输入 SHIELDPRO-... 激活码解锁。'
+              : 'Note: Built-in 10 secret detectors ran! To also apply Custom Company Domains & Regex rules, enter a SHIELDPRO-... Pro key below.'
+          );
+        }
+      }
+
+      // Wire buttons
+      document.getElementById('runSanitizeBtn').addEventListener('click', function () { runSanitize(false); });
+      document.getElementById('applyCustomRulesBtn').addEventListener('click', function () {
+        runSanitize(true);
+        if (!vault.isPro()) {
+          document.getElementById('pro-unlock-box').scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+
+      document.getElementById('clearVaultBtn').addEventListener('click', function () {
+        vault.clear();
+        renderVaultInspector();
+      });
+
+      document.getElementById('generateAiMockBtn').addEventListener('click', function () {
+        var entries = vault.entries().map(function (e) { return e.placeholder; });
+        document.getElementById('restoreTestArea').value = buildSimulatedAiSnippet(entries);
+      });
+
+      document.getElementById('runRestoreBtn').addEventListener('click', function () {
+        var area = document.getElementById('restoreTestArea');
+        var res = vault.restore(area.value);
+        area.value = res.restoredText;
+      });
+
+      function copyWithFeedback(btn, text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text);
+        }
+        var orig = btn.innerHTML;
+        btn.textContent = currentLang === 'zh' ? '✓ 已复制' : '✓ Copied!';
+        setTimeout(function () { btn.innerHTML = orig; }, 1200);
+      }
+
+      document.getElementById('copySanitizedBtn').addEventListener('click', function () {
+        copyWithFeedback(this, document.getElementById('sanitizedOutputArea').value);
+      });
+      document.getElementById('copyRestoredBtn').addEventListener('click', function () {
+        copyWithFeedback(this, document.getElementById('restoreTestArea').value);
+      });
+      document.getElementById('copyExtCmdBtn').addEventListener('click', function () {
+        copyWithFeedback(this, 'ext install craftleaf-studio.pasteshield-ai-secret-sanitizer');
+      });
+
+      // Preset switcher
+      var presetBtns = document.querySelectorAll('[data-preset]');
+      for (var p = 0; p < presetBtns.length; p++) {
+        presetBtns[p].addEventListener('click', function () {
+          for (var k = 0; k < presetBtns.length; k++) presetBtns[k].classList.remove('active');
+          this.classList.add('active');
+          var key = this.getAttribute('data-preset');
+          vault.clear();
+          document.getElementById('rawInputArea').value = PRESETS[key] || PRESETS.dotenv;
+          runSanitize(key === 'corp');
+        });
+      }
+
+      // License activation button wired to CraftLeafSDK + PasteShieldCore
+      document.getElementById('activateKeyBtn').addEventListener('click', async function () {
+        var rawKey = document.getElementById('licenseKeyInput').value;
+        if (window.CraftLeafSDK && typeof window.CraftLeafSDK.verifyLicense === 'function') {
+          var sdkCheck = await window.CraftLeafSDK.verifyLicense('pasteShieldPro', rawKey, { keyPrefix: 'SHIELDPRO' });
+          if (sdkCheck.valid) {
+            vault.activateLicense(sdkCheck.key);
+            setLicenseBanner(true, sdkCheck.key);
+            runSanitize(false);
+            return;
+          }
+        }
+        var localCheck = vault.activateLicense(rawKey);
+        if (localCheck.valid) {
+          setLicenseBanner(true, localCheck.key);
+          runSanitize(false);
+        } else {
+          setLicenseBanner(
+            false,
+            currentLang === 'zh'
+              ? '✗ 激活码格式或校验和无效（期望格式：SHIELDPRO-XXXX-XXXX-XXXXXX）。'
+              : '✗ Invalid license key (' + localCheck.reason + '). Expected SHIELDPRO-XXXX-XXXX-XXXXXX.'
+          );
+        }
+      });
+
+      // Bilingual toggle
+      document.getElementById('langToggleBtn').addEventListener('click', function () {
+        currentLang = currentLang === 'en' ? 'zh' : 'en';
+        document.body.classList.toggle('lang-zh', currentLang === 'zh');
+        syncMonetizationLinks();
+        renderVaultInspector();
+      });
+
+      // Initialize default preset
+      document.getElementById('rawInputArea').value = PRESETS.dotenv;
+      syncMonetizationLinks();
+      runSanitize(false);
+    })();
+  </script>
+</body>
+</html>

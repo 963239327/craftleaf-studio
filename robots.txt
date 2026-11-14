@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://963239327.github.io/craftleaf-studio/sitemap.xml

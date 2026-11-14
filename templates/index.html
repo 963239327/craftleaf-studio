@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solo-Founder &amp; Freelancer Finance OS — Offline SaaS Bleed, Tax Ledger &amp; AI SOP Vault | CraftLeaf Studio</title>
+  <meta name="description" content="100% offline, privacy-first financial command center for freelancers &amp; solo founders. Detect SaaS subscription bleed, track Schedule C tax write-offs, reverse-calculate hourly/day rates, and automate proposals with 10 commercial AI SOPs." />
+  <meta property="og:title" content="Solo-Founder &amp; Freelancer OS — Offline Finance, Tax &amp; AI SOP Vault" />
+  <meta property="og:description" content="Try the live Subscription Bleed &amp; Reverse Rate Calculator in your browser. Download the $0+ Free Starter Kit or unlock the Complete Offline Pro OS ($9.99)." />
+  <meta property="og:type" content="website" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --card: #1e293b;
+      --card-alt: #0f172a;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #10b981;
+      --accent-hover: #34d399;
+      --blue: #3b82f6;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at 18% 0%, #172554 0%, var(--bg) 52%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 17, 32, 0.86);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.75);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; gap: 12px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; text-decoration: none; }
+    .badge-pill {
+      display: inline-block; font-size: 12px; font-weight: 700;
+      padding: 3px 11px; border-radius: 999px;
+      background: rgba(16, 185, 129, 0.16); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.38);
+    }
+    .nav-links { display: flex; align-items: center; gap: 16px; font-size: 14px; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: var(--muted); transition: color 0.15s; }
+    .nav-links a:hover { color: #fff; }
+    .lang-btn {
+      background: var(--card); color: var(--text); border: 1px solid var(--border);
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700;
+    }
+
+    .hero { padding: 54px 0 34px; text-align: center; }
+    .hero h1 { font-size: clamp(28px, 4.3vw, 46px); line-height: 1.16; margin: 14px auto; max-width: 900px; letter-spacing: -0.6px; }
+    .hero h1 span { color: #34d399; }
+    .hero p { color: var(--muted); font-size: 17px; max-width: 760px; margin: 0 auto 26px; }
+    .cta-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 22px; border-radius: 11px; font-weight: 800; font-size: 14px;
+      text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform 0.12s, background 0.15s;
+      font-family: inherit;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: #052e16; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: var(--card); color: var(--text); border-color: var(--border); }
+    .btn-secondary:hover { border-color: #64748b; }
+    .btn-amber { background: rgba(245, 158, 11, 0.18); color: #fcd34d; border-color: rgba(245, 158, 11, 0.45); }
+
+    /* Interactive Demo Sandbox */
+    .demo-shell {
+      background: rgba(17, 24, 39, 0.9);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      margin: 12px 0 42px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.36);
+    }
+    .demo-topbar {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+      padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 18px;
+    }
+    .demo-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .dtab {
+      background: var(--card-alt); color: var(--muted); border: 1px solid var(--border);
+      padding: 8px 15px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer;
+    }
+    .dtab.active {
+      background: linear-gradient(135deg, rgba(16,185,129,0.22), rgba(59,130,246,0.22));
+      color: #fff; border-color: rgba(52, 211, 153, 0.5);
+    }
+    .dpanel { display: none; }
+    .dpanel.active { display: block; }
+    .demo-two { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 18px; }
+    @media (max-width: 920px) { .demo-two { grid-template-columns: 1fr; } }
+
+    .mini-box {
+      background: rgba(30, 41, 59, 0.78); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+    }
+    .sim-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .sk { background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+    .sk small { display: block; font-size: 11px; color: var(--muted); }
+    .sk strong { font-size: 19px; color: #34d399; font-weight: 800; }
+
+    table.dtable { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.dtable th { text-align: left; font-size: 11px; text-transform: uppercase; color: var(--muted); padding: 8px; border-bottom: 1px solid var(--border); }
+    table.dtable td { padding: 9px 8px; border-bottom: 1px solid rgba(51,65,85,0.55); }
+    table.dtable tr.cut-on td { background: rgba(16, 185, 129, 0.11); }
+
+    .slider-item { background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; margin-bottom: 9px; }
+    .slider-top { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .slider-top strong { color: #34d399; font-size: 14px; }
+    input[type="range"] { width: 100%; accent-color: #10b981; cursor: pointer; }
+
+    .pro-lock-bar {
+      margin-top: 16px; padding: 12px 16px; border-radius: 12px;
+      background: rgba(245, 158, 11, 0.11); border: 1px dashed rgba(245, 158, 11, 0.45);
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px;
+    }
+
+    /* Pricing Editions Split */
+    .editions-grid { display: grid; grid-template-columns: 1fr 1.18fr; gap: 22px; margin: 24px 0 44px; align-items: stretch; }
+    @media (max-width: 880px) { .editions-grid { grid-template-columns: 1fr; } }
+    .edition-card {
+      background: rgba(30, 41, 59, 0.82); border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 26px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+    }
+    .edition-card.pro {
+      border-color: rgba(52, 211, 153, 0.65);
+      background: linear-gradient(160deg, rgba(16, 185, 129, 0.15), rgba(17, 24, 39, 0.96));
+    }
+    .price-big { font-size: 38px; font-weight: 900; letter-spacing: -1px; margin: 8px 0 4px; }
+    .price-big small { font-size: 14px; font-weight: 600; color: var(--muted); }
+    ul.check-list { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-direction: column; gap: 9px; font-size: 14px; }
+    ul.check-list li { display: flex; align-items: flex-start; gap: 8px; }
+
+    .deliverable-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 42px; }
+    .dcard { background: rgba(30, 41, 59, 0.72); border: 1px solid var(--border); border-radius: 15px; padding: 18px; }
+    .dcard h3 { margin: 8px 0 6px; font-size: 17px; }
+    .dcard p { margin: 0; font-size: 13.5px; color: var(--muted); }
+
+    footer {
+      border-top: 1px solid var(--border); margin-top: 48px; padding: 30px 0 46px;
+      color: var(--muted); font-size: 13px;
+    }
+    html:not(.zh) [data-lang="zh"] { display: none !important; }
+    html.zh [data-lang="en"] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="../index.html" class="brand">
+        <span>🌿 CraftLeaf Studio</span>
+        <span class="badge-pill" data-lang="en">100% Offline Vault</span>
+        <span class="badge-pill" data-lang="zh">100% 纯本地离线隐私运行</span>
+      </a>
+      <div class="nav-links">
+        <a href="../index.html" data-lang="en">← All Studio Tools</a>
+        <a href="../index.html" data-lang="zh">← 返回工坊首页</a>
+        <a href="#live-demo" data-lang="en">Live Interactive Demo</a>
+        <a href="#live-demo" data-lang="zh">在线交互试玩</a>
+        <a href="#free-lite" data-lang="en">Free Starter ($0+)</a>
+        <a href="#free-lite" data-lang="zh">免费精简引流包</a>
+        <a href="#pro-pack" data-lang="en">Complete Pro OS</a>
+        <a href="#pro-pack" data-lang="zh">完整买断专业版</a>
+        <a href="../tools/invoice/index.html" data-lang="en">Free Invoice PDF</a>
+        <a href="../tools/invoice/index.html" data-lang="zh">商业发票生成</a>
+        <button class="lang-btn" id="langToggle" type="button">中文 / EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <span class="badge-pill" data-lang="en">Zero Cloud Signup · Zero Bank Login · Double-Click Offline HTML + CSV + 6-Page AI SOP PDF</span>
+      <span class="badge-pill" data-lang="zh">免注册 · 无需绑卡 · 双击秒开的纯本地财务订阅管家 + 5套表格 + 6页商业AI手册</span>
+
+      <h1 data-lang="en">Solo-Founder &amp; Freelancer OS:<br/><span>Stop Silent SaaS Bleed &amp; Master Your Rate</span></h1>
+      <h1 data-lang="zh">一人公司与自由职业财务管家：<br/><span>揪出“订阅刺客”、算清抵扣税池与三档高价提案</span></h1>
+
+      <p data-lang="en">A zero-dependency offline financial command center, IRS Schedule C deductible expense tracker, reverse hourly/3-tier proposal pricing calculator, 5 Excel/Notion spreadsheets, and a 6-page AI Automation SOP Playbook.</p>
+      <p data-lang="zh">专为独立开发者、自由设计师、顾问与副业创作者打造的私密离线财务系统：包月续费止损模拟、多项目经营成本抵扣台账、一键打印损益报表、保本时薪倒推与 10 套商业 AI 提效 SOP。</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary pro-en-cta" href="#pro-pack" data-lang="en"><span>🚀 Get Complete Pro OS (<span class="js-pro-price">$9.99</span>) →</span></a>
+        <a class="btn btn-primary pro-zh-cta" href="#pro-pack" data-lang="zh">🚀 获取中文完整全套包（买断制）→</a>
+        <a class="btn btn-secondary free-cta" href="#free-lite" data-lang="en">🎁 Download $0+ Free Starter Kit</a>
+        <a class="btn btn-secondary free-cta" href="#free-lite" data-lang="zh">🎁 免费领取 $0+ 精简入门包</a>
+        <a class="btn btn-amber" href="#live-demo" data-lang="en">▶ Try Interactive Sandbox Below</a>
+        <a class="btn btn-amber" href="#live-demo" data-lang="zh">▶ 立即在网页试玩核心计算器</a>
+      </div>
+    </section>
+
+    <!-- LIVE EMBEDDED DEMO SANDBOX -->
+    <section id="live-demo" class="demo-shell">
+      <div class="demo-topbar">
+        <div>
+          <strong style="font-size:16px;" data-lang="en">⚡ Live Interactive Preview Sandbox (Read/Test Mode — Runs 100% in Browser)</strong>
+          <strong style="font-size:16px;" data-lang="zh">⚡ 在线实机交互预览沙盒（零上传纯本地实时演算）</strong>
+          <div style="font-size:12.5px;color:var(--muted);" data-lang="en">Toggle SaaS cuts or drag pricing sliders below to experience how the offline Pro OS works.</div>
+          <div style="font-size:12.5px;color:var(--muted);" data-lang="zh">勾选下方吃灰订阅或拖动目标年入滑块，直观感受离线完整版管家的丝滑测算体验。</div>
+        </div>
+        <div class="demo-tabs" id="demoTabs">
+          <button type="button" class="dtab active" data-dtab="bleed">🩸 Subscription Bleed Simulator</button>
+          <button type="button" class="dtab" data-dtab="rate">🎯 Reverse Rate &amp; 3-Tier Quote</button>
+          <button type="button" class="dtab" data-dtab="sop">⚡ AI SOP Vault Preview</button>
+        </div>
+      </div>
+
+      <!-- DEMO PANEL 1: SUBSCRIPTION BLEED -->
+      <div class="dpanel active" id="dpanel-bleed">
+        <div class="sim-kpis" id="demoBleedKpis"></div>
+        <div class="demo-two">
+          <div class="mini-box">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap;">
+              <strong style="font-size:14px;" data-lang="en">Check "Cut?" to simulate canceling non-essential tools:</strong>
+              <strong style="font-size:14px;" data-lang="zh">勾选左侧复选框模拟砍掉低频/吃灰软件：</strong>
+              <button type="button" id="demoSelectUnused" class="btn btn-secondary" style="padding:5px 11px;font-size:12px;">✂️ Auto-Select Non-Essential</button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="dtable">
+                <thead>
+                  <tr><th>Cut?</th><th>SaaS / Tool</th><th>Monthly</th><th>Annualized</th><th>Tier</th></tr>
+                </thead>
+                <tbody id="demoSubsRows"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="mini-box" style="display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <strong style="font-size:14px;display:block;margin-bottom:10px;" data-lang="en">Remaining Active Burn by Category</strong>
+              <strong style="font-size:14px;display:block;margin-bottom:10px;" data-lang="zh">砍单后剩余软件订阅分类占比</strong>
+              <div id="demoDonutMount"></div>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--border);" data-lang="en">
+              💡 Full Pro Edition adds unlimited custom subscriptions, 21-day renewal countdown radar, deductible % math, and JSON/CSV vault persistence.
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--border);" data-lang="zh">
+              💡 完整专业版支持无限添加按月/包季/包年订阅、21天到期防扣款预警雷达、经营抵扣比例折算与本地备份恢复。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO PANEL 2: REVERSE RATE CALCULATOR -->
+      <div class="dpanel" id="dpanel-rate">
+        <div class="demo-two">
+          <div class="mini-box">
+            <div class="slider-item">
+              <div class="slider-top"><span data-lang="en">Target Annual Net Take-Home (USD)</span><span data-lang="zh">期望年度净到手收入 ($ USD 演示)</span><strong id="lblNet">$96,000</strong></div>
+              <input type="range" id="dmNet" min="30000" max="250000" step="2000" value="96000" />
+            </div>
+            <div class="slider-item">
+              <div class="slider-top"><span data-lang="en">Annual SaaS &amp; Gear Overhead</span><span data-lang="zh">年度软硬件与办公固定开销</span><strong id="lblOh">$4,800</strong></div>
+              <input type="range" id="dmOh" min="0" max="35000" step="400" value="4800" />
+            </div>
+            <div class="slider-item">
+              <div class="slider-top"><span data-lang="en">Self-Employment &amp; Income Tax Reserve %</span><span data-lang="zh">综合预留税费安全垫比例 (%)</span><strong id="lblTax">28%</strong></div>
+              <input type="range" id="dmTax" min="5" max="45" step="1" value="28" />
+            </div>
+            <div class="slider-item">
+              <div class="slider-top"><span data-lang="en">Working Weeks / Year (Excl. Vacation)</span><span data-lang="zh">全年实际工作周数（扣除休假）</span><strong id="lblWks">46 wks</strong></div>
+              <input type="range" id="dmWks" min="32" max="52" step="1" value="46" />
+            </div>
+            <div class="slider-item" style="margin-bottom:0;">
+              <div class="slider-top"><span data-lang="en">Billable Utilization % (of 36h/wk)</span><span data-lang="zh">真实可计费工时利用率（除谈单/杂务）</span><strong id="lblUtil">60%</strong></div>
+              <input type="range" id="dmUtil" min="30" max="85" step="5" value="60" />
+            </div>
+          </div>
+          <div class="mini-box" id="demoRateOut"></div>
+        </div>
+      </div>
+
+      <!-- DEMO PANEL 3: AI SOP PREVIEW -->
+      <div class="dpanel" id="dpanel-sop">
+        <div class="demo-two">
+          <div class="mini-box">
+            <span class="badge-pill" style="margin-bottom:8px;">Sample 1 of 10 · SOP 05</span>
+            <h3 style="margin:0 0 8px;font-size:16px;" data-lang="en">Diplomatic Mid-Sprint Scope-Creep Shield</h3>
+            <h3 style="margin:0 0 8px;font-size:16px;" data-lang="zh">高情商防白嫖加需求（转付费变更单）话术模板</h3>
+            <pre style="white-space:pre-wrap;background:#090e1a;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:#cbd5e1;margin:0;">Act as an empathetic, relationship-first Senior Producer. My client ([Client]) just asked to add "[Extra Request]" outside our signed SOW.
+Write a crisp 130-word reply that:
+1. Validates why the idea adds business value.
+2. Protects our agreed launch date by framing this as an additive module.
+3. Offers two executive options:
+   • Choice A: Add now via a [$AddOn] Change Order (+[N] days).
+   • Choice B: Keep Phase 1 launch locked on schedule and queue first in Phase 2.</pre>
+          </div>
+          <div class="mini-box" style="display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <strong style="font-size:15px;display:block;margin-bottom:8px;" data-lang="en">📘 Inside the Full 6-Page AI SOP Playbook PDF (EN + 中文):</strong>
+              <strong style="font-size:15px;display:block;margin-bottom:8px;" data-lang="zh">📘 完整版 6 页高清矢量 AI SOP 实战手册完整目录：</strong>
+              <ul class="check-list" style="font-size:13px;margin-top:6px;">
+                <li><span>✅</span><span>SOP 01: 3-Tier Value-Anchored Proposal Architect (+32% avg deal size)</span></li>
+                <li><span>✅</span><span>SOP 02: Rough Discovery Call Notes → Watertight SOW &amp; Exclusions</span></li>
+                <li><span>✅</span><span>SOP 03: Zero-Spam Peer-to-Peer Diagnostic Cold Outreach</span></li>
+                <li><span>✅</span><span>SOP 04: Discount Pushback → "Cut Scope, Never Rate" Reframe</span></li>
+                <li><span>✅</span><span>SOP 05–06: Scope-Creep Change Order + 3-Stage Late Invoice Recovery</span></li>
+                <li><span>✅</span><span>SOP 07–08: SEO Storefront Copy + 1 Project → 5 Proof Assets</span></li>
+                <li><span>✅</span><span>SOP 09–10: Raw Bank CSV → Schedule C Tax Categorizer + CFO Ritual</span></li>
+              </ul>
+            </div>
+            <a class="btn btn-primary pro-en-cta" href="#pro-pack" style="margin-top:12px;" data-lang="en">Unlock All 10 SOPs + Full Finance OS →</a>
+            <a class="btn btn-primary pro-zh-cta" href="#pro-pack" style="margin-top:12px;" data-lang="zh">解锁全套 10 大 SOP 手册 + 离线财务管家 →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pro-lock-bar">
+        <span data-lang="en">🔒 <strong>Pro Command Center Modules:</strong> Schedule C Multi-Project Tax Ledger · CSV Import/Export · 🖨️ One-Click Printable Accountant P&amp;L Statement · 5 Excel/Notion CSVs</span>
+        <span data-lang="zh">🔒 <strong>完整专业版额外解锁：</strong> 多项目经营成本抵扣台账 · 季度预留税费池 · Excel/Notion CSV 双向导入导出 · 🖨️ 一键打印白底财务损益报表</span>
+        <a class="btn btn-primary" href="#pro-pack" style="padding:8px 15px;font-size:12.5px;" data-lang="en">Compare Free vs. Pro ↓</a>
+        <a class="btn btn-primary" href="#pro-pack" style="padding:8px 15px;font-size:12.5px;" data-lang="zh">查看免费版与专业版对比 ↓</a>
+      </div>
+    </section>
+
+    <!-- WHAT'S INCLUDED DELIVERABLES -->
+    <section>
+      <h2 style="margin:0 0 6px;font-size:25px;" data-lang="en">Everything Engineered Inside the Complete System</h2>
+      <h2 style="margin:0 0 6px;font-size:25px;" data-lang="zh">一套买断，配齐一人公司“管钱 · 止损 · 报价 · 获客”四大基建</h2>
+      <p style="margin:0 0 18px;color:var(--muted);font-size:14.5px;" data-lang="en">Zero monthly SaaS rent. Every file lives permanently on your own drive.</p>
+      <p style="margin:0 0 18px;color:var(--muted);font-size:14.5px;" data-lang="zh">拒绝每月被记账软件反薅月租，所有文件永久保存在你自己的电脑硬盘里。</p>
+
+      <div class="deliverable-grid">
+        <article class="dcard">
+          <span class="badge-pill">HTML Offline App</span>
+          <h3 data-lang="en">5-Tab Financial &amp; Tax OS</h3>
+          <h3 data-lang="zh">五合一零依赖离线财务指挥舱</h3>
+          <p data-lang="en">Double-click local HTML app with 6-month SVG cashflow charts, category donut, 21-day renewal alerts, Schedule C tax reserve math, JSON vault backup, and 1-click printable P&amp;L statements.</p>
+          <p data-lang="zh">双击秒开，内置近 6 个月现金流矢量图、订阅环形图、21天到期扣款预警、分季度预留税费计算与一键打印财务损益报表。</p>
+        </article>
+        <article class="dcard">
+          <span class="badge-pill">5× Spreadsheets (.CSV)</span>
+          <h3 data-lang="en">Excel, Sheets &amp; Notion Ready</h3>
+          <h3 data-lang="zh">5 套防乱码通用商业数据表</h3>
+          <p data-lang="en">Clean UTF-8 templates: (1) Income Ledger, (2) Schedule C Deductible Expenses, (3) SaaS Bleed Audit, (4) Client Pipeline CRM, and (5) Anti-Scope-Creep SOW Checklist.</p>
+          <p data-lang="zh">含收入台账、经营成本抵扣表、订阅刺客审计表、客户商机回款 CRM 表与防坑 SOW 核对表，支持 Excel 与 Notion 一键导入。</p>
+        </article>
+        <article class="dcard">
+          <span class="badge-pill">6-Page Playbook + MD</span>
+          <h3 data-lang="en">Commercial AI SOP Vault</h3>
+          <h3 data-lang="zh">6 页商业 AI 实战手册 + 复盘模板</h3>
+          <p data-lang="en">Publication-grade 6-page guide + Notion/Obsidian Weekly CEO Ritual &amp; protective SOW contract clauses for proposals, cold outreach, change orders, and raw bank CSV bookkeeping.</p>
+          <p data-lang="zh">收录 10 套工程级商业提示词工作流 + Notion/Obsidian 每周 30 分钟 CEO 复盘模板与防白嫖加需求合同护栏条款。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- TWO-TIER EDITIONS: FREE STARTER vs COMPLETE PRO -->
+    <section class="editions-grid">
+      <!-- FREE STARTER KIT -->
+      <article class="edition-card" id="free-lite">
+        <div>
+          <span class="badge-pill" style="background:rgba(59,130,246,0.18);color:#93c5fd;border-color:rgba(96,165,250,0.4);" data-lang="en">Lead-Magnet Starter Edition</span>
+          <span class="badge-pill" style="background:rgba(59,130,246,0.18);color:#93c5fd;border-color:rgba(96,165,250,0.4);" data-lang="zh">免费体验入门包</span>
+          <h2 style="margin:10px 0 4px;font-size:22px;" data-lang="en">Solo-Founder Free Starter Kit</h2>
+          <h2 style="margin:10px 0 4px;font-size:22px;" data-lang="zh">自由职业定价与订阅审计免费入门包</h2>
+          <div class="price-big">$0+ <small data-lang="en">Pay What You Want</small><small data-lang="zh">免费领取 / 随心打赏</small></div>
+          <p style="margin:0;font-size:13.5px;color:var(--muted);" data-lang="en">Audit your SaaS stack and stop undercharging on your very next client quote.</p>
+          <p style="margin:0;font-size:13.5px;color:var(--muted);" data-lang="zh">快速盘点手头吃灰会员，并在下一次给客户报价前算清保本底线。</p>
+          <ul class="check-list">
+            <li><span>✓</span><span data-lang="en"><strong>Pricing Calculator Lite HTML</strong> (Offline hourly/day/3-tier quote tool)</span><span data-lang="zh"><strong>时薪与三档报价精简计算器</strong>（离线单页版）</span></li>
+            <li><span>✓</span><span data-lang="en"><strong>SaaS Subscription Bleed Audit CSV</strong> (Excel / Notion ready)</span><span data-lang="zh"><strong>SaaS 订阅刺客审计表格模板 (.CSV)</strong></span></li>
+            <li><span>✓</span><span data-lang="en"><strong>10-Prompt Commercial Quickstart (.MD)</strong></span><span data-lang="zh"><strong>10 条高频商业 AI 提示词速查卡 (.MD)</strong></span></li>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a class="btn btn-secondary free-cta" id="btnFreeGumroad" href="#free-lite" target="_blank" rel="noopener" data-lang="en">🎁 Get Free Starter Kit on Gumroad ($0+) →</a>
+          <a class="btn btn-secondary free-cta" id="btnFreeGumroadZh" href="#free-lite" target="_blank" rel="noopener" data-lang="zh">🎁 前往领取 $0+ 免费入门包 →</a>
+          <button type="button" class="btn btn-secondary" id="btnInstantSampleCsv" style="font-size:12.5px;padding:9px 14px;">⬇ Instant Browser Export: Sample SaaS Audit .CSV</button>
+        </div>
+      </article>
+
+      <!-- COMPLETE PRO EDITION -->
+      <article class="edition-card pro" id="pro-pack">
+        <div>
+          <span class="badge-pill" data-lang="en">★ Complete Commercial Edition · Lifetime Offline Ownership</span>
+          <span class="badge-pill" data-lang="zh">★ 完整商业买断版 · 含英文国际版 / 中文深度本土化版</span>
+          <h2 style="margin:10px 0 4px;font-size:24px;" data-lang="en">Solo-Founder &amp; Freelancer OS — Complete Pro v1.0</h2>
+          <h2 style="margin:10px 0 4px;font-size:24px;" data-lang="zh">一人公司与自由职业财务订阅管家 &amp; AI 提效全套包 Pro</h2>
+          <div class="price-big"><span class="js-pro-price">$9.99</span> <small data-lang="en">one-time · zero subscriptions</small><small data-lang="zh">国际版 $9.99 / 面包多中文全套买断</small></div>
+          <p style="margin:0;font-size:13.5px;color:#cbd5e1;" data-lang="en">Pays for itself the moment you cancel one forgotten $15/mo SaaS tool or write off one missed business receipt.</p>
+          <p style="margin:0;font-size:13.5px;color:#cbd5e1;" data-lang="zh">只要帮你提前关掉 1 个忘退的连续包月软件，或用三档报价多谈成 ¥500 差价，瞬间十倍回本。</p>
+          <ul class="check-list">
+            <li><span>🌟</span><span data-lang="en"><strong>Full 5-Tab Offline Finance, Subscription &amp; Tax OS HTML</strong> (SVG Cashflow Charts, Renewal Radar, Cancel Savings Simulator, Multi-Currency)</span><span data-lang="zh"><strong>完整五合一离线财务订阅管家 HTML</strong>（6月现金流图、续费预警、砍单复利模拟、JSON备份）</span></li>
+            <li><span>🌟</span><span data-lang="en"><strong>IRS Schedule C Tax Write-Off Ledger + Printable P&amp;L Statement</strong> (Quarterly tax vault + 1-click CSV import/export)</span><span data-lang="zh"><strong>多项目经营成本抵扣台账 + 一键打印白底损益报表</strong>（支持 CSV 批量导入导出）</span></li>
+            <li><span>🌟</span><span data-lang="en"><strong>All 5 Structured Business CSV Trackers</strong> (Income, Write-Offs, SaaS Audit, Client Pipeline CRM, SOW Checklist)</span><span data-lang="zh"><strong>全套 5 张 Excel / Notion / 飞书防乱码商业表格</strong>（收支、抵扣、订阅、客户CRM、SOW清单）</span></li>
+            <li><span>🌟</span><span data-lang="en"><strong>6-Page Illustrated AI Automation SOP Playbook + Notion/Obsidian CEO Rituals</strong></span><span data-lang="zh"><strong>6 页商业 AI 提效实战手册 + Notion/Obsidian 周复盘与防白嫖合同条款库</strong></span></li>
+          </ul>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a class="btn btn-primary pro-en-cta" id="btnProGumroad" href="#pro-pack" target="_blank" rel="noopener" style="flex:1 1 220px;"><span>🛒 Unlock English Pro Pack (<span class="js-pro-price">$9.99</span>) →</span></a>
+          <a class="btn btn-secondary pro-zh-cta" id="btnProMbd" href="#pro-pack" target="_blank" rel="noopener" style="flex:1 1 220px;">🇨🇳 面包多 / 爱发电 获取中文全套包 →</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- ALL-ACCESS STUDIO CROSS-SELL -->
+    <section style="background:linear-gradient(135deg, rgba(16,185,129,0.14), rgba(59,130,246,0.15));border:1px solid rgba(52,211,153,0.42);border-radius:18px;padding:22px 26px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
+      <div style="max-width:700px;">
+        <strong style="font-size:17px;display:block;margin-bottom:4px;" data-lang="en">🌿 Pair with CraftLeaf Freelancer Invoice PDF Studio &amp; PasteShield</strong>
+        <strong style="font-size:17px;display:block;margin-bottom:4px;" data-lang="zh">🌿 搭配工坊免注册英文商业发票生成器与 PasteShield 防泄密插件</strong>
+        <span style="font-size:13.5px;color:#cbd5e1;" data-lang="en">Generate crisp client invoices right in your browser or unlock every Pro web utility in CraftLeaf Studio with a single lifetime All-Access Pass.</span>
+        <span style="font-size:13.5px;color:#cbd5e1;" data-lang="zh">在线免费开具跨境/双语 PDF 发票，或通过工坊终身通票一键解锁全站所有效率工具高级版。</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-secondary" href="../tools/invoice/index.html" data-lang="en">🧾 Open Invoice Studio</a>
+        <a class="btn btn-secondary" href="../tools/invoice/index.html" data-lang="zh">🧾 打开商业发票工具</a>
+        <a class="btn btn-primary" id="allAccessCta" href="../index.html#all-access" data-lang="en">Studio All-Access ($19) →</a>
+        <a class="btn btn-primary" id="allAccessCtaZh" href="../index.html#all-access" data-lang="zh">了解全站终身通票 →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div>
+        <strong>CraftLeaf &amp; Pixel Studio</strong> — 100% Client-Side Privacy Architecture. Financial data never leaves your device.
+      </div>
+      <div>
+        <a href="../index.html" style="margin-right:14px;">Studio Home</a>
+        <a href="../tools/invoice/index.html" style="margin-right:14px;">Invoice PDF</a>
+        <a href="../tools/id-photo/index.html" style="margin-right:14px;">4×6 ID Photo</a>
+        <a href="../cardsheet/index.html">CardSheet</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- RELATIVE MONETIZATION ASSETS -->
+  <script src="../assets/monetization-config.js"></script>
+  <script src="../assets/monetization-sdk.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // 1. Bilingual Toggle synced with CraftLeaf Studio
+    var htmlEl = document.documentElement;
+    var savedLang = '';
+    try { savedLang = localStorage.getItem('craftleaf_lang') || ''; } catch (_e) {}
+    if (!savedLang && navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) {
+      savedLang = 'zh';
+    }
+    function applyLang(lang) {
+      if (lang === 'zh') htmlEl.classList.add('zh');
+      else htmlEl.classList.remove('zh');
+      try { localStorage.setItem('craftleaf_lang', lang); } catch (_e) {}
+    }
+    applyLang(savedLang === 'zh' ? 'zh' : 'en');
+    document.getElementById('langToggle').addEventListener('click', function () {
+      applyLang(htmlEl.classList.contains('zh') ? 'en' : 'zh');
+    });
+
+    // 2. Wire CRAFTLEAF_MONETIZATION.products.freelancerOsKit
+    var cfg = (window.CRAFTLEAF_MONETIZATION) || {};
+    var prods = cfg.products || {};
+    var kit = prods.freelancerOsKit || {};
+    var priceUsd = kit.priceUsd || '$9.99';
+
+    Array.prototype.forEach.call(document.querySelectorAll('.js-pro-price'), function (el) {
+      el.textContent = priceUsd;
+    });
+    if (kit.freeLiteUrl) {
+      Array.prototype.forEach.call(document.querySelectorAll('.free-cta'), function (a) {
+        a.href = kit.freeLiteUrl;
+      });
+    }
+    if (kit.fullPackUrlEn) {
+      Array.prototype.forEach.call(document.querySelectorAll('.pro-en-cta'), function (a) {
+        a.href = kit.fullPackUrlEn;
+      });
+    }
+    if (kit.fullPackUrlZh) {
+      Array.prototype.forEach.call(document.querySelectorAll('.pro-zh-cta'), function (a) {
+        a.href = kit.fullPackUrlZh;
+      });
+    }
+    if (prods.allAccessPass) {
+      if (prods.allAccessPass.checkoutUrlEn) document.getElementById('allAccessCta').href = prods.allAccessPass.checkoutUrlEn;
+      if (prods.allAccessPass.checkoutUrlZh) document.getElementById('allAccessCtaZh').href = prods.allAccessPass.checkoutUrlZh;
+    }
+
+    // 3. Instant Browser-Generated Free Sample SaaS Audit CSV (Zero static .zip/.pdf files in public-web!)
+    document.getElementById('btnInstantSampleCsv').addEventListener('click', function () {
+      var csvLines = [
+        'Service_Name,Category,Billing_Cycle,Monthly_USD,Annualized_USD,Business_Deductible_Pct,Necessity_Tier,Action_Decision',
+        'Claude Pro,AI & LLM,Monthly,20.00,240.00,100,Essential Core,KEEP',
+        'Figma Professional,Design,Monthly,15.00,180.00,100,Essential Core,KEEP',
+        'Adobe Creative Cloud,Design,Monthly,59.99,719.88,100,Nice-to-Have,EVALUATE DOWNGRADE',
+        'Ahrefs Lite SEO,Marketing,Monthly,129.00,1548.00,100,Unused 45+ Days,CANCEL BEFORE RENEWAL',
+        'Loom Business Annual,Productivity,Annual,15.00,180.00,100,Nice-to-Have,SWITCH TO LOCAL RECORDER'
+      ];
+      var blob = new Blob(['\ufeff' + csvLines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'SaaS_Subscription_Bleed_Audit_Starter.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 500);
+    });
+
+    // 4. Demo Sandbox Tabs
+    document.getElementById('demoTabs').addEventListener('click', function (e) {
+      var btn = e.target.closest('.dtab');
+      if (!btn) return;
+      var target = btn.getAttribute('data-dtab');
+      Array.prototype.forEach.call(document.querySelectorAll('.dtab'), function (b) {
+        b.classList.toggle('active', b === btn);
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('.dpanel'), function (p) {
+        p.classList.toggle('active', p.id === 'dpanel-' + target);
+      });
+    });
+
+    // 5. Interactive Demo Subscription Bleed & Cancel Simulator
+    var demoSubs = [
+      { id: 'd1', name: 'Claude Pro (AI Pair Coding)', cat: 'AI & LLM', mrr: 20.00, tier: 'Essential', cut: false },
+      { id: 'd2', name: 'Figma Professional', cat: 'Design', mrr: 15.00, tier: 'Essential', cut: false },
+      { id: 'd3', name: 'Vercel Pro & Domains', cat: 'Cloud & Dev', mrr: 24.00, tier: 'Essential', cut: false },
+      { id: 'd4', name: 'Adobe Creative Cloud All Apps', cat: 'Design', mrr: 59.99, tier: 'Nice-to-Have', cut: true },
+      { id: 'd5', name: 'Ahrefs Lite SEO Suite', cat: 'Marketing', mrr: 129.00, tier: 'Unused 47d', cut: true },
+      { id: 'd6', name: 'Loom Business + 4K Stream', cat: 'Personal/Ops', mrr: 37.99, tier: 'Nice-to-Have', cut: true }
+    ];
+    var currentTargetHr = 152;
+    var COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#f43f5e'];
+
+    function fmtUsd(n) { return '$' + Math.round(n).toLocaleString(); }
+
+    function renderDemoBleed() {
+      var activeMrr = 0, cutMrr = 0, catMap = {};
+      demoSubs.forEach(function (s) {
+        if (s.cut) {
+          cutMrr += s.mrr;
+        } else {
+          activeMrr += s.mrr;
+          catMap[s.cat] = (catMap[s.cat] || 0) + s.mrr;
+        }
+      });
+      var cutYr = cutMrr * 12;
+      var r = 0.07 / 12;
+      var cut3Yr = cutMrr > 0 ? cutMrr * ((Math.pow(1 + r, 36) - 1) / r) : 0;
+      var hrsFreed = currentTargetHr > 0 ? (cutYr / currentTargetHr) : 0;
+
+      document.getElementById('demoBleedKpis').innerHTML =
+        '<div class="sk"><small>Active Burn Kept</small><strong style="color:#f8fafc;">$' + activeMrr.toFixed(2) + '/mo</strong></div>' +
+        '<div class="sk"><small>Monthly Cash Freed</small><strong>$' + cutMrr.toFixed(2) + '/mo</strong></div>' +
+        '<div class="sk"><small>1-Year Direct Savings</small><strong>' + fmtUsd(cutYr) + '/yr</strong></div>' +
+        '<div class="sk"><small>3-Yr Invested (7% APY)</small><strong>' + fmtUsd(cut3Yr) + '</strong></div>' +
+        '<div class="sk"><small>Billable Work Saved</small><strong style="color:#fbbf24;">' + hrsFreed.toFixed(1) + ' hrs/yr</strong></div>';
+
+      document.getElementById('demoSubsRows').innerHTML = demoSubs.map(function (s) {
+        return '<tr class="' + (s.cut ? 'cut-on' : '') + '">' +
+          '<td><input type="checkbox" class="dm-sub-chk" data-id="' + s.id + '" ' + (s.cut ? 'checked' : '') + ' style="width:16px;height:16px;accent-color:#10b981;cursor:pointer;" /></td>' +
+          '<td><strong>' + s.name + '</strong></td>' +
+          '<td>$' + s.mrr.toFixed(2) + '</td>' +
+          '<td>$' + Math.round(s.mrr * 12) + '/yr</td>' +
+          '<td><span style="font-size:11px;color:' + (s.tier === 'Essential' ? '#93c5fd' : '#fcd34d') + ';font-weight:700;">' + s.tier + '</span></td>' +
+          '</tr>';
+      }).join('');
+
+      var cats = Object.keys(catMap);
+      var rad = 52, cx = 68, cy = 68, circ = 2 * Math.PI * rad, off = 0;
+      var arcs = '', leg = '';
+      var denom = activeMrr || 1;
+      if (!cats.length) {
+        arcs = '<circle cx="68" cy="68" r="52" fill="none" stroke="#334155" stroke-width="16" />';
+      } else {
+        cats.forEach(function (c, i) {
+          var col = COLORS[i % COLORS.length];
+          var dash = (catMap[c] / denom) * circ;
+          arcs += '<circle cx="68" cy="68" r="52" fill="none" stroke="' + col + '" stroke-width="16" stroke-dasharray="' + dash.toFixed(1) + ' ' + circ.toFixed(1) + '" stroke-dashoffset="' + (-off).toFixed(1) + '" transform="rotate(-90 68 68)" />';
+          off += dash;
+          leg += '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;">' +
+            '<span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + col + ';margin-right:6px;"></i>' + c + '</span>' +
+            '<strong>$' + catMap[c].toFixed(0) + '/mo</strong></div>';
+        });
+      }
+      document.getElementById('demoDonutMount').innerHTML =
+        '<div style="display:grid;grid-template-columns:140px 1fr;gap:12px;align-items:center;">' +
+        '<svg viewBox="0 0 136 136" style="width:136px;height:136px;">' + arcs +
+        '<text x="68" y="65" text-anchor="middle" fill="#f8fafc" font-size="14" font-weight="800">$' + Math.round(activeMrr) + '</text>' +
+        '<text x="68" y="80" text-anchor="middle" fill="#94a3b8" font-size="9.5">/mo kept</text></svg>' +
+        '<div>' + (leg || '<span style="font-size:12px;color:var(--muted);">All cut ($0/mo)!</span>') + '</div></div>';
+    }
+
+    document.getElementById('demoSubsRows').addEventListener('click', function (e) {
+      var chk = e.target.closest('.dm-sub-chk');
+      if (!chk) return;
+      var id = chk.getAttribute('data-id');
+      demoSubs.forEach(function (s) { if (s.id === id) s.cut = chk.checked; });
+      renderDemoBleed();
+    });
+    document.getElementById('demoSelectUnused').addEventListener('click', function () {
+      demoSubs.forEach(function (s) { s.cut = (s.tier !== 'Essential'); });
+      renderDemoBleed();
+    });
+
+    // 6. Interactive Demo Reverse Rate Calculator
+    function renderDemoRate() {
+      var net = Number(document.getElementById('dmNet').value) || 96000;
+      var oh = Number(document.getElementById('dmOh').value) || 4800;
+      var taxPct = Number(document.getElementById('dmTax').value) || 28;
+      var wks = Number(document.getElementById('dmWks').value) || 46;
+      var utilPct = Number(document.getElementById('dmUtil').value) || 60;
+
+      document.getElementById('lblNet').textContent = fmtUsd(net);
+      document.getElementById('lblOh').textContent = fmtUsd(oh);
+      document.getElementById('lblTax').textContent = taxPct + '%';
+      document.getElementById('lblWks').textContent = wks + ' wks';
+      document.getElementById('lblUtil').textContent = utilPct + '%';
+
+      var gross = (net / (1 - taxPct / 100)) + oh;
+      var billableHrs = wks * 36 * (utilPct / 100);
+      var floorHr = Math.ceil(gross / billableHrs);
+      var targetHr = Math.ceil(floorHr * 1.15);
+      var dayRate = Math.ceil((targetHr * 7) / 10) * 10;
+      currentTargetHr = targetHr;
+
+      var qCore = Math.ceil((32 * targetHr) / 50) * 50;
+      var qGrowth = Math.ceil((qCore * 1.35) / 50) * 50;
+      var qVip = Math.ceil((qCore * 1.85) / 50) * 50;
+
+      document.getElementById('demoRateOut').innerHTML =
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">' +
+        '<div class="sk"><small>Target Hourly (+15% Buffer)</small><strong style="font-size:24px;">$' + targetHr + '/hr</strong></div>' +
+        '<div class="sk"><small>7-Hour Day Sprint</small><strong style="font-size:24px;color:#60a5fa;">$' + dayRate.toLocaleString() + '</strong></div>' +
+        '<div class="sk"><small>Required Gross Revenue</small><strong style="color:#f8fafc;">' + fmtUsd(gross) + '/yr</strong></div>' +
+        '<div class="sk"><small>Survival Walk-Away Floor</small><strong style="color:#fbbf24;">$' + floorHr + '/hr</strong></div>' +
+        '</div>' +
+        '<strong style="font-size:13px;display:block;margin-bottom:8px;">Sample 32-Hour Client Project — 3-Tier Proposal Anchor:</strong>' +
+        '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">' +
+        '<div class="sk"><small>Tier 1 · Core</small><strong style="font-size:17px;color:#f8fafc;">' + fmtUsd(qCore) + '</strong></div>' +
+        '<div class="sk" style="border-color:#10b981;background:rgba(16,185,129,0.12);"><small style="color:#34d399;font-weight:700;">Tier 2 · Growth ★</small><strong style="font-size:17px;">' + fmtUsd(qGrowth) + '</strong></div>' +
+        '<div class="sk"><small>Tier 3 · VIP</small><strong style="font-size:17px;color:#f8fafc;">' + fmtUsd(qVip) + '</strong></div>' +
+        '</div>';
+
+      renderDemoBleed();
+    }
+
+    ['dmNet', 'dmOh', 'dmTax', 'dmWks', 'dmUtil'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', renderDemoRate);
+    });
+
+    renderDemoRate();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D&D 5e Spell, Monster & Magic Item Reference Card Sheet Generator | CardSheet Studio</title>
+  <meta name="description" content="Create printable 9-up Poker-size D&D 5e spell cards, magic item handouts, and 1-inch tabletop battlemap paper standees on A4 or US Letter PDF sheets." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/cardsheet/use-cases/dnd-spell-item-card-sheet-generator.html" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Will these 9-up RPG spell cards fit standard 9-pocket trading card binder pages?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! The default 63.5 × 88.9 mm (2.5 × 3.5 inch) Poker preset matches standard TCG cards, fitting both card sleeves and 9-pocket character spellbook binder sheets."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the 3D Paper Standee generator keep the back side upright when folded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CardSheet Studio automatically rotates the upper back panel 180 degrees across the top mountain-fold crease, so when you fold the strip into an A-frame triangle and glue the base tab, both front and back stand right-side up."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my homebrew campaign text uploaded anywhere?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Never. CardSheet Studio runs 100% locally inside your browser tab with zero backend servers."
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 65%, #f5f3ff 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      margin-bottom: 26px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(22px, 3.4vw, 31px);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 16px;
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 19px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 12.5px;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary {
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .faq-item p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pnp-banner {
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, #eef2ff 0%, #ecfdf5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .related-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      background: #f8fafc;
+      font-size: 13px;
+    }
+    .related-card span { color: var(--primary); font-size: 12px; font-weight: 600; }
+    [data-lang="zh"] { display: none; }
+    body.lang-zh [data-lang="en"] { display: none; }
+    body.lang-zh [data-lang="zh"] { display: block; }
+    body.lang-zh span[data-lang="zh"], body.lang-zh a[data-lang="zh"] { display: inline-flex; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../index.html?preset=dnd">
+      <span>🃏</span>
+      <span>CardSheet &amp; Flashcard Studio</span>
+    </a>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a class="btn" style="padding:6px 12px;font-size:12.5px;" href="../../index.html">← Studio Hub</a>
+      <button type="button" id="langBtn" class="btn" style="padding:6px 12px;font-size:12.5px;">🌐 中文 / EN</button>
+      <a class="btn btn-primary" style="padding:6px 13px;font-size:12.5px;" href="../index.html?preset=dnd">Open Studio →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="badge" data-lang="en">TTRPG 5E & DUNGEON MASTER TOOLS</div>
+      <div class="badge" data-lang="zh">TRPG 跑团地下城主法术卡与立牌工坊</div>
+
+      <h1 data-lang="en">D&D 5e Spell, Monster & Magic Item Reference Card Sheet Generator</h1>
+      <h1 data-lang="zh">D&D 跑团法术卡、魔法物品速查卡与 1 英寸格子怪物立牌拼版生成器</h1>
+
+      <p class="lead" data-lang="en">Stop flipping through 300-page rulebooks mid-combat. Hand your party physical parchment-styled Spell Cards, Magic Item loot cards, and tri-fold 1-inch grid monster standees printed straight from your browser.</p>
+      <p class="lead" data-lang="zh">告别战斗轮翻书卡壳！一键用复古羊皮纸主题排印玩家的每日准备法术卡、鉴定后的魔法战利品道具卡，还能直接切换 3D 模式生成适配 1 英寸战斗地图网格的折纸英雄与怪物立牌。</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" data-lang="en" href="../index.html?preset=dnd">🎲 Open 5e Grimoire Card Designer</a>
+        <a class="btn btn-primary" data-lang="zh" href="../index.html?preset=dnd&amp;lang=zh">🎲 打开跑团羊皮纸法术卡设计器</a>
+
+        <a class="btn" data-lang="en" href="../index.html?preset=standee">🧍 Generate 1-Inch Battlemap Standees</a>
+        <a class="btn" data-lang="zh" href="../index.html?preset=standee&amp;lang=zh">🧍 生成 1 英寸战斗网格怪物折纸立牌</a>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Exact Physical Sheet Dimensions &amp; Cards Per Page</h2>
+      <h2 data-lang="zh">精确物理尺寸规格与单页拼版容量对照表</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Preset</th>
+              <th>Physical Size</th>
+              <th>Sheet Capacity</th>
+              <th>Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Standard Spell Card</strong></td><td><code>63.5 × 88.9 mm (9-Up)</code></td><td>Fits 9-pocket binder pages</td><td>Prepared spells, class features & conditions</td></tr>
+<tr><td><strong>Compact Loot / Potion</strong></td><td><code>44 × 68 mm Mini Euro (16-Up)</code></td><td>16 items per A4 sheet</td><td>Consumables, potions, scrolls & charms</td></tr>
+<tr><td><strong>1-Inch Grid Standee</strong></td><td><code>28 × 46 mm Tri-Fold</code></td><td>12 standees per A4 sheet</td><td>Upright front + auto-inverted 180° back art</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">3-Step Zero-Waste Home Printing Workflow</h2>
+      <h2 data-lang="zh">三步零废纸家用高清打印与直刀裁切流程</h2>
+      <ol data-lang="en" style="margin:0;padding-left:20px;">
+        <li>Click the **🎲 5e RPG Spells** preset deck or paste custom homebrew spells (`Spell Name | Range · Components · Effect | Action Cost | Icon`).</li>
+<li>Select the **RPG Grimoire Parchment** visual theme or switch to **Low-Ink Eco** for crisp black-and-white laser printing.</li>
+<li>Need miniatures for tonight's encounter? Click **3D Standees & Tuckbox** in the top bar to print 12 foldable heroes & monsters on one sheet!</li>
+      </ol>
+      <ol data-lang="zh" style="margin:0;padding-left:20px;">
+        <li>点击 **🎲 跑团法术物品卡** 示例，或按竖线格式粘贴你的房规法术与神装属性。</li>
+<li>选用 **复古羊皮纸法术书** 主题（黑白激光打印机可选省墨白底边框模式）。</li>
+<li>今晚跑团缺怪物棋子？点击顶部 **3D 折纸立牌与卡盒刀版**，一页纸即可印出 12 枚正反双面直立的 1 英寸网格立牌！</li>
+      </ol>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Frequently Asked Questions</h2>
+      <h2 data-lang="zh">常见问题解答 (FAQ)</h2>
+      <details class="faq-item" open><summary>Will these 9-up RPG spell cards fit standard 9-pocket trading card binder pages?</summary><p>Yes! The default 63.5 × 88.9 mm (2.5 × 3.5 inch) Poker preset matches standard TCG cards, fitting both card sleeves and 9-pocket character spellbook binder sheets.</p></details>
+<details class="faq-item" open><summary>How does the 3D Paper Standee generator keep the back side upright when folded?</summary><p>CardSheet Studio automatically rotates the upper back panel 180 degrees across the top mountain-fold crease, so when you fold the strip into an A-frame triangle and glue the base tab, both front and back stand right-side up.</p></details>
+<details class="faq-item" open><summary>Is my homebrew campaign text uploaded anywhere?</summary><p>Never. CardSheet Studio runs 100% locally inside your browser tab with zero backend servers.</p></details>
+    </section>
+
+    <div id="affiliateMount"></div>
+
+    <div class="pnp-banner">
+      <div style="flex:1;min-width:240px;">
+        <div style="font-size:11.5px;font-weight:800;color:#4338ca;">🎲 ORIGINAL INDIE PRINT &amp; PLAY GAMES</div>
+        <strong style="font-size:15px;display:block;margin:2px 0;" data-lang="en">Play Our 3 Original 2-Player Strategy Board Games Free vs. Browser AI!</strong>
+        <strong style="font-size:15px;margin:2px 0;" data-lang="zh">免费在线试玩工坊原创 3 款双人策略桌游（内置 AI 陪练 + 完整双语打印包）！</strong>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a class="btn" href="../../play/index.html">▶️ Play Free in Browser</a>
+        <a id="pnpBuyBtn" class="btn btn-primary" href="../../play/index.html" target="_blank" rel="noopener">📦 PnP Trilogy Bundle ($7.99)</a>
+      </div>
+    </div>
+
+    <section class="section-card" style="margin-top:20px;">
+      <h2 data-lang="en">More Card &amp; Tabletop Print Layout Tools</h2>
+      <h2 data-lang="zh">更多卡牌、闪卡与桌游纸艺排版工具</h2>
+      <div class="related-grid">
+        <a class="related-card" href="./printable-flashcard-maker-a4-letter.html"><strong>Printable Vocabulary Flashcard Maker for A4 & US Letter</strong><span>背单词与考试复习双面闪卡排版器 →</span></a>
+<a class="related-card" href="./playing-card-print-and-play-layout-tool.html"><strong>Playing Card Print-and-Play</strong><span>独立桌游原型与 PnP 卡牌拼版神器 →</span></a>
+<a class="related-card" href="./duplex-double-sided-card-printing-aligner.html"><strong>Duplex Double-Sided Card Printing Aligner</strong><span>解决家用双面打印正反错位痛点 →</span></a>
+<a class="related-card" href="./diy-business-card-sheet-pdf-maker.html"><strong>DIY 3.5×2" Business Card 10-Up Sheet PDF Maker</strong><span>独立创作者展会名片与二维码贴纸排版 →</span></a>
+<a class="related-card" href="./board-game-standee-template-generator.html"><strong>Board Game Paper Standee & Custom Parametric Deck Tuckbox Template Generator</strong><span>3D 桌游折纸立牌与自定义牌厚卡盒刀版 →</span></a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script>
+    (function () {
+      var lang = (navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) ? 'zh' : 'en';
+      function syncLang() {
+        document.body.classList.toggle('lang-zh', lang === 'zh');
+        if (window.CraftLeafSDK) {
+          CraftLeafSDK.renderAffiliateBar(document.getElementById('affiliateMount'), 'print-craft', lang);
+          var cfg = CraftLeafSDK.getConfig();
+          var pnp = (cfg.products && cfg.products.pnpTrilogyBundle) || {};
+          var btn = document.getElementById('pnpBuyBtn');
+          if (btn) {
+            btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
+            btn.textContent = lang === 'zh'
+              ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
+              : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+          }
+        }
+      }
+      document.getElementById('langBtn').addEventListener('click', function () {
+        lang = lang === 'en' ? 'zh' : 'en';
+        syncLang();
+      });
+      syncLang();
+    })();
+  </script>
+</body>
+</html>

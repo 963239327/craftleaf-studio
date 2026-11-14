@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CraftLeaf &amp; Pixel Studio — Privacy-First Browser Tools, Dev Extensions &amp; Print-and-Play Games</title>
+  <meta name="description" content="100% local, privacy-first browser utilities (Passport/Visa 4x6 ID Photo Maker, No-Signup Invoice PDF Studio, Flashcard &amp; PnP Card Sheet Layout), VS Code &amp; Browser Extensions, and Original 2-Player Print-and-Play Tabletop Games." />
+  <meta property="og:title" content="CraftLeaf &amp; Pixel Studio — Privacy-First Micro-Tools &amp; Indie Tabletop" />
+  <meta property="og:description" content="Zero-upload browser tools, developer security extensions, solo-founder templates, and tactile 2-player Print-and-Play board games." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111827;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --blue: #3b82f6;
+      --amber: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at 20% 0%, #172554 0%, var(--bg) 52%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 17, 32, 0.84);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.7);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; gap: 12px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; text-decoration: none; }
+    .badge-pill {
+      display: inline-block; font-size: 12px; font-weight: 600;
+      padding: 3px 10px; border-radius: 999px;
+      background: rgba(16, 185, 129, 0.16); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .nav-links { display: flex; align-items: center; gap: 16px; font-size: 14px; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: var(--muted); transition: color 0.15s; }
+    .nav-links a:hover { color: #fff; }
+    .lang-btn {
+      background: var(--card); color: var(--text); border: 1px solid var(--border);
+      padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
+    }
+    .hero { padding: 64px 0 40px; text-align: center; }
+    .hero h1 { font-size: clamp(28px, 4.4vw, 48px); line-height: 1.18; margin: 16px auto; max-width: 880px; }
+    .hero p { color: var(--muted); font-size: 17px; max-width: 720px; margin: 0 auto 28px; }
+    .cta-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 20px; border-radius: 10px; font-weight: 700; font-size: 14px;
+      text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform 0.12s, background 0.15s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: #052e16; }
+    .btn-primary:hover { background: #34d399; }
+    .btn-secondary { background: var(--card); color: var(--text); border-color: var(--border); }
+    .section { padding: 36px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+    .section-head h2 { margin: 0; font-size: 24px; }
+    .section-head p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+    .card {
+      background: rgba(30, 41, 59, 0.78);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
+    }
+    .card-tag {
+      display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 3px 8px; border-radius: 6px; margin-bottom: 8px;
+    }
+    .tag-green { background: rgba(16,185,129,0.16); color: #6ee7b7; }
+    .tag-blue { background: rgba(59,130,246,0.18); color: #93c5fd; }
+    .tag-amber { background: rgba(245,158,11,0.18); color: #fcd34d; }
+    .card h3 { margin: 0 0 8px; font-size: 19px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .card-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .all-access {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(59, 130, 246, 0.16));
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      border-radius: 18px; padding: 28px; margin: 24px 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    }
+    .seo-pill-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .seo-pill-list a {
+      font-size: 12px; color: #cbd5e1; background: rgba(30,41,59,0.7);
+      border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; text-decoration: none;
+    }
+    .seo-pill-list a:hover { border-color: var(--accent); color: #fff; }
+    footer {
+      border-top: 1px solid var(--border); margin-top: 48px; padding: 32px 0 48px;
+      color: var(--muted); font-size: 13px;
+    }
+    [data-lang="zh"] { display: none; }
+    html.zh [data-lang="en"] { display: none; }
+    html.zh [data-lang="zh"] { display: revert; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="./" class="brand">
+        <span>🌿 CraftLeaf Studio</span>
+        <span class="badge-pill" data-lang="en">100% Local &amp; Private</span>
+        <span class="badge-pill" data-lang="zh">100% 浏览器本地隐私运行</span>
+      </a>
+      <div class="nav-links">
+        <a href="#web-tools" data-lang="en">Web Tools</a>
+        <a href="#web-tools" data-lang="zh">实用工具</a>
+        <a href="#extensions" data-lang="en">Extensions</a>
+        <a href="#extensions" data-lang="zh">效率插件</a>
+        <a href="#templates" data-lang="en">Templates</a>
+        <a href="#templates" data-lang="zh">财务模板</a>
+        <a href="#games" data-lang="en">Tabletop Games</a>
+        <a href="#games" data-lang="zh">打印桌游</a>
+        <button class="lang-btn" id="langToggle" type="button">中文 / EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <span class="badge-pill" data-lang="en">Zero Cloud Upload · Zero Account Required · Instant PDF &amp; Print</span>
+      <span class="badge-pill" data-lang="zh">文件绝不上传服务器 · 免注册点开即用 · 高清矢量打印导出</span>
+      <h1 data-lang="en">Practical Micro-Tools, Developer Extensions &amp; Tactile Tabletop Games</h1>
+      <h1 data-lang="zh">隐私优先的纯本地实用工具、开发者效率插件与原创打印桌游工坊</h1>
+      <p data-lang="en">Save $16+ on drugstore passport photos, generate client invoices in 30 seconds, sanitize secrets before pasting to AI, purify web pages to clean PDFs, or play original 2-player board games.</p>
+      <p data-lang="zh">在家拼版 4×6 寸出国签证证件照、免注册生成英文商业发票、向 AI 提问前自动脱敏代码密钥、网页一键省墨净版打印，以及随时在线试玩原创双人策略桌游。</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="./tools/id-photo/index.html" data-lang="en">🪪 Open Passport Photo Maker</a>
+        <a class="btn btn-primary" href="./tools/id-photo/index.html" data-lang="zh">🪪 打开出国证件照冲印拼版器</a>
+        <a class="btn btn-secondary" href="./tools/invoice/index.html" data-lang="en">🧾 Free Invoice PDF Studio</a>
+        <a class="btn btn-secondary" href="./tools/invoice/index.html" data-lang="zh">🧾 免注册英文发票生成器</a>
+        <a class="btn btn-secondary" href="./play/index.html" data-lang="en">🎲 Play Star Chef vs. AI</a>
+        <a class="btn btn-secondary" href="./play/index.html" data-lang="zh">🎲 在线试玩《星厨对决》</a>
+      </div>
+    </section>
+
+    <section class="section" id="web-tools">
+      <div class="section-head">
+        <div>
+          <h2 data-lang="en">1. Privacy-First Browser Studios</h2>
+          <h2 data-lang="zh">一、零上传纯本地高频实用工具台</h2>
+          <p data-lang="en">All image cropping, PDF generation, and client ledgers stay 100% inside your browser.</p>
+          <p data-lang="zh">所有人脸照片、商业账单与卡牌素材均在本地浏览器内存处理，零隐私泄露风险。</p>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div>
+            <span class="card-tag tag-green" data-lang="en">Everyday Saver</span>
+            <span class="card-tag tag-green" data-lang="zh">留学签证省钱神器</span>
+            <h3 data-lang="en">Passport &amp; Visa ID Photo 4×6" Sheet Studio</h3>
+            <h3 data-lang="zh">出国护照/美签/申根证件照 4×6 寸冲印拼版器</h3>
+            <p data-lang="en">Crop US (2×2"), Schengen, UK, Canada, Japan &amp; China visa photos with biometric head guides and tile onto a $0.39 drugstore 4×6" print sheet.</p>
+            <p data-lang="zh">内置美/加/英/申根/日/中等标准尺寸与头顶下巴比例辅助线，一键拼成 4×6 寸相纸去药店低成本冲印。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary" href="./tools/id-photo/index.html" data-lang="en">Launch Tool →</a>
+            <a class="btn btn-primary" href="./tools/id-photo/index.html" data-lang="zh">立即使用 →</a>
+            <a class="btn btn-secondary" href="./seo/index.html" data-lang="en">Country Specs</a>
+            <a class="btn btn-secondary" href="./seo/index.html" data-lang="zh">各国尺寸指南</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
+            <span class="card-tag tag-blue" data-lang="en">Freelance &amp; B2B</span>
+            <span class="card-tag tag-blue" data-lang="zh">自由职业与跨境收款</span>
+            <h3 data-lang="en">No-Signup Freelancer Invoice &amp; Receipt PDF Studio</h3>
+            <h3 data-lang="zh">免注册英文/双语商业发票与收据生成器</h3>
+            <p data-lang="en">Create crisp A4 / US Letter client invoices, quotes, and receipts with multi-currency tax calculation, local client CRM book, and payment QR codes.</p>
+            <p data-lang="zh">支持多币种税率折扣计算、本地客户档案记忆、自定义品牌配色与收款链接二维码嵌入，一键打印矢量 PDF。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary" href="./tools/invoice/index.html" data-lang="en">Create Invoice →</a>
+            <a class="btn btn-primary" href="./tools/invoice/index.html" data-lang="zh">生成发票 →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
+            <span class="card-tag tag-amber" data-lang="en">Study &amp; Print Craft</span>
+            <span class="card-tag tag-amber" data-lang="zh">单词闪卡与双面打印</span>
+            <h3 data-lang="en">CardSheet &amp; Flashcard Duplex Print Studio</h3>
+            <h3 data-lang="zh">CardSheet 单词闪卡/名片/卡牌双面精准拼版台</h3>
+            <p data-lang="en">Lay out study flashcards, business cards, stickers, and PnP game decks onto A4 or US Letter with millimeter duplex back-offset calibration.</p>
+            <p data-lang="zh">支持粘贴文本快速生成双面单词闪卡或拖入图片拼版，独创双面打印毫米级偏移校准与共线直刀裁剪线。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary" href="./cardsheet/index.html" data-lang="en">Open CardSheet →</a>
+            <a class="btn btn-primary" href="./cardsheet/index.html" data-lang="zh">打开拼版工作台 →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="extensions">
+      <div class="section-head">
+        <div>
+          <h2 data-lang="en">2. Developer &amp; Browser Extensions</h2>
+          <h2 data-lang="zh">二、开发者防泄密与浏览器净版打印插件</h2>
+          <p data-lang="en">Lightweight, zero-telemetry extensions for VS Code, Cursor, Microsoft Edge, and Firefox.</p>
+          <p data-lang="zh">零遥测、纯本地运行的编辑器与浏览器效率扩展。</p>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div>
+            <span class="card-tag tag-blue">VS Code &amp; Cursor (OpenVSX)</span>
+            <h3 data-lang="en">PasteShield — Reversible AI Prompt Secret Sanitizer</h3>
+            <h3 data-lang="zh">PasteShield — 代码与日志防泄密双向脱敏插件</h3>
+            <p data-lang="en">Automatically mask API keys, JWTs, cloud credentials, connection strings, and internal hosts before pasting to AI—then restore real identifiers in one click.</p>
+            <p data-lang="zh">复制代码或报错日志给外部 AI 前自动替换密钥与内网地址为可读占位符，收到回复后一键无损还原。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary" href="./extensions/pasteshield/index.html" data-lang="en">Try Live Playground →</a>
+            <a class="btn btn-primary" href="./extensions/pasteshield/index.html" data-lang="zh">在线体验脱敏沙盒 →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
+            <span class="card-tag tag-green">Edge &amp; Firefox Add-ons</span>
+            <h3 data-lang="en">CleanPrint &amp; AI-Chat to PDF Studio</h3>
+            <h3 data-lang="zh">CleanPrint — 网页净版阅读与 AI 对话省墨导出插件</h3>
+            <p data-lang="en">Strip ads and sidebars, prevent split code blocks in ChatGPT/Claude/Docs, toggle eco low-ink print mode, and merge multi-tab articles into one PDF.</p>
+            <p data-lang="zh">一键剔除网页杂项、防止 AI 对话代码块跨页截断、开启去背景省墨打印及多标签页合并导出。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary" href="./extensions/cleanprint/index.html" data-lang="en">Preview Extension →</a>
+            <a class="btn btn-primary" href="./extensions/cleanprint/index.html" data-lang="zh">查看插件详情 →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="templates">
+      <div class="section-head">
+        <div>
+          <h2 data-lang="en">3. Solo-Founder Finance OS &amp; Creator Toolkits</h2>
+          <h2 data-lang="zh">三、一人公司财务订阅看板与独立创作者开发包</h2>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div>
+            <span class="card-tag tag-amber" data-lang="en">Templates &amp; AI SOPs</span>
+            <span class="card-tag tag-amber" data-lang="zh">离线财务看板 + 商业SOP</span>
+            <h3 data-lang="en">Solo-Founder Finance, Subscription Bleed &amp; Tax OS</h3>
+            <h3 data-lang="zh">自由职业与副业财务、订阅止损及报税离线管家</h3>
+            <p data-lang="en">Offline interactive HTML financial command center, SaaS renewal bleed analyzer, hourly rate reverse calculator, 5 spreadsheet templates &amp; AI SOP playbook.</p>
+            <p data-lang="zh">双击即用的离线财务仪表盘、订阅续费漏斗分析、时薪倒推计算器、5 套表格模板与商业 AI 提示词手册。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary" href="./templates/index.html" data-lang="en">Explore Demo &amp; Free Kit →</a>
+            <a class="btn btn-primary" href="./templates/index.html" data-lang="zh">体验看板与免费精简包 →</a>
+          </div>
+        </article>
+
+        <article class="card" id="creator-kit">
+          <div>
+            <span class="card-tag tag-blue" data-lang="en">Game Designer Kit</span>
+            <span class="card-tag tag-blue" data-lang="zh">独立桌游开发者套件</span>
+            <h3 data-lang="en">Tabletop PnP HTML-to-PDF &amp; Monte Carlo Starter Kit</h3>
+            <h3 data-lang="zh">桌游 A4/Letter 印刷级排版模板与蒙特卡洛平衡模拟器</h3>
+            <p data-lang="en">Dual-size CSS print grid templates, 3D paper standee/tower die-cuts, 60 commercial-free tabletop SVG icons, and a Python 10,000-run game balance simulator.</p>
+            <p data-lang="zh">自适应双纸张印刷 CSS 框架、3D 折纸立牌刀版、60 枚原创桌游矢量图标与万局策略胜率模拟器。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-secondary" id="creatorKitBtn" href="#creator-kit" data-lang="en">Get Creator Kit ($12.99) →</a>
+            <a class="btn btn-secondary" id="creatorKitBtnZh" href="#creator-kit" data-lang="zh">获取开发者套件 →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="games">
+      <div class="section-head">
+        <div>
+          <h2 data-lang="en">4. Original 2-Player Print &amp; Play Tabletop Trilogy</h2>
+          <h2 data-lang="zh">四、原创双人打印即玩（Print &amp; Play）微桌游三部曲</h2>
+          <p data-lang="en">Monte-Carlo balanced 3–4 page tabletop strategy games in ISO A4, US Letter (8.5×11"), and Eco Low-Ink editions. Try Star Chef free in your browser!</p>
+          <p data-lang="zh">经过蒙特卡洛数值模拟与真人打磨的 3～4 页双人策略桌游，提供英/中双语、A4 + 北美 US Letter + 省墨版 PDF。</p>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div>
+            <span class="card-tag tag-green" data-lang="en">Playable in Browser!</span>
+            <span class="card-tag tag-green" data-lang="zh">支持网页单人 AI 陪练试玩</span>
+            <h3 data-lang="en">🍳 Star Chef Showdown: Rondel Bistro</h3>
+            <h3 data-lang="zh">🍳 《星厨对决》八方回转吧台 × 21点控温料理</h3>
+            <p data-lang="en">8-seat clockwise rondel movement, multi-use dish cards, and push-your-luck 21° wok heat control. Play solo vs. Sous-Chef AI right now, or print the 3-sheet physical game!</p>
+            <p data-lang="zh">八方顺时针回转吧台 × 一卡三用闭环 × 21点式添柴控温，点开网页即可单人挑战 AI 主厨！</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary" href="./play/index.html" data-lang="en">▶ Play Free in Browser</a>
+            <a class="btn btn-primary" href="./play/index.html" data-lang="zh">▶ 免费在线试玩</a>
+            <a class="btn btn-secondary" href="./games/previews/star_chef_sample_preview.pdf" target="_blank" data-lang="en">Sample PDF</a>
+            <a class="btn btn-secondary" href="./games/previews/star_chef_sample_preview.pdf" target="_blank" data-lang="zh">试阅样张</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
+            <span class="card-tag tag-amber">4-Sheet Cozy Strategy</span>
+            <h3 data-lang="en">🌾 Woodland Seasons: Emerald Valley</h3>
+            <h3 data-lang="zh">🌾 《四季森友》八轮节气时钟 × 四向旋转生态方片</h3>
+            <p data-lang="en">Friendly bump worker placement across an 8-solar-term clock, 4-way rotating habitat tiles, stone canals, and 12 symbiotic woodland critters.</p>
+            <p data-lang="zh">友好顶替轮流派工、24 枚四向顺时针旋转生态方片与 12 种森林伙伴十字相邻共生。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-secondary" href="./games/previews/woodland_seasons_sample_preview.pdf" target="_blank" data-lang="en">Free Sample PDF</a>
+            <a class="btn btn-secondary" href="./games/previews/woodland_seasons_sample_preview.pdf" target="_blank" data-lang="zh">免费试阅样张</a>
+            <a class="btn btn-primary pnp-bundle-link" href="#games" data-lang="en">Get Trilogy Bundle ($7.99)</a>
+            <a class="btn btn-primary pnp-bundle-link-zh" href="#games" data-lang="zh">获取三合一打印典藏包</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div>
+            <span class="card-tag tag-blue">3-Sheet + Standard Poker Deck</span>
+            <h3 data-lang="en">🔮 Cloudspire Alchemy: Skyward Grimoires</h3>
+            <h3 data-lang="zh">🔮 《云塔炼金》扑克盲翻推进 × 双层配重立体云塔</h3>
+            <p data-lang="en">Combine 3 printed sheets (including foldable 3D weighted paper cloud towers!) with any standard 54-card poker deck for tense grimoire engine building.</p>
+            <p data-lang="zh">配合任意一副普通扑克牌即可游玩，四花色双卷法典构筑搭配可叠放的 3D 折纸配重立体云塔。</p>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-secondary" href="./games/previews/cloudspire_alchemy_sample_preview.pdf" target="_blank" data-lang="en">Free Sample PDF</a>
+            <a class="btn btn-secondary" href="./games/previews/cloudspire_alchemy_sample_preview.pdf" target="_blank" data-lang="zh">免费试阅样张</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="all-access" id="all-access">
+      <div style="max-width:680px;">
+        <span class="badge-pill" data-lang="en">Best Value · One Key Unlocks Everything</span>
+        <span class="badge-pill" data-lang="zh">超值通票 · 一个激活码解锁全站所有 Pro 工具</span>
+        <h2 style="margin:10px 0 6px;" data-lang="en">Studio All-Access Lifetime Pro Pass ($19)</h2>
+        <h2 style="margin:10px 0 6px;" data-lang="zh">工坊全站工具终身 Pro 通行证</h2>
+        <p style="margin:0;color:#cbd5e1;font-size:14px;" data-lang="en">One `STUDIOALL-...` license key permanently unlocks Pro features across IDPhoto 4×6 Studio, Freelancer Invoice CRM, CardSheet Duplex Batch Aligner, CleanPrint Browser Extension, and PasteShield for VS Code.</p>
+        <p style="margin:0;color:#cbd5e1;font-size:14px;" data-lang="zh">一枚 `STUDIOALL-...` 通用终身激活码即可同时解锁证件照冲印刀线版、发票多客户管理、闪卡批量双面校准、CleanPrint 浏览器插件与 PasteShield 编辑器插件全部高级功能。</p>
+      </div>
+      <div class="card-actions" id="support">
+        <a class="btn btn-primary" id="allAccessLink" href="#all-access" data-lang="en">Unlock All-Access Pass →</a>
+        <a class="btn btn-primary" id="allAccessLinkZh" href="#all-access" data-lang="zh">获取全站终身通票 →</a>
+        <a class="btn btn-secondary" id="tipLink" href="#support" target="_blank" rel="noopener" data-lang="en">☕ Buy Creator a Coffee</a>
+        <a class="btn btn-secondary" id="tipLinkZh" href="#support" target="_blank" rel="noopener" data-lang="zh">☕ 赞助支持独立开发</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 style="margin:0 0 6px;font-size:16px;" data-lang="en">Popular Print Specs &amp; Free Templates</h3>
+      <h3 style="margin:0 0 6px;font-size:16px;" data-lang="zh">热门证件照冲印规格与发票/闪卡专题入口</h3>
+      <div class="seo-pill-list">
+        <a href="./seo/index.html">All Specs &amp; Guides Hub</a>
+        <a href="./tools/id-photo/index.html?preset=us">US 2×2" Passport Photo 4×6 Sheet</a>
+        <a href="./tools/id-photo/index.html?preset=schengen">Schengen 35×45mm Visa Photo</a>
+        <a href="./tools/id-photo/index.html?preset=canada">Canada 50×70mm Passport Photo</a>
+        <a href="./tools/id-photo/index.html?preset=china">China 33×48mm Visa Photo</a>
+        <a href="./tools/invoice/index.html">No-Signup Freelancer Invoice PDF</a>
+        <a href="./cardsheet/index.html">Duplex Flashcard &amp; PnP Card Sheet Maker</a>
+      </div>
+      <div id="portalAffiliateMount" style="margin-top:18px;color:#0f172a;"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div>
+        <strong>CraftLeaf &amp; Pixel Studio</strong> — 100% Client-Side Privacy Architecture. Files never leave your device.
+      </div>
+      <div>
+        <a href="./seo/index.html" style="margin-right:14px;">Guides</a>
+        <a href="./extensions/cleanprint/index.html#privacy" style="margin-right:14px;">Privacy Policy</a>
+        <a href="./sitemap.xml">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./assets/monetization-config.js"></script>
+  <script src="./assets/monetization-sdk.js"></script>
+  <script>
+    (function () {
+      var htmlEl = document.documentElement;
+      var savedLang = '';
+      try { savedLang = localStorage.getItem('craftleaf_lang') || ''; } catch (_e) {}
+      if (!savedLang && navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) {
+        savedLang = 'zh';
+      }
+      function applyLang(lang) {
+        if (lang === 'zh') htmlEl.classList.add('zh');
+        else htmlEl.classList.remove('zh');
+        try { localStorage.setItem('craftleaf_lang', lang); } catch (_e) {}
+        if (window.CraftLeafSDK) {
+          window.CraftLeafSDK.renderAffiliateBar(document.getElementById('portalAffiliateMount'), '', lang === 'zh' ? 'zh' : 'en');
+        }
+      }
+      applyLang(savedLang === 'zh' ? 'zh' : 'en');
+      document.getElementById('langToggle').addEventListener('click', function () {
+        applyLang(htmlEl.classList.contains('zh') ? 'en' : 'zh');
+      });
+
+      var cfg = (window.CraftLeafSDK && window.CraftLeafSDK.getConfig()) || {};
+      var prods = cfg.products || {};
+      var tips = cfg.tips || {};
+      if (prods.allAccessPass) {
+        document.getElementById('allAccessLink').href = prods.allAccessPass.checkoutUrlEn || '#all-access';
+        document.getElementById('allAccessLinkZh').href = prods.allAccessPass.checkoutUrlZh || '#all-access';
+      }
+      if (prods.tabletopCreatorKit) {
+        document.getElementById('creatorKitBtn').href = prods.tabletopCreatorKit.gumroadUrl || prods.tabletopCreatorKit.itchUrl || '#creator-kit';
+        document.getElementById('creatorKitBtnZh').href = prods.tabletopCreatorKit.gumroadUrl || '#creator-kit';
+      }
+      if (prods.pnpTrilogyBundle) {
+        Array.prototype.forEach.call(document.querySelectorAll('.pnp-bundle-link'), function (a) {
+          a.href = prods.pnpTrilogyBundle.itchUrl || prods.pnpTrilogyBundle.gumroadUrl || '#games';
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('.pnp-bundle-link-zh'), function (a) {
+          a.href = prods.pnpTrilogyBundle.mianbaoduoUrl || prods.pnpTrilogyBundle.gumroadUrl || '#games';
+        });
+      }
+      if (tips.kofiUrl) {
+        document.getElementById('tipLink').href = tips.kofiUrl;
+        document.getElementById('tipLinkZh').href = tips.afdianUrl || tips.kofiUrl;
+      }
+    })();
+  </script>
+</body>
+</html>

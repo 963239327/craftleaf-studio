@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleanPrint &amp; AI-Chat to PDF Studio — Edge &amp; Firefox Extension | CraftLeaf Studio</title>
+  <meta name="description" content="Purify web articles &amp; AI chats (ChatGPT, Claude, Copilot, GitHub) into crisp, ink-saving vector PDFs. 100% local Manifest V3 extension for Microsoft Edge &amp; Firefox." />
+  <link rel="icon" type="image/png" href="icon-128.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-lang="en">
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="../../index.html" class="nav-brand">
+        <img src="icon-128.png" alt="CleanPrint Studio" />
+        <span>CleanPrint Studio</span>
+      </a>
+      <div class="nav-links">
+        <a href="#preview">
+          <span data-lang-only="en">Before vs. After</span>
+          <span data-lang-only="zh">前后对比预览</span>
+        </a>
+        <a href="#features">
+          <span data-lang-only="en">Features</span>
+          <span data-lang-only="zh">核心功能</span>
+        </a>
+        <a href="#pro">
+          <span data-lang-only="en">Pro Lifetime ($5.99)</span>
+          <span data-lang-only="zh">Pro 终身买断</span>
+        </a>
+        <a href="#privacy">
+          <span data-lang-only="en">Privacy Policy</span>
+          <span data-lang-only="zh">隐私政策</span>
+        </a>
+        <button type="button" class="lang-switch" id="btnSwitchLang">中文 / EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badges">
+        <span class="pill">
+          <span data-lang-only="en">100% Local · Zero Data Collection</span>
+          <span data-lang-only="zh">100% 纯本地运行 · 零数据上传</span>
+        </span>
+        <span class="pill indigo">
+          <span data-lang-only="en">Manifest V3 · Minimal Permissions</span>
+          <span data-lang-only="zh">Manifest V3 最小权限安全架构</span>
+        </span>
+      </div>
+
+      <h1>
+        <span data-lang-only="en">Purify Web Articles &amp; AI Chats into Crisp, Ink-Saving Vector PDFs</span>
+        <span data-lang-only="zh">一键净化网页文章与 AI 对话，导出高清省墨矢量 PDF</span>
+      </h1>
+
+      <p class="hero-lead">
+        <span data-lang-only="en">
+          Stop printing cookie popups, chopped-off code blocks, and toner-soaking dark backgrounds. CleanPrint formats ChatGPT, Claude, Microsoft Copilot, GitHub docs, and articles into publication-grade printable sheets in one click.
+        </span>
+        <span data-lang-only="zh">
+          告别网页打印满屏弹窗广告、长代码右侧被截断、暗黑模式狂费墨粉的痛点！一键将 ChatGPT、Claude、Copilot、GitHub 技术文档与专栏排版为出版级省墨矢量 PDF。
+        </span>
+      </p>
+
+      <div class="store-badges">
+        <a href="https://microsoftedge.microsoft.com/addons" target="_blank" rel="noopener noreferrer" class="store-badge store-edge">
+          <span>🧩</span>
+          <span>
+            <span class="badge-small" data-lang-only="en">Free Official Download</span>
+            <span class="badge-small" data-lang-only="zh">免费官方商店安装</span>
+            <span class="badge-main">Microsoft Edge Add-ons</span>
+          </span>
+        </a>
+
+        <a href="https://addons.mozilla.org/" target="_blank" rel="noopener noreferrer" class="store-badge store-firefox">
+          <span>🦊</span>
+          <span>
+            <span class="badge-small" data-lang-only="en">Free Official Download</span>
+            <span class="badge-small" data-lang-only="zh">免费官方商店安装</span>
+            <span class="badge-main">Firefox Add-ons (AMO)</span>
+          </span>
+        </a>
+
+        <a href="#pro" class="store-badge store-pro">
+          <span>🔑</span>
+          <span>
+            <span class="badge-small" data-lang-only="en">Optional Lifetime Upgrade</span>
+            <span class="badge-small" data-lang-only="zh">一次买断 · 绝无订阅</span>
+            <span class="badge-main" data-lang-only="en">Unlock Pro Studio · $5.99</span>
+            <span class="badge-main" data-lang-only="zh">解锁 Pro 多页合并版 · ¥19.9</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="hero-trust">
+        <span>✓ ChatGPT · Claude · Copilot · DeepSeek · GitHub</span>
+        <span data-lang-only="en">✓ Also compatible with Chrome, Brave &amp; Arc</span>
+        <span data-lang-only="zh">✓ 同时全面兼容 Edge / Firefox / Chrome / Brave</span>
+        <span data-lang-only="en">✓ Saves up to 65% black ink &amp; toner</span>
+        <span data-lang-only="zh">✓ 省墨模式最高节省约 65% 硒鼓墨水</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="preview">
+    <div class="container">
+      <div class="section-header">
+        <h2>
+          <span data-lang-only="en">Interactive Before vs. After CleanPrint Preview</span>
+          <span data-lang-only="zh">交互式净化前后对比与专业排版实时预览</span>
+        </h2>
+        <p>
+          <span data-lang-only="en">Drag the green divider or click the typography pills below to see how CleanPrint transforms messy web &amp; AI chat threads.</span>
+          <span data-lang-only="zh">左右拖动绿色对比滑块，或点击下方主题按钮实时体验省墨代码框、学术衬线与双栏讲义效果。</span>
+        </p>
+      </div>
+
+      <div class="playground-toolbar">
+        <div class="pg-pills">
+          <button type="button" class="pg-btn active" id="btnToggleLowInk">
+            <span data-lang-only="en">🌿 Eco Low-Ink</span>
+            <span data-lang-only="zh">🌿 Eco 环保省墨</span>
+          </button>
+          <button type="button" class="pg-btn active" data-theme-btn="standard">
+            <span data-lang-only="en">Modern Sans (Free)</span>
+            <span data-lang-only="zh">现代无衬线 (免费)</span>
+          </button>
+          <button type="button" class="pg-btn" data-theme-btn="serif">
+            <span data-lang-only="en">Academic Serif (Pro)</span>
+            <span data-lang-only="zh">学术论文衬线 (Pro)</span>
+          </button>
+          <button type="button" class="pg-btn" data-theme-btn="swiss">
+            <span data-lang-only="en">Minimalist Swiss (Pro)</span>
+            <span data-lang-only="zh">极简瑞士网格 (Pro)</span>
+          </button>
+          <button type="button" class="pg-btn" data-theme-btn="twocol">
+            <span data-lang-only="en">2-Col Study Sheet (Pro)</span>
+            <span data-lang-only="zh">紧凑双栏讲义 (Pro)</span>
+          </button>
+        </div>
+
+        <label class="slider-control-inline" for="rngCompareSplit">
+          <span data-lang-only="en">Before / After Split:</span>
+          <span data-lang-only="zh">前后对比滑块：</span>
+          <input type="range" id="rngCompareSplit" min="5" max="95" value="46" />
+        </label>
+      </div>
+
+      <div class="compare-stage" id="compareStage">
+        <!-- AFTER LAYER -->
+        <div class="compare-layer layer-after low-ink" id="layerAfter">
+          <span class="after-badge">✓ AFTER · CLEANPRINT VECTOR PDF (~64% INK SAVED · 2 CRISP PAGES)</span>
+          <h3 class="demo-doc-title">Zero-Latency SQLite WAL Concurrency Architecture</h3>
+          <div class="demo-body-cols">
+            <div class="demo-qa">
+              <strong>PROMPT #1 · YOU</strong><br />
+              How do we eliminate reader/writer lock contention in SQLite while keeping crash safety?
+            </div>
+            <div class="demo-qa ai">
+              <strong>RESPONSE #2 · AI ASSISTANT</strong><br />
+              Switch from legacy rollback journals to Write-Ahead Logging (WAL). Readers inspect consistent snapshots while writers append sequentially without blocking queries:
+              <div class="demo-code">PRAGMA journal_mode = WAL;
+PRAGMA synchronous = NORMAL;
+PRAGMA busy_timeout = 5000; -- Wrapped cleanly with break-inside: avoid!</div>
+            </div>
+            <p style="margin:0;font-size:13.5px;color:#334155;">
+              All text exports as crisp, selectable, searchable vector glyphs — zero blurry raster screenshots, zero cookie modals, and zero cut-off code lines.
+            </p>
+          </div>
+        </div>
+
+        <!-- BEFORE LAYER -->
+        <div class="compare-layer layer-before" id="layerBefore">
+          <span class="before-badge">✕ BEFORE · RAW BROWSER CTRL+P (9 CLUTTERED PAGES · HEAVY BLACK TONER)</span>
+          <div class="messy-bar">
+            <span>☰ Chat Sidebar History · Upgrade Banner · User Nav</span>
+            <span>https://chatgpt.com/c/98a2...</span>
+          </div>
+          <div class="messy-ad-banner">
+            SPONSORED HEADER BANNER &amp; STICKY NAVIGATION BAR PRINTED ON EVERY SHEET
+          </div>
+          <div class="messy-chat-dark">
+            PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL; -- WIDE CODE CHOPPED AT RIGHT MARGIN →
+          </div>
+          <div class="messy-cookie-modal">
+            🍪 COOKIE &amp; PRIVACY CONSENT OVERLAY BLOCKING YOUR PARAGRAPHS! [Accept All] [Manage Preferences]
+          </div>
+        </div>
+
+        <div class="split-divider" id="splitDivider">
+          <span class="split-knob">◀ Drag ▶</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>
+          <span data-lang-only="en">Built for Engineers, Researchers &amp; Students</span>
+          <span data-lang-only="zh">专为开发者、科研人员与备考学生打造</span>
+        </h2>
+        <p>
+          <span data-lang-only="en">Every print pain point solved cleanly inside a zero-dependency ~40KB extension.</span>
+          <span data-lang-only="zh">零第三方臃肿依赖，纯原生轻量内核一站式解决网页与 AI 对话打印难题。</span>
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <article class="feat-card">
+          <div class="feat-icon">🤖</div>
+          <h3>
+            <span data-lang-only="en">AI-Chat Q&amp;A Cards &amp; Code Protection</span>
+            <span data-lang-only="zh">AI 对话问答卡片与代码防截断</span>
+          </h3>
+          <p>
+            <span data-lang-only="en">Formats ChatGPT, Claude, Copilot &amp; DeepSeek threads into clean Prompt/Response cards with <code>break-inside: avoid</code> on code blocks and tables.</span>
+            <span data-lang-only="zh">自动识别多轮提问与回答，代码块自动折行并锁定防跨页劈裂（<code>break-inside: avoid</code>），数据表格完整呈现。</span>
+          </p>
+        </article>
+
+        <article class="feat-card">
+          <div class="feat-icon">🌿</div>
+          <h3>
+            <span data-lang-only="en">Eco Low-Ink Print Stylesheet</span>
+            <span data-lang-only="zh">Eco 环保省墨打印引擎</span>
+          </h3>
+          <p>
+            <span data-lang-only="en">Strips solid black terminal boxes and dark-mode page backgrounds into crisp hairline borders, cutting home &amp; office ink/toner usage by up to 65%.</span>
+            <span data-lang-only="zh">智能褪去暗黑网页背景与纯黑代码底色，转换为高对比度细线框，家用喷墨与激光打印最高省墨 65%。</span>
+          </p>
+        </article>
+
+        <article class="feat-card">
+          <div class="feat-icon">📚</div>
+          <h3>
+            <span data-lang-only="en">Multi-Tab PDF Binder + Auto TOC</span>
+            <span data-lang-only="zh">跨标签多文章合并与自动目录</span>
+          </h3>
+          <p>
+            <span data-lang-only="en">Clip full articles or highlighted excerpts across multiple tabs and compile one unified vector PDF complete with a clickable Table of Contents.</span>
+            <span data-lang-only="zh">在多个网页与 AI 标签页自由摘录全文或划选重点，一键合并导出含可点击章节目录（TOC）的单本 PDF 合集。</span>
+          </p>
+        </article>
+
+        <article class="feat-card">
+          <div class="feat-icon">📖</div>
+          <h3>
+            <span data-lang-only="en">2-Column Study Sheets &amp; 2-Up Booklets</span>
+            <span data-lang-only="zh">学术双栏讲义与对折小册子拼版</span>
+          </h3>
+          <p>
+            <span data-lang-only="en">Switch to Academic Serif, Minimalist Swiss, dense Two-Column cheat sheets, or Landscape 2-Up booklets with automatic browser URL header removal.</span>
+            <span data-lang-only="zh">内置学术期刊衬线、极简瑞士、高密度双栏复习资料与横向双页小册子模式，并自动隐藏浏览器丑陋网址页眉。</span>
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pro">
+    <div class="container">
+      <div class="section-header">
+        <h2>
+          <span data-lang-only="en">Simple, Honest Pricing — Free Core + $5.99 Lifetime Pro</span>
+          <span data-lang-only="zh">核心功能永久免费 · Pro 专业版一次买断终身可用</span>
+        </h2>
+        <p>
+          <span data-lang-only="en">Zero monthly subscriptions. Zero accounts required. Activate offline in 3 seconds across Edge, Firefox &amp; Chrome.</span>
+          <span data-lang-only="zh">拒绝按月订阅套路，无需注册账号，一枚离线激活码在 Edge、Firefox 与 Chrome 永久通用。</span>
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <strong>CleanPrint Free</strong>
+          <div class="price-tag">$0</div>
+          <div class="price-note">
+            <span data-lang-only="en">Free forever on Edge Add-ons &amp; Firefox AMO</span>
+            <span data-lang-only="zh">官方扩展商店免费安装 · 无广告无水印</span>
+          </div>
+          <ul class="check-list">
+            <li>✓ One-Click Web Article &amp; Docs Purifier</li>
+            <li>✓ ChatGPT / Claude / Copilot Q&amp;A Formatter</li>
+            <li>✓ Unbroken Code Blocks &amp; Tables (<code>break-inside: avoid</code>)</li>
+            <li>✓ Eco Low-Ink Toggle + Hide Images + Font Slider</li>
+            <li>✓ Instant Native Vector PDF Export</li>
+          </ul>
+          <a href="#preview" class="cta-btn cta-outline">
+            <span data-lang-only="en">Included Free in Extension</span>
+            <span data-lang-only="zh">安装插件即可免费使用</span>
+          </a>
+        </div>
+
+        <div class="price-card featured">
+          <strong>CleanPrint Pro Studio</strong>
+          <div class="price-tag" id="lblProPrice">$5.99</div>
+          <div class="price-note">
+            <span data-lang-only="en">One-time payment · Lifetime CLEANPRO license key</span>
+            <span data-lang-only="zh">一次性买断（¥19.9 / $5.99）· 终身有效无二次收费</span>
+          </div>
+          <ul class="check-list">
+            <li>✓ <strong>Everything in Free</strong>, plus:</li>
+            <li>✓ <strong>Multi-Article Print Queue Collector</strong> across unlimited tabs</li>
+            <li>✓ <strong>Automatic Clickable Table of Contents (TOC)</strong> generator</li>
+            <li>✓ <strong>4 Studio Themes:</strong> Academic Serif, Swiss, 2-Column Study Sheet &amp; 2-Up Booklet</li>
+            <li>✓ <strong>Marginless Header/Footer Remover</strong> (strips browser URLs/timestamps)</li>
+            <li>✓ Works 100% offline + compatible with <code>STUDIOALL</code> All-Access Pass</li>
+          </ul>
+          <a href="#pro-verifier" class="cta-btn cta-emerald" id="btnCheckoutPro">
+            <span data-lang-only="en">Get CleanPrint Pro Key ($5.99) →</span>
+            <span data-lang-only="zh">获取 CleanPrint Pro 终身激活码 (¥19.9) →</span>
+          </a>
+          <div style="margin-top:10px;text-align:center;font-size:12.5px;">
+            <a href="../../index.html#all-access" id="btnCheckoutAllAccess" style="color:#2563eb;font-weight:700;text-decoration:none;">
+              <span data-lang-only="en">Or unlock ALL 6 Studio Pro tools + Games with Studio All-Access ($19) →</span>
+              <span data-lang-only="zh">或选择全站通票 Studio All-Access（¥69 解锁全部 6 款专业工具）→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="verifier-box" id="pro-verifier">
+        <strong>
+          <span data-lang-only="en">🔑 Already Purchased a CLEANPRO or STUDIOALL Key? Verify Checksum Instantly:</span>
+          <span data-lang-only="zh">🔑 已购买 CLEANPRO 或 STUDIOALL 激活码？在此在线秒验真伪：</span>
+        </strong>
+        <div class="verifier-row">
+          <input type="text" id="inpWebLicenseKey" placeholder="CLEANPRO-XXXX-XXXX-XXXXXX" spellcheck="false" autocomplete="off" />
+          <button type="button" class="cta-btn cta-emerald" id="btnWebVerifyKey">
+            <span data-lang-only="en">Verify Key</span>
+            <span data-lang-only="zh">验证激活码</span>
+          </button>
+        </div>
+        <div class="verify-result" id="webVerifyResult"></div>
+      </div>
+
+      <div id="affiliateSuppliesMount"></div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="privacy">
+    <div class="container">
+      <div class="privacy-box">
+        <h2>
+          <span data-lang-only="en">🛡️ Official Privacy Policy — CleanPrint &amp; AI-Chat to PDF Studio</span>
+          <span data-lang-only="zh">🛡️ 官方隐私政策声明（零数据收集承诺）</span>
+        </h2>
+        <p style="font-size:13px;color:#64748b;margin-top:-4px;">
+          Effective Date: November 13, 2026 · Extension ID: <code>cleanprint-studio@craftleaf.studio</code>
+        </p>
+
+        <p data-lang-only="en">
+          <strong>Zero Data Collection Summary:</strong> CleanPrint &amp; AI-Chat to PDF Studio does <strong>not</strong> collect, transmit, store on external servers, sell, or share any personal information, browsing history, search queries, AI chat transcripts, or webpage content. All reader purification, Eco Low-Ink CSS styling, and multi-tab PDF compilation run <strong>100% locally inside your web browser</strong>.
+        </p>
+        <p data-lang-only="zh">
+          <strong>零数据收集承诺：</strong>CleanPrint &amp; AI-Chat to PDF Studio <strong>绝不收集、上传、远程存储或向任何第三方共享</strong>您的任何个人信息、浏览记录、AI 聊天记录或网页正文内容。所有的正文提纯、省墨排版与跨标签 PDF 目录合并均 <strong>100% 在您本地设备浏览器内存中离线完成</strong>。
+        </p>
+
+        <table class="perm-table">
+          <thead>
+            <tr>
+              <th>Manifest V3 Permission</th>
+              <th>Exact Local Purpose &amp; Reviewer Justification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>activeTab</code></td>
+              <td>Grants temporary, user-initiated access strictly to the currently active tab only when you explicitly click the CleanPrint toolbar button. Zero background tab monitoring and zero broad <code>&lt;all_urls&gt;</code> host permissions.</td>
+            </tr>
+            <tr>
+              <td><code>scripting</code></td>
+              <td>Injects the local <code>purifier.js</code> print formatter on demand when clicked so ads, navbars, and dark backgrounds can be stripped cleanly for printing.</td>
+            </tr>
+            <tr>
+              <td><code>storage</code></td>
+              <td>Stores your preferred print font size, Eco Low-Ink toggle state, locally queued print clips, and offline Pro license status exclusively on your own computer via <code>storage.local</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:13.5px;color:#475569;margin-bottom:0;" id="support">
+          <strong>License Verification Disclosure:</strong> Offline <code>CLEANPRO-...</code> and <code>STUDIOALL-...</code> keys verify locally via deterministic FNV-1a checksums with zero network requests. Only if you manually submit a Gumroad license string does the extension send that license key directly to Gumroad's official <code>https://api.gumroad.com/v2/licenses/verify</code> endpoint to validate purchase status. Zero analytics, telemetry, cookies, or third-party tracking scripts exist anywhere in the extension. For support, visit <a href="../../index.html">CraftLeaf &amp; Pixel Studio</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© 2026 CraftLeaf &amp; Pixel Studio (青叶像素独立工坊) · 100% Local Privacy-First Tools</div>
+      <div style="display:flex;gap:18px;">
+        <a href="../../index.html">Studio Home</a>
+        <a href="#pro">CleanPrint Pro</a>
+        <a href="#privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script src="landing.js"></script>
+</body>
+</html>

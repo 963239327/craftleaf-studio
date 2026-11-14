@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DIY 3.5×2" Business Card 10-Up Sheet PDF Maker (A4 & US Letter, Zero Bleed Hassle) | CardSheet Studio</title>
+  <meta name="description" content="Print 10 crisp 3.5 x 2 inch (88.9 x 50.8 mm) business cards or 15 square 50x50mm product QR tags per A4 or US Letter sheet in your browser with shared straight-cut crop marks." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/cardsheet/use-cases/diy-business-card-sheet-pdf-maker.html" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why cut plain heavyweight cardstock with guillotine marks instead of perforated Avery sheets?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Micro-perforated sheets leave fuzzy nibs on card edges and jam if printer margins drift by 1mm. Printing onto solid 250gsm–300gsm cardstock and making 7+3 straight slide-trimmer cuts gives true print-shop smooth edges at a fraction of the cost."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I switch to European 85 × 55 mm or Japanese 91 × 55 mm business card sizes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Select 'Custom Millimeter Size (W × H mm)' in the preset dropdown and enter 85 × 55 mm or 91 × 55 mm — the 2×5 10-up centered grid and guillotine ticks recalculate instantly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is single-sheet 10-card front printing free without watermarks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "100% free! You can export high-resolution single-sheet vector PDFs and 300 DPI PNGs with zero watermarks and zero login."
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 65%, #f5f3ff 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      margin-bottom: 26px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(22px, 3.4vw, 31px);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 16px;
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 19px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 12.5px;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary {
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .faq-item p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pnp-banner {
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, #eef2ff 0%, #ecfdf5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .related-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      background: #f8fafc;
+      font-size: 13px;
+    }
+    .related-card span { color: var(--primary); font-size: 12px; font-weight: 600; }
+    [data-lang="zh"] { display: none; }
+    body.lang-zh [data-lang="en"] { display: none; }
+    body.lang-zh [data-lang="zh"] { display: block; }
+    body.lang-zh span[data-lang="zh"], body.lang-zh a[data-lang="zh"] { display: inline-flex; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../index.html?preset=business">
+      <span>🃏</span>
+      <span>CardSheet &amp; Flashcard Studio</span>
+    </a>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a class="btn" style="padding:6px 12px;font-size:12.5px;" href="../../index.html">← Studio Hub</a>
+      <button type="button" id="langBtn" class="btn" style="padding:6px 12px;font-size:12.5px;">🌐 中文 / EN</button>
+      <a class="btn btn-primary" style="padding:6px 13px;font-size:12.5px;" href="../index.html?preset=business">Open Studio →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="badge" data-lang="en">SMALL BUSINESS & EXPO PRINT STUDIO</div>
+      <div class="badge" data-lang="zh">独立创作者展会名片与二维码贴纸排版</div>
+
+      <h1 data-lang="en">DIY 3.5×2" Business Card 10-Up Sheet PDF Maker (A4 & US Letter, Zero Bleed Hassle)</h1>
+      <h1 data-lang="zh">DIY 商务名片与展会联系卡 10 张拼版 PDF 生成器（支持 A4 与美标 Letter）</h1>
+
+      <p class="lead" data-lang="en">Need 30 crisp business cards, booth contact cards, or Etsy thank-you tags in 10 minutes before a conference or craft fair? Lay out exact `3.5 × 2.0 in` (`88.9 × 50.8 mm`) 10-up sheets with zero account signup and zero watermarks.</p>
+      <p class="lead" data-lang="zh">明早就要参展或见客户，来不及等图文快印店寄快递？拖入你设计好的名片正反面图片（或直接用极简名片模板输入信息），在 A4 或 US Letter 重磅卡纸上一页排好 10 张标准 `88.9 × 50.8 mm` 名片，滑轨裁纸器 9 刀即可出片！</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" data-lang="en" href="../index.html?preset=business">💼 Open 10-Up Business Card Studio</a>
+        <a class="btn btn-primary" data-lang="zh" href="../index.html?preset=business&amp;lang=zh">💼 打开每页 10 张标准名片拼版器</a>
+
+        <a class="btn" data-lang="en" href="../index.html?preset=square-50">⭐ Open 50×50mm Square Tag / Sticker</a>
+        <a class="btn" data-lang="zh" href="../index.html?preset=square-50&amp;lang=zh">⭐ 打开 50×50mm 方形吊牌贴纸预设</a>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Exact Physical Sheet Dimensions &amp; Cards Per Page</h2>
+      <h2 data-lang="zh">精确物理尺寸规格与单页拼版容量对照表</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Preset</th>
+              <th>Physical Size</th>
+              <th>Sheet Capacity</th>
+              <th>Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>US Standard Business Card</strong></td><td><code>88.9 × 50.8 mm (3.5 × 2.0 in)</code></td><td>2 × 5 = 10 cards / sheet</td><td>Works on both ISO A4 & US Letter!</td></tr>
+<tr><td><strong>Square Product / QR Tag</strong></td><td><code>50.0 × 50.0 mm</code></td><td>3 × 5 = 15 tags / sheet</td><td>Craft booth price tags, QR Wi-Fi & stickers</td></tr>
+<tr><td><strong>Custom Euro / Moo Size</strong></td><td><code>Custom W × H mm (e.g. 85×55mm)</code></td><td>Auto-centered max grid</td><td>Any custom millimeter dimension</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">3-Step Zero-Waste Home Printing Workflow</h2>
+      <h2 data-lang="zh">三步零废纸家用高清打印与直刀裁切流程</h2>
+      <ol data-lang="en" style="margin:0;padding-left:20px;">
+        <li>Drop your `3.5 × 2 in` PNG/JPG business card design into **Drag & Drop Images** (or customize the built-in Minimal Studio template).</li>
+<li>Set copies to `10` to fill an entire 2×5 sheet automatically, and enable **Duplex Back Sheets** if printing a logo or QR code on the reverse.</li>
+<li>Print on 250gsm–300gsm matte cardstock at 100% scale and slice along the outer-margin guillotine ticks.</li>
+      </ol>
+      <ol data-lang="zh" style="margin:0;padding-left:20px;">
+        <li>将设计好的名片正背面高清图拖入图片区，或直接在文本模式修改姓名、邮箱与展会摊位号并设份数为 `10`。</li>
+<li>如需背面印品牌 Logo 或二维码，勾选双面镜像并用偏移滑块微调对齐。</li>
+<li>使用 250g–300g 哑光白卡纸 100% 原尺寸打印，沿纸张边缘共线裁切标直刀裁开，边缘干净利落无虚线锯齿！</li>
+      </ol>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Frequently Asked Questions</h2>
+      <h2 data-lang="zh">常见问题解答 (FAQ)</h2>
+      <details class="faq-item" open><summary>Why cut plain heavyweight cardstock with guillotine marks instead of perforated Avery sheets?</summary><p>Micro-perforated sheets leave fuzzy nibs on card edges and jam if printer margins drift by 1mm. Printing onto solid 250gsm–300gsm cardstock and making 7+3 straight slide-trimmer cuts gives true print-shop smooth edges at a fraction of the cost.</p></details>
+<details class="faq-item" open><summary>Can I switch to European 85 × 55 mm or Japanese 91 × 55 mm business card sizes?</summary><p>Yes! Select 'Custom Millimeter Size (W × H mm)' in the preset dropdown and enter 85 × 55 mm or 91 × 55 mm — the 2×5 10-up centered grid and guillotine ticks recalculate instantly.</p></details>
+<details class="faq-item" open><summary>Is single-sheet 10-card front printing free without watermarks?</summary><p>100% free! You can export high-resolution single-sheet vector PDFs and 300 DPI PNGs with zero watermarks and zero login.</p></details>
+    </section>
+
+    <div id="affiliateMount"></div>
+
+    <div class="pnp-banner">
+      <div style="flex:1;min-width:240px;">
+        <div style="font-size:11.5px;font-weight:800;color:#4338ca;">🎲 ORIGINAL INDIE PRINT &amp; PLAY GAMES</div>
+        <strong style="font-size:15px;display:block;margin:2px 0;" data-lang="en">Play Our 3 Original 2-Player Strategy Board Games Free vs. Browser AI!</strong>
+        <strong style="font-size:15px;margin:2px 0;" data-lang="zh">免费在线试玩工坊原创 3 款双人策略桌游（内置 AI 陪练 + 完整双语打印包）！</strong>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a class="btn" href="../../play/index.html">▶️ Play Free in Browser</a>
+        <a id="pnpBuyBtn" class="btn btn-primary" href="../../play/index.html" target="_blank" rel="noopener">📦 PnP Trilogy Bundle ($7.99)</a>
+      </div>
+    </div>
+
+    <section class="section-card" style="margin-top:20px;">
+      <h2 data-lang="en">More Card &amp; Tabletop Print Layout Tools</h2>
+      <h2 data-lang="zh">更多卡牌、闪卡与桌游纸艺排版工具</h2>
+      <div class="related-grid">
+        <a class="related-card" href="./printable-flashcard-maker-a4-letter.html"><strong>Printable Vocabulary Flashcard Maker for A4 & US Letter</strong><span>背单词与考试复习双面闪卡排版器 →</span></a>
+<a class="related-card" href="./playing-card-print-and-play-layout-tool.html"><strong>Playing Card Print-and-Play</strong><span>独立桌游原型与 PnP 卡牌拼版神器 →</span></a>
+<a class="related-card" href="./duplex-double-sided-card-printing-aligner.html"><strong>Duplex Double-Sided Card Printing Aligner</strong><span>解决家用双面打印正反错位痛点 →</span></a>
+<a class="related-card" href="./dnd-spell-item-card-sheet-generator.html"><strong>D&D 5e Spell, Monster & Magic Item Reference Card Sheet Generator</strong><span>TRPG 跑团地下城主法术卡与立牌工坊 →</span></a>
+<a class="related-card" href="./board-game-standee-template-generator.html"><strong>Board Game Paper Standee & Custom Parametric Deck Tuckbox Template Generator</strong><span>3D 桌游折纸立牌与自定义牌厚卡盒刀版 →</span></a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script>
+    (function () {
+      var lang = (navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) ? 'zh' : 'en';
+      function syncLang() {
+        document.body.classList.toggle('lang-zh', lang === 'zh');
+        if (window.CraftLeafSDK) {
+          CraftLeafSDK.renderAffiliateBar(document.getElementById('affiliateMount'), 'print-craft', lang);
+          var cfg = CraftLeafSDK.getConfig();
+          var pnp = (cfg.products && cfg.products.pnpTrilogyBundle) || {};
+          var btn = document.getElementById('pnpBuyBtn');
+          if (btn) {
+            btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
+            btn.textContent = lang === 'zh'
+              ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
+              : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+          }
+        }
+      }
+      document.getElementById('langBtn').addEventListener('click', function () {
+        lang = lang === 'en' ? 'zh' : 'en';
+        syncLang();
+      });
+      syncLang();
+    })();
+  </script>
+</body>
+</html>

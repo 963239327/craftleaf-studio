@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playing Card Print-and-Play (PnP) 9-Up Sheet Layout Tool (Poker, Bridge & Mini Euro) | CardSheet Studio</title>
+  <meta name="description" content="Lay out 63.5x88.9mm Poker cards, 57x87mm Bridge cards, and 44x68mm Mini Euro tabletop cards onto 3x3 A4 or US Letter print-and-play PDF sheets with zero-gap shared straight guillotine cut lines." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/cardsheet/use-cases/playing-card-print-and-play-layout-tool.html" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why did my printed Poker cards come out slightly smaller than 63.5 × 88.9 mm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Browser and PDF print dialogs often default to 'Fit to Printable Area' (around 94–96% scale). Always select 'Actual Size' or 'Custom Scale: 100%' in your system print dialog so physical millimeters remain exact."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why are outer-margin guillotine ticks better than full grid lines?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Full grid lines leave visible ink streaks along card edges if your blade is off by 0.2mm, whereas corner ticks inside the sheet vanish after your first cut. Outer-margin guillotine ticks keep your slide trimmer aligned from first cut to last without putting ink on your cards."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I print multiple copies of common cards without duplicating image files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! In CSV/JSON or Pipe Designer mode, add a 5th column (e.g. `Strike | Deal 3 DMG | Basic | ⚔️ | 4`) to automatically expand card quantities across paginated sheets."
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 65%, #f5f3ff 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      margin-bottom: 26px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(22px, 3.4vw, 31px);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 16px;
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 19px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 12.5px;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary {
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .faq-item p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pnp-banner {
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, #eef2ff 0%, #ecfdf5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .related-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      background: #f8fafc;
+      font-size: 13px;
+    }
+    .related-card span { color: var(--primary); font-size: 12px; font-weight: 600; }
+    [data-lang="zh"] { display: none; }
+    body.lang-zh [data-lang="en"] { display: none; }
+    body.lang-zh [data-lang="zh"] { display: block; }
+    body.lang-zh span[data-lang="zh"], body.lang-zh a[data-lang="zh"] { display: inline-flex; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../index.html?preset=poker">
+      <span>🃏</span>
+      <span>CardSheet &amp; Flashcard Studio</span>
+    </a>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a class="btn" style="padding:6px 12px;font-size:12.5px;" href="../../index.html">← Studio Hub</a>
+      <button type="button" id="langBtn" class="btn" style="padding:6px 12px;font-size:12.5px;">🌐 中文 / EN</button>
+      <a class="btn btn-primary" style="padding:6px 13px;font-size:12.5px;" href="../index.html?preset=poker">Open Studio →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="badge" data-lang="en">INDIE TABLETOP & PNP PROTOTYPING</div>
+      <div class="badge" data-lang="zh">独立桌游原型与 PnP 卡牌拼版神器</div>
+
+      <h1 data-lang="en">Playing Card Print-and-Play (PnP) 9-Up Sheet Layout Tool (Poker, Bridge & Mini Euro)</h1>
+      <h1 data-lang="zh">桌游卡牌 Print & Play 九宫格拼版打印工具（标准扑克 / 桥牌 / Mini Euro）</h1>
+
+      <p class="lead" data-lang="en">Prototype a 54-card tabletop deck in 60 seconds or lay out custom PnP card artwork at exact 1:1 sleeve-ready dimensions (`63.5 × 88.9 mm`) with outer-margin guillotine ticks that keep every card clean.</p>
+      <p class="lead" data-lang="zh">专为桌游设计师与 PnP 玩家打造：无论拖入现成卡面 PNG，还是用内置文本设计器秒出数值测试卡，都能按 `63.5 × 88.9 mm` 标准牌套尺寸生成外边距共线直刀 PDF（每页仅需 8 刀一裁到底，卡面绝无残留黑线）。</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" data-lang="en" href="../index.html?preset=poker">🃏 Open 3×3 Poker 9-Up PnP Studio</a>
+        <a class="btn btn-primary" data-lang="zh" href="../index.html?preset=poker&amp;lang=zh">🃏 打开 63.5×88.9mm 标准九宫格拼版</a>
+
+        <a class="btn" data-lang="en" href="../index.html?preset=mini-euro">🧩 Open Mini Euro (44×68mm · 16-Up)</a>
+        <a class="btn" data-lang="zh" href="../index.html?preset=mini-euro&amp;lang=zh">🧩 打开 Mini Euro 迷你卡 (16张/页)</a>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Exact Physical Sheet Dimensions &amp; Cards Per Page</h2>
+      <h2 data-lang="zh">精确物理尺寸规格与单页拼版容量对照表</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Preset</th>
+              <th>Physical Size</th>
+              <th>Sheet Capacity</th>
+              <th>Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Standard Poker / TCG</strong></td><td><code>63.5 × 88.9 mm (2.5×3.5")</code></td><td>3 × 3 = 9 cards / sheet</td><td>Fits Dragon Shield / Ultra PRO Standard sleeves</td></tr>
+<tr><td><strong>Bridge / Euro Narrow</strong></td><td><code>57.0 × 87.0 mm</code></td><td>3 × 3 = 9 cards / sheet</td><td>Classic Eurogames & trick-taking prototypes</td></tr>
+<tr><td><strong>Mini Euro Card</strong></td><td><code>44.0 × 68.0 mm</code></td><td>4 × 4 = 16 cards / A4 sheet</td><td>Equipment, loot, and compact status decks</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">3-Step Zero-Waste Home Printing Workflow</h2>
+      <h2 data-lang="zh">三步零废纸家用高清打印与直刀裁切流程</h2>
+      <ol data-lang="en" style="margin:0;padding-left:20px;">
+        <li>Drag and drop your card front PNG/JPG art (plus 1 shared card back or per-card backs), or prototype rapidly in Text Designer.</li>
+<li>Keep **Gap = 0 mm** to activate **Shared Margin Guillotine Ticks** — only 4 vertical + 4 horizontal straight cuts per 9-card sheet!</li>
+<li>Print at 100% scale (disable 'Fit to Page') so cards slide effortlessly into standard 66×91mm sleeves.</li>
+      </ol>
+      <ol data-lang="zh" style="margin:0;padding-left:20px;">
+        <li>批量拖入卡牌正面插画与通用牌背图，或在文本设计器用竖线语法快速编写技能数值原型卡。</li>
+<li>保持 **卡间距 Gap = 0 mm**，启用外边距共线直刀裁切线——每页 9 张卡只需横竖各 4 刀即可齐整裁出！</li>
+<li>打印时务必勾选“实际大小 / 缩放 100%”，裁出后可直接塞入标准 66×91mm 桌游磨砂牌套。</li>
+      </ol>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Frequently Asked Questions</h2>
+      <h2 data-lang="zh">常见问题解答 (FAQ)</h2>
+      <details class="faq-item" open><summary>Why did my printed Poker cards come out slightly smaller than 63.5 × 88.9 mm?</summary><p>Browser and PDF print dialogs often default to 'Fit to Printable Area' (around 94–96% scale). Always select 'Actual Size' or 'Custom Scale: 100%' in your system print dialog so physical millimeters remain exact.</p></details>
+<details class="faq-item" open><summary>Why are outer-margin guillotine ticks better than full grid lines?</summary><p>Full grid lines leave visible ink streaks along card edges if your blade is off by 0.2mm, whereas corner ticks inside the sheet vanish after your first cut. Outer-margin guillotine ticks keep your slide trimmer aligned from first cut to last without putting ink on your cards.</p></details>
+<details class="faq-item" open><summary>Can I print multiple copies of common cards without duplicating image files?</summary><p>Yes! In CSV/JSON or Pipe Designer mode, add a 5th column (e.g. `Strike | Deal 3 DMG | Basic | ⚔️ | 4`) to automatically expand card quantities across paginated sheets.</p></details>
+    </section>
+
+    <div id="affiliateMount"></div>
+
+    <div class="pnp-banner">
+      <div style="flex:1;min-width:240px;">
+        <div style="font-size:11.5px;font-weight:800;color:#4338ca;">🎲 ORIGINAL INDIE PRINT &amp; PLAY GAMES</div>
+        <strong style="font-size:15px;display:block;margin:2px 0;" data-lang="en">Play Our 3 Original 2-Player Strategy Board Games Free vs. Browser AI!</strong>
+        <strong style="font-size:15px;margin:2px 0;" data-lang="zh">免费在线试玩工坊原创 3 款双人策略桌游（内置 AI 陪练 + 完整双语打印包）！</strong>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a class="btn" href="../../play/index.html">▶️ Play Free in Browser</a>
+        <a id="pnpBuyBtn" class="btn btn-primary" href="../../play/index.html" target="_blank" rel="noopener">📦 PnP Trilogy Bundle ($7.99)</a>
+      </div>
+    </div>
+
+    <section class="section-card" style="margin-top:20px;">
+      <h2 data-lang="en">More Card &amp; Tabletop Print Layout Tools</h2>
+      <h2 data-lang="zh">更多卡牌、闪卡与桌游纸艺排版工具</h2>
+      <div class="related-grid">
+        <a class="related-card" href="./printable-flashcard-maker-a4-letter.html"><strong>Printable Vocabulary Flashcard Maker for A4 & US Letter</strong><span>背单词与考试复习双面闪卡排版器 →</span></a>
+<a class="related-card" href="./duplex-double-sided-card-printing-aligner.html"><strong>Duplex Double-Sided Card Printing Aligner</strong><span>解决家用双面打印正反错位痛点 →</span></a>
+<a class="related-card" href="./dnd-spell-item-card-sheet-generator.html"><strong>D&D 5e Spell, Monster & Magic Item Reference Card Sheet Generator</strong><span>TRPG 跑团地下城主法术卡与立牌工坊 →</span></a>
+<a class="related-card" href="./diy-business-card-sheet-pdf-maker.html"><strong>DIY 3.5×2" Business Card 10-Up Sheet PDF Maker</strong><span>独立创作者展会名片与二维码贴纸排版 →</span></a>
+<a class="related-card" href="./board-game-standee-template-generator.html"><strong>Board Game Paper Standee & Custom Parametric Deck Tuckbox Template Generator</strong><span>3D 桌游折纸立牌与自定义牌厚卡盒刀版 →</span></a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script>
+    (function () {
+      var lang = (navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) ? 'zh' : 'en';
+      function syncLang() {
+        document.body.classList.toggle('lang-zh', lang === 'zh');
+        if (window.CraftLeafSDK) {
+          CraftLeafSDK.renderAffiliateBar(document.getElementById('affiliateMount'), 'print-craft', lang);
+          var cfg = CraftLeafSDK.getConfig();
+          var pnp = (cfg.products && cfg.products.pnpTrilogyBundle) || {};
+          var btn = document.getElementById('pnpBuyBtn');
+          if (btn) {
+            btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
+            btn.textContent = lang === 'zh'
+              ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
+              : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+          }
+        }
+      }
+      document.getElementById('langBtn').addEventListener('click', function () {
+        lang = lang === 'en' ? 'zh' : 'en';
+        syncLang();
+      });
+      syncLang();
+    })();
+  </script>
+</body>
+</html>

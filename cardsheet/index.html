@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CardSheet &amp; Flashcard Print Layout Studio — A4 &amp; US Letter Duplex Card Sheet Maker</title>
+  <meta name="description" content="100% private browser studio to lay out Poker playing cards (63.5x88.9mm), vocabulary flashcards, business cards, stickers, 3D paper standees &amp; tuckboxes onto A4 and US Letter PDF/PNG sheets with shared straight-cut guillotine marks and millimeter duplex offset calibration." />
+  <meta name="keywords" content="printable flashcard maker A4 US Letter, playing card print and play layout tool, duplex double sided card printing alignment, 9 card sheet poker template PDF, DIY business card sheet maker, board game standee tuckbox generator" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "CardSheet & Flashcard Print Layout Studio",
+    "applicationCategory": "DesignApplication",
+    "operatingSystem": "Any (100% Client-Side Browser)",
+    "offers": [
+      { "@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "Free single-sheet card & flashcard layout with guillotine crop marks" },
+      { "@type": "Offer", "price": "9.00", "priceCurrency": "USD", "description": "Lifetime Pro unlock for multi-page CSV batch decks, duplex offset calibration, and 3D standee/tuckbox generators" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <!-- Sticky Studio Header -->
+  <header class="studio-header no-print">
+    <div class="brand-group">
+      <div class="brand-logo" aria-hidden="true">🃏</div>
+      <div>
+        <h1 class="brand-title" data-i18n="appTitle">CardSheet &amp; Flashcard Studio</h1>
+        <p class="brand-sub" data-i18n="appSub">100% Local Browser Card Layout · Guillotine Crop Marks · Duplex Calibration</p>
+      </div>
+    </div>
+
+    <nav class="mode-tabs" aria-label="Studio Mode">
+      <button type="button" id="tabCardsBtn" class="mode-tab active">
+        <span>🃏</span> <span data-i18n="tabCards">Card &amp; Flashcard Sheets</span>
+      </button>
+      <button type="button" id="tab3dBtn" class="mode-tab">
+        <span>🧍</span> <span data-i18n="tab3d">3D Standees &amp; Tuckbox</span>
+        <span class="pro-pill-mini">PRO</span>
+      </button>
+    </nav>
+
+    <div class="header-actions">
+      <a href="../index.html" class="btn" data-i18n="portalLink">← All Studio Tools</a>
+      <button type="button" id="langToggleBtn" class="btn">🌐 中文界面</button>
+      <button type="button" id="headerProBtn" class="btn btn-pro" data-i18n="unlockBtn">🔓 Unlock Pro ($9)</button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="studio-workspace">
+    <!-- Left Sidebar Controls -->
+    <aside class="control-sidebar no-print">
+      <!-- Section 1: Paper & Card Size Preset (Always visible for Paper Switch) -->
+      <section class="panel-card">
+        <h2 class="panel-title" data-i18n="secPaper">1. Paper &amp; Card Size Preset</h2>
+
+        <div class="field-row">
+          <div>
+            <div class="field-label"><span data-i18n="lblPaper">Paper Size</span></div>
+            <div class="seg-pills">
+              <button type="button" id="paperA4Btn" class="seg-btn active">ISO A4</button>
+              <button type="button" id="paperLetterBtn" class="seg-btn">US Letter</button>
+            </div>
+          </div>
+          <div>
+            <div class="field-label"><span data-i18n="lblOrient">Sheet Orientation</span></div>
+            <div class="seg-pills">
+              <button type="button" id="orientPortraitBtn" class="seg-btn active" data-i18n="orientPortrait">Portrait</button>
+              <button type="button" id="orientLandscapeBtn" class="seg-btn" data-i18n="orientLandscape">Landscape</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="presetSelect" data-i18n="lblPreset">Card / Sticker Size Preset</label>
+          <select id="presetSelect" class="input-control"></select>
+        </div>
+
+        <div id="customDimsRow" class="field-row" style="display:none;">
+          <div>
+            <label class="field-label" for="customWInput" data-i18n="lblCustomW">Card Width (mm)</label>
+            <input type="number" id="customWInput" class="input-control" min="15" max="200" step="0.5" value="63.5" />
+          </div>
+          <div>
+            <label class="field-label" for="customHInput" data-i18n="lblCustomH">Card Height (mm)</label>
+            <input type="number" id="customHInput" class="input-control" min="15" max="270" step="0.5" value="88.9" />
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-bottom:8px;">
+          <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#475569;cursor:pointer;">
+            <input type="checkbox" id="rotateCardCheck" />
+            <span data-i18n="lblRotateCard">Rotate Card 90° on Sheet</span>
+          </label>
+        </div>
+
+        <div id="gridMetricBanner" class="metric-banner"></div>
+      </section>
+
+      <!-- Card & Flashcard Mode Controls -->
+      <div id="cardsSidebarSections" style="display:contents;">
+        <!-- Section 2: Dual-Input Workflow -->
+        <section class="panel-card">
+          <h2 class="panel-title" data-i18n="secInput">2. Deck Content (Text Designer or Images)</h2>
+
+          <div class="seg-pills" style="margin-bottom:10px;">
+            <button type="button" id="inputModeTextBtn" class="seg-btn active" data-i18n="modeText">✍️ Flashcard / Card Designer</button>
+            <button type="button" id="inputModeImgBtn" class="seg-btn" data-i18n="modeImage">🖼️ Drag &amp; Drop Images</button>
+          </div>
+
+          <!-- Text / Vocabulary Designer -->
+          <div id="textDesignerPane">
+            <div class="field-label"><span data-i18n="lblSamples">Instant Sample Decks:</span></div>
+            <div class="sample-chips">
+              <button type="button" class="chip-btn" data-sample="pnp" data-i18n="samplePnp">⚔️ PnP Relic Deck</button>
+              <button type="button" class="chip-btn" data-sample="vocab" data-i18n="sampleVocab">📚 Vocab Study</button>
+              <button type="button" class="chip-btn" data-sample="dnd" data-i18n="sampleDnd">🎲 5e RPG Spells</button>
+              <button type="button" class="chip-btn" data-sample="business" data-i18n="sampleBiz">💼 Business Cards</button>
+              <button type="button" class="chip-btn" data-sample="stickers" data-i18n="sampleSticker">⭐ 50mm Stickers</button>
+              <button type="button" class="chip-btn" data-sample="batch54" data-i18n="sampleBatch54">🧩 54-Card Batch (Pro)</button>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="deckTextarea" data-i18n="lblRawDeck">Type/Paste Lines (Front | Back | Tag | Icon | Copies) or CSV / TSV / JSON:</label>
+              <textarea id="deckTextarea" class="input-control" spellcheck="false"></textarea>
+            </div>
+
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+              <input type="file" id="csvFileInput" accept=".csv,.tsv,.json,.txt" style="display:none;" />
+              <button type="button" id="importCsvBtn" class="btn" style="flex:1;font-size:12px;" data-i18n="btnImportCsv">📂 Import CSV / TSV / JSON</button>
+              <button type="button" id="resetDeckBtn" class="btn" style="font-size:12px;" data-i18n="btnClearDeck">Reset Sample</button>
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label class="field-label" for="themeSelect" data-i18n="lblTheme">Card Visual Style</label>
+                <select id="themeSelect" class="input-control">
+                  <option value="study" data-i18n="themeStudy">Clean Study Flashcard</option>
+                  <option value="tabletop" data-i18n="themeTabletop">Tabletop Double-Frame</option>
+                  <option value="parchment" data-i18n="themeParchment">RPG Grimoire Parchment</option>
+                  <option value="minimal" data-i18n="themeMinimal">Minimal Business / Contact</option>
+                  <option value="badge" data-i18n="themeBadge">Token / Sticker Badge</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="backStyleSelect" data-i18n="lblBackStyle">Card Back Content</label>
+                <select id="backStyleSelect" class="input-control">
+                  <option value="def" data-i18n="backStyleDef">Per-Card Back Text / Definition</option>
+                  <option value="crest" data-i18n="backStyleCrest">Unified Deck Crest Card Back</option>
+                  <option value="low-ink" data-i18n="backStyleLowInk">Unified Low-Ink Eco Crest</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label class="field-label" for="crestInput" data-i18n="lblCrestText">Unified Back Crest Title</label>
+                <input type="text" id="crestInput" class="input-control" value="⚔️ RELIC DUEL" />
+              </div>
+              <div>
+                <div class="field-label">
+                  <span data-i18n="lblFontScale">Typography Scale</span>
+                  <strong id="fontScaleVal">100%</strong>
+                </div>
+                <input type="range" id="fontScaleRange" min="75" max="135" step="5" value="100" style="width:100%;margin-top:6px;" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Drag & Drop Pane -->
+          <div id="imageDropPane" style="display:none;">
+            <input type="file" id="frontImgInput" accept="image/*" multiple style="display:none;" />
+            <div id="frontDropzone" class="dropzone">
+              <div style="font-weight:700;color:#0f172a;margin-bottom:3px;" data-i18n="dropFrontTitle">Drop Front Card Images Here (PNG / JPG / WebP / SVG)</div>
+              <div style="font-size:11.5px;color:#64748b;" data-i18n="dropFrontSub">Click or drag multiple card fronts — auto-paginated in filename order</div>
+            </div>
+
+            <input type="file" id="backImgInput" accept="image/*" multiple style="display:none;" />
+            <div id="backDropzone" class="dropzone">
+              <div style="font-weight:700;color:#0f172a;margin-bottom:3px;" data-i18n="dropBackTitle">Optional: Drop Shared Back Image (1 file) or Matched Backs (N files)</div>
+              <div style="font-size:11.5px;color:#64748b;" data-i18n="dropBackSub">1 image = universal deck back; multiple images = matched 1-to-1 per card</div>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+              <span id="imgStatusText" style="font-size:12px;font-weight:600;color:#2563eb;"></span>
+              <button type="button" id="clearImgsBtn" class="btn" style="font-size:12px;" data-i18n="btnClearImgs">Clear Uploaded Images</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Shared Guillotine Crop Marks, Bleed & Gap -->
+        <section class="panel-card">
+          <h2 class="panel-title" data-i18n="secMarks">3. Shared Guillotine Crop Marks &amp; Bleed</h2>
+
+          <div class="field-group">
+            <label class="field-label" for="markStyleSelect" data-i18n="lblMarkStyle">Cut Guide Style</label>
+            <select id="markStyleSelect" class="input-control">
+              <option value="guillotine" data-i18n="markGuillotine">Shared Margin Guillotine Ticks (8 Straight Cuts!)</option>
+              <option value="hairline" data-i18n="markHairline">Full Through-Grid Hairlines</option>
+              <option value="corners" data-i18n="markCorners">Corner Crosshairs Only</option>
+              <option value="none" data-i18n="markNone">No Crop Marks</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="gapInput" data-i18n="lblGap">Gap Between Cards (mm)</label>
+            <div class="range-row">
+              <input type="range" id="gapRange" min="0" max="10" step="0.5" value="0" />
+              <input type="number" id="gapInput" class="input-control" min="0" max="15" step="0.5" value="0" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="bleedInput" data-i18n="lblBleed">Artwork Bleed (mm)</label>
+            <div class="range-row">
+              <input type="range" id="bleedRange" min="0" max="4" step="0.5" value="0" />
+              <input type="number" id="bleedInput" class="input-control" min="0" max="5" step="0.5" value="0" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="marginInput" data-i18n="lblMargin">Printer Safe Margin (mm)</label>
+            <div class="range-row">
+              <input type="range" id="marginRange" min="0" max="15" step="0.5" value="5" />
+              <input type="number" id="marginInput" class="input-control" min="0" max="20" step="0.5" value="5" />
+            </div>
+          </div>
+
+          <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#475569;cursor:pointer;">
+            <input type="checkbox" id="innerBorderCheck" checked />
+            <span data-i18n="lblCardBorder">Print Inner Card Border</span>
+          </label>
+        </section>
+
+        <!-- Section 4: Duplex Back-Page Mirroring + Millimeter Offset Calibration -->
+        <section class="panel-card pro-highlight">
+          <h2 class="panel-title">
+            <span data-i18n="secDuplex">4. Duplex Mirroring &amp; Printer Offset Calibration</span>
+            <span class="pro-pill-mini">PRO</span>
+          </h2>
+
+          <div class="field-group">
+            <label style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#1e293b;cursor:pointer;">
+              <input type="checkbox" id="duplexCheck" />
+              <span data-i18n="lblEnableDuplex">Generate Mirrored Duplex Back Sheets</span>
+            </label>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="flipEdgeSelect" data-i18n="lblFlipEdge">Printer Duplex Flip Axis</label>
+            <select id="flipEdgeSelect" class="input-control">
+              <option value="long" data-i18n="flipLong">Long-Edge Flip (Horizontal Mirror · Standard)</option>
+              <option value="short" data-i18n="flipShort">Short-Edge Flip (Vertical Mirror + 180°)</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="pageOrderSelect" data-i18n="lblPageOrder">Multi-Page Export Sequence</label>
+            <select id="pageOrderSelect" class="input-control">
+              <option value="interleaved" data-i18n="orderInterleaved">Interleaved (Front 1 → Back 1 → Front 2…)</option>
+              <option value="fronts-then-backs" data-i18n="orderGrouped">Grouped (All Fronts → All Backs)</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <div class="field-label">
+              <span data-i18n="lblOffsetX">Back Horizontal Shift (±X mm)</span>
+              <button type="button" id="resetOffsetBtn" class="chip-btn" style="padding:1px 7px;font-size:10.5px;" data-i18n="btnResetOffset">Zero (0.0 mm)</button>
+            </div>
+            <div class="range-row">
+              <input type="range" id="offsetXRange" min="-8" max="8" step="0.1" value="0" />
+              <input type="number" id="offsetXInput" class="input-control" min="-15" max="15" step="0.1" value="0" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="offsetYInput" data-i18n="lblOffsetY">Back Vertical Shift (±Y mm)</label>
+            <div class="range-row">
+              <input type="range" id="offsetYRange" min="-8" max="8" step="0.1" value="0" />
+              <input type="number" id="offsetYInput" class="input-control" min="-15" max="15" step="0.1" value="0" />
+            </div>
+          </div>
+
+          <div style="font-size:11.5px;color:#4c1d95;background:#ede9fe;border-radius:7px;padding:7px 9px;line-height:1.4;" data-i18n="duplexTip">
+            💡 Hold a test print against a window: if the back shifts left by 1.2mm, set +1.2mm X above for sub-millimeter alignment!
+          </div>
+        </section>
+      </div>
+
+      <!-- 3D Folded Paper Standee & Tuckbox Generator Controls -->
+      <section id="studio3dSidebarSection" class="panel-card pro-highlight" style="display:none;">
+        <h2 class="panel-title">
+          <span data-i18n="sec3dMode">3D Tabletop Paper Craft Generator</span>
+          <span class="pro-pill-mini">PRO</span>
+        </h2>
+
+        <div class="seg-pills" style="margin-bottom:12px;">
+          <button type="button" id="subStandeeBtn" class="seg-btn active" data-i18n="subStandee">🧍 Folded Paper Standees</button>
+          <button type="button" id="subTuckboxBtn" class="seg-btn" data-i18n="subTuckbox">📦 Parametric Deck Tuckbox</button>
+        </div>
+
+        <div id="standeeControlsPane">
+          <div class="field-group">
+            <label class="field-label" for="standeeSizeSelect" data-i18n="lblStandeeSize">Standee Base &amp; Height Preset</label>
+            <select id="standeeSizeSelect" class="input-control">
+              <option value="small" data-i18n="standeeSmall">Small Creature (24 × 36 mm)</option>
+              <option value="medium" selected data-i18n="standeeMed">Medium 1-Inch Grid Hero (28 × 46 mm)</option>
+              <option value="large" data-i18n="standeeLarge">Large Boss / Mecha (45 × 62 mm)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="tuckboxControlsPane" style="display:none;">
+          <div class="field-row">
+            <div>
+              <label class="field-label" for="tuckWInput" data-i18n="lblTuckW">Card Width (mm)</label>
+              <input type="number" id="tuckWInput" class="input-control" min="30" max="110" step="0.5" value="63.5" />
+            </div>
+            <div>
+              <label class="field-label" for="tuckHInput" data-i18n="lblTuckH">Card Height (mm)</label>
+              <input type="number" id="tuckHInput" class="input-control" min="40" max="145" step="0.5" value="88.9" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div>
+              <label class="field-label" for="tuckCountInput" data-i18n="lblTuckCount">Deck Card Count</label>
+              <input type="number" id="tuckCountInput" class="input-control" min="10" max="150" step="1" value="54" />
+            </div>
+            <div>
+              <label class="field-label" for="tuckGsmSelect" data-i18n="lblTuckGsm">Cardstock Thickness</label>
+              <select id="tuckGsmSelect" class="input-control">
+                <option value="0.25" data-i18n="gsm200">200gsm Matte Cardstock (0.25mm/card)</option>
+                <option value="0.31" selected data-i18n="gsm250">250–300gsm Pro Core (0.31mm/card)</option>
+                <option value="0.46" data-i18n="gsmSleeved">Sleeved Cards 60–100μm (0.46mm/card)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tuckTitleInput" data-i18n="lblTuckTitle">Box Cover &amp; Spine Title</label>
+            <input type="text" id="tuckTitleInput" class="input-control" value="RELIC DUEL" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tuckSubInput" data-i18n="lblTuckSub">Box Subtitle / Specs</label>
+            <input type="text" id="tuckSubInput" class="input-control" value="54 Cards · 63.5×88.9mm PnP Edition" />
+          </div>
+
+          <div id="tuckMetricBanner" class="metric-banner" style="margin-top:8px;"></div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Right Preview & Export Stage -->
+    <section class="preview-column">
+      <!-- Sticky Stage Export Toolbar -->
+      <div class="stage-toolbar no-print">
+        <div class="toolbar-group">
+          <button type="button" id="printPdfBtn" class="btn btn-primary" data-i18n="btnPrintPdf">🖨️ Print / Save Vector PDF</button>
+          <button type="button" id="exportPngBtn" class="btn" data-i18n="btnExportPng">🖼️ Export 300 DPI PNG</button>
+          <button type="button" id="exportSvgBtn" class="btn" style="display:none;" data-i18n="btnExportSvg">📐 Download 1:1 SVG Die-Line</button>
+        </div>
+
+        <div class="toolbar-group">
+          <span style="font-size:12px;color:#64748b;" data-i18n="freeBadgeNote">Free Tier: 1 Front Sheet unlimited prints · Pro ($9): Unlimited Batch + Duplex Calibration + 3D Tuckbox</span>
+          <label for="zoomSelect" style="font-size:12px;font-weight:600;color:#475569;" data-i18n="lblZoom">Preview Zoom:</label>
+          <select id="zoomSelect" class="input-control" style="width:auto;padding:4px 8px;">
+            <option value="0.55">55%</option>
+            <option value="0.72" selected>72% (Fit)</option>
+            <option value="0.9">90%</option>
+            <option value="1">100% (1:1)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Live 1:1 Physical Millimeter Print Sheets -->
+      <div id="sheetStageScroll" class="sheet-stage-scroll"></div>
+
+      <!-- Affiliate Print Supplies + Studio PnP Games Cross-Sell + SEO Use-Case Links -->
+      <div class="ecosystem-section no-print">
+        <!-- Populated dynamically via CraftLeafSDK.renderAffiliateBar(el, 'print-craft', lang) -->
+        <div id="affiliateSupplyMount"></div>
+
+        <!-- Original 2-Player Print & Play Board Games Cross-Sell Showcase -->
+        <div class="pnp-cross-sell">
+          <div class="pnp-cross-info">
+            <span class="pnp-badge" data-i18n="pnpBadge">🎲 FROM OUR INDIE TABLETOP STUDIO</span>
+            <h3 class="pnp-cross-title" data-i18n="pnpTitle">Love Print-and-Play? Try Our 3 Original 2-Player Strategy Board Games!</h3>
+            <p class="pnp-cross-desc" data-i18n="pnpDesc">Play instant solo matches vs. built-in AI right in your browser, or grab the bilingual A4 + US Letter + Low-Ink Print-and-Play Trilogy Bundle.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <a href="../play/index.html" class="btn" data-i18n="pnpPlayBtn">▶️ Play Free vs. AI in Browser</a>
+            <a id="pnpBundleLink" href="../play/index.html" target="_blank" rel="noopener" class="btn btn-primary">📦 Get PnP Trilogy Bundle ($7.99)</a>
+          </div>
+        </div>
+
+        <!-- Targeted SEO Use-Case Subpages Internal Hub -->
+        <div class="seo-guides-strip">
+          <div style="font-weight:700;color:#0f172a;font-size:13px;" data-i18n="seoGuidesTitle">📘 Popular Print &amp; Layout Use-Case Guides</div>
+          <div class="seo-guides-grid">
+            <a class="seo-guide-link" href="./use-cases/printable-flashcard-maker-a4-letter.html">📚 Printable Vocabulary Flashcard Maker (A4 &amp; US Letter)</a>
+            <a class="seo-guide-link" href="./use-cases/playing-card-print-and-play-layout-tool.html">🃏 Playing Card Print &amp; Play 9-Up Sheet Layout Tool</a>
+            <a class="seo-guide-link" href="./use-cases/duplex-double-sided-card-printing-aligner.html">🎯 Duplex Double-Sided Card Printing Offset Aligner</a>
+            <a class="seo-guide-link" href="./use-cases/dnd-spell-item-card-sheet-generator.html">🎲 D&amp;D 5e Spell &amp; Magic Item Reference Card Sheet Maker</a>
+            <a class="seo-guide-link" href="./use-cases/diy-business-card-sheet-pdf-maker.html">💼 DIY 3.5×2" Business Card 10-Up Sheet PDF Maker</a>
+            <a class="seo-guide-link" href="./use-cases/board-game-standee-template-generator.html">🧍 Board Game Paper Standee &amp; Custom Tuckbox Generator</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pro License Key Unlock Modal -->
+  <div id="proModalBackdrop" class="modal-backdrop no-print" role="dialog" aria-modal="true" aria-labelledby="proModalTitle">
+    <div class="modal-card">
+      <button type="button" id="closeProModalBtn" class="modal-close" aria-label="Close">✕</button>
+      <div style="display:inline-block;padding:3px 9px;border-radius:999px;background:#f5f3ff;color:#7c3aed;font-size:11px;font-weight:800;margin-bottom:8px;">CARDSHEET STUDIO PRO · LIFETIME UNLOCK</div>
+      <h2 id="proModalTitle" style="margin:0 0 6px;font-size:19px;font-weight:800;" data-i18n="modalTitle">Unlock CardSheet Studio Pro — Lifetime License</h2>
+      <p style="margin:0;font-size:13px;color:#475569;" data-i18n="modalSubtitle">One-time $9.00 purchase (or Studio All-Access Pass). 100% local privacy, zero subscriptions.</p>
+
+      <ul class="pro-feature-list">
+        <li><span>✅</span> <span data-i18n="modalFeat1">Unlimited Multi-Page Batch Deck Export (CSV / TSV / JSON / 54+ card decks auto-paginated)</span></li>
+        <li><span>✅</span> <span data-i18n="modalFeat2">Duplex Back-Page Mirroring + 0.1mm Printer Offset Calibration (±X / ±Y mm)</span></li>
+        <li><span>✅</span> <span data-i18n="modalFeat3">3D Folded A-Frame Paper Standees &amp; Custom Parametric Deck Tuckbox SVG/PDF Export</span></li>
+      </ul>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+        <a id="modalBuyProLink" href="https://gumroad.com/" target="_blank" rel="noopener" class="btn btn-pro" data-i18n="btnBuyPro">Buy CardSheet Pro Key ($9.00)</a>
+        <a id="modalBuyAllLink" href="../index.html#all-access" target="_blank" rel="noopener" class="btn" data-i18n="btnBuyAllAccess">Get Studio All-Access Pass ($19)</a>
+      </div>
+
+      <div style="border-top:1px solid #e2e8f0;padding-top:14px;">
+        <label for="licenseKeyInput" style="font-size:12.5px;font-weight:700;color:#1e293b;display:block;" data-i18n="lblHaveKey">Already have a CARDPRO or STUDIOALL license key?</label>
+        <div class="key-input-row">
+          <input type="text" id="licenseKeyInput" class="input-control" placeholder="CARDPRO-XXXX-XXXX-XXXXXX" autocomplete="off" spellcheck="false" style="font-family:ui-monospace,monospace;text-transform:uppercase;" />
+          <button type="button" id="activateKeyBtn" class="btn btn-primary" style="white-space:nowrap;" data-i18n="btnActivateKey">Activate Pro</button>
+        </div>
+        <div id="licenseStatusMsg" class="status-msg"></div>
+      </div>
+
+      <div style="margin-top:8px;text-align:center;">
+        <button type="button" id="freeFallbackPrintBtn" class="btn" style="width:100%;font-size:12.5px;display:none;" data-i18n="btnPrintFree1Sheet">Or Print Free Single Front Sheet (Page 1 Only)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Relative SDK & Config Scripts (Works seamlessly under GitHub Project Pages!) -->
+  <script src="../assets/monetization-config.js"></script>
+  <script src="../assets/monetization-sdk.js"></script>
+  <script src="./cardsheet-core.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Printable Vocabulary Flashcard Maker for A4 & US Letter (PDF & 300 DPI PNG) | CardSheet Studio</title>
+  <meta name="description" content="Free browser-based printable flashcard maker for ISO A4 and US Letter. Paste vocabulary lists, Anki TSV, or CSV tables to lay out 4-up 3x5 inch or 8-up A7 double-sided study flashcards with straight guillotine crop marks." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/cardsheet/use-cases/printable-flashcard-maker-a4-letter.html" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I print double-sided flashcards so the front word matches the right back definition?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Enable 'Generate Mirrored Duplex Back Sheets' with Long-Edge Flip in CardSheet Studio. Column 1 on the front automatically mirrors to Column N on the reverse side so every term aligns with its exact definition when flipped."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I import my existing Anki, Quizlet, or Google Sheets vocabulary list?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Export your deck or spreadsheet as CSV or Tab-Separated Values (TSV) and click 'Import CSV / TSV / JSON' or paste it directly into the Flashcard Designer box."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What paper weight is best for homemade study flashcards?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Heavyweight 180gsm to 220gsm (110lb index) matte white cardstock prevents ink bleed-through during active recall quizzing and feeds smoothly through standard home inkjet and laser printers."
+      }
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 65%, #f5f3ff 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      margin-bottom: 26px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(22px, 3.4vw, 31px);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 16px;
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 19px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 12.5px;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary {
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .faq-item p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .pnp-banner {
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, #eef2ff 0%, #ecfdf5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .related-card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      background: #f8fafc;
+      font-size: 13px;
+    }
+    .related-card span { color: var(--primary); font-size: 12px; font-weight: 600; }
+    [data-lang="zh"] { display: none; }
+    body.lang-zh [data-lang="en"] { display: none; }
+    body.lang-zh [data-lang="zh"] { display: block; }
+    body.lang-zh span[data-lang="zh"], body.lang-zh a[data-lang="zh"] { display: inline-flex; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../index.html?preset=flashcard">
+      <span>🃏</span>
+      <span>CardSheet &amp; Flashcard Studio</span>
+    </a>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a class="btn" style="padding:6px 12px;font-size:12.5px;" href="../../index.html">← Studio Hub</a>
+      <button type="button" id="langBtn" class="btn" style="padding:6px 12px;font-size:12.5px;">🌐 中文 / EN</button>
+      <a class="btn btn-primary" style="padding:6px 13px;font-size:12.5px;" href="../index.html?preset=flashcard">Open Studio →</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="badge" data-lang="en">STUDY & ACTIVE RECALL PRINT TOOL</div>
+      <div class="badge" data-lang="zh">背单词与考试复习双面闪卡排版器</div>
+
+      <h1 data-lang="en">Printable Vocabulary Flashcard Maker for A4 & US Letter (PDF & 300 DPI PNG)</h1>
+      <h1 data-lang="zh">免费可打印单词记忆闪卡拼版生成器（支持 A4 与 US Letter 双面精准对齐）</h1>
+
+      <p class="lead" data-lang="en">Turn any vocabulary list, medical/law definition sheet, JLPT kanji table, or Anki TSV export into crisp double-sided study flashcards ready for home printing and 8-cut straight trimming — 100% locally in your browser.</p>
+      <p class="lead" data-lang="zh">无需注册登录、零隐私上传：将考研/雅思词表、Excel/Anki 导出表格或知识点问答粘贴进浏览器，一秒排好正反双面镜像 PDF 闪卡，配合共线直刀裁切线几刀即可裁出整套掌中单词卡。</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" data-lang="en" href="../index.html?preset=flashcard">🚀 Launch A7 8-Up Flashcard Studio</a>
+        <a class="btn btn-primary" data-lang="zh" href="../index.html?preset=flashcard&amp;lang=zh">🚀 打开 A7 (8张/页) 单词闪卡工坊</a>
+
+        <a class="btn" data-lang="en" href="../index.html?preset=flashcard-3x5&paper=letter">🇺🇸 Open US Letter 3×5" (4-Up) Preset</a>
+        <a class="btn" data-lang="zh" href="../index.html?preset=flashcard-3x5&paper=letter&amp;lang=zh">🇺🇸 打开 3×5 英寸宽幅学科卡预设</a>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Exact Physical Sheet Dimensions &amp; Cards Per Page</h2>
+      <h2 data-lang="zh">精确物理尺寸规格与单页拼版容量对照表</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Preset</th>
+              <th>Physical Size</th>
+              <th>Sheet Capacity</th>
+              <th>Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>ISO A7 Pocket Study</strong></td><td><code>74 × 105 mm</code></td><td>8 cards / A4 sheet (0mm margin)</td><td>GRE, IELTS, JLPT Kanji, Idioms</td></tr>
+<tr><td><strong>US 3×5" Index Card</strong></td><td><code>127 × 76.2 mm</code></td><td>4 cards / US Letter or A4</td><td>Law, Medical, Formulas & Diagrams</td></tr>
+<tr><td><strong>Poker Study Deck</strong></td><td><code>63.5 × 88.9 mm</code></td><td>9 cards / A4 or Letter</td><td>Fits standard TCG card sleeves!</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">3-Step Zero-Waste Home Printing Workflow</h2>
+      <h2 data-lang="zh">三步零废纸家用高清打印与直刀裁切流程</h2>
+      <ol data-lang="en" style="margin:0;padding-left:20px;">
+        <li>Paste `Term | Definition | Tag | Emoji` lines or import an Anki `.tsv` / `.csv` spreadsheet directly.</li>
+<li>Choose **Vocabulary Flashcard A7 (74×105mm)** for zero-waste 8-up sheets or **3×5" Index Card** for detailed notes.</li>
+<li>Toggle **Mirrored Duplex Back Sheets** and print at 100% Actual Size on 200gsm cardstock.</li>
+      </ol>
+      <ol data-lang="zh" style="margin:0;padding-left:20px;">
+        <li>直接粘贴 `正面词汇 | 背面释义 | 分类标签 | 图标` 文本，或一键导入 Excel / Anki `.csv` `.tsv` 词库文件。</li>
+<li>选择 **A7 掌中闪卡 (74×105mm，最高 8张/页)** 或 **3×5 英寸宽幅卡片 (4张/页)**。</li>
+<li>开启双面背面镜像与毫米级打印机偏移校准，使用 200g 白卡纸按“100% 实际大小”双面打印直裁。</li>
+      </ol>
+    </section>
+
+    <section class="section-card">
+      <h2 data-lang="en">Frequently Asked Questions</h2>
+      <h2 data-lang="zh">常见问题解答 (FAQ)</h2>
+      <details class="faq-item" open><summary>How do I print double-sided flashcards so the front word matches the right back definition?</summary><p>Enable 'Generate Mirrored Duplex Back Sheets' with Long-Edge Flip in CardSheet Studio. Column 1 on the front automatically mirrors to Column N on the reverse side so every term aligns with its exact definition when flipped.</p></details>
+<details class="faq-item" open><summary>Can I import my existing Anki, Quizlet, or Google Sheets vocabulary list?</summary><p>Yes! Export your deck or spreadsheet as CSV or Tab-Separated Values (TSV) and click 'Import CSV / TSV / JSON' or paste it directly into the Flashcard Designer box.</p></details>
+<details class="faq-item" open><summary>What paper weight is best for homemade study flashcards?</summary><p>Heavyweight 180gsm to 220gsm (110lb index) matte white cardstock prevents ink bleed-through during active recall quizzing and feeds smoothly through standard home inkjet and laser printers.</p></details>
+    </section>
+
+    <div id="affiliateMount"></div>
+
+    <div class="pnp-banner">
+      <div style="flex:1;min-width:240px;">
+        <div style="font-size:11.5px;font-weight:800;color:#4338ca;">🎲 ORIGINAL INDIE PRINT &amp; PLAY GAMES</div>
+        <strong style="font-size:15px;display:block;margin:2px 0;" data-lang="en">Play Our 3 Original 2-Player Strategy Board Games Free vs. Browser AI!</strong>
+        <strong style="font-size:15px;margin:2px 0;" data-lang="zh">免费在线试玩工坊原创 3 款双人策略桌游（内置 AI 陪练 + 完整双语打印包）！</strong>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a class="btn" href="../../play/index.html">▶️ Play Free in Browser</a>
+        <a id="pnpBuyBtn" class="btn btn-primary" href="../../play/index.html" target="_blank" rel="noopener">📦 PnP Trilogy Bundle ($7.99)</a>
+      </div>
+    </div>
+
+    <section class="section-card" style="margin-top:20px;">
+      <h2 data-lang="en">More Card &amp; Tabletop Print Layout Tools</h2>
+      <h2 data-lang="zh">更多卡牌、闪卡与桌游纸艺排版工具</h2>
+      <div class="related-grid">
+        <a class="related-card" href="./playing-card-print-and-play-layout-tool.html"><strong>Playing Card Print-and-Play</strong><span>独立桌游原型与 PnP 卡牌拼版神器 →</span></a>
+<a class="related-card" href="./duplex-double-sided-card-printing-aligner.html"><strong>Duplex Double-Sided Card Printing Aligner</strong><span>解决家用双面打印正反错位痛点 →</span></a>
+<a class="related-card" href="./dnd-spell-item-card-sheet-generator.html"><strong>D&D 5e Spell, Monster & Magic Item Reference Card Sheet Generator</strong><span>TRPG 跑团地下城主法术卡与立牌工坊 →</span></a>
+<a class="related-card" href="./diy-business-card-sheet-pdf-maker.html"><strong>DIY 3.5×2" Business Card 10-Up Sheet PDF Maker</strong><span>独立创作者展会名片与二维码贴纸排版 →</span></a>
+<a class="related-card" href="./board-game-standee-template-generator.html"><strong>Board Game Paper Standee & Custom Parametric Deck Tuckbox Template Generator</strong><span>3D 桌游折纸立牌与自定义牌厚卡盒刀版 →</span></a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script>
+    (function () {
+      var lang = (navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) ? 'zh' : 'en';
+      function syncLang() {
+        document.body.classList.toggle('lang-zh', lang === 'zh');
+        if (window.CraftLeafSDK) {
+          CraftLeafSDK.renderAffiliateBar(document.getElementById('affiliateMount'), 'print-craft', lang);
+          var cfg = CraftLeafSDK.getConfig();
+          var pnp = (cfg.products && cfg.products.pnpTrilogyBundle) || {};
+          var btn = document.getElementById('pnpBuyBtn');
+          if (btn) {
+            btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
+            btn.textContent = lang === 'zh'
+              ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
+              : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+          }
+        }
+      }
+      document.getElementById('langBtn').addEventListener('click', function () {
+        lang = lang === 'en' ? 'zh' : 'en';
+        syncLang();
+      });
+      syncLang();
+    })();
+  </script>
+</body>
+</html>

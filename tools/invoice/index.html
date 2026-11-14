@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Freelancer Invoice, Quote &amp; Receipt PDF Generator (No Signup) — CraftLeaf Studio</title>
+  <meta name="description" content="Create polished A4 &amp; US Letter vector PDF invoices, quotes, and paid receipts instantly in your browser. Zero signup, 100% local privacy, multi-currency math, bilingual EN/中文 labels, client CRM &amp; scannable QR payment block." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-group">
+        <a class="brand-home" href="../../index.html" data-i18n="studioHome">← CraftLeaf Studio</a>
+        <div class="app-title-wrap">
+          <span class="app-badge-icon" aria-hidden="true">🧾</span>
+          <span class="app-title" data-i18n="appTitle">Freelancer Invoice &amp; Receipt PDF Studio</span>
+        </div>
+        <span class="privacy-pill">🔒 <span data-i18n="privacyBadge">No Signup · 100% Local Data</span></span>
+      </div>
+      <div class="topbar-actions">
+        <a class="nav-link-chip" href="../id-photo/index.html" data-i18n="idPhotoLink">← ID Photo 4×6" Studio</a>
+        <a class="nav-link-chip" href="../../seo/index.html" data-i18n="seoGuidesLink">Invoice Templates &amp; Guides</a>
+        <button type="button" id="langToggleBtn" class="lang-btn">中文 / EN</button>
+        <button type="button" id="openProModalBtn" class="pro-status-btn" data-i18n="unlockBtn">Unlock Pro ($9.00)</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Top Quick Bar -->
+    <section class="toolbar-bar">
+      <div class="toolbar-group">
+        <span class="toolbar-label" data-i18n="tbTemplate">Starter:</span>
+        <select id="templateSelect" class="select select-inline" aria-label="Invoice Starter Template"></select>
+
+        <span class="toolbar-label" style="margin-left:8px;" data-i18n="tbPaper">Paper:</span>
+        <select id="paperSelect" class="select select-inline" aria-label="Paper Size">
+          <option value="a4">A4 (210 × 297 mm)</option>
+          <option value="letter">US Letter (8.5 × 11 in)</option>
+        </select>
+      </div>
+
+      <div class="toolbar-group">
+        <button type="button" id="printPdfBtn" class="btn btn-emerald" data-i18n="btnPrintPdf">
+          🖨️ Print / Save Vector PDF
+        </button>
+      </div>
+    </section>
+
+    <div class="workspace-split">
+      <!-- Left Interactive Editor Column -->
+      <div class="editor-col">
+        <!-- 1. Document Setup -->
+        <section class="card">
+          <div class="card-title-row">
+            <span class="card-title"><span data-i18n="secDoc">Document Setup</span></span>
+            <span class="badge-free">FREE PDF</span>
+          </div>
+          <div class="form-grid-3">
+            <div class="field">
+              <label for="docTypeSelect" data-i18n="lblDocType">Document Type</label>
+              <select id="docTypeSelect" class="select">
+                <option value="invoice" data-i18n="optInvoice">Invoice</option>
+                <option value="quote" data-i18n="optQuote">Quotation / Estimate</option>
+                <option value="receipt" data-i18n="optReceipt">Paid Receipt</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="docLangSelect" data-i18n="lblDocLang">PDF Labels</label>
+              <select id="docLangSelect" class="select">
+                <option value="en" data-i18n="optLangEn">English</option>
+                <option value="zh" data-i18n="optLangZh">中文 (Chinese)</option>
+                <option value="bilingual" data-i18n="optLangBi">Bilingual (EN + 中文)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="currencySelect" data-i18n="lblCurrency">Currency</label>
+              <select id="currencySelect" class="select"></select>
+            </div>
+          </div>
+
+          <div class="form-grid-3" style="margin-top:10px;">
+            <div class="field">
+              <label for="invNumInput" data-i18n="lblInvNum">Document #</label>
+              <input type="text" id="invNumInput" class="input" />
+            </div>
+            <div class="field">
+              <label for="issueDateInput" data-i18n="lblIssueDate">Issue Date</label>
+              <input type="date" id="issueDateInput" class="input" />
+            </div>
+            <div class="field">
+              <label for="dueDateInput" data-i18n="lblDueDate">Due / Valid Date</label>
+              <input type="date" id="dueDateInput" class="input" />
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Sender & Client -->
+        <section class="card">
+          <div class="card-title-row">
+            <span class="card-title" data-i18n="secParties">Sender &amp; Client Details</span>
+          </div>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="senderNameInput" data-i18n="lblSenderName">Your Name / Business</label>
+              <input type="text" id="senderNameInput" class="input" />
+              <label for="senderDetailsInput" style="margin-top:6px;" data-i18n="lblSenderDetails">Your Email, Address &amp; Tax/EIN ID</label>
+              <textarea id="senderDetailsInput" class="textarea"></textarea>
+            </div>
+            <div class="field">
+              <label for="clientNameInput" data-i18n="lblClientName">Bill To (Client / Company)</label>
+              <input type="text" id="clientNameInput" class="input" />
+              <label for="clientDetailsInput" style="margin-top:6px;" data-i18n="lblClientDetails">Client Email, Billing Address &amp; VAT/Tax ID</label>
+              <textarea id="clientDetailsInput" class="textarea"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Line Items & Math -->
+        <section class="card">
+          <div class="card-title-row">
+            <span class="card-title" data-i18n="secItems">Line Items &amp; Tax / Discount Math</span>
+            <button type="button" id="addItemBtn" class="btn btn-xs btn-primary" data-i18n="btnAddItem">+ Add Line Item</button>
+          </div>
+          <div id="lineItemsList" class="line-items-list"></div>
+
+          <div class="form-grid-3" style="margin-top:12px;">
+            <div class="field">
+              <label for="discTypeSelect" data-i18n="lblDiscType">Discount Type</label>
+              <select id="discTypeSelect" class="select">
+                <option value="percent">Percent (%)</option>
+                <option value="fixed">Fixed Amount</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="discValInput" data-i18n="lblDiscVal">Discount Value</label>
+              <input type="number" id="discValInput" class="input" step="any" min="0" value="0" />
+            </div>
+            <div class="field">
+              <label for="amtPaidInput" data-i18n="lblAmtPaid">Deposit / Paid Deducted</label>
+              <input type="number" id="amtPaidInput" class="input" step="any" min="0" value="0" />
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="margin-top:10px;">
+            <div class="field">
+              <label for="taxLabelInput" data-i18n="lblTaxLabel">Tax / VAT Label</label>
+              <input type="text" id="taxLabelInput" class="input" placeholder="Tax / VAT / GST" />
+            </div>
+            <div class="field">
+              <label for="taxRateInput" data-i18n="lblTaxRate">Tax Rate (%)</label>
+              <input type="number" id="taxRateInput" class="input" step="any" min="0" value="0" />
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Payment Terms & Notes -->
+        <section class="card">
+          <div class="card-title-row">
+            <span class="card-title" data-i18n="secNotes">Payment Instructions, Terms &amp; Notes</span>
+          </div>
+          <div class="field" style="margin-bottom:8px;">
+            <label for="termsInput" data-i18n="lblTerms">Payment Terms</label>
+            <input type="text" id="termsInput" class="input" />
+          </div>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="payInfoInput" data-i18n="lblPayInfo">Bank / Wire / Payment Instructions</label>
+              <textarea id="payInfoInput" class="textarea"></textarea>
+            </div>
+            <div class="field">
+              <label for="notesInput" data-i18n="lblNotes">Client Notes / Thank You Message</label>
+              <textarea id="notesInput" class="textarea"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. PRO Brand Logo, Accent Theme, White-Label & Scannable QR -->
+        <section class="card card-pro">
+          <div class="card-title-row">
+            <span class="card-title" data-i18n="secProBrand">Brand Logo, Theme Color, Payment QR &amp; White-Label</span>
+            <span class="badge-pro">PRO · $9.00</span>
+          </div>
+
+          <div class="form-grid-2" style="align-items:end;">
+            <div class="field">
+              <label data-i18n="lblAccent">Invoice Accent Theme</label>
+              <div class="color-swatches">
+                <button type="button" class="accent-dot active" data-color="#1e3a8a" style="background:#1e3a8a;" aria-label="Navy"></button>
+                <button type="button" class="accent-dot" data-color="#0f172a" style="background:#0f172a;" aria-label="Slate"></button>
+                <button type="button" class="accent-dot" data-color="#047857" style="background:#047857;" aria-label="Emerald"></button>
+                <button type="button" class="accent-dot" data-color="#6d28d9" style="background:#6d28d9;" aria-label="Violet"></button>
+                <button type="button" class="accent-dot" data-color="#b91c1c" style="background:#b91c1c;" aria-label="Crimson"></button>
+                <button type="button" class="accent-dot" data-color="#0369a1" style="background:#0369a1;" aria-label="Ocean"></button>
+                <input type="color" id="customColorPicker" value="#1e3a8a" style="width:28px;height:28px;border:none;padding:0;background:none;cursor:pointer;" title="Custom Hex Color" />
+              </div>
+            </div>
+
+            <div style="display:flex;gap:6px;">
+              <button type="button" id="uploadLogoBtn" class="btn btn-xs" data-i18n="btnUploadLogo">🖼️ Upload Logo</button>
+              <button type="button" id="clearLogoBtn" class="btn btn-xs" data-i18n="btnClearLogo">Clear</button>
+              <input type="file" id="logoFileInput" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden />
+            </div>
+          </div>
+
+          <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin-top:11px;cursor:pointer;">
+            <input type="checkbox" id="hideFooterChk" />
+            <span data-i18n="chkHideFooter">Remove "Generated with CraftLeaf" Footer (White-Label)</span>
+          </label>
+
+          <div class="form-grid-2" style="margin-top:10px;">
+            <div class="field">
+              <label for="qrUrlInput" data-i18n="lblQrUrl">Embedded SVG Payment Link / QR URL (Stripe, PayPal, Wise)</label>
+              <input type="url" id="qrUrlInput" class="input" placeholder="https://buy.stripe.com/..." />
+            </div>
+            <div class="field">
+              <label for="qrCaptionInput" data-i18n="lblQrCaption">QR Callout Label</label>
+              <input type="text" id="qrCaptionInput" class="input" />
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. PRO Local Client & Item CRM Book + CSV Ledger -->
+        <section class="card card-pro">
+          <div class="card-title-row">
+            <span class="card-title" data-i18n="secCrm">Local Client &amp; Item CRM Book + CSV Ledger</span>
+            <span class="badge-pro">PRO · $9.00</span>
+          </div>
+
+          <div class="crm-tabs">
+            <button type="button" id="crmTabClients" class="crm-tab active" data-i18n="tabClients">Clients</button>
+            <button type="button" id="crmTabCatalog" class="crm-tab" data-i18n="tabCatalog">Item Catalog</button>
+            <button type="button" id="crmTabLedger" class="crm-tab" data-i18n="tabLedger">Invoice Ledger</button>
+          </div>
+
+          <div id="crmActionsClients" style="display:flex;gap:8px;">
+            <button type="button" id="saveClientBtn" class="btn btn-xs btn-pro" data-i18n="btnSaveClient">+ Save Current Client</button>
+          </div>
+          <div id="crmActionsCatalog" style="display:none;gap:8px;">
+            <button type="button" id="saveCatalogItemBtn" class="btn btn-xs btn-pro" data-i18n="btnSaveItem">+ Save First Line Item</button>
+          </div>
+          <div id="crmActionsLedger" style="display:none;gap:8px;flex-wrap:wrap;">
+            <button type="button" id="saveLedgerBtn" class="btn btn-xs btn-pro" data-i18n="btnSaveLedger">+ Save Invoice to Ledger</button>
+            <button type="button" id="exportCsvBtn" class="btn btn-xs btn-emerald" data-i18n="btnExportCsv">⬇ Export Ledger CSV</button>
+          </div>
+
+          <div id="crmSavedList" class="crm-saved-list"></div>
+        </section>
+      </div>
+
+      <!-- Right Live Vector Paper Preview -->
+      <section class="preview-stage" aria-label="Live Printable Invoice Preview">
+        <article id="invoicePaper" class="invoice-paper a4-sheet print-sheet"></article>
+      </section>
+    </div>
+
+    <!-- Below Workspace: Affiliate Bar, Tip Jar & Internal SEO Links -->
+    <div class="below-workspace">
+      <div id="invoiceAffiliateMount"></div>
+      <div class="tip-strip">
+        <span data-i18n="tipText">Get paid faster with zero monthly SaaS fees? Support independent offline software:</span>
+        <a id="studioTipLink" class="btn btn-xs" href="../../index.html#support" target="_blank" rel="noopener" data-i18n="tipCta">
+          ☕ Support CraftLeaf Studio
+        </a>
+      </div>
+
+      <nav class="seo-links-footer" aria-label="Freelancer Invoice Templates">
+        <strong data-i18n="guidesFooterTitle">Free Industry Invoice &amp; Receipt Templates:</strong>
+        <div class="seo-links-grid">
+          <a href="../../seo/free-freelancer-invoice-generator-no-signup.html">Free Freelancer Invoice (No Signup)</a>
+          <a href="../../seo/consulting-hourly-invoice-template-pdf.html">Consulting Hourly Invoice PDF</a>
+          <a href="../../seo/web-developer-project-invoice-generator.html">Web Developer Milestone Invoice</a>
+          <a href="../../seo/graphic-designer-quote-and-invoice-pdf.html">Graphic Designer Quote &amp; Invoice</a>
+          <a href="../../seo/contractor-receipt-maker-pdf.html">Independent Contractor Paid Receipt</a>
+          <a href="../../seo/bilingual-english-chinese-commercial-invoice.html">Bilingual EN/中文 Commercial Invoice</a>
+          <a href="../../seo/photography-client-invoice-generator.html">Photography Client Invoice</a>
+          <a href="../../seo/indie-saas-b2b-receipt-generator.html">Indie SaaS B2B VAT Receipt</a>
+        </div>
+      </nav>
+    </div>
+  </main>
+
+  <!-- Pro License Unlock Modal -->
+  <div id="proModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="invProModalHeading">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <h2 id="invProModalHeading" data-i18n="modalTitle">Unlock Freelancer Invoice Studio Pro</h2>
+          <p style="margin:4px 0 0 0;font-size:13px;color:#475569;" data-i18n="modalSub">
+            One-time $9.00 lifetime unlock — replace $15/mo invoicing subscriptions forever.
+          </p>
+        </div>
+        <button type="button" id="closeProModalBtn" class="modal-close" aria-label="Close">✕</button>
+      </div>
+
+      <div class="pro-perks">
+        <ul>
+          <li data-i18n="perk1">White-label PDF output (removes "Generated with CraftLeaf Invoice Studio" footer)</li>
+          <li data-i18n="perk2">Local Client &amp; Service Item CRM Book (IndexedDB + localStorage) for 1-click repeat billing</li>
+          <li data-i18n="perk3">Custom Brand Logo upload + custom corporate Accent Color themes</li>
+          <li data-i18n="perk4">Scannable Vector SVG Payment QR Code embedded directly on your invoice</li>
+          <li data-i18n="perk5">1-click Tax-Season CSV Export of your saved Invoice Ledger (also unlocked by STUDIOALL-...)</li>
+        </ul>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a id="buyProCta" class="btn btn-pro" href="#unlock-pro" target="_blank" rel="noopener" data-i18n="buyKeyBtn">
+          Get Instant Pro Key ($9.00) →
+        </a>
+        <a id="buyAllAccessCta" style="font-size:12px;text-align:center;color:#2563eb;" href="../../index.html#all-access" target="_blank" rel="noopener" data-i18n="allAccessLink">
+          Or unlock all 6 CraftLeaf tools with All-Access Pass ($19)
+        </a>
+      </div>
+
+      <div class="key-input-row">
+        <input type="text" id="licenseKeyInput" class="key-input" placeholder="INVPRO-XXXX-XXXX-XXXXXX" autocomplete="off" spellcheck="false" />
+        <button type="button" id="verifyKeyBtn" class="btn btn-primary" data-i18n="verifyBtn">Activate</button>
+      </div>
+      <div id="licenseMsg" class="modal-msg"></div>
+    </div>
+  </div>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

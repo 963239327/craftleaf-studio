@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passport &amp; Visa ID Photo 4×6" Print Sheet Maker (300 DPI Offline) — CraftLeaf Studio</title>
+  <meta name="description" content="100% private, browser-based Passport &amp; Visa ID Photo maker and 4×6 inch drugstore print sheet generator. Official biometric guides for US 2×2, Schengen 35×45mm, UK, Canada 50×70mm, Japan 45×45mm &amp; China 33×48mm." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-group">
+        <a class="brand-home" href="../../index.html" data-i18n="studioHome">← CraftLeaf Studio</a>
+        <div class="app-title-wrap">
+          <span class="app-badge-icon" aria-hidden="true">🪪</span>
+          <span class="app-title" data-i18n="appTitle">Passport &amp; Visa ID Photo 4×6" Studio</span>
+        </div>
+        <span class="privacy-pill">🔒 <span data-i18n="privacyBadge">100% Client-Side · Zero Upload</span></span>
+      </div>
+      <div class="topbar-actions">
+        <a class="nav-link-chip" href="../../seo/index.html" data-i18n="seoGuidesLink">Country Spec Guides</a>
+        <a class="nav-link-chip" href="../invoice/index.html" data-i18n="invoiceToolLink">Invoice PDF Studio →</a>
+        <button type="button" id="langToggleBtn" class="lang-btn">中文 / EN</button>
+        <button type="button" id="openProModalBtn" class="pro-status-btn" data-i18n="unlockBtn">Unlock Pro ($3.99)</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-strip">
+      <div>
+        <h1 data-i18n="heroTitle">Make Compliant 300 DPI Passport &amp; Visa Photos + $0.39 Drugstore 4×6" Sheets</h1>
+        <p data-i18n="heroDesc">Align head crown &amp; chin with official biometric guides, brighten home walls to studio white, and tile onto 4×6" or A4 print sheets — 100% offline in your browser.</p>
+      </div>
+      <div class="savings-pill" data-i18n="savingsPill">💡 Print 6–8 photos for $0.39 at CVS/Walgreens vs. $16.99 in-store</div>
+    </section>
+
+    <div class="workspace-grid">
+      <!-- Left Controls Panel -->
+      <aside class="panel">
+        <div class="panel-section">
+          <div class="section-label"><span data-i18n="sec1">1. Portrait Source</span></div>
+          <div class="upload-row">
+            <div id="uploadDropzone" class="upload-dropzone" role="button" tabindex="0" data-i18n="dropzoneText">
+              📷 Choose or Drop Portrait Photo
+            </div>
+            <button type="button" id="demoPortraitBtn" class="btn btn-demo" data-i18n="demoBtn">✨ Demo Portrait</button>
+          </div>
+          <input type="file" id="photoFileInput" accept="image/jpeg,image/png,image/webp" hidden />
+        </div>
+
+        <div class="panel-section">
+          <div class="section-label"><span data-i18n="sec2">2. Country &amp; Visa Specification</span></div>
+          <select id="presetSelect" class="select-input" aria-label="Country Photo Preset"></select>
+          <div id="specCallout" class="spec-callout"></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-label"><span data-i18n="sec3">3. Pose &amp; Biometric Framing</span></div>
+          <div class="control-group">
+            <div class="control-header">
+              <span data-i18n="lblZoom">Zoom Scale</span>
+              <span id="zoomVal" class="control-val">104%</span>
+            </div>
+            <input type="range" id="zoomSlider" min="50" max="280" step="1" value="104" />
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <span data-i18n="lblRotate">Fine Tilt / Rotate</span>
+              <span id="rotateVal" class="control-val">0°</span>
+            </div>
+            <input type="range" id="rotateSlider" min="-15" max="15" step="0.5" value="0" />
+          </div>
+
+          <div class="inline-btns">
+            <button type="button" id="rotLeftBtn" class="btn btn-xs" data-i18n="btnRotLeft">↺ -90°</button>
+            <button type="button" id="rotRightBtn" class="btn btn-xs" data-i18n="btnRotRight">↻ +90°</button>
+            <button type="button" id="recenterBtn" class="btn btn-xs" data-i18n="btnCenter">⌖ Re-Center</button>
+            <button type="button" id="flipBtn" class="btn btn-xs" data-i18n="btnFlip">⇄ Mirror</button>
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="guidesCheckbox" checked />
+            <span data-i18n="chkGuides">Show Head Crown / Eye / Chin Biometric Overlay</span>
+          </label>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-label">
+            <span data-i18n="sec4">4. Studio Lighting &amp; White-Wall Boost</span>
+            <button type="button" id="resetAdjBtn" class="btn btn-xs" data-i18n="btnResetAdj">Reset Lighting</button>
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <span data-i18n="lblBgBoost">White-Background Boost (Home Wall Whitener)</span>
+              <span id="bgBoostVal" class="control-val">45%</span>
+            </div>
+            <input type="range" id="bgBoostSlider" min="0" max="100" step="1" value="45" />
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <span data-i18n="lblBright">Brightness</span>
+              <span id="brightVal" class="control-val">0</span>
+            </div>
+            <input type="range" id="brightSlider" min="-40" max="40" step="1" value="0" />
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <span data-i18n="lblContrast">Contrast</span>
+              <span id="contrastVal" class="control-val">+4</span>
+            </div>
+            <input type="range" id="contrastSlider" min="-40" max="40" step="1" value="4" />
+          </div>
+
+          <div class="bg-swatches">
+            <button type="button" class="swatch-btn active" data-bg="#FFFFFF">
+              <span class="swatch-dot" style="background:#FFFFFF;"></span>
+              <span data-i18n="swatchWhite">Pure White</span>
+            </button>
+            <button type="button" class="swatch-btn" data-bg="#F7F8FA">
+              <span class="swatch-dot" style="background:#F7F8FA;"></span>
+              <span data-i18n="swatchCream">UK Soft Grey</span>
+            </button>
+            <button type="button" class="swatch-btn" data-bg="#D9EEFC">
+              <span class="swatch-dot" style="background:#D9EEFC;"></span>
+              <span data-i18n="swatchBlue">Light Blue</span>
+            </button>
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="trimMarksCheckbox" checked />
+            <span data-i18n="chkTrimMarks">Draw Precision Scissor Trim Marks &amp; 1" Scale Bar</span>
+          </label>
+        </div>
+      </aside>
+
+      <!-- Right Interactive Canvas & Print Sheet Stage -->
+      <section class="panel">
+        <div class="stage-grid">
+          <div class="canvas-card">
+            <div class="card-head">
+              <span class="card-title" data-i18n="cropCardTitle">Biometric Alignment Canvas</span>
+            </div>
+            <div id="cropViewport" class="crop-viewport">
+              <canvas id="cropCanvas" width="680" height="680"></canvas>
+            </div>
+            <div class="drag-hint" data-i18n="dragHint">
+              Drag photo directly to position eyes &amp; crown inside green target bands · Scroll wheel to zoom
+            </div>
+          </div>
+
+          <div class="canvas-card">
+            <div class="card-head">
+              <span class="card-title" data-i18n="sheetCardTitle">300 DPI Print Sheet Live Preview</span>
+              <div class="sheet-tabs">
+                <button type="button" id="tabBtn4x6" class="sheet-tab active" data-i18n="tab4x6">4×6" Sheet ($0.39)</button>
+                <button type="button" id="tabBtnA4" class="sheet-tab" data-i18n="tabA4">A4 Sheet</button>
+              </div>
+            </div>
+            <div class="sheet-preview-wrap">
+              <canvas id="sheetCanvas" width="792" height="528"></canvas>
+            </div>
+            <div class="sheet-meta-bar">
+              <span id="sheetStatsText">6 photos tiled · 1800×1200 px @ 300 DPI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Freemium Export Actions -->
+        <div class="export-actions">
+          <div class="export-card">
+            <div>
+              <div class="export-card-title">
+                <span data-i18n="freeCardTitle">Single Cropped Photo</span>
+                <span class="tier-tag tier-free">FREE</span>
+              </div>
+              <p class="export-card-desc" data-i18n="freeCardDesc">
+                Exact 300 DPI biometric PNG ready for online visa/USCIS digital portals.
+              </p>
+            </div>
+            <button type="button" id="dlSingleBtn" class="btn btn-primary" data-i18n="btnDlSingle">
+              ⬇ Download Single 300 DPI PNG
+            </button>
+          </div>
+
+          <div class="export-card pro-card">
+            <div>
+              <div class="export-card-title">
+                <span data-i18n="pro4x6Title">4×6" Cut-Ready Print Sheet</span>
+                <span class="tier-tag tier-pro">PRO · $3.99</span>
+              </div>
+              <p class="export-card-desc" data-i18n="pro4x6Desc">
+                Unwatermarked 1800×1200 px 300 DPI sheet with scissor trim ticks for CVS, Walgreens, Walmart, Boots.
+              </p>
+            </div>
+            <button type="button" id="dl4x6Btn" class="btn btn-pro" data-i18n="btnDl4x6">
+              ⬇ Download 4×6" Sheet PNG
+            </button>
+          </div>
+
+          <div class="export-card pro-card">
+            <div>
+              <div class="export-card-title">
+                <span data-i18n="proA4Title">A4 Sheet + Direct Print</span>
+                <span class="tier-tag tier-pro">PRO · $3.99</span>
+              </div>
+              <p class="export-card-desc" data-i18n="proA4Desc">
+                Unwatermarked 2480×3508 px A4 sheet PNG + 1:1 physical scale print view.
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" id="dlA4Btn" class="btn btn-pro" style="flex:1;" data-i18n="btnDlA4">
+                ⬇ Download A4 PNG
+              </button>
+              <button type="button" id="printSheetBtn" class="btn btn-accent" style="flex:1;" data-i18n="btnPrintSheet">
+                🖨️ Print Cut-Ready Sheet
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Affiliate Supplies & Tip Strip -->
+        <div class="footer-monetization">
+          <div id="affiliateMount"></div>
+          <div id="affiliateTrimmerMount"></div>
+          <div class="tip-strip">
+            <span data-i18n="tipText">Saved $16+ vs. retail passport photo booths? Support independent privacy-first tools:</span>
+            <a id="studioTipLink" class="btn btn-xs" href="../../index.html#support" target="_blank" rel="noopener" data-i18n="tipCta">
+              ☕ Leave a Tip / Support Studio
+            </a>
+          </div>
+        </div>
+
+        <!-- Internal SEO Cross-Links -->
+        <nav class="seo-links-footer" aria-label="Passport Photo Specification Guides">
+          <strong data-i18n="guidesFooterTitle">Official Country Photo Size &amp; Drugstore Printing Guides:</strong>
+          <div class="seo-links-grid">
+            <a href="../../seo/us-passport-photo-4x6-print.html">US Passport 2×2" 4×6 Print Guide</a>
+            <a href="../../seo/schengen-visa-photo-35x45-maker.html">Schengen Visa 35×45mm Spec</a>
+            <a href="../../seo/canada-passport-photo-50x70-online.html">Canada Passport 50×70mm Guide</a>
+            <a href="../../seo/chinese-visa-photo-33x48-tool.html">Chinese Visa 33×48mm Maker</a>
+            <a href="../../seo/uk-passport-photo-print-sheet.html">UK Passport 35×45mm Sheet</a>
+            <a href="../../seo/japan-visa-photo-45x45-maker.html">Japan Visa 45×45mm Square Spec</a>
+            <a href="../../seo/opt-ead-2x2-photo-sheet-cvs-walgreens.html">USCIS OPT / EAD 2×2 CVS Guide</a>
+            <a href="../../seo/baby-passport-photo-at-home-guide.html">Baby Passport Photo at Home</a>
+          </div>
+        </nav>
+      </section>
+    </div>
+  </main>
+
+  <!-- Dedicated 1:1 Physical Scale Print Mount -->
+  <div id="printSheetMount" aria-hidden="true"></div>
+
+  <!-- Pro License Unlock Modal -->
+  <div id="proModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="proModalHeading">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div>
+          <h2 id="proModalHeading" data-i18n="modalTitle">Unlock ID Photo Print Sheet Pro</h2>
+          <p style="margin:4px 0 0 0;font-size:13px;color:#475569;" data-i18n="modalSub">
+            One-time $3.99 lifetime browser unlock — zero subscription, works 100% offline forever.
+          </p>
+        </div>
+        <button type="button" id="closeProModalBtn" class="modal-close" aria-label="Close">✕</button>
+      </div>
+
+      <div class="pro-perks">
+        <ul>
+          <li data-i18n="perk1">Clean, unwatermarked 300 DPI 4×6" (1800×1200 px) &amp; A4 (2480×3508 px) tiled sheets</li>
+          <li data-i18n="perk2">Precision corner crop ticks, scissor cut lines &amp; 1-inch calibration bar</li>
+          <li data-i18n="perk3">1:1 physical-size Print View for home inkjet/laser printers</li>
+          <li data-i18n="perk4">Also unlocked automatically with the $19 CraftLeaf All-Access Pass (STUDIOALL-...)</li>
+        </ul>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a id="buyProCta" class="btn btn-pro" href="#unlock-pro" target="_blank" rel="noopener" data-i18n="buyKeyBtn">
+          Buy Instant Pro Key ($3.99) →
+        </a>
+        <a id="buyAllAccessCta" style="font-size:12px;text-align:center;color:#2563eb;" href="../../index.html#all-access" target="_blank" rel="noopener" data-i18n="allAccessLink">
+          Or get All-Access Pass for all 6 Studio tools ($19)
+        </a>
+      </div>
+
+      <div class="key-input-row">
+        <input type="text" id="licenseKeyInput" class="key-input" placeholder="IDPRO-XXXX-XXXX-XXXXXX" autocomplete="off" spellcheck="false" />
+        <button type="button" id="verifyKeyBtn" class="btn btn-primary" data-i18n="verifyBtn">Activate</button>
+      </div>
+      <div id="licenseMsg" class="modal-msg"></div>
+    </div>
+  </div>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
