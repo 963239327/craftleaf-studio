@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Print Claude Conversations &amp; Code Artifacts to PDF Without Cutoff</title>
+  <meta name="description" content="Export Claude 3.5/4 chats, architecture specs, and wide code blocks to clean A4/Letter PDFs without horizontal scrollbars chopping off lines past 80 characters." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/seo/print-claude-artifacts-code-without-cutoff.html" />
+  <meta property="og:title" content="Print Claude Conversations &amp; Code Artifacts to PDF Without Cutoff" />
+  <meta property="og:description" content="Export Claude 3.5/4 chats, architecture specs, and wide code blocks to clean A4/Letter PDFs without horizontal scrollbars chopping off lines past 80 characters." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/seo/print-claude-artifacts-code-without-cutoff.html" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="./seo.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "CraftLeaf Studio",
+          "item": "https://963239327.github.io/craftleaf-studio/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides & Templates Hub",
+          "item": "https://963239327.github.io/craftleaf-studio/seo/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How to Print Claude Chats & Wide Code Blocks Without Right-Edge Cutoff",
+          "item": "https://963239327.github.io/craftleaf-studio/seo/print-claude-artifacts-code-without-cutoff.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "If CleanPrint wraps long code lines onto the next line for printing, does copying from the PDF add fake line breaks?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because CleanPrint applies CSS white-space: pre-wrap rather than inserting literal newline characters into the DOM text, modern PDF viewers preserve clean logical text flow without losing any truncated characters!"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does CleanPrint also prevent Markdown tables and headings from orphaning at the bottom of a page?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! CleanPrint injects break-after: avoid on h1–h4 headings (so a heading never sits alone at the bottom of a page) and break-inside: avoid on table rows and compact callouts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which browsers support CleanPrint Studio?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Microsoft Edge, Mozilla Firefox, Google Chrome, Brave, and Arc (standard Manifest V3 architecture)."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "name": "How to Print Claude Chats & Wide Code Blocks Without Right-Edge Cutoff",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (100% Browser-Based HTML5)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary Navigation">
+    <div class="site-nav-inner">
+      <a href="../index.html">← CraftLeaf &amp; Pixel Studio</a>
+      <div class="nav-links">
+        <a href="./index.html">All 68 Guides</a>
+        <a href="../tools/id-photo/index.html">ID Photo 4×6"</a>
+        <a href="../tools/invoice/index.html">Invoice PDF</a>
+        <a href="../cardsheet/index.html">CardSheet</a>
+        <a href="../extensions/pasteshield/index.html">PasteShield</a>
+        <a href="../extensions/cleanprint/index.html">CleanPrint</a>
+        <a href="../play/index.html">Play PnP</a>
+        <a class="nav-cta" href="../extensions/cleanprint/index.html">Launch Tool →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <header class="hero-box">
+      <span class="kicker">Claude Chats &amp; Code Artifacts · Zero Right-Edge Cutoff · Vector PDF</span>
+      <h1>How to Print Claude Chats &amp; Wide Code Blocks Without Right-Edge Cutoff</h1>
+      <p class="lead">Claude writes phenomenal architecture docs, SQL queries, and code reviews — but native browser printing slices wide <code>&lt;pre&gt;&lt;code&gt;</code> blocks straight off at column 78 and splits functions awkwardly across page breaks! CleanPrint wraps code intelligently, keeps short blocks whole, and strips UI chrome.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="../extensions/cleanprint/index.html">Preview CleanPrint Code-Wrap Engine →</a>
+        
+      </div>
+      <div class="cta-sub">🔒 100% Client-Side Browser Privacy · Fixes Horizontal <code>&lt;pre&gt;</code> Clipping, Split Tables &amp; Dark-Theme Toner Waste · 100% Local</div>
+      <div class="zh-callout">中文提示：Claude 写的长篇系统架构设计、SQL 查询与代码走查在浏览器直接打印时，超过 80 列的宽代码右侧会被直接裁丢，分栏界面还会把正文挤成细条！CleanPrint 采用纯 CSS 软折行 (<code>pre-wrap</code>) + 防跨页截断保护，纸面完整显示且从 PDF 复制代码依然保持完整单行逻辑。</div>
+    </header>
+
+    <section class="section-card">
+      <h2>Technical CSS Print Bugs CleanPrint Solves Automatically on AI &amp; Dev Sites</h2>
+      <div style="overflow-x:auto;">
+        <table class="spec-table">
+          <thead><tr><th>CSS Layout Trap</th><th>What Happens Without CleanPrint</th><th>How CleanPrint Fixes It</th></tr></thead>
+          <tbody><tr><td><code>pre { overflow-x: auto; white-space: pre }</code></td><td>Characters &gt;75 cols vanish forever off right margin</td><td><code>white-space: pre-wrap; overflow-wrap: anywhere</code> with subtle indent</td></tr><tr><td>Split Short Code / Math Blocks</td><td>4-line SQL query chopped 2 lines bottom + 2 lines top</td><td><code>break-inside: avoid</code> keeps blocks ≤22 lines intact on one page</td></tr><tr><td>Warm/Dark Background Fills</td><td>Wastes color/black ink across every background sheet</td><td>Pure <code>#FFFFFF</code> paper canvas + crisp <code>#CBD5E1</code> 1px borders</td></tr><tr><td>Split Side-by-Side Artifact Pane</td><td>Crushes chat into narrow 40% column when printing</td><td>Expands readable 100% document measure across A4 / US Letter</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="section-card">
+      <h2>Best Settings for Printing Technical Architecture Reviews &amp; Study Guides</h2>
+      <div class="checklist-box">
+        <ul class="checklist-list"><li>Turn OFF Browser &#x27;Headers and Footers&#x27; in the final Print dialog if you don&#x27;t want raw session URLs stamped at the bottom corner.</li><li>Keep &#x27;Background Graphics&#x27; OFF (or let CleanPrint&#x27;s Eco Low-Ink mode handle crisp borders using real CSS borders that print even when Background Graphics are disabled!).</li><li>Use <strong>Minimalist Swiss</strong> or <strong>Academic Serif</strong> (Pro) when handing an AI-assisted technical RFC or research synthesis to leadership or thesis advisors.</li></ul>
+      </div>
+    </section>
+    <section class="section-card">
+      <h2>Save Clean, Unclipped Code &amp; Technical Threads as PDF</h2>
+      <ol class="steps-list"><li>Test the live Before/After split-screen demo on the CleanPrint Studio page above to see wrapped <code>PRAGMA</code> / code blocks in action.</li><li>Open your Claude, Copilot, or technical blog tab and activate CleanPrint.</li><li>Verify that wide TypeScript, Python, SQL, and Markdown comparison tables wrap cleanly inside the page margins with zero horizontal scrollbars.</li><li>Export as a crisp vector PDF where colleagues or future-you can copy-paste multi-line code without missing right-hand characters!</li></ol>
+    </section>
+
+    <section class="section-card">
+      <h2>Watch Out for Copy-Paste Linebreaks vs. Visual Soft-Wrap</h2>
+      <ul class="pitfalls-list"><li>Hard-inserting newline characters that break copied code: Unlike scripts that mutate code strings with hard <code>\n</code> breaks, CleanPrint uses CSS soft-wrapping (<code>pre-wrap</code>), so selecting text in the exported PDF still copies unbroken logical lines!</li><li>Printing with 200% browser zoom active: Reset zoom to 100% or use CleanPrint&#x27;s dedicated font-size scale (<code>10pt–12pt</code>) for dense, crisp code.</li></ul>
+    </section>
+
+    <div id="seoAffiliateMount"></div>
+
+    <section class="section-card">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item"><h3 class="faq-q">If CleanPrint wraps long code lines onto the next line for printing, does copying from the PDF add fake line breaks?</h3><p class="faq-a">Because CleanPrint applies CSS <code>white-space: pre-wrap</code> rather than inserting literal newline characters into the DOM text, modern PDF viewers preserve clean logical text flow without losing any truncated characters!</p></div><div class="faq-item"><h3 class="faq-q">Does CleanPrint also prevent Markdown tables and headings from orphaning at the bottom of a page?</h3><p class="faq-a">Yes! CleanPrint injects <code>break-after: avoid</code> on <code>h1–h4</code> headings (so a heading never sits alone at the bottom of a page) and <code>break-inside: avoid</code> on table rows and compact callouts.</p></div><div class="faq-item"><h3 class="faq-q">Which browsers support CleanPrint Studio?</h3><p class="faq-a">Microsoft Edge, Mozilla Firefox, Google Chrome, Brave, and Arc (standard Manifest V3 architecture).</p></div>
+    </section>
+
+    <div class="bottom-cta-banner">
+      <div style="max-width:540px;">
+        <strong style="font-size:18px;display:block;margin-bottom:4px;">Protect your credentials &amp; purify technical pages 100% locally.</strong>
+        <span style="font-size:13.5px;color:#cbd5e1;">Zero telemetry, zero cloud servers — built for privacy-conscious engineers, researchers, and students.</span>
+      </div>
+      <a class="cta-btn" href="../extensions/cleanprint/index.html">Preview CleanPrint Code-Wrap Engine →</a>
+    </div>
+
+    <section class="section-card">
+      <h2>Related Specifications, Tools &amp; Free Templates</h2>
+      <div class="related-grid"><a class="related-card" href="./save-github-readme-docs-as-ink-saver-pdf.html"><strong>Print &amp; Archive GitHub READMEs &amp; Technical Docs as Ink-Saver PDFs</strong><span>GitHub READMEs · MDN / ReadTheDocs / Docusaurus · Multi-Tab Binder PDF</span></a><a class="related-card" href="./sanitize-env-api-keys-before-chatgpt-prompt.html"><strong>How to Sanitize .env API Keys &amp; DB URIs Before Prompting ChatGPT or Claude</strong><span>PasteShield · VS Code &amp; Cursor · 100% Offline Reversible Masking</span></a><a class="related-card" href="./redact-jwt-aws-keys-from-logs-online.html"><strong>Redact JWTs, AWS Keys &amp; Auth Headers from Logs — 100% Client-Side</strong><span>Incident Response · AWS AKIA / STS · Bearer JWT · PEM Private Keys</span></a><a class="related-card" href="./gdpr-pii-log-scrubber-for-developers.html"><strong>Developer GDPR &amp; SOC2 PII Scrubber for Bug Repros &amp; AI Prompts</strong><span>GDPR / HIPAA / SOC2 · Emails, IPs &amp; Customer PII · Reversible Dev Anonymizer</span></a><a class="related-card" href="./date-night-2-player-print-and-play-board-games.html"><strong>Cozy Date-Night 2-Player Print &amp; Play Board Games (Play Tonight!)</strong><span>3–4 Pages · 25-Min Cozy Strategy · Playable Free in Browser + Printable PDF</span></a><a class="related-card" href="./india-oci-visa-photo-2x2-maker.html"><strong>India Tourist e-Visa, OCI Card &amp; Passport Renewal 2×2&quot; Photo Maker</strong><span>India e-Visa · OCI Card · VFS Indian Passport 2×2&quot;</span></a></div>
+    </section>
+
+    <footer class="site-footer">
+      <p>
+        <a href="../index.html">CraftLeaf &amp; Pixel Studio</a> ·
+        <a href="./index.html">All 68 Guides Directory</a> ·
+        <a href="../tools/id-photo/index.html">ID Photo 4×6" Studio</a> ·
+        <a href="../tools/invoice/index.html">Invoice PDF Studio</a> ·
+        <a href="../cardsheet/index.html">CardSheet Duplex Studio</a> ·
+        <a href="../extensions/pasteshield/index.html">PasteShield</a> ·
+        <a href="../extensions/cleanprint/index.html">CleanPrint</a> ·
+        <a href="../play/index.html">Play Star Chef</a>
+      </p>
+      <p>100% Client-Side Offline Web Tools — Your photos, secrets, flashcards, and financial records never leave your browser.</p>
+    </footer>
+  </main>
+
+  <script src="../assets/monetization-config.js"></script>
+  <script src="../assets/monetization-sdk.js"></script>
+  <script>
+    if (window.CraftLeafSDK) {
+      var lang = (localStorage.getItem('craftleaf_lang') === 'zh') ? 'zh' : 'en';
+      window.CraftLeafSDK.renderAffiliateBar(document.getElementById('seoAffiliateMount'), 'print-craft', lang);
+    }
+  </script>
+</body>
+</html>

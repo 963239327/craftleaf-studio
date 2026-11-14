@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redact JWT Tokens, AWS Keys &amp; Bearer Headers from Logs Offline</title>
+  <meta name="description" content="Scrub Bearer JWTs, AWS AKIA/ASIA access keys, Azure SAS tokens, GCP service-account JSON &amp; PEM private keys from production logs locally in your browser before sharing." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/seo/redact-jwt-aws-keys-from-logs-online.html" />
+  <meta property="og:title" content="Redact JWT Tokens, AWS Keys &amp; Bearer Headers from Logs Offline" />
+  <meta property="og:description" content="Scrub Bearer JWTs, AWS AKIA/ASIA access keys, Azure SAS tokens, GCP service-account JSON &amp; PEM private keys from production logs locally in your browser before sharing." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/seo/redact-jwt-aws-keys-from-logs-online.html" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="./seo.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "CraftLeaf Studio",
+          "item": "https://963239327.github.io/craftleaf-studio/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides & Templates Hub",
+          "item": "https://963239327.github.io/craftleaf-studio/seo/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Redact JWTs, AWS Keys & Auth Headers from Logs — 100% Client-Side",
+          "item": "https://963239327.github.io/craftleaf-studio/seo/redact-jwt-aws-keys-from-logs-online.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does redacting inside JSON payloads keep the JSON valid and parseable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! PasteShield substitutes the secret token inside quotes (e.g. \"token\": \"<JWT_TOKEN_1>\") so JSON formatters, linters, and LLMs still parse the structure cleanly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why shouldn't I paste even an 'expired' JWT into public issues or AI prompts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Even expired JWT headers and payloads expose internal user IDs, email addresses, org/tenant IDs, issuer URLs, and key IDs (kid) in plaintext Base64Url."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I install this directly inside VS Code or Cursor so I don't even switch tabs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — PasteShield is available as a lightweight, zero-dependency extension for VS Code and Cursor with instant keyboard shortcuts."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Redact JWTs, AWS Keys & Auth Headers from Logs — 100% Client-Side",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (100% Browser-Based HTML5)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary Navigation">
+    <div class="site-nav-inner">
+      <a href="../index.html">← CraftLeaf &amp; Pixel Studio</a>
+      <div class="nav-links">
+        <a href="./index.html">All 68 Guides</a>
+        <a href="../tools/id-photo/index.html">ID Photo 4×6"</a>
+        <a href="../tools/invoice/index.html">Invoice PDF</a>
+        <a href="../cardsheet/index.html">CardSheet</a>
+        <a href="../extensions/pasteshield/index.html">PasteShield</a>
+        <a href="../extensions/cleanprint/index.html">CleanPrint</a>
+        <a href="../play/index.html">Play PnP</a>
+        <a class="nav-cta" href="../extensions/pasteshield/index.html">Launch Tool →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <header class="hero-box">
+      <span class="kicker">Incident Response · AWS AKIA / STS · Bearer JWT · PEM Private Keys</span>
+      <h1>Redact JWTs, AWS Keys &amp; Auth Headers from Logs — 100% Client-Side</h1>
+      <p class="lead">Sharing production CloudWatch, Datadog, Nginx, or Kubernetes pod logs in a GitHub Issue, vendor support ticket, Slack channel, or LLM prompt? One stray <code>Authorization: Bearer eyJhbG...</code> or <code>AKIA...</code> session key can hijack live accounts. Scrub multi-thousand-line logs locally in milliseconds.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="../extensions/pasteshield/index.html">Open Offline Log &amp; JWT Redactor →</a>
+        
+      </div>
+      <div class="cta-sub">🔒 100% Client-Side Browser Privacy · Detects JWTs, AWS/GCP/Azure Keys, Slack/GitHub Webhooks, DB Strings &amp; Private Keys in RAM</div>
+      <div class="zh-callout">中文提示：线上故障排查 (On-Call / Incident Response) 往工单、GitHub Issue、外包供应商群或 AI 粘贴报错日志与 <code>Copy as cURL</code> 前必过一遍！纯本地识别脱敏 <code>Bearer eyJ...</code> JWT 令牌、AWS <code>AKIA</code> 密钥、Azure 连接串及私钥块，保持合法 JSON 结构不破坏上下文。</div>
+    </header>
+
+    <section class="section-card">
+      <h2>High-Risk Cloud &amp; Auth Credential Signatures Automatically Scrubbed</h2>
+      <div style="overflow-x:auto;">
+        <table class="spec-table">
+          <thead><tr><th>Credential Class</th><th>Signature / Entropy Pattern</th><th>Sanitized Output Token</th></tr></thead>
+          <tbody><tr><td>JSON Web Tokens (JWT / OIDC)</td><td><code>eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+</code></td><td><code>&lt;JWT_TOKEN_1&gt;</code></td></tr><tr><td>AWS IAM &amp; STS Access Keys</td><td><code>AKIA[0-9A-Z]{16}</code> / <code>ASIA[0-9A-Z]{16}</code> + 40-char Secret</td><td><code>&lt;AWS_ACCESS_KEY_1&gt;</code> / <code>&lt;AWS_SECRET_1&gt;</code></td></tr><tr><td>Azure Storage / SAS &amp; Connection Strings</td><td><code>AccountKey=...;</code> / <code>sv=2022-...&amp;sig=...</code></td><td><code>&lt;AZURE_CREDENTIAL_1&gt;</code></td></tr><tr><td>PEM / SSH Private Key Blocks</td><td><code>-----BEGIN (RSA|EC|OPENSSH|PRIVATE) KEY-----</code></td><td><code>&lt;PRIVATE_KEY_BLOCK_1&gt;</code></td></tr><tr><td>RFC1918 &amp; Internal Corp Hostnames</td><td><code>10.x.x.x</code>, <code>172.16-31.x.x</code>, <code>*.internal.corp</code></td><td><code>&lt;INTERNAL_IP_1&gt;</code> / <code>&lt;CORP_HOST_1&gt;</code></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="section-card">
+      <h2>Why JWTs in &#x27;har&#x27; Files &amp; Debug Logs Are Live Session Bombs</h2>
+      <div class="checklist-box">
+        <ul class="checklist-list"><li>JWT Payloads Are Base64Url — NOT Encrypted! Anyone reading an unredacted <code>eyJ...</code> token in a Jira/GitHub comment can base64-decode user emails, tenant UUIDs, and role claims in 2 seconds — and replay the bearer token until <code>exp</code>!</li><li>HAR File &amp; cURL Warning: Browser &#x27;Copy as cURL&#x27; and exported <code>.har</code> captures embed <code>Cookie:</code>, <code>x-api-key:</code>, and <code>Authorization:</code> headers verbatim. Always run <code>Copy as cURL</code> snippets through PasteShield before sending to third-party support or AI!</li><li>Consistent Request-Correlation: Distinct JWTs become <code>&lt;JWT_TOKEN_1&gt;</code> and <code>&lt;JWT_TOKEN_2&gt;</code>, so you can still trace multi-user race conditions across 500 log lines!</li></ul>
+      </div>
+    </section>
+    <section class="section-card">
+      <h2>Sanitize Stack Traces &amp; cURL Reproductions Before Sharing</h2>
+      <ol class="steps-list"><li>Open the Offline Log Redactor Playground above in any modern browser.</li><li>Paste raw Kubernetes logs, <code>Copy as cURL</code> commands, or JSON webhook payloads into the input pane.</li><li>Verify the Vault Counter pill showing how many JWTs, cloud keys, and internal IPs were caught and indexed.</li><li>Copy the scrubbed output safely into GitHub Issues, Zendesk vendor tickets, Slack channels, or AI chat assistants!</li></ol>
+    </section>
+
+    <section class="section-card">
+      <h2>Common Regex Blind Spots in DIY <code>sed</code> Scripts</h2>
+      <ul class="pitfalls-list"><li>Missing URL-encoded or multi-line secrets: Quick <code>sed</code> one-liners miss <code>postgres://user:p%40ss@...</code> credentials, base64 Basic Auth headers, and multi-line <code>-----BEGIN PRIVATE KEY-----</code> blocks.</li><li>Destroying JSON validity during redaction: PasteShield replaces secret values inside string literals cleanly without breaking surrounding JSON quotes or braces!</li></ul>
+    </section>
+
+    <div id="seoAffiliateMount"></div>
+
+    <section class="section-card">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item"><h3 class="faq-q">Does redacting inside JSON payloads keep the JSON valid and parseable?</h3><p class="faq-a">Yes! PasteShield substitutes the secret token inside quotes (e.g. <code>&quot;token&quot;: &quot;&lt;JWT_TOKEN_1&gt;&quot;</code>) so JSON formatters, linters, and LLMs still parse the structure cleanly.</p></div><div class="faq-item"><h3 class="faq-q">Why shouldn&#x27;t I paste even an &#x27;expired&#x27; JWT into public issues or AI prompts?</h3><p class="faq-a">Even expired JWT headers and payloads expose internal user IDs, email addresses, org/tenant IDs, issuer URLs, and key IDs (<code>kid</code>) in plaintext Base64Url.</p></div><div class="faq-item"><h3 class="faq-q">Can I install this directly inside VS Code or Cursor so I don&#x27;t even switch tabs?</h3><p class="faq-a">Yes — PasteShield is available as a lightweight, zero-dependency extension for VS Code and Cursor with instant keyboard shortcuts.</p></div>
+    </section>
+
+    <div class="bottom-cta-banner">
+      <div style="max-width:540px;">
+        <strong style="font-size:18px;display:block;margin-bottom:4px;">Protect your credentials &amp; purify technical pages 100% locally.</strong>
+        <span style="font-size:13.5px;color:#cbd5e1;">Zero telemetry, zero cloud servers — built for privacy-conscious engineers, researchers, and students.</span>
+      </div>
+      <a class="cta-btn" href="../extensions/pasteshield/index.html">Open Offline Log &amp; JWT Redactor →</a>
+    </div>
+
+    <section class="section-card">
+      <h2>Related Specifications, Tools &amp; Free Templates</h2>
+      <div class="related-grid"><a class="related-card" href="./gdpr-pii-log-scrubber-for-developers.html"><strong>Developer GDPR &amp; SOC2 PII Scrubber for Bug Repros &amp; AI Prompts</strong><span>GDPR / HIPAA / SOC2 · Emails, IPs &amp; Customer PII · Reversible Dev Anonymizer</span></a><a class="related-card" href="./print-chatgpt-conversation-to-pdf-cleanly.html"><strong>How to Print &amp; Save ChatGPT Conversations to Crisp Vector PDFs</strong><span>CleanPrint Extension · Edge, Firefox &amp; Chromium · Saves ~65% Toner</span></a><a class="related-card" href="./print-claude-artifacts-code-without-cutoff.html"><strong>How to Print Claude Chats &amp; Wide Code Blocks Without Right-Edge Cutoff</strong><span>Claude Chats &amp; Code Artifacts · Zero Right-Edge Cutoff · Vector PDF</span></a><a class="related-card" href="./save-github-readme-docs-as-ink-saver-pdf.html"><strong>Print &amp; Archive GitHub READMEs &amp; Technical Docs as Ink-Saver PDFs</strong><span>GitHub READMEs · MDN / ReadTheDocs / Docusaurus · Multi-Tab Binder PDF</span></a><a class="related-card" href="./ugc-creator-brand-sponsorship-invoice-pdf.html"><strong>UGC Creator, Influencer &amp; Brand Sponsorship Invoice PDF Studio</strong><span>UGC Creators · YouTube Sponsors · TikTok / IG Brand Deals</span></a><a class="related-card" href="./canada-passport-photo-50x70-online.html"><strong>Canada Passport &amp; PR Photo 50×70mm Maker (Smart 4-Up 4×6&quot; Layout)</strong><span>IRCC Canada 50×70 mm Spec</span></a></div>
+    </section>
+
+    <footer class="site-footer">
+      <p>
+        <a href="../index.html">CraftLeaf &amp; Pixel Studio</a> ·
+        <a href="./index.html">All 68 Guides Directory</a> ·
+        <a href="../tools/id-photo/index.html">ID Photo 4×6" Studio</a> ·
+        <a href="../tools/invoice/index.html">Invoice PDF Studio</a> ·
+        <a href="../cardsheet/index.html">CardSheet Duplex Studio</a> ·
+        <a href="../extensions/pasteshield/index.html">PasteShield</a> ·
+        <a href="../extensions/cleanprint/index.html">CleanPrint</a> ·
+        <a href="../play/index.html">Play Star Chef</a>
+      </p>
+      <p>100% Client-Side Offline Web Tools — Your photos, secrets, flashcards, and financial records never leave your browser.</p>
+    </footer>
+  </main>
+
+  <script src="../assets/monetization-config.js"></script>
+  <script src="../assets/monetization-sdk.js"></script>
+  <script>
+    if (window.CraftLeafSDK) {
+      var lang = (localStorage.getItem('craftleaf_lang') === 'zh') ? 'zh' : 'en';
+      window.CraftLeafSDK.renderAffiliateBar(document.getElementById('seoAffiliateMount'), 'print-craft', lang);
+    }
+  </script>
+</body>
+</html>

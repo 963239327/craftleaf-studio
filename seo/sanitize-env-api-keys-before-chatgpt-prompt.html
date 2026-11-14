@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sanitize .env API Keys &amp; Secrets Before Pasting to ChatGPT or Claude</title>
+  <meta name="description" content="Never leak OpenAI, Anthropic, Stripe, AWS, or Postgres .env credentials into AI prompts! Replace secrets locally with reversible &lt;OPENAI_KEY_1&gt; tokens and restore AI code in 1 click." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/seo/sanitize-env-api-keys-before-chatgpt-prompt.html" />
+  <meta property="og:title" content="Sanitize .env API Keys &amp; Secrets Before Pasting to ChatGPT or Claude" />
+  <meta property="og:description" content="Never leak OpenAI, Anthropic, Stripe, AWS, or Postgres .env credentials into AI prompts! Replace secrets locally with reversible &lt;OPENAI_KEY_1&gt; tokens and restore AI code in 1 click." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/seo/sanitize-env-api-keys-before-chatgpt-prompt.html" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="./seo.css" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "CraftLeaf Studio",
+          "item": "https://963239327.github.io/craftleaf-studio/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides & Templates Hub",
+          "item": "https://963239327.github.io/craftleaf-studio/seo/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How to Sanitize .env API Keys & DB URIs Before Prompting ChatGPT or Claude",
+          "item": "https://963239327.github.io/craftleaf-studio/seo/sanitize-env-api-keys-before-chatgpt-prompt.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does PasteShield send my code or .env keys to any server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Never. Both the browser sandbox and the VS Code / Cursor extension run 100% locally in JavaScript with zero telemetry, zero analytics, and zero outbound network permissions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "If the same API key or internal IP appears 6 times in my config, does the AI know they are the same value?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! PasteShield uses deterministic session indexing: all 6 occurrences of Server A's IP map to <INTERNAL_IP_1> while Server B maps to <INTERNAL_IP_2>, preserving architectural relationships for accurate AI debugging."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does PasteShield Pro ($9 lifetime) add over the free core?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All core secret, JWT, cloud key, DB URI, and IP redaction + 1-click restoration are 100% free; Pro ($9 one-time or included in the $19 Studio All-Access Pass) unlocks custom company regex packs (internal project codewords, custom prefixes) and multi-file safe context export."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "name": "How to Sanitize .env API Keys & DB URIs Before Prompting ChatGPT or Claude",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (100% Browser-Based HTML5)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary Navigation">
+    <div class="site-nav-inner">
+      <a href="../index.html">← CraftLeaf &amp; Pixel Studio</a>
+      <div class="nav-links">
+        <a href="./index.html">All 68 Guides</a>
+        <a href="../tools/id-photo/index.html">ID Photo 4×6"</a>
+        <a href="../tools/invoice/index.html">Invoice PDF</a>
+        <a href="../cardsheet/index.html">CardSheet</a>
+        <a href="../extensions/pasteshield/index.html">PasteShield</a>
+        <a href="../extensions/cleanprint/index.html">CleanPrint</a>
+        <a href="../play/index.html">Play PnP</a>
+        <a class="nav-cta" href="../extensions/pasteshield/index.html">Launch Tool →</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <header class="hero-box">
+      <span class="kicker">PasteShield · VS Code &amp; Cursor · 100% Offline Reversible Masking</span>
+      <h1>How to Sanitize .env API Keys &amp; DB URIs Before Prompting ChatGPT or Claude</h1>
+      <p class="lead">Every day, developers accidentally paste <code>.env</code> configs, <code>docker-compose.yml</code> passwords, or <code>curl</code> headers into ChatGPT, Claude, or DeepSeek while debugging — triggering emergency key rotations and SOC2 incidents. PasteShield masks secrets locally into readable <code>&lt;STRIPE_SECRET_1&gt;</code> placeholders AND restores real values in 1 click!</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="../extensions/pasteshield/index.html">Try Live Offline Secret Sanitizer Sandbox →</a>
+        
+      </div>
+      <div class="cta-sub">🔒 100% Client-Side Browser Privacy · Zero Network Calls · Live Browser Playground + Free VS Code &amp; Cursor (.vsix / OpenVSX) Extension</div>
+      <div class="zh-callout">中文提示：程序员向 ChatGPT / Claude / DeepSeek 提问排错前的「防泄密安全阀」！纯本地毫秒级识别 <code>.env</code>、OpenAI/Stripe/AWS/阿里云密钥、数据库连接串与内网 IP，替换为语义化占位符 <code>&lt;OPENAI_KEY_1&gt;</code>，拿到 AI 修改后的代码还能在本地一键无损还原真实配置！</div>
+    </header>
+
+    <section class="section-card">
+      <h2>How Reversible Placeholder Masking Outperforms Manual <code>REDACTED</code> Edits</h2>
+      <div style="overflow-x:auto;">
+        <table class="spec-table">
+          <thead><tr><th>Secret Pattern Found in Code</th><th>Naive Manual Scrub (Breaks AI Context!)</th><th>PasteShield Deterministic Token</th></tr></thead>
+          <tbody><tr><td><code>sk-proj-8f92aBcD...</code> (OpenAI)</td><td><code>REDACTED</code> (AI confuses multiple keys!)</td><td><code>&lt;OPENAI_API_KEY_1&gt;</code> (preserves distinct identity)</td></tr><tr><td><code>postgres://admin:Sup3rS3cr3t@10.24.1.9:5432/prod</code></td><td>Deletes whole URI -&gt; AI writes broken code</td><td><code>postgres://&lt;DB_CREDENTIALS_1&gt;@&lt;INTERNAL_IP_1&gt;:5432/prod</code></td></tr><tr><td><code>sk_live_51N9xK...</code> + <code>whsec_9a8b...</code></td><td>Easy to miss webhook secret on line 84</td><td><code>&lt;STRIPE_KEY_1&gt;</code> + <code>&lt;WEBHOOK_SECRET_1&gt;</code></td></tr><tr><td><code>ghp_x89LmN...</code> / <code>glpat-...</code></td><td>Committed in chat history forever</td><td><code>&lt;GITHUB_PAT_1&gt;</code> -&gt; Restored locally in 1 click!</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="section-card">
+      <h2>3-Step Zero-Leak AI Debugging Workflow (In VS Code, Cursor, or Browser)</h2>
+      <div class="checklist-box">
+        <ul class="checklist-list"><li>1. <strong>Copy Sanitised (<code>Cmd+Shift+C</code> in VS Code/Cursor or Live Web Sandbox)</strong>: PasteShield scans <code>.env</code>, YAML, JSON, stack traces, and TypeScript locally in &lt;5 ms, maps secrets in an ephemeral in-memory vault, and copies clean placeholder code.</li><li>2. <strong>Prompt Any External LLM Safely</strong>: ChatGPT, Claude, or Copilot understands <code>&lt;AWS_ACCESS_KEY_1&gt;</code> and <code>&lt;INTERNAL_HOST_1&gt;</code> structurally and writes working refactored code referencing those exact tokens!</li><li>3. <strong>1-Click Restore (<code>Cmd+Shift+V</code>)</strong>: Paste the AI&#x27;s reply back — PasteShield swaps <code>&lt;AWS_ACCESS_KEY_1&gt;</code> back to your real local credential purely inside local RAM (vault clears automatically when closed).</li></ul>
+      </div>
+    </section>
+    <section class="section-card">
+      <h2>Test Your <code>.env</code> or Config Snippet Right Now (Disconnect Wi-Fi to Verify!)</h2>
+      <ol class="steps-list"><li>Click &#x27;Try Live Offline Secret Sanitizer Sandbox&#x27; above — inspect the Network tab or turn off Wi-Fi to verify zero bytes ever leave your machine.</li><li>Paste your <code>.env</code>, <code>appsettings.json</code>, Kubernetes Secret manifest, or failing <code>curl</code> command into Column 1.</li><li>Copy the green sanitized prompt from Column 2 into ChatGPT / Claude, then paste the AI&#x27;s refactored config into Column 3 to restore real values instantaneously!</li><li>Want shortcut integration directly inside your IDE? Install the free <strong>PasteShield</strong> extension in VS Code or Cursor (OpenVSX).</li></ol>
+    </section>
+
+    <section class="section-card">
+      <h2>Why <code>.gitignore</code> &amp; Cursorignore Aren&#x27;t Enough During Live Debugging</h2>
+      <ul class="pitfalls-list"><li>Terminal traceback leaks: Even when <code>.env</code> is ignored, failed HTTP client logs and stack traces dump <code>Authorization: Bearer ...</code> and Redis passwords into terminal output that devs copy-paste straight into chat windows!</li><li>Using random cloud &#x27;online redactor&#x27; sites that upload your raw <code>.env</code> to a Node/Python backend: Never send secrets over HTTPS to a third-party server just to redact them!</li></ul>
+    </section>
+
+    <div id="seoAffiliateMount"></div>
+
+    <section class="section-card">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item"><h3 class="faq-q">Does PasteShield send my code or .env keys to any server?</h3><p class="faq-a">Never. Both the browser sandbox and the VS Code / Cursor extension run 100% locally in JavaScript with zero telemetry, zero analytics, and zero outbound network permissions.</p></div><div class="faq-item"><h3 class="faq-q">If the same API key or internal IP appears 6 times in my config, does the AI know they are the same value?</h3><p class="faq-a">Yes! PasteShield uses deterministic session indexing: all 6 occurrences of Server A&#x27;s IP map to <code>&lt;INTERNAL_IP_1&gt;</code> while Server B maps to <code>&lt;INTERNAL_IP_2&gt;</code>, preserving architectural relationships for accurate AI debugging.</p></div><div class="faq-item"><h3 class="faq-q">What does PasteShield Pro ($9 lifetime) add over the free core?</h3><p class="faq-a">All core secret, JWT, cloud key, DB URI, and IP redaction + 1-click restoration are 100% free; Pro ($9 one-time or included in the $19 Studio All-Access Pass) unlocks custom company regex packs (internal project codewords, custom prefixes) and multi-file safe context export.</p></div>
+    </section>
+
+    <div class="bottom-cta-banner">
+      <div style="max-width:540px;">
+        <strong style="font-size:18px;display:block;margin-bottom:4px;">Protect your credentials &amp; purify technical pages 100% locally.</strong>
+        <span style="font-size:13.5px;color:#cbd5e1;">Zero telemetry, zero cloud servers — built for privacy-conscious engineers, researchers, and students.</span>
+      </div>
+      <a class="cta-btn" href="../extensions/pasteshield/index.html">Try Live Offline Secret Sanitizer Sandbox →</a>
+    </div>
+
+    <section class="section-card">
+      <h2>Related Specifications, Tools &amp; Free Templates</h2>
+      <div class="related-grid"><a class="related-card" href="./redact-jwt-aws-keys-from-logs-online.html"><strong>Redact JWTs, AWS Keys &amp; Auth Headers from Logs — 100% Client-Side</strong><span>Incident Response · AWS AKIA / STS · Bearer JWT · PEM Private Keys</span></a><a class="related-card" href="./gdpr-pii-log-scrubber-for-developers.html"><strong>Developer GDPR &amp; SOC2 PII Scrubber for Bug Repros &amp; AI Prompts</strong><span>GDPR / HIPAA / SOC2 · Emails, IPs &amp; Customer PII · Reversible Dev Anonymizer</span></a><a class="related-card" href="./print-chatgpt-conversation-to-pdf-cleanly.html"><strong>How to Print &amp; Save ChatGPT Conversations to Crisp Vector PDFs</strong><span>CleanPrint Extension · Edge, Firefox &amp; Chromium · Saves ~65% Toner</span></a><a class="related-card" href="./print-claude-artifacts-code-without-cutoff.html"><strong>How to Print Claude Chats &amp; Wide Code Blocks Without Right-Edge Cutoff</strong><span>Claude Chats &amp; Code Artifacts · Zero Right-Edge Cutoff · Vector PDF</span></a><a class="related-card" href="./airbnb-short-term-rental-stay-receipt-pdf.html"><strong>Short-Term Rental, Direct-Booking &amp; Corporate Lodging Stay Receipt PDF</strong><span>Direct-Booking STR Hosts · Corporate Extended Stays · Furnished Finder</span></a><a class="related-card" href="./monte-carlo-board-game-balance-testing-guide.html"><strong>How to Balance Tabletop Games With 10,000-Run Monte Carlo Simulations</strong><span>Game Design Math · 10,000-Match Python Bot Simulation · First-Player Parity</span></a></div>
+    </section>
+
+    <footer class="site-footer">
+      <p>
+        <a href="../index.html">CraftLeaf &amp; Pixel Studio</a> ·
+        <a href="./index.html">All 68 Guides Directory</a> ·
+        <a href="../tools/id-photo/index.html">ID Photo 4×6" Studio</a> ·
+        <a href="../tools/invoice/index.html">Invoice PDF Studio</a> ·
+        <a href="../cardsheet/index.html">CardSheet Duplex Studio</a> ·
+        <a href="../extensions/pasteshield/index.html">PasteShield</a> ·
+        <a href="../extensions/cleanprint/index.html">CleanPrint</a> ·
+        <a href="../play/index.html">Play Star Chef</a>
+      </p>
+      <p>100% Client-Side Offline Web Tools — Your photos, secrets, flashcards, and financial records never leave your browser.</p>
+    </footer>
+  </main>
+
+  <script src="../assets/monetization-config.js"></script>
+  <script src="../assets/monetization-sdk.js"></script>
+  <script>
+    if (window.CraftLeafSDK) {
+      var lang = (localStorage.getItem('craftleaf_lang') === 'zh') ? 'zh' : 'en';
+      window.CraftLeafSDK.renderAffiliateBar(document.getElementById('seoAffiliateMount'), 'print-craft', lang);
+    }
+  </script>
+</body>
+</html>
