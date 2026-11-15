@@ -1,0 +1,29 @@
+# CraftLeaf & Stardust Studio (青叶星尘独立工坊)
+
+> Privacy-first 100% client-side browser micro-tools, zero-telemetry open-source IDE & browser extensions, original Print-and-Play tabletop strategy games, and bilingual North American newcomer survival guides. Zero user files or secrets are ever uploaded to a server.
+
+- Portal: https://963239327.github.io/craftleaf-studio/
+- Short Root URL: https://963239327.github.io/
+- Digital Storefront (27 Products & Lifetime Passes): https://stardustdemo.gumroad.com
+- Playable Tabletop Showcase: https://stardustdemo.itch.io
+
+## Free Client-Side Interactive Web Tools (0 Bytes Uploaded)
+- [Passport & Visa 4x6" ID Photo Print Sheet Maker ($0.39 CVS/Walgreens + Anti-Overscan Safe Bleed)](https://963239327.github.io/craftleaf-studio/tools/id-photo/): US 2x2", China 33x48mm, Schengen/UK 35x45mm, Canada 50x70mm, Japan 45x45mm on 300 DPI 4x6" sheet.
+- [No-Signup Freelancer Invoice, Quote & Receipt PDF Studio](https://963239327.github.io/craftleaf-studio/tools/invoice/): Instant commercial vector PDF invoices with QR payment links.
+- [CardSheet Duplex Flashcard & Tabletop PnP Aligner](https://963239327.github.io/craftleaf-studio/cardsheet/): Sub-millimeter back-side mirror X/Y offset calibration and guillotine crop marks.
+- [Star Chef Showdown — Free Browser Rondel Bistro Strategy Game](https://963239327.github.io/craftleaf-studio/play/): Playable solo vs. AI funnel for our single-sided Print-and-Play tabletop trilogy.
+- [WA Driver License Road Test 36 Examiner Audio Flashcard Trainer](https://963239327.github.io/craftleaf-studio/tools/us-life/wa-road-test-trainer/): Interactive English audio command trainer for Washington State driving skills test.
+- [US Doctor Visit & Urgent Care English Nurse Triage Symptom Card Maker](https://963239327.github.io/craftleaf-studio/tools/us-life/doctor-symptom-card/): 100% local bilingual symptom, pain scale, allergy & free Mandarin interpreter request card generator.
+- [US Credit Card Statement Closing Date vs. Due Date & <9% FICO Simulator](https://963239327.github.io/craftleaf-studio/tools/us-life/credit-score-simulator/): Calculates exact pre-statement payment day & amount for newcomers starting from $500 secured cards.
+- [2026 US Black Friday 4-Layer Cashback & Sales Tax Stacking Calculator](https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/): Separates pre-tax Rakuten cashback base from post-tax Amex/Chase Offer thresholds.
+
+## Official Open-Source Developer & Browser Extensions (MIT)
+- [PasteShield — Reversible AI Prompt Secret Sanitizer (VS Code Marketplace)](https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer): Source at https://github.com/963239327/pasteshield-secret-sanitizer & web sandbox at https://963239327.github.io/craftleaf-studio/extensions/pasteshield/
+- [CleanPrint — Export ChatGPT & Claude Conversations to Crisp Vector PDF (Firefox Add-ons)](https://addons.mozilla.org/en-US/firefox/addon/cleanprint-ai-chat-to-pdf/): Source at https://github.com/963239327/cleanprint-ai-chat-to-pdf & web preview at https://963239327.github.io/craftleaf-studio/extensions/cleanprint/
+- [US Newcomer Bilingual Survival Handbook (GitHub)](https://github.com/963239327/us-newcomer-bilingual-handbook)
+
+## Full Guide Indexes & Store Catalog
+- [70+ English How-To & Template Guides](https://963239327.github.io/craftleaf-studio/seo/)
+- [50+ North American Chinese & Bilingual Practical Guides](https://963239327.github.io/craftleaf-studio/cn-guides/)
+- [Extended Machine-Readable Catalog](https://963239327.github.io/craftleaf-studio/llms-full.txt)
+- [RSS 2.0 Feed](https://963239327.github.io/craftleaf-studio/feed.xml)
