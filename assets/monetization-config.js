@@ -18,6 +18,13 @@
     "rakutenInviteUrl": "",
     "telecomEsimInviteUrl": ""
   },
+  "b2bServices": {
+    "restaurantCustomCheckoutUrl": "https://stardustdemo.gumroad.com/l/coffee?price=65&wanted=true",
+    "restaurantDiyGlossaryUrl": "https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?wanted=true",
+    "landlordCustomCheckoutUrl": "https://stardustdemo.gumroad.com/l/coffee?price=35&wanted=true",
+    "landlordLeaseKitUrl": "https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?wanted=true",
+    "intakeEmail": ""
+  },
   "tips": {
     "kofiUrl": "https://stardustdemo.gumroad.com/l/coffee",
     "buyMeACoffeeUrl": "https://stardustdemo.gumroad.com/l/coffee",

@@ -505,16 +505,30 @@
     document.body.appendChild(toast);
   }
 
+  function isExtensionRuntime() {
+    if (typeof location !== 'undefined' && location && typeof location.protocol === 'string') {
+      if (location.protocol !== 'https:' && location.protocol !== 'http:') return true;
+    }
+    if (typeof chrome !== 'undefined' && chrome && chrome.runtime && chrome.runtime.id) return true;
+    if (typeof browser !== 'undefined' && browser && browser.runtime && browser.runtime.id) return true;
+    return false;
+  }
+
   function initOptionalAnalytics() {
-    if (typeof document === 'undefined' || !document.head) return;
+    if (typeof Image === 'undefined' || typeof location === 'undefined' || isExtensionRuntime()) return;
     var cfg = getConfig();
     var gc = cfg.analytics && cfg.analytics.goatcounterEndpoint ? String(cfg.analytics.goatcounterEndpoint).trim() : '';
-    if (!gc) return;
-    var s = document.createElement('script');
-    s.async = true;
-    s.setAttribute('data-goatcounter', gc);
-    s.src = 'https://gc.zgo.at/count.js';
-    document.head.appendChild(s);
+    if (!gc || !/^https:\/\//i.test(gc)) return;
+    try {
+      var endpoint = gc.replace(/\/+$/, '');
+      if (endpoint.slice(-6) !== '/count') endpoint += '/count';
+      var q = '?p=' + encodeURIComponent((location.pathname || '/') + (location.search || '')) +
+        '&t=' + encodeURIComponent((typeof document !== 'undefined' && document.title) || '') +
+        '&rnd=' + String(Date.now());
+      var beacon = new Image(1, 1);
+      beacon.decoding = 'async';
+      beacon.src = endpoint + q;
+    } catch (_e) {}
   }
 
   // Purge any legacy v1/v2 records immediately & trigger background Gumroad re-verification

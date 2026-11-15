@@ -591,7 +591,7 @@
       buyKeyBtn: 'Get Instant Pro Key ($9.00) →',
       allAccessLink: 'Or unlock all 6 CraftLeaf tools with All-Access Pass ($19)',
       verifyBtn: 'Activate',
-      msgInvalid: 'Invalid key. Expected INVPRO-XXXX-XXXX-XXXXXX or STUDIOALL-...',
+      msgInvalid: 'Invalid key. Expected XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX or STUDIOALL-...',
       msgSuccess: 'Invoice Studio Pro Unlocked! White-label, CRM, Logo, QR & CSV are now active.'
     },
     zh: {
@@ -662,7 +662,7 @@
       buyKeyBtn: '立即获取 Pro 激活码 ($9.00) →',
       allAccessLink: '或入手 $19 工坊全系 6 款效率工具通票',
       verifyBtn: '立即激活',
-      msgInvalid: '激活码格式有误，请输入 INVPRO-XXXX-XXXX-XXXXXX 或 STUDIOALL-...。',
+      msgInvalid: '激活码格式有误，请输入 XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX 或 STUDIOALL-...。',
       msgSuccess: 'Pro 专业版已激活！去品牌水印、本地客户 CRM、Logo、矢量收款码与 CSV 导出已全部开启。'
     }
   };

@@ -169,8 +169,8 @@
             out.className = 'verify-result ok';
           } else {
             out.textContent = pageState.lang === 'zh'
-              ? '✕ 激活码校验未通过，请检查格式 CLEANPRO-XXXX-XXXX-XXXXXX。'
-              : '✕ Key checksum invalid. Expected format CLEANPRO-XXXX-XXXX-XXXXXX or STUDIOALL-...';
+              ? '✕ 激活码校验未通过，请检查格式 XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX。'
+              : '✕ Key checksum invalid. Expected format XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX or STUDIOALL-...';
             out.className = 'verify-result err';
           }
         });

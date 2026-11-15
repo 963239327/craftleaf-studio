@@ -115,7 +115,7 @@
       btnActivateKey: 'Activate Pro',
       btnPrintFree1Sheet: 'Or Print Free Single Front Sheet (Page 1 Only)',
       keySuccess: '✅ License verified! All Pro batch, duplex calibration & 3D features are permanently unlocked.',
-      keyInvalid: '❌ Invalid license key checksum. Check format CARDPRO-XXXX-XXXX-XXXXXX.',
+      keyInvalid: '❌ Invalid license key checksum. Check format XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX.',
       freeBadgeNote: 'Free Tier: 1 Front Sheet unlimited prints · Pro ($9): Unlimited Batch + Duplex Calibration + 3D Tuckbox'
     },
     zh: {
@@ -224,7 +224,7 @@
       btnActivateKey: '立即激活专业版',
       btnPrintFree1Sheet: '先免费打印单页正面（仅导出第 1 页正面）',
       keySuccess: '✅ 激活码校验通过！批量多页、双面毫米校准与 3D 立牌卡盒导出已永久解锁。',
-      keyInvalid: '❌ 激活码格式或校验和无效，请核对 CARDPRO-XXXX-XXXX-XXXXXX。',
+      keyInvalid: '❌ 激活码格式或校验和无效，请核对 XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX。',
       freeBadgeNote: '免费版：单页正面高清拼版与共线裁切线永久免费 · Pro版：解锁无限批量分页 + 双面偏移校准 + 3D立牌卡盒'
     }
   };
