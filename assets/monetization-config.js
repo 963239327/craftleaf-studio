@@ -150,8 +150,8 @@ window.CRAFTLEAF_MONETIZATION = {
     },
     "leaseGuide": {
       "priceUsd": "$7.00",
-      "gumroadPermalink": "us-newcomer-first-year-7in1-bundle",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-newcomer-first-year-7in1-bundle"
+      "gumroadPermalink": "us-apartment-lease-12-clauses-chinese-guide",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide"
     },
     "settlingCarGuide": {
       "priceUsd": "$7.00",
