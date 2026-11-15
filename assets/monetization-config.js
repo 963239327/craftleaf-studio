@@ -146,22 +146,22 @@ window.CRAFTLEAF_MONETIZATION = {
     "healthcareKit": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "us-healthcare-doctor-visit-bilingual-kit",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-healthcare-doctor-visit-bilingual-kit"
     },
     "leaseGuide": {
       "priceUsd": "$7.00",
-      "gumroadPermalink": "us-apartment-lease-12-clauses-chinese-guide",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "gumroadPermalink": "us-newcomer-first-year-7in1-bundle",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-newcomer-first-year-7in1-bundle"
     },
     "settlingCarGuide": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-settling-in-and-first-car-chinese-playbook",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-settling-in-and-first-car-chinese-playbook"
     },
     "newcomerMasterBundle": {
       "priceUsd": "$24.00",
       "gumroadPermalink": "us-newcomer-first-year-7in1-bundle",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-newcomer-first-year-7in1-bundle"
     }
   },
   "affiliates": {
