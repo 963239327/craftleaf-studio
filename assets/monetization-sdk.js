@@ -1,88 +1,28 @@
 /**
- * CraftLeaf Universal Zero-Backend Monetization, License & Attribution SDK (v2 Hardened)
+ * CraftLeaf Universal Zero-Backend Monetization, Gumroad License & Attribution SDK (v3)
  * Works in Static Sites (GitHub Pages), Browser Extensions (MV3 DOM-safe), and Headless Tests.
  *
- * Security & Privacy Guarantees:
- *  - ZERO key-generation or reversible checksum algorithm shipped in client code (#4).
- *  - Pre-issued buyer keys inside paid store ZIPs are verified via one-way SHA-256 digests only.
- *  - Native Gumroad License Keys are verified via https://api.gumroad.com/v2/licenses/verify,
- *    rejecting refunded/chargebacked purchases and surfacing 'network_error' when offline (#14).
- *  - LocalStorage unlock records require cryptographic proof digests (never string-length checks).
- *  - Outbound Gumroad links automatically forward UTM campaign & landing-page attribution (#5).
+ * Security Guarantees (#4, #14, #22):
+ *  - ZERO offline keygen, checksum helpers, SHA-256 helpers, or public digest tables.
+ *  - `isUnlocked()` reads ONLY private closure state (`verifiedSessionSlots`) populated exclusively
+ *    after a successful `https://api.gumroad.com/v2/licenses/verify` call in this runtime.
+ *  - `localStorage` caches ONLY the buyer's raw `licenseKey` string for convenience so returning
+ *    buyers are automatically re-verified against Gumroad on page load (`reverifyStoredLicenses()`).
+ *  - Hand-written `localStorage` records (legacy v1/v2 proof hashes, public digests, or fake keys)
+ *    NEVER satisfy `isUnlocked()` and are purged when Gumroad rejects them.
+ *  - Refunded, disputed, or chargebacked Gumroad purchases are rejected and revoked on reload.
  */
 (function (root) {
   'use strict';
 
-  var STORAGE_PREFIX = 'craftleaf_license_v2_';
+  var CACHE_PREFIX = 'craftleaf_gumroad_key_v3_';
+  var LEGACY_PREFIXES = ['craftleaf_license_', 'craftleaf_license_v2_'];
   var UTM_SESSION_KEY = 'craftleaf_utm_v1';
+  var GUMROAD_VERIFY_URL = 'https://api.gumroad.com/v2/licenses/verify';
 
-  // Compact FIPS 180-4 SHA-256 (synchronous, zero dependencies, works in Browser + MV3 + JSC + Node)
-  var K256 = [
-    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
-  ];
-
-  function rotr(x, n) {
-    return (x >>> n) | (x << (32 - n));
-  }
-
-  function sha256Hex(str) {
-    var utf8 = unescape(encodeURIComponent(String(str)));
-    var bitLen = utf8.length * 8;
-    var words = [];
-    for (var i = 0; i < utf8.length; i++) {
-      words[i >> 2] |= (utf8.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
-    }
-    words[utf8.length >> 2] |= 0x80 << (24 - (utf8.length % 4) * 8);
-    var totalWords = (((utf8.length + 8) >> 6) + 1) * 16;
-    for (var z = 0; z < totalWords; z++) {
-      if (words[z] === undefined) words[z] = 0;
-    }
-    words[totalWords - 2] = Math.floor(bitLen / 0x100000000);
-    words[totalWords - 1] = bitLen >>> 0;
-
-    var H = [
-      0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-      0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
-    ];
-    var W = new Array(64);
-    for (var offset = 0; offset < totalWords; offset += 16) {
-      for (var t = 0; t < 16; t++) W[t] = words[offset + t] | 0;
-      for (var t2 = 16; t2 < 64; t2++) {
-        var s0 = rotr(W[t2 - 15], 7) ^ rotr(W[t2 - 15], 18) ^ (W[t2 - 15] >>> 3);
-        var s1 = rotr(W[t2 - 2], 17) ^ rotr(W[t2 - 2], 19) ^ (W[t2 - 2] >>> 10);
-        W[t2] = (W[t2 - 16] + s0 + W[t2 - 7] + s1) | 0;
-      }
-      var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
-      for (var r = 0; r < 64; r++) {
-        var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
-        var ch = (e & f) ^ ((~e) & g);
-        var temp1 = (h + S1 + ch + K256[r] + W[r]) | 0;
-        var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
-        var maj = (a & b) ^ (a & c) ^ (b & c);
-        var temp2 = (S0 + maj) | 0;
-        h = g; g = f; f = e; e = (d + temp1) | 0;
-        d = c; c = b; b = a; a = (temp1 + temp2) | 0;
-      }
-      H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
-      H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
-    }
-    var hex = '';
-    for (var hi = 0; hi < 8; hi++) {
-      hex += ('00000000' + (H[hi] >>> 0).toString(16)).slice(-8);
-    }
-    return hex;
-  }
-
-  function normalizeKey(raw) {
-    return String(raw || '').trim().toUpperCase().replace(/\s+/g, '');
-  }
+  // Strictly private in-memory verification map — never exported, never serialized as proof.
+  var verifiedSessionSlots = Object.create(null);
+  var bootReverifyPromise = null;
 
   function getConfig() {
     return root.CRAFTLEAF_MONETIZATION || {
@@ -91,68 +31,78 @@
       products: {},
       affiliates: { amazonAssociateTag: '', items: [] },
       referrals: {},
-      analytics: {},
-      issuedKeyDigests: {}
+      analytics: {}
     };
   }
 
-  function checkIssuedDigest(rawKey, allowedPrefixes) {
-    var key = normalizeKey(rawKey);
-    if (!key) return { valid: false, reason: 'empty' };
-    var parts = key.split('-');
-    if (parts.length !== 4) return { valid: false, reason: 'format' };
-    var prefix = parts[0];
-    var validPrefixes = (allowedPrefixes || []).concat(['STUDIOALL']);
-    if (validPrefixes.indexOf(prefix) === -1) {
-      return { valid: false, reason: 'prefix' };
+  function encodeFormBody(fields) {
+    var pairs = [];
+    var keys = Object.keys(fields);
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      pairs.push(encodeURIComponent(k) + '=' + encodeURIComponent(String(fields[k])));
     }
-    var cfg = getConfig();
-    var table = (cfg && cfg.issuedKeyDigests && cfg.issuedKeyDigests[prefix]) || [];
-    var digest = sha256Hex('CraftLeaf-Issued-v2::' + key).slice(0, 32);
-    if (table.indexOf(digest) === -1) {
-      return { valid: false, reason: 'unrecognized' };
-    }
-    return { valid: true, mode: 'issued', prefix: prefix, digest: digest };
+    return pairs.join('&');
   }
 
-  function writeProofRecord(storageId, record) {
+  function emitLicenseUpdated(slot, unlocked) {
+    if (typeof root !== 'undefined' && typeof root.dispatchEvent === 'function' && typeof CustomEvent === 'function') {
+      try {
+        root.dispatchEvent(new CustomEvent('craftleaf:license-updated', {
+          detail: { slot: slot, unlocked: Boolean(unlocked) }
+        }));
+      } catch (_e) {}
+    }
+  }
+
+  function purgeLegacyStorage() {
+    if (typeof localStorage === 'undefined' || !localStorage) return;
     try {
-      localStorage.setItem(STORAGE_PREFIX + storageId, JSON.stringify(record));
+      var knownSlots = ['allAccessPass', 'idPhotoPro', 'invoicePro', 'cardsheetPro', 'cleanPrintPro', 'pasteShieldPro'];
+      for (var i = 0; i < LEGACY_PREFIXES.length; i++) {
+        for (var j = 0; j < knownSlots.length; j++) {
+          localStorage.removeItem(LEGACY_PREFIXES[i] + knownSlots[j]);
+        }
+      }
     } catch (_e) {}
   }
 
-  function saveUnlocked(productId, rawKey, options) {
-    options = options || {};
-    var cfg = getConfig();
-    var prod = (cfg.products && cfg.products[productId]) || {};
-    var prefix = options.keyPrefix || prod.keyPrefix || 'PRO';
-    var issued = checkIssuedDigest(rawKey, [prefix]);
-    if (!issued.valid) return false;
-    var targetId = issued.prefix === 'STUDIOALL' ? 'allAccessPass' : productId;
-    writeProofRecord(targetId, {
-      mode: 'issued',
-      prefix: issued.prefix,
-      digest: issued.digest,
-      proof: sha256Hex('CLIssuedProof-v2::' + issued.prefix + '::' + issued.digest).slice(0, 32),
-      unlockedAt: new Date().toISOString()
-    });
-    return true;
+  function writeCachedLicenseKey(slot, permalink, trimmedKey) {
+    if (typeof localStorage === 'undefined' || !localStorage) return;
+    try {
+      localStorage.setItem(CACHE_PREFIX + slot, JSON.stringify({
+        slot: slot,
+        permalink: permalink,
+        licenseKey: trimmedKey
+      }));
+    } catch (_e) {}
+  }
+
+  function removeCachedLicenseKey(slot) {
+    if (typeof localStorage === 'undefined' || !localStorage) return;
+    try {
+      localStorage.removeItem(CACHE_PREFIX + slot);
+    } catch (_e) {}
   }
 
   async function verifyGumroadEndpoint(permalink, trimmedKey) {
-    var body = new URLSearchParams();
-    body.set('product_permalink', permalink);
-    body.set('license_key', trimmedKey);
-    body.set('increment_uses_count', 'false');
-    var resp = await fetch('https://api.gumroad.com/v2/licenses/verify', {
+    var resp = await fetch(GUMROAD_VERIFY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body.toString()
+      body: encodeFormBody({
+        product_permalink: permalink,
+        license_key: trimmedKey,
+        increment_uses_count: 'false'
+      })
     });
     var data = await resp.json();
-    if (data && data.success) {
-      if (data.purchase && (data.purchase.refunded || data.purchase.chargebacked)) {
+    if (data && data.success === true) {
+      var p = data.purchase || null;
+      if (p && (p.refunded || p.chargebacked || p.disputed)) {
         return { valid: false, reason: 'refunded' };
+      }
+      if (p && p.permalink && String(p.permalink) !== String(permalink)) {
+        return { valid: false, reason: 'invalid' };
       }
       return { valid: true };
     }
@@ -163,97 +113,107 @@
     options = options || {};
     var trimmed = String(rawKey || '').trim();
     if (!trimmed) return { valid: false, reason: 'empty' };
+    if (trimmed.length < 8) return { valid: false, reason: 'invalid' };
+    if (typeof fetch !== 'function') return { valid: false, reason: 'network_error' };
 
     var cfg = getConfig();
     var prod = (cfg.products && cfg.products[productId]) || {};
-    var prefix = options.keyPrefix || prod.keyPrefix || 'PRO';
-
-    // 1. Check one-way SHA-256 digest of pre-issued buyer ZIP keys (zero keygen math in public code)
-    var issued = checkIssuedDigest(trimmed, [prefix]);
-    if (issued.valid) {
-      saveUnlocked(productId, trimmed, { keyPrefix: prefix });
-      return { valid: true, mode: 'issued', prefix: issued.prefix };
-    }
-
-    // 2. Verify live Gumroad license key via official CORS endpoint (plus All-Access fallback)
     var permalink = options.gumroadPermalink || prod.gumroadPermalink;
     var allAccessPermalink = (cfg.products && cfg.products.allAccessPass && cfg.products.allAccessPass.gumroadPermalink) || 'craftleaf-all-access';
-    if (permalink && trimmed.length >= 8 && typeof fetch === 'function') {
-      try {
-        var primary = await verifyGumroadEndpoint(permalink, trimmed);
-        if (primary.reason === 'refunded') {
+    if (!permalink) return { valid: false, reason: 'invalid' };
+
+    try {
+      var primary = await verifyGumroadEndpoint(permalink, trimmed);
+      if (primary.reason === 'refunded') {
+        verifiedSessionSlots[productId] = false;
+        removeCachedLicenseKey(productId);
+        emitLicenseUpdated(productId, false);
+        return { valid: false, reason: 'refunded' };
+      }
+      if (primary.valid) {
+        verifiedSessionSlots[productId] = true;
+        writeCachedLicenseKey(productId, permalink, trimmed);
+        emitLicenseUpdated(productId, true);
+        return { valid: true, mode: 'gumroad', slot: productId };
+      }
+
+      if (permalink !== allAccessPermalink) {
+        var fallbackAll = await verifyGumroadEndpoint(allAccessPermalink, trimmed);
+        if (fallbackAll.reason === 'refunded') {
+          verifiedSessionSlots.allAccessPass = false;
+          removeCachedLicenseKey('allAccessPass');
+          emitLicenseUpdated('allAccessPass', false);
           return { valid: false, reason: 'refunded' };
         }
-        var targetSlot = productId;
-        var ok = primary.valid;
-        if (!ok && permalink !== allAccessPermalink) {
-          var fallbackAll = await verifyGumroadEndpoint(allAccessPermalink, trimmed);
-          if (fallbackAll.reason === 'refunded') {
-            return { valid: false, reason: 'refunded' };
-          }
-          if (fallbackAll.valid) {
-            ok = true;
-            targetSlot = 'allAccessPass';
-          }
+        if (fallbackAll.valid) {
+          verifiedSessionSlots.allAccessPass = true;
+          writeCachedLicenseKey('allAccessPass', allAccessPermalink, trimmed);
+          emitLicenseUpdated('allAccessPass', true);
+          return { valid: true, mode: 'gumroad', slot: 'allAccessPass' };
         }
-        if (ok) {
-          var kh = sha256Hex('CLGumroadKey-v2::' + trimmed).slice(0, 32);
-          writeProofRecord(targetSlot, {
-            mode: 'gumroad',
-            target: targetSlot,
-            keyHash: kh,
-            proof: sha256Hex('CLGumroadProof-v2::' + targetSlot + '::' + kh).slice(0, 32),
-            unlockedAt: new Date().toISOString()
-          });
-          return { valid: true, mode: 'gumroad' };
-        }
-      } catch (_err) {
-        return { valid: false, reason: 'network_error' };
       }
-    }
-    return { valid: false, reason: 'invalid' };
-  }
-
-  function validateStoredRecord(slotId, rawJson, expectedPrefixes) {
-    if (!rawJson) return false;
-    try {
-      var parsed = JSON.parse(rawJson);
-      if (!parsed || typeof parsed !== 'object') return false;
-      if (parsed.mode === 'issued') {
-        if (!parsed.prefix || !parsed.digest || !parsed.proof) return false;
-        if (expectedPrefixes.indexOf(parsed.prefix) === -1) return false;
-        var cfg = getConfig();
-        var table = (cfg && cfg.issuedKeyDigests && cfg.issuedKeyDigests[parsed.prefix]) || [];
-        if (table.indexOf(parsed.digest) === -1) return false;
-        var expectedProof = sha256Hex('CLIssuedProof-v2::' + parsed.prefix + '::' + parsed.digest).slice(0, 32);
-        return parsed.proof === expectedProof;
-      }
-      if (parsed.mode === 'gumroad') {
-        if (!parsed.keyHash || !parsed.proof || parsed.target !== slotId) return false;
-        var expectedGumProof = sha256Hex('CLGumroadProof-v2::' + slotId + '::' + parsed.keyHash).slice(0, 32);
-        return parsed.proof === expectedGumProof;
-      }
-      return false;
-    } catch (_e) {
-      return false;
+      return { valid: false, reason: 'invalid' };
+    } catch (_err) {
+      return { valid: false, reason: 'network_error' };
     }
   }
 
-  function isUnlocked(productId, keyPrefix) {
-    try {
-      var cfg = getConfig();
-      var prod = (cfg.products && cfg.products[productId]) || {};
-      var pfx = keyPrefix || prod.keyPrefix || 'PRO';
-      if (validateStoredRecord(productId, localStorage.getItem(STORAGE_PREFIX + productId), [pfx, 'STUDIOALL'])) {
-        return true;
-      }
-      if (validateStoredRecord('allAccessPass', localStorage.getItem(STORAGE_PREFIX + 'allAccessPass'), ['STUDIOALL'])) {
-        return true;
-      }
-      return false;
-    } catch (_e) {
-      return false;
+  async function reverifyStoredLicenses() {
+    purgeLegacyStorage();
+    if (typeof localStorage === 'undefined' || !localStorage || typeof fetch !== 'function') {
+      return { checked: 0, unlocked: 0 };
     }
+    var cfg = getConfig();
+    var products = cfg.products || {};
+    var slots = ['allAccessPass', 'idPhotoPro', 'invoicePro', 'cardsheetPro', 'cleanPrintPro', 'pasteShieldPro'];
+    var checked = 0;
+    var unlockedCount = 0;
+
+    for (var i = 0; i < slots.length; i++) {
+      var slot = slots[i];
+      var raw = null;
+      try { raw = localStorage.getItem(CACHE_PREFIX + slot); } catch (_e) { raw = null; }
+      if (!raw) continue;
+
+      var parsed = null;
+      try { parsed = JSON.parse(raw); } catch (_e2) { parsed = null; }
+      if (!parsed || typeof parsed !== 'object' || typeof parsed.licenseKey !== 'string' || parsed.licenseKey.trim().length < 8) {
+        verifiedSessionSlots[slot] = false;
+        removeCachedLicenseKey(slot);
+        continue;
+      }
+
+      var prod = products[slot] || {};
+      var expectedPermalink = prod.gumroadPermalink;
+      if (!expectedPermalink) {
+        verifiedSessionSlots[slot] = false;
+        removeCachedLicenseKey(slot);
+        continue;
+      }
+
+      checked++;
+      try {
+        var res = await verifyGumroadEndpoint(expectedPermalink, parsed.licenseKey.trim());
+        if (res.valid) {
+          verifiedSessionSlots[slot] = true;
+          unlockedCount++;
+          emitLicenseUpdated(slot, true);
+        } else {
+          verifiedSessionSlots[slot] = false;
+          removeCachedLicenseKey(slot);
+          emitLicenseUpdated(slot, false);
+        }
+      } catch (_netErr) {
+        // Offline: keep cached key for next online boot, but NEVER unlock without live verification.
+        verifiedSessionSlots[slot] = false;
+      }
+    }
+    return { checked: checked, unlocked: unlockedCount };
+  }
+
+  function isUnlocked(productId) {
+    if (!productId) return false;
+    return Boolean(verifiedSessionSlots[productId] || verifiedSessionSlots.allAccessPass);
   }
 
   function buildAmazonUrl(rawUrl, assocTag) {
@@ -280,7 +240,6 @@
     if (!items.length) return;
     var isZh = lang === 'zh';
 
-    // Support lightweight headless unit-test mock containers without document.createElement
     if (typeof document === 'undefined' || typeof containerEl.appendChild !== 'function') {
       containerEl.textContent = items.map(function (it) { return isZh ? it.titleZh : it.titleEn; }).join(' | ');
       return;
@@ -487,9 +446,6 @@
     document.body.appendChild(overlay);
   }
 
-  /**
-   * Non-blocking "Peak Gratitude / Value Moment" post-export conversion toast (#16).
-   */
   function showValueMomentPrompt(opts) {
     if (typeof document === 'undefined' || !document.body) return;
     opts = opts || {};
@@ -561,8 +517,11 @@
     document.head.appendChild(s);
   }
 
+  // Purge any legacy v1/v2 records immediately & trigger background Gumroad re-verification
+  purgeLegacyStorage();
   if (typeof document !== 'undefined' && document.addEventListener) {
     captureIncomingUtm();
+    bootReverifyPromise = reverifyStoredLicenses();
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initOptionalAnalytics);
     } else {
@@ -583,12 +542,12 @@
     });
   }
 
-  // Note: fnv1aHex6 & verifyOfflineKey are intentionally NOT exported (#4).
+  // Note: fnv1aHex6, verifyOfflineKey, sha256Hex, and saveUnlocked are intentionally NOT exported (#4, #22).
   root.CraftLeafSDK = {
-    sha256Hex: sha256Hex,
     verifyLicense: verifyLicense,
+    reverifyStoredLicenses: reverifyStoredLicenses,
+    getBootVerification: function () { return bootReverifyPromise; },
     isUnlocked: isUnlocked,
-    saveUnlocked: saveUnlocked,
     getConfig: getConfig,
     renderAffiliateBar: renderAffiliateBar,
     openTipModal: openTipModal,

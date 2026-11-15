@@ -1423,11 +1423,21 @@
         updateProUI();
         refreshAllCanvases();
         setTimeout(closeUnlockModal, 1100);
+      } else if (res && res.reason === 'network_error') {
+        msgEl.textContent = state.lang === 'zh' ? '网络连接失败，请联网后验证 Gumroad 许可证密钥。' : 'Network unreachable — please connect to verify your Gumroad license key.';
+        msgEl.className = 'modal-msg err';
       } else {
         msgEl.textContent = dict.msgInvalid;
         msgEl.className = 'modal-msg err';
       }
     });
+
+    if (typeof root.addEventListener === 'function') {
+      root.addEventListener('craftleaf:license-updated', function () {
+        updateProUI();
+        refreshAllCanvases();
+      });
+    }
 
     if (window.location.hash === '#unlock-pro' && !isPro()) {
       openUnlockModal();

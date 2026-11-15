@@ -1172,28 +1172,24 @@
         });
       }
 
-      // License activation button wired to CraftLeafSDK + PasteShieldCore
+      // License activation button wired strictly to Gumroad API verification (#22)
       document.getElementById('activateKeyBtn').addEventListener('click', async function () {
         var rawKey = document.getElementById('licenseKeyInput').value;
-        if (window.CraftLeafSDK && typeof window.CraftLeafSDK.verifyLicense === 'function') {
-          var sdkCheck = await window.CraftLeafSDK.verifyLicense('pasteShieldPro', rawKey, { keyPrefix: 'SHIELDPRO' });
-          if (sdkCheck.valid) {
-            vault.activateLicense(sdkCheck.key);
-            setLicenseBanner(true, sdkCheck.key);
-            runSanitize(false);
-            return;
+        var check = await vault.verifyGumroadLicense(rawKey);
+        if (check.valid) {
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.verifyLicense === 'function') {
+            await window.CraftLeafSDK.verifyLicense('pasteShieldPro', rawKey);
           }
-        }
-        var localCheck = vault.activateLicense(rawKey);
-        if (localCheck.valid) {
-          setLicenseBanner(true, localCheck.key);
+          setLicenseBanner(true, check.tier === 'all-access' ? 'All-Access Pass' : 'PasteShield Pro');
           runSanitize(false);
+        } else if (check.reason === 'network_error') {
+          setLicenseBanner(false, currentLang === 'zh' ? '✗ 网络不可用，请联网后验证 Gumroad 密钥。' : '✗ Network offline — connect to verify your Gumroad license key.');
         } else {
           setLicenseBanner(
             false,
             currentLang === 'zh'
-              ? '✗ 激活码格式或校验和无效（期望格式：SHIELDPRO-XXXX-XXXX-XXXXXX）。'
-              : '✗ Invalid license key (' + localCheck.reason + '). Expected SHIELDPRO-XXXX-XXXX-XXXXXX.'
+              ? '✗ Gumroad 许可证密钥无效或已退款。'
+              : '✗ Invalid or refunded Gumroad license key (' + check.reason + ').'
           );
         }
       });

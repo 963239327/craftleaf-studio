@@ -1461,12 +1461,20 @@
           msgEl.style.color = '#059669';
           renderAll();
           setTimeout(closeProModal, 1100);
+        } else if (res && res.reason === 'network_error') {
+          msgEl.textContent = state.lang === 'zh' ? '网络不可用，请联网后验证 Gumroad 密钥。' : 'Network offline — reconnect to verify Gumroad key.';
+          msgEl.style.color = '#dc2626';
         } else {
           msgEl.textContent = t('keyInvalid');
           msgEl.style.color = '#dc2626';
         }
       });
     });
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+      window.addEventListener('craftleaf:license-updated', function () {
+        renderAll();
+      });
+    }
   }
 
   function initFromUrlParams() {
