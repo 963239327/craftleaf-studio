@@ -1414,6 +1414,18 @@
   function triggerVectorPrint() {
     prepareVectorPrint();
     window.print();
+    if (typeof window !== 'undefined' && window.CraftLeafSDK && window.CraftLeafSDK.showValueMomentPrompt && !isPro()) {
+      window.CraftLeafSDK.showValueMomentPrompt({
+        lang: state.lang,
+        titleZh: '🧾 矢量商业 PDF 已就绪（100% 本地隐私生成）！',
+        titleEn: '🧾 Crisp Vector Invoice PDF Ready (100% Local)!',
+        bodyZh: '需要本地保存多位常客抬头、去页脚品牌白标或内嵌收款二维码？一次买断终身解锁 Invoice Pro！',
+        bodyEn: 'Save recurring client profiles locally, remove footer branding & embed payment QR codes with Invoice Pro!',
+        proUrl: 'https://stardustdemo.gumroad.com/l/invoice-studio-pro?wanted=true',
+        proLabelZh: '✨ 解锁白标+客户库 ($9)',
+        proLabelEn: '✨ Unlock CRM Pro ($9)'
+      });
+    }
   }
 
   function init() {

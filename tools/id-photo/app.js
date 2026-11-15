@@ -1058,6 +1058,18 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    if (typeof window !== 'undefined' && window.CraftLeafSDK && window.CraftLeafSDK.showValueMomentPrompt && !isPro()) {
+      window.CraftLeafSDK.showValueMomentPrompt({
+        lang: state.lang,
+        titleZh: '🎉 高清证件照已在本地保存（立省药店 $16+）！',
+        titleEn: '🎉 High-Res Photo Sheet Saved Locally (Saved $16+ vs. Drugstore)!',
+        bodyZh: '照片全程 0 字节上传云端。觉得好用欢迎扫码请作者喝杯咖啡，或 $3.99 终身解锁全家 6 张满版 Pro！',
+        bodyEn: '0 bytes uploaded. Support ad-free maintenance with a coffee or unlock full 6-photo Pro sheets ($3.99)!',
+        proUrl: 'https://stardustdemo.gumroad.com/l/idphoto-pro?wanted=true',
+        proLabelZh: '✨ 解锁 6 张满版 ($3.99)',
+        proLabelEn: '✨ Unlock 6-Up Pro ($3.99)'
+      });
+    }
   }
 
   function openUnlockModal() {

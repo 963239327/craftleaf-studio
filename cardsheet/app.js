@@ -1091,6 +1091,18 @@
       a.click();
       document.body.removeChild(a);
       setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      if (typeof window !== 'undefined' && window.CraftLeafSDK && window.CraftLeafSDK.showValueMomentPrompt && !isProUnlocked()) {
+        window.CraftLeafSDK.showValueMomentPrompt({
+          lang: state.lang,
+          titleZh: '🃏 300 DPI 打印排版图已导出！',
+          titleEn: '🃏 300 DPI Print Sheet Exported Locally!',
+          bodyZh: '需要 CSV 批量导入整套单词卡与毫米级双面背面偏移校准？支持独立开发或解锁 CardSheet Pro！',
+          bodyEn: 'Batch-import CSV decks with sub-mm duplex back-offset calibration via CardSheet Pro!',
+          proUrl: 'https://stardustdemo.gumroad.com/l/cardsheet-pro?wanted=true',
+          proLabelZh: '✨ 解锁批量双面 Pro ($9)',
+          proLabelEn: '✨ Unlock Duplex Pro ($9)'
+        });
+      }
     }, 'image/png');
   }
 

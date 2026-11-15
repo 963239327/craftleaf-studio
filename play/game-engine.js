@@ -2301,6 +2301,18 @@
       if (prevWinner === null && state.phase === 'GAME_OVER') {
         BistroAudio.victory();
         ui.activeModal = 'victory';
+        if (typeof window !== 'undefined' && window.CraftLeafSDK && window.CraftLeafSDK.showValueMomentPrompt) {
+          window.CraftLeafSDK.showValueMomentPrompt({
+            lang: ui.lang,
+            titleZh: '👨‍🍳 精彩对局！喜欢实体卡牌面对面博弈吗？',
+            titleEn: '👨‍🍳 Great Match! Want the Physical Tabletop Trilogy?',
+            bodyZh: '《口袋双人打印桌游三部曲》仅需单面打印 3–4 张纸，周末和伴侣/朋友 8 分钟开局！',
+            bodyEn: 'Get all 3 single-sided 2-player strategy PnP games (US Letter + A4 + Low-Ink) for $7.99!',
+            proUrl: 'https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy?wanted=true',
+            proLabelZh: '🎲 获取三部曲 PDF ($7.99)',
+            proLabelEn: '🎲 Get 3-Game Pack ($7.99)'
+          });
+        }
       } else if (prevPhase !== state.phase && state.mode === '2p' && !ui.openHands2P) {
         var nextActor = getActingPlayer(state);
         if (nextActor !== null && action.type !== 'MOVE_RONDEL') {
