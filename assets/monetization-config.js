@@ -81,6 +81,56 @@ window.CRAFTLEAF_MONETIZATION = {
       "priceUsd": "$12.99",
       "itchUrl": "https://stardustdemo.itch.io/tabletop-pnp-creator-kit",
       "gumroadUrl": "https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit"
+    },
+    "citizenshipPrep2025": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "us-citizenship-test-2025-chinese-prep",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-citizenship-test-2025-chinese-prep"
+    },
+    "bilingualAiPrompts": {
+      "priceUsd": "$6.00",
+      "gumroadPermalink": "ai-prompt-pack-bilingual",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/ai-prompt-pack-bilingual"
+    },
+    "blackFridayGuide": {
+      "priceUsd": "$6.00",
+      "gumroadPermalink": "black-friday-2026-chinese-guide",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+    },
+    "taxPrepGuide": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "us-first-year-tax-prep-chinese-organizer",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+    },
+    "creditStarterGuide": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "us-credit-from-zero-chinese-guide",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+    },
+    "waDriverGuide": {
+      "priceUsd": "$6.00",
+      "gumroadPermalink": "wa-driver-license-chinese-study-roadtest-pack",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+    },
+    "healthcareKit": {
+      "priceUsd": "$6.00",
+      "gumroadPermalink": "us-healthcare-doctor-visit-bilingual-kit",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+    },
+    "leaseGuide": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "us-apartment-lease-12-clauses-chinese-guide",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+    },
+    "settlingCarGuide": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "us-settling-in-and-first-car-chinese-playbook",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+    },
+    "newcomerMasterBundle": {
+      "priceUsd": "$24.00",
+      "gumroadPermalink": "us-newcomer-first-year-7in1-bundle",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
     }
   },
   "affiliates": {

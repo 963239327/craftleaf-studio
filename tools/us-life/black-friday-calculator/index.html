@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 北美黑五折上折 + Rakuten返利 + 信用卡 + 消费税真实到手价计算器</title>
+  <meta name="description" content="免费纯本地计算北美黑五折上折、商家Coupon、Rakuten/TopCashback税前返利、礼卡与各州消费税真实净到手价，一键对比官网高返现与Amazon直降谁更省钱。" />
+  <meta property="og:title" content="2026 北美黑五折上折 + Rakuten返利 + 信用卡 + 消费税真实到手价计算器" />
+  <meta property="og:description" content="免费纯本地计算北美黑五折上折、商家Coupon、Rakuten/TopCashback税前返利、礼卡与各州消费税真实净到手价，一键对比官网高返现与Amazon直降谁更省钱。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/" />
+  <style>
+:root {
+  --bg: #0b1120;
+  --surface: #111827;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --navy: #10365C;
+  --gold: #f59e0b;
+  --accent: #10b981;
+  --blue: #3b82f6;
+  --danger: #ef4444;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: radial-gradient(circle at 20% 0%, #172554 0%, var(--bg) 55%);
+  color: var(--text);
+  line-height: 1.65;
+}
+a { color: #67e8f9; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+header.top-nav {
+  position: sticky; top: 0; z-index: 40;
+  backdrop-filter: blur(12px);
+  background: rgba(11, 17, 32, 0.88);
+  border-bottom: 1px solid var(--border);
+}
+.nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 0; gap: 12px; flex-wrap: wrap;
+}
+.brand { font-weight: 800; font-size: 17px; color: #fff; display: flex; align-items: center; gap: 8px; }
+.nav-links { display: flex; gap: 14px; font-size: 13.5px; flex-wrap: wrap; align-items: center; }
+.nav-links a { color: #cbd5e1; }
+.pill {
+  display: inline-block; font-size: 12px; font-weight: 700;
+  padding: 4px 11px; border-radius: 999px;
+  background: rgba(16, 185, 129, 0.16); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.35);
+}
+.pill-gold {
+  background: rgba(245, 158, 11, 0.16); color: #fcd34d; border-color: rgba(245, 158, 11, 0.4);
+}
+.hero { padding: 44px 0 26px; }
+.hero h1 { font-size: clamp(24px, 3.8vw, 38px); line-height: 1.22; margin: 12px 0; }
+.hero p { color: var(--muted); font-size: 16px; max-width: 780px; margin: 0 0 18px; }
+.panel {
+  background: rgba(30, 41, 59, 0.84);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+label.fld { display: block; font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px; }
+input[type="number"], input[type="text"], select, textarea {
+  width: 100%; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: #090f1d; color: #fff;
+  font-size: 14px; margin-bottom: 12px;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 18px; border-radius: 10px; font-weight: 700; font-size: 14px;
+  border: 1px solid transparent; cursor: pointer; text-decoration: none !important;
+  transition: transform 0.12s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #042f1e; }
+.btn-gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #1e1300; }
+.btn-secondary { background: #1e293b; color: #f8fafc; border-color: var(--border); }
+.stat-box {
+  background: #090f1d; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+}
+.stat-val { font-size: 26px; font-weight: 800; color: #34d399; }
+.stat-lbl { font-size: 12.5px; color: var(--muted); }
+.cta-banner {
+  background: linear-gradient(135deg, rgba(16, 54, 92, 0.9), rgba(16, 185, 129, 0.18));
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 16px; padding: 22px; margin: 24px 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+}
+.disclaimer {
+  font-size: 12.5px; color: #94a3b8; background: rgba(15, 23, 42, 0.8);
+  border-left: 3px solid var(--gold); padding: 12px 15px; border-radius: 8px; margin: 18px 0;
+}
+table.clean-tbl { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+table.clean-tbl th, table.clean-tbl td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+table.clean-tbl th { background: rgba(16, 54, 92, 0.65); color: #fcd34d; }
+footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 40px; font-size: 13px; color: var(--muted); }
+@media print {
+  header.top-nav, .no-print { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .panel, .print-card { background: #fff !important; color: #000 !important; border: 2px solid #000 !important; }
+}
+</style>
+  
+</head>
+<body>
+  
+<header class="top-nav">
+  <div class="container nav-row">
+    <a class="brand" href="../../../index.html">🌿 CraftLeaf 北美实用工具箱</a>
+    <nav class="nav-links">
+      <a href="../../../tools/us-life/index.html">🧰 北美生活计算器</a>
+      <a href="../../../tools/id-photo/index.html">🪪 $0.39 证件照</a>
+      <a href="../../../cn-guides/index.html">📚 华人避坑指南库</a>
+      <a href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">⭐ GitHub 开源手册</a>
+      <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">🛒 精品 PDF 手册店</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container">
+    
+    <section class="hero">
+      <span class="pill pill-gold">2026 北美黑五 &amp; 节日季省钱神器</span>
+      <h1>🛍️ 北美黑五折上折 + 门户返利 + 信用卡 + 消费税真实到手价计算器</h1>
+      <p>别被虚标原价和「返现按税前还是税后算」绕晕！输入商品折扣、礼卡折扣、Rakuten/TopCashback 返点与州税，一秒算出真实净成本，还能左右对比两家平台谁更划算。</p>
+    </section>
+    <div class="grid-2">
+      <div class="panel">
+        <h3 style="margin-top:0;">方案 A（例如：官网直购 + 高返利门户）</h3>
+        <label class="fld">商品标价 / 原价 MSRP ($)</label>
+        <input type="number" id="a_msrp" value="499" min="0" step="0.01" oninput="calcBF()" />
+        <label class="fld">黑五现价 Sale Price ($)</label>
+        <input type="number" id="a_sale" value="349" min="0" step="0.01" oninput="calcBF()" />
+        <label class="fld">叠加神券 / 满减立减 Coupon ($)</label>
+        <input type="number" id="a_coupon" value="25" min="0" step="0.01" oninput="calcBF()" />
+        <label class="fld">返利网比例 Rakuten / TopCashback (%) — 按税前实付计</label>
+        <input type="number" id="a_portal" value="12" min="0" max="80" step="0.5" oninput="calcBF()" />
+        <label class="fld">信用卡返现 / Offer 返点 (%) — 按税后刷卡额计</label>
+        <input type="number" id="a_cc" value="5" min="0" max="50" step="0.5" oninput="calcBF()" />
+        <label class="fld">打折礼卡优惠率 (%)（如 9 折买礼卡填 10，不用填 0）</label>
+        <input type="number" id="a_gc" value="0" min="0" max="40" step="0.5" oninput="calcBF()" />
+        <label class="fld">所在州综合消费税 Sales Tax (%)</label>
+        <select id="a_tax_preset" onchange="if(this.value!=='custom'){document.getElementById('a_tax').value=this.value;calcBF();}">
+          <option value="10.25">华盛顿州东区 Redmond / Bellevue / Seattle (10.25%)</option>
+          <option value="0">俄勒冈 / 特拉华 / 新罕布什尔免税州 (0%)</option>
+          <option value="9.5">加州湾区 / 洛杉矶均值 (9.50%)</option>
+          <option value="8.875">纽约市 NYC (8.875%)</option>
+          <option value="8.25">德州 Austin / Dallas (8.25%)</option>
+        </select>
+        <input type="number" id="a_tax" value="10.25" min="0" max="20" step="0.01" oninput="calcBF()" />
+      </div>
+
+      <div class="panel">
+        <h3 style="margin-top:0;">方案 B 对比（例如：Amazon / Costco 低返利直降价）</h3>
+        <label class="fld">商品标价 MSRP ($)</label>
+        <input type="number" id="b_msrp" value="499" min="0" step="0.01" oninput="calcBF()" />
+        <label class="fld">黑五现价 Sale Price ($)</label>
+        <input type="number" id="b_sale" value="319" min="0" step="0.01" oninput="calcBF()" />
+        <label class="fld">叠加立减券 Coupon ($)</label>
+        <input type="number" id="b_coupon" value="0" min="0" step="0.01" oninput="calcBF()" />
+        <label class="fld">返利网比例 (%)</label>
+        <input type="number" id="b_portal" value="2" min="0" max="80" step="0.5" oninput="calcBF()" />
+        <label class="fld">信用卡返现比例 (%)</label>
+        <input type="number" id="b_cc" value="5" min="0" max="50" step="0.5" oninput="calcBF()" />
+        <div class="grid-2" style="margin-top:16px;">
+          <div class="stat-box">
+            <div class="stat-lbl">方案 A 最终净到手成本</div>
+            <div class="stat-val" id="out_a_net">$0.00</div>
+            <div class="stat-lbl" id="out_a_sub">结账刷卡 $0 · 综合折率 0%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-lbl">方案 B 最终净到手成本</div>
+            <div class="stat-val" id="out_b_net">$0.00</div>
+            <div class="stat-lbl" id="out_b_sub">结账刷卡 $0 · 综合折率 0%</div>
+          </div>
+        </div>
+        <div id="bf_verdict" style="margin-top:14px;padding:14px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(52,211,153,0.4);font-weight:700;"></div>
+        <h4 style="margin:18px 0 8px;">⚠️ 下单前必勾 5 条防丢返利 &amp; 黑五特供机防坑检查</h4>
+        <div style="font-size:13.5px;color:#cbd5e1;">
+          <label style="display:block;margin-bottom:5px;"><input type="checkbox" /> 结账前已临时关闭 Honey / 其他比价插件（防止最后一秒覆盖 Rakuten 追踪 Cookie 导致丢返现！）</label>
+          <label style="display:block;margin-bottom:5px;"><input type="checkbox" /> 未输入返利网页面未收录的野生 Promo Code（野码会导致整单 Cashback 被拒）</label>
+          <label style="display:block;margin-bottom:5px;"><input type="checkbox" /> 买电视/显示器/笔记本已核对型号尾缀（警惕黑五特供缩水版衍生型号如少 HDMI 2.1 口或低色域屏）</label>
+          <label style="display:block;margin-bottom:5px;"><input type="checkbox" /> 已用 CamelCamelCamel 查过过去 180 天历史低价，非「先涨后降」假折扣</label>
+          <label style="display:block;margin-bottom:5px;"><input type="checkbox" /> 已确认退货截止日（Extended Holiday Return）及是否有 15% 拆封费（Restocking Fee）</label>
+        </div>
+      </div>
+    </div>
+    <div class="cta-banner">
+      <div>
+        <h3 style="margin:0 0 6px;">想要完整《北美商超 &amp; 网购返利叠加追踪表》与双语办事省钱指南？</h3>
+        <div style="color:#cbd5e1;font-size:14px;">包含 Ibotta + Rakuten + 商店电子券叠加以一表管全年返现，以及新移民电话/宽带/医保砍价实操。</div>
+      </div>
+      <a class="btn btn-gold" id="ctaBfStore" href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">查看省钱实战包与追踪表 →</a>
+    </div>
+    <div class="disclaimer">免责声明：本计算器仅供购物折扣与返利数学测算参考，不构成任何购物或金融建议；各商家返利排除类目（如礼卡/Apple部分新品）与消费税计税基数请以结账页面及返利平台实时条款为准。</div>
+    <script>
+    function computeSide(msrp, sale, coupon, portalPct, ccPct, gcPct, taxPct) {
+      const preTax = Math.max(0, sale - coupon);
+      const taxedCheckout = preTax * (1 + taxPct / 100);
+      const portalBack = preTax * (portalPct / 100);
+      const gcSaved = taxedCheckout * (gcPct / 100);
+      const cardCharged = taxedCheckout - gcSaved;
+      const ccBack = cardCharged * (ccPct / 100);
+      const net = taxedCheckout - portalBack - gcSaved - ccBack;
+      const effOff = msrp > 0 ? Math.max(0, (1 - (net / (msrp * (1 + taxPct / 100)))) * 100) : 0;
+      return { preTax, taxedCheckout, portalBack, ccBack, gcSaved, net, effOff };
+    }
+    function calcBF() {
+      const tax = parseFloat(document.getElementById('a_tax').value) || 0;
+      const A = computeSide(
+        parseFloat(document.getElementById('a_msrp').value)||0,
+        parseFloat(document.getElementById('a_sale').value)||0,
+        parseFloat(document.getElementById('a_coupon').value)||0,
+        parseFloat(document.getElementById('a_portal').value)||0,
+        parseFloat(document.getElementById('a_cc').value)||0,
+        parseFloat(document.getElementById('a_gc').value)||0,
+        tax
+      );
+      const B = computeSide(
+        parseFloat(document.getElementById('b_msrp').value)||0,
+        parseFloat(document.getElementById('b_sale').value)||0,
+        parseFloat(document.getElementById('b_coupon').value)||0,
+        parseFloat(document.getElementById('b_portal').value)||0,
+        parseFloat(document.getElementById('b_cc').value)||0,
+        0,
+        tax
+      );
+      document.getElementById('out_a_net').textContent = '$' + A.net.toFixed(2);
+      document.getElementById('out_a_sub').textContent = '税后实刷 $' + A.taxedCheckout.toFixed(2) + ' · 返现/礼卡省 $' + (A.portalBack+A.ccBack+A.gcSaved).toFixed(2) + ' · 相当于税后原价省 ' + A.effOff.toFixed(1) + '%';
+      document.getElementById('out_b_net').textContent = '$' + B.net.toFixed(2);
+      document.getElementById('out_b_sub').textContent = '税后实刷 $' + B.taxedCheckout.toFixed(2) + ' · 返现省 $' + (B.portalBack+B.ccBack).toFixed(2) + ' · 相当于税后原价省 ' + B.effOff.toFixed(1) + '%';
+      const diff = Math.abs(A.net - B.net).toFixed(2);
+      const v = document.getElementById('bf_verdict');
+      if (A.net < B.net - 0.01) {
+        v.textContent = '🏆 结论：方案 A（叠加高返利后）比方案 B 净省 $' + diff + '！记得先清空购物车再从返利网点击跳转。';
+      } else if (B.net < A.net - 0.01) {
+        v.textContent = '🏆 结论：方案 B（直接低价）比方案 A 净省 $' + diff + '，而且不用等返利季度打款，建议直接买 B！';
+      } else {
+        v.textContent = '⚖️ 两个方案净成本几乎持平，优先选退货政策更宽松或免等返利直降的渠道！';
+      }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      calcBF();
+      const u = window.CRAFTLEAF_MONETIZATION?.products?.blackFridayGuide?.checkoutUrlZh;
+      if (u) document.getElementById('ctaBfStore').href = u;
+    });
+    </script>
+    
+  </main>
+  
+<footer>
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div>© 2026 CraftLeaf &amp; Pixel Studio · 100% 浏览器本地计算，零隐私数据上传</div>
+      <div>
+        <a href="../../../index.html">主站首页</a> ·
+        <a href="../../../tools/us-life/index.html">北美生活工具</a> ·
+        <a href="../../../cn-guides/index.html">40篇中文指南</a> ·
+        <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">Gumroad 数字商店</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script src="../../../assets/monetization-config.js"></script>
+  <script src="../../../assets/monetization-sdk.js"></script>
+</body>
+</html>

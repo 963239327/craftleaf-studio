@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>防止 SSN 被盗开贷款！美国三大信用局 Equifax / Experian / TransUnion 免费冻结（Credit Freeze）教程 | CraftLeaf 北美华人实用指南</title>
+  <meta name="description" content="手把手梳理免费 Security Freeze 与付费 Lock 的区别，平时锁死信报局、申卡前 2 分钟临时解冻的安全习惯。" />
+  <meta property="og:title" content="防止 SSN 被盗开贷款！美国三大信用局 Equifax / Experian / TransUnion 免费冻结（Credit Freeze）教程 | CraftLeaf 北美华人实用指南" />
+  <meta property="og:description" content="手把手梳理免费 Security Freeze 与付费 Lock 的区别，平时锁死信报局、申卡前 2 分钟临时解冻的安全习惯。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/cn-guides/us-three-credit-bureaus-free-freeze-anti-fraud.html" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/cn-guides/us-three-credit-bureaus-free-freeze-anti-fraud.html" />
+  <style>
+:root {
+  --bg: #0b1120;
+  --surface: #111827;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --navy: #10365C;
+  --gold: #f59e0b;
+  --accent: #10b981;
+  --blue: #3b82f6;
+  --danger: #ef4444;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: radial-gradient(circle at 20% 0%, #172554 0%, var(--bg) 55%);
+  color: var(--text);
+  line-height: 1.65;
+}
+a { color: #67e8f9; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+header.top-nav {
+  position: sticky; top: 0; z-index: 40;
+  backdrop-filter: blur(12px);
+  background: rgba(11, 17, 32, 0.88);
+  border-bottom: 1px solid var(--border);
+}
+.nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 0; gap: 12px; flex-wrap: wrap;
+}
+.brand { font-weight: 800; font-size: 17px; color: #fff; display: flex; align-items: center; gap: 8px; }
+.nav-links { display: flex; gap: 14px; font-size: 13.5px; flex-wrap: wrap; align-items: center; }
+.nav-links a { color: #cbd5e1; }
+.pill {
+  display: inline-block; font-size: 12px; font-weight: 700;
+  padding: 4px 11px; border-radius: 999px;
+  background: rgba(16, 185, 129, 0.16); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.35);
+}
+.pill-gold {
+  background: rgba(245, 158, 11, 0.16); color: #fcd34d; border-color: rgba(245, 158, 11, 0.4);
+}
+.hero { padding: 44px 0 26px; }
+.hero h1 { font-size: clamp(24px, 3.8vw, 38px); line-height: 1.22; margin: 12px 0; }
+.hero p { color: var(--muted); font-size: 16px; max-width: 780px; margin: 0 0 18px; }
+.panel {
+  background: rgba(30, 41, 59, 0.84);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+label.fld { display: block; font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px; }
+input[type="number"], input[type="text"], select, textarea {
+  width: 100%; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: #090f1d; color: #fff;
+  font-size: 14px; margin-bottom: 12px;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 18px; border-radius: 10px; font-weight: 700; font-size: 14px;
+  border: 1px solid transparent; cursor: pointer; text-decoration: none !important;
+  transition: transform 0.12s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #042f1e; }
+.btn-gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #1e1300; }
+.btn-secondary { background: #1e293b; color: #f8fafc; border-color: var(--border); }
+.stat-box {
+  background: #090f1d; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+}
+.stat-val { font-size: 26px; font-weight: 800; color: #34d399; }
+.stat-lbl { font-size: 12.5px; color: var(--muted); }
+.cta-banner {
+  background: linear-gradient(135deg, rgba(16, 54, 92, 0.9), rgba(16, 185, 129, 0.18));
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 16px; padding: 22px; margin: 24px 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+}
+.disclaimer {
+  font-size: 12.5px; color: #94a3b8; background: rgba(15, 23, 42, 0.8);
+  border-left: 3px solid var(--gold); padding: 12px 15px; border-radius: 8px; margin: 18px 0;
+}
+table.clean-tbl { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+table.clean-tbl th, table.clean-tbl td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+table.clean-tbl th { background: rgba(16, 54, 92, 0.65); color: #fcd34d; }
+footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 40px; font-size: 13px; color: var(--muted); }
+@media print {
+  header.top-nav, .no-print { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .panel, .print-card { background: #fff !important; color: #000 !important; border: 2px solid #000 !important; }
+}
+</style>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "小心点进了信用局网站的付费 Credit Lock 怎么办？", "acceptedAnswer": {"@type": "Answer", "text": "搜索 'Security Freeze' 专用入口即可切换回免费的法定冻结服务，无需购买月费监控套餐。"}}]}</script>
+</head>
+<body>
+  
+<header class="top-nav">
+  <div class="container nav-row">
+    <a class="brand" href="../index.html">🌿 CraftLeaf 北美实用工具箱</a>
+    <nav class="nav-links">
+      <a href="../tools/us-life/index.html">🧰 北美生活计算器</a>
+      <a href="../tools/id-photo/index.html">🪪 $0.39 证件照</a>
+      <a href="../cn-guides/index.html">📚 华人避坑指南库</a>
+      <a href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">⭐ GitHub 开源手册</a>
+      <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">🛒 精品 PDF 手册店</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container">
+    
+        <article class="hero">
+          <a href="./index.html" style="font-size:13.5px;">← 返回北美华人避坑指南总目录</a>
+          <div style="margin-top:12px;"><span class="pill pill-gold">美国信用分与首卡</span></div>
+          <h1>防止 SSN 被盗开贷款！美国三大信用局 Equifax / Experian / TransUnion 免费冻结（Credit Freeze）教程</h1>
+          <p>手把手梳理免费 Security Freeze 与付费 Lock 的区别，平时锁死信报局、申卡前 2 分钟临时解冻的安全习惯。</p>
+        </article>
+        <div class="disclaimer"><strong>📌 合规与免责提示：</strong>账户安全科普，不构成法律或金融建议。</div>
+        <section class="panel">
+          <h2 style="margin-top:0;font-size:21px;">核心实操要点与避坑清单</h2>
+          <ul style="padding-left:20px;color:#e2e8f0;font-size:15.5px;">
+            <li style='margin-bottom:10px;'>联邦法律规定三大信用局的 Security Freeze（信用冻结）与解冻 100% 永久免费，别误点进收费会员广告页</li>
+<li style='margin-bottom:10px;'>冻结期间不影响你名下已有信用卡正常刷卡、还款和每月继续涨信用分</li>
+<li style='margin-bottom:10px;'>准备申请新信用卡、车贷、房贷或租房背调前，登录对应网站选择 Temporary Thaw（临时解冻几天）即可</li>
+<li style='margin-bottom:10px;'>每年可在官方 AnnualCreditReport.com 免费拉取三家完整信报排查陌生账户</li>
+          </ul>
+        </section>
+        <section class="panel">
+          <h2 style="margin-top:0;font-size:20px;">💬 常见问题解答 (FAQ)</h2>
+          <h3 style="font-size:16.5px;color:#6ee7b7;margin-bottom:6px;">Q：小心点进了信用局网站的付费 Credit Lock 怎么办？</h3>
+          <p style="margin:0;color:#cbd5e1;">A：搜索 &#x27;Security Freeze&#x27; 专用入口即可切换回免费的法定冻结服务，无需购买月费监控套餐。</p>
+        </section>
+        <div class="cta-banner">
+          <div>
+            <span class="pill" style="margin-bottom:6px;">免费纯本地配套工具 &amp; 完整可打印手册</span>
+            <h3 style="margin:4px 0;">边算边用：立即打开配套免费工具或下载完整双语 PDF 手册</h3>
+            <div style="color:#cbd5e1;font-size:14px;">所有在线计算器均 100% 在您本地浏览器运行，免登录零广告。</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="btn btn-primary" href="../tools/us-life/credit-score-simulator/index.html">🧰 打开配套免费工具 →</a>
+            <a class="btn btn-gold" href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">📚 查看完整可打印 PDF 包 →</a>
+          </div>
+        </div>
+        
+  </main>
+  
+<footer>
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div>© 2026 CraftLeaf &amp; Pixel Studio · 100% 浏览器本地计算，零隐私数据上传</div>
+      <div>
+        <a href="../index.html">主站首页</a> ·
+        <a href="../tools/us-life/index.html">北美生活工具</a> ·
+        <a href="../cn-guides/index.html">40篇中文指南</a> ·
+        <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">Gumroad 数字商店</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script src="../assets/monetization-config.js"></script>
+  <script src="../assets/monetization-sdk.js"></script>
+</body>
+</html>

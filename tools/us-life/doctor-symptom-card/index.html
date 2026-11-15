@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>美国看病英文症状出示卡生成器 + Urgent Care / ER 防天价账单分诊指南</title>
+  <meta name="description" content="100%纯本地隐私运行：中文勾选发烧、疼痛、过敏史与用药，1秒生成递给美国护士和药剂师看的英文就诊摘要卡，内置免费中文医疗口译请求话术。" />
+  <meta property="og:title" content="美国看病英文症状出示卡生成器 + Urgent Care / ER 防天价账单分诊指南" />
+  <meta property="og:description" content="100%纯本地隐私运行：中文勾选发烧、疼痛、过敏史与用药，1秒生成递给美国护士和药剂师看的英文就诊摘要卡，内置免费中文医疗口译请求话术。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/tools/us-life/doctor-symptom-card/" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/tools/us-life/doctor-symptom-card/" />
+  <style>
+:root {
+  --bg: #0b1120;
+  --surface: #111827;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --navy: #10365C;
+  --gold: #f59e0b;
+  --accent: #10b981;
+  --blue: #3b82f6;
+  --danger: #ef4444;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: radial-gradient(circle at 20% 0%, #172554 0%, var(--bg) 55%);
+  color: var(--text);
+  line-height: 1.65;
+}
+a { color: #67e8f9; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+header.top-nav {
+  position: sticky; top: 0; z-index: 40;
+  backdrop-filter: blur(12px);
+  background: rgba(11, 17, 32, 0.88);
+  border-bottom: 1px solid var(--border);
+}
+.nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 0; gap: 12px; flex-wrap: wrap;
+}
+.brand { font-weight: 800; font-size: 17px; color: #fff; display: flex; align-items: center; gap: 8px; }
+.nav-links { display: flex; gap: 14px; font-size: 13.5px; flex-wrap: wrap; align-items: center; }
+.nav-links a { color: #cbd5e1; }
+.pill {
+  display: inline-block; font-size: 12px; font-weight: 700;
+  padding: 4px 11px; border-radius: 999px;
+  background: rgba(16, 185, 129, 0.16); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.35);
+}
+.pill-gold {
+  background: rgba(245, 158, 11, 0.16); color: #fcd34d; border-color: rgba(245, 158, 11, 0.4);
+}
+.hero { padding: 44px 0 26px; }
+.hero h1 { font-size: clamp(24px, 3.8vw, 38px); line-height: 1.22; margin: 12px 0; }
+.hero p { color: var(--muted); font-size: 16px; max-width: 780px; margin: 0 0 18px; }
+.panel {
+  background: rgba(30, 41, 59, 0.84);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+label.fld { display: block; font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px; }
+input[type="number"], input[type="text"], select, textarea {
+  width: 100%; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: #090f1d; color: #fff;
+  font-size: 14px; margin-bottom: 12px;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 18px; border-radius: 10px; font-weight: 700; font-size: 14px;
+  border: 1px solid transparent; cursor: pointer; text-decoration: none !important;
+  transition: transform 0.12s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #042f1e; }
+.btn-gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #1e1300; }
+.btn-secondary { background: #1e293b; color: #f8fafc; border-color: var(--border); }
+.stat-box {
+  background: #090f1d; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+}
+.stat-val { font-size: 26px; font-weight: 800; color: #34d399; }
+.stat-lbl { font-size: 12.5px; color: var(--muted); }
+.cta-banner {
+  background: linear-gradient(135deg, rgba(16, 54, 92, 0.9), rgba(16, 185, 129, 0.18));
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 16px; padding: 22px; margin: 24px 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+}
+.disclaimer {
+  font-size: 12.5px; color: #94a3b8; background: rgba(15, 23, 42, 0.8);
+  border-left: 3px solid var(--gold); padding: 12px 15px; border-radius: 8px; margin: 18px 0;
+}
+table.clean-tbl { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+table.clean-tbl th, table.clean-tbl td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+table.clean-tbl th { background: rgba(16, 54, 92, 0.65); color: #fcd34d; }
+footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 40px; font-size: 13px; color: var(--muted); }
+@media print {
+  header.top-nav, .no-print { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .panel, .print-card { background: #fff !important; color: #000 !important; border: 2px solid #000 !important; }
+}
+</style>
+  
+</head>
+<body>
+  
+<header class="top-nav">
+  <div class="container nav-row">
+    <a class="brand" href="../../../index.html">🌿 CraftLeaf 北美实用工具箱</a>
+    <nav class="nav-links">
+      <a href="../../../tools/us-life/index.html">🧰 北美生活计算器</a>
+      <a href="../../../tools/id-photo/index.html">🪪 $0.39 证件照</a>
+      <a href="../../../cn-guides/index.html">📚 华人避坑指南库</a>
+      <a href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">⭐ GitHub 开源手册</a>
+      <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">🛒 精品 PDF 手册店</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container">
+    
+    <section class="hero">
+      <span class="pill">100% 离线本地生成 · 绝不上传健康隐私</span>
+      <h1>🏥 美国看病分诊避坑 (PCP / Urgent Care / ER) + 英文症状出示卡生成器</h1>
+      <p>发烧疼痛时本来就难受，还要想医学英文单词？在下方用中文勾选症状、持续时间、过敏药与在服药物，立即生成一张地道清晰的英文就诊卡，直接亮手机屏幕给护士/医生/药剂师看！</p>
+    </section>
+    <div class="disclaimer" style="border-left-color:#ef4444;color:#fecaca;">
+      <strong>🚨 医疗免责与急救提示：</strong>本工具仅供就医日常语言翻译沟通辅助，<strong>绝不构成任何医疗分诊或医生诊断建议（For Language Reference Only — Not Medical Advice）</strong>。如出现胸痛压迫、呼吸困难、中风征兆、严重过敏休克或大出血等危急情况，请立即拨打 <strong>911</strong> 或前往最近急诊室（ER）！
+    </div>
+    <div class="grid-2">
+      <div class="panel no-print">
+        <h3 style="margin-top:0;">第一步：勾选您的症状与病史（中文点选）</h3>
+        <label class="fld">主要不适症状（可多选）</label>
+        <div id="symChips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
+        <label class="fld">疼痛/不适程度 (0 = 无痛, 10 = 剧痛难以忍受)</label>
+        <input type="number" id="m_pain" value="5" min="0" max="10" oninput="renderMed()" />
+        <label class="fld">症状持续了多久？</label>
+        <select id="m_dur" onchange="renderMed()">
+          <option value="Started a few hours ago">几小时前刚开始 (Started a few hours ago)</option>
+          <option value="For 2 to 3 days" selected>持续了 2–3 天 (For 2 to 3 days)</option>
+          <option value="For about 1 week">持续约 1 周 (For about 1 week)</option>
+          <option value="More than 2 weeks (chronic/recurring)">超过 2 周或反复发作 (More than 2 weeks)</option>
+        </select>
+        <label class="fld">最高体温 / 补充数值（选填，例如 101.5°F / 38.6°C）</label>
+        <input type="text" id="m_temp" placeholder="例如：38.6°C (101.5°F)" oninput="renderMed()" />
+        <label class="fld">药物或食物过敏史 Drug / Food Allergies（极为重要！）</label>
+        <input type="text" id="m_allergy" placeholder="若无请留空（默认显示 No Known Drug Allergies）；如有青霉素填 Penicillin" oninput="renderMed()" />
+        <label class="fld">目前已自行服用的药物 Current Medications</label>
+        <input type="text" id="m_meds" placeholder="例如：Tylenol (Acetaminophen) 500mg, Ibuprofen" oninput="renderMed()" />
+        <label class="fld">需要免费中文医疗口译员吗？（美国医院依法免费提供！）</label>
+        <select id="m_interp" onchange="renderMed()">
+          <option value="yes">需要 — 请帮我接通普通话医疗口译 (Mandarin Medical Interpreter)</option>
+          <option value="no">不需要 — 我可以用基础英文沟通</option>
+        </select>
+      </div>
+
+      <div class="panel print-card" style="background:#ffffff;color:#0f172a;border:2px solid #10365C;">
+        <div style="border-bottom:2px solid #10365C;padding-bottom:10px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:12px;font-weight:800;color:#10365C;text-transform:uppercase;">Patient Intake Summary (For Triage Nurse / Provider)</div>
+            <h2 style="margin:2px 0 0;color:#0f172a;font-size:22px;">PATIENT SYMPTOM SUMMARY</h2>
+          </div>
+          <span style="background:#10365C;color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">SHOW TO STAFF</span>
+        </div>
+        <div id="medEnglishCard" style="font-size:15.5px;line-height:1.65;color:#0f172a;"></div>
+        <div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;">
+          <button class="btn btn-primary" type="button" onclick="copyMed()">📋 复制英文说明文本</button>
+          <button class="btn btn-secondary" type="button" onclick="window.print()">🖨️ 打印 / 存为手机 PDF</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel no-print">
+      <h3 style="margin-top:0;">💡 美国看病防天价账单 30 秒常识：PCP vs Urgent Care vs ER</h3>
+      <table class="clean-tbl">
+        <thead><tr><th>就医渠道</th><th>适合情况</th><th>网络内常见自付量级</th><th>避坑提醒</th></tr></thead>
+        <tbody>
+          <tr><td><strong>In-Network Urgent Care (急诊门诊)</strong></td><td>突发高烧、咽喉剧痛、尿路感染、扭伤拍片、轻度割伤缝针、耳痛皮疹</td><td>通常 $30–$120 Copay 或折后 $150–$280</td><td>进门前务必拿保险卡问前台：<em>"Are you in-network with my plan?"</em></td></tr>
+          <tr><td><strong>Primary Care (PCP 家庭医生)</strong></td><td>年度免费体检、慢性病开药、专科转诊 (Referral)、非紧急不适</td><td>年度预防体检通常 $0；普通门诊 $20–$60 Copay</td><td>预约周期较长，适合非急症或线上 Telehealth 视频问诊。</td></tr>
+          <tr><td><strong>Emergency Room (ER 医院急诊室)</strong></td><td>胸痛、呼吸困难、剧烈腹痛、头部重创、骨折脱臼、意识模糊等危及生命急症</td><td>未满 Deductible 时账单常达 $1,500–$5,000+</td><td>注意收到保险公司寄来的 <strong>EOB (Explanation of Benefits) 不是账单</strong>，等医院正式账单核对无误后再付！</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cta-banner no-print">
+      <div>
+        <h3 style="margin:0 0 6px;">想要《美国看病买药 140+ 症状词表 + 医保术语 + 天价账单 CPT 核对申诉脚本》完整 PDF？</h3>
+        <div style="color:#cbd5e1;font-size:14px;">含电话预约、CVS/Walgreens 处方转药房、华盛顿州医保选计划避坑与随身钱包急救卡。</div>
+      </div>
+      <a class="btn btn-gold" id="ctaMedStore" href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">查看看病与医保双语工具包 →</a>
+    </div>
+    <script>
+    const SYMPTOMS = [
+      ["发烧寒战", "Fever and chills"],
+      ["剧烈咽喉痛/吞咽痛", "Severe sore throat and pain when swallowing"],
+      ["持续咳嗽/有痰", "Persistent cough with phlegm"],
+      ["剧烈胃痛/恶心呕吐", "Stomach pain, nausea, and vomiting"],
+      ["腹泻/疑似食物中毒", "Diarrhea / suspected food poisoning"],
+      ["尿频尿痛 (疑似尿路感染)", "Painful, frequent urination (possible UTI)"],
+      ["急性皮疹/瘙痒过敏", "Acute skin rash / itchy hives"],
+      ["脚踝/关节扭伤肿胀", "Sprained joint with swelling and tenderness"],
+      ["偏头痛/头晕", "Throbbing headache and dizziness"],
+      ["牙齿/牙龈剧痛肿胀", "Severe toothache and gum swelling"],
+      ["常规处方药续药", "Need a prescription medication refill"]
+    ];
+    const selected = new Set([0, 1]);
+    function initChips() {
+      const box = document.getElementById('symChips');
+      SYMPTOMS.forEach((pair, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn ' + (selected.has(i) ? 'btn-primary' : 'btn-secondary');
+        b.style.padding = '7px 12px';
+        b.style.fontSize = '13px';
+        b.textContent = pair[0];
+        b.onclick = () => {
+          if (selected.has(i)) selected.delete(i); else selected.add(i);
+          b.className = 'btn ' + (selected.has(i) ? 'btn-primary' : 'btn-secondary');
+          renderMed();
+        };
+        box.appendChild(b);
+      });
+    }
+    function renderMed() {
+      const syms = Array.from(selected).map(i => SYMPTOMS[i][1]);
+      const pain = document.getElementById('m_pain').value || '0';
+      const dur = document.getElementById('m_dur').value;
+      const temp = document.getElementById('m_temp').value.trim();
+      const allergy = document.getElementById('m_allergy').value.trim() || 'No Known Drug Allergies (NKDA)';
+      const meds = document.getElementById('m_meds').value.trim() || 'None taken yet';
+      const interp = document.getElementById('m_interp').value === 'yes';
+      let lines = [];
+      if (interp) {
+        lines.push('<div style="background:#fef3c7;border:1px solid #f59e0b;padding:8px 12px;border-radius:8px;margin-bottom:10px;font-weight:700;">🗣️ Language Request: English is my second language. Could I please have a free <u>Mandarin Chinese medical interpreter</u> (phone/video) for clinical details? Thank you!</div>');
+      }
+      lines.push('<p style="margin:6px 0;"><strong>• Chief Complaints:</strong> ' + (syms.length ? syms.join('; ') : 'General discomfort (please evaluate)') + '.</p>');
+      lines.push('<p style="margin:6px 0;"><strong>• Duration / Onset:</strong> ' + dur + '.</p>');
+      lines.push('<p style="margin:6px 0;"><strong>• Pain / Discomfort Level:</strong> <strong>' + pain + ' / 10</strong>' + (temp ? ' &nbsp;|&nbsp; <strong>Recorded Temp:</strong> ' + temp.replace(/</g,'&lt;') : '') + '</p>');
+      lines.push('<p style="margin:6px 0;color:#b91c1c;"><strong>• Drug / Food Allergies:</strong> ' + allergy.replace(/</g,'&lt;') + '</p>');
+      lines.push('<p style="margin:6px 0;"><strong>• Medications Already Taken:</strong> ' + meds.replace(/</g,'&lt;') + '</p>');
+      lines.push('<p style="margin:10px 0 0;font-size:13.5px;color:#334155;border-top:1px dashed #cbd5e1;padding-top:8px;">💳 <em>Insurance check: Please confirm that both this facility and the attending provider are <strong>In-Network</strong> with my insurance card before non-emergency procedures.</em></p>');
+      document.getElementById('medEnglishCard').innerHTML = lines.join('');
+    }
+    function copyMed() {
+      navigator.clipboard.writeText(document.getElementById('medEnglishCard').innerText);
+      alert('已复制英文就诊说明，可直接粘贴到医院在线问诊 App 或备忘录！');
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      initChips(); renderMed();
+      const u = window.CRAFTLEAF_MONETIZATION?.products?.healthcareKit?.checkoutUrlZh;
+      if (u) document.getElementById('ctaMedStore').href = u;
+    });
+    </script>
+    
+  </main>
+  
+<footer>
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div>© 2026 CraftLeaf &amp; Pixel Studio · 100% 浏览器本地计算，零隐私数据上传</div>
+      <div>
+        <a href="../../../index.html">主站首页</a> ·
+        <a href="../../../tools/us-life/index.html">北美生活工具</a> ·
+        <a href="../../../cn-guides/index.html">40篇中文指南</a> ·
+        <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">Gumroad 数字商店</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script src="../../../assets/monetization-config.js"></script>
+  <script src="../../../assets/monetization-sdk.js"></script>
+</body>
+</html>
