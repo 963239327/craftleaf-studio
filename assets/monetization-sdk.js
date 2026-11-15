@@ -136,6 +136,137 @@
     containerEl.innerHTML = html;
   }
 
+  function detectActiveLang() {
+    if (typeof document === 'undefined') return 'en';
+    var de = document.documentElement;
+    if (de.classList && de.classList.contains('zh')) return 'zh';
+    if (document.body && (document.body.classList.contains('lang-zh') || document.body.getAttribute('data-lang') === 'zh')) return 'zh';
+    var hl = (de.getAttribute('lang') || '').toLowerCase();
+    if (hl.indexOf('zh') === 0) return 'zh';
+    try {
+      var sl = localStorage.getItem('craftleaf_lang');
+      if (sl === 'zh' || sl === 'en') return sl;
+    } catch (_e) {}
+    return (typeof navigator !== 'undefined' && navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) ? 'zh' : 'en';
+  }
+
+  function resolvePortalBase() {
+    if (typeof document !== 'undefined') {
+      var scripts = document.getElementsByTagName('script');
+      for (var i = 0; i < scripts.length; i++) {
+        var src = scripts[i].getAttribute('src') || '';
+        var idx = src.indexOf('assets/monetization-sdk.js');
+        if (idx !== -1) return src.slice(0, idx);
+      }
+    }
+    return 'https://963239327.github.io/craftleaf-studio/';
+  }
+
+  function openTipModal(forcedLang) {
+    if (typeof document === 'undefined') return;
+    var lang = forcedLang || detectActiveLang();
+    var isZh = lang === 'zh';
+    var cfg = getConfig();
+    var tips = cfg.tips || {};
+    var coffeeUrl = tips.buyMeACoffeeUrl || tips.stripeTipUrl || 'https://stardustdemo.gumroad.com/l/coffee';
+    var qrUrl = resolvePortalBase() + (tips.wechatQrPath || 'assets/wechat-reward-qr.png');
+
+    var existing = document.getElementById('craftleafTipModal');
+    if (existing) existing.parentNode.removeChild(existing);
+
+    var overlay = document.createElement('div');
+    overlay.id = 'craftleafTipModal';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(2,6,23,0.76);backdrop-filter:blur(6px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:18px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;';
+
+    var card = document.createElement('div');
+    card.style.cssText = 'background:#ffffff;color:#0f172a;max-width:410px;width:100%;border-radius:20px;padding:24px 22px;box-shadow:0 24px 60px rgba(0,0,0,0.45);text-align:center;position:relative;';
+
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.textContent = '✕';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.style.cssText = 'position:absolute;top:12px;right:14px;border:none;background:#f1f5f9;color:#475569;width:30px;height:30px;border-radius:999px;font-size:15px;font-weight:700;cursor:pointer;';
+    closeBtn.onclick = function () { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); };
+    card.appendChild(closeBtn);
+
+    if (isZh) {
+      // Chinese visitors: WeChat Reward QR primary + Overseas USD Apple Pay / Card secondary
+      var hZh = document.createElement('h3');
+      hZh.style.cssText = 'margin:2px 0 6px;font-size:20px;color:#0f172a;';
+      hZh.textContent = '☕ 请独立开发者喝杯咖啡';
+      card.appendChild(hZh);
+
+      var pZh = document.createElement('p');
+      pZh.style.cssText = 'margin:0 0 14px;font-size:13.5px;color:#475569;line-height:1.5;';
+      pZh.textContent = '小工具帮您省下了时间或开销？微信扫一扫或手机长按识别赞赏码（0手续费直达作者），支持工具永久免广告运行 ❤️';
+      card.appendChild(pZh);
+
+      var qrImg = document.createElement('img');
+      qrImg.src = qrUrl;
+      qrImg.alt = 'WeChat Reward QR Code';
+      qrImg.style.cssText = 'width:246px;height:246px;object-fit:contain;border-radius:14px;border:1px solid #e2e8f0;display:block;margin:0 auto 14px;';
+      card.appendChild(qrImg);
+
+      var usdLink = document.createElement('a');
+      usdLink.href = coffeeUrl;
+      usdLink.target = '_blank';
+      usdLink.rel = 'noopener';
+      usdLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px 14px;border-radius:10px;background:#0f172a;color:#f8fafc;font-size:13.5px;font-weight:700;text-decoration:none;';
+      usdLink.textContent = '💳 使用美元信用卡 / Apple Pay 赞助 ($3+) →';
+      card.appendChild(usdLink);
+    } else {
+      // English / Western visitors: Apple Pay & Credit Card USD Coffee primary (no confusing WeChat prompt upfront!)
+      var hEn = document.createElement('h3');
+      hEn.style.cssText = 'margin:2px 0 8px;font-size:21px;color:#0f172a;';
+      hEn.textContent = '☕ Buy the Indie Creator a Coffee';
+      card.appendChild(hEn);
+
+      var pEn = document.createElement('p');
+      pEn.style.cssText = 'margin:0 0 18px;font-size:14px;color:#475569;line-height:1.55;';
+      pEn.textContent = 'Saved $16+ at the drugstore or love our 100% local, zero-tracking privacy tools? Support ongoing open-source maintenance with a quick $3 coffee via Apple Pay, Google Pay, or Card!';
+      card.appendChild(pEn);
+
+      var mainCta = document.createElement('a');
+      mainCta.href = coffeeUrl;
+      mainCta.target = '_blank';
+      mainCta.rel = 'noopener';
+      mainCta.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 16px;border-radius:12px;background:#10b981;color:#042f1e;font-size:15px;font-weight:800;text-decoration:none;margin-bottom:12px;';
+      mainCta.textContent = '☕ Support with Card / Apple Pay ($3+) →';
+      card.appendChild(mainCta);
+
+      var toggleQr = document.createElement('button');
+      toggleQr.type = 'button';
+      toggleQr.style.cssText = 'border:none;background:transparent;color:#64748b;font-size:12.5px;cursor:pointer;text-decoration:underline;';
+      toggleQr.textContent = 'Using WeChat Pay? Show WeChat Reward QR Code';
+      var hiddenQr = document.createElement('img');
+      hiddenQr.src = qrUrl;
+      hiddenQr.alt = 'WeChat Reward QR';
+      hiddenQr.style.cssText = 'display:none;width:210px;height:210px;object-fit:contain;border-radius:12px;border:1px solid #e2e8f0;margin:10px auto 0;';
+      toggleQr.onclick = function () {
+        hiddenQr.style.display = hiddenQr.style.display === 'none' ? 'block' : 'none';
+      };
+      card.appendChild(toggleQr);
+      card.appendChild(hiddenQr);
+    }
+
+    overlay.appendChild(card);
+    overlay.addEventListener('click', function (ev) {
+      if (ev.target === overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    });
+    document.body.appendChild(overlay);
+  }
+
+  // Auto-bind all tip buttons across the entire portal!
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    document.addEventListener('click', function (ev) {
+      var t = ev.target && ev.target.closest ? ev.target.closest('#tipLink, #tipLinkZh, #studioTipLink, [data-craftleaf-tip]') : null;
+      if (!t) return;
+      ev.preventDefault();
+      var forced = t.id === 'tipLinkZh' ? 'zh' : (t.id === 'tipLink' ? 'en' : undefined);
+      openTipModal(forced);
+    });
+  }
+
   root.CraftLeafSDK = {
     fnv1aHex6: fnv1aHex6,
     verifyOfflineKey: verifyOfflineKey,
@@ -143,7 +274,8 @@
     isUnlocked: isUnlocked,
     saveUnlocked: saveUnlocked,
     getConfig: getConfig,
-    renderAffiliateBar: renderAffiliateBar
+    renderAffiliateBar: renderAffiliateBar,
+    openTipModal: openTipModal
   };
 
   if (typeof module !== 'undefined' && module.exports) {

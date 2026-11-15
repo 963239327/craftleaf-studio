@@ -9,10 +9,11 @@ window.CRAFTLEAF_MONETIZATION = {
     "portalUrl": "https://963239327.github.io/craftleaf-studio/"
   },
   "tips": {
-    "kofiUrl": "https://stardustdemo.gumroad.com/",
-    "buyMeACoffeeUrl": "https://stardustdemo.gumroad.com/",
-    "stripeTipUrl": "https://stardustdemo.gumroad.com/l/craftleaf-all-access",
-    "afdianUrl": "https://stardustdemo.gumroad.com/"
+    "kofiUrl": "https://stardustdemo.gumroad.com/l/coffee",
+    "buyMeACoffeeUrl": "https://stardustdemo.gumroad.com/l/coffee",
+    "stripeTipUrl": "https://stardustdemo.gumroad.com/l/coffee",
+    "afdianUrl": "https://stardustdemo.gumroad.com/l/coffee",
+    "wechatQrPath": "assets/wechat-reward-qr.png"
   },
   "products": {
     "allAccessPass": {
@@ -125,22 +126,22 @@ window.CRAFTLEAF_MONETIZATION = {
     "blackFridayGuide": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "black-friday-2026-chinese-guide",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/black-friday-2026-chinese-guide"
     },
     "taxPrepGuide": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-first-year-tax-prep-chinese-organizer",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-first-year-tax-prep-chinese-organizer"
     },
     "creditStarterGuide": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-credit-from-zero-chinese-guide",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-credit-from-zero-chinese-guide"
     },
     "waDriverGuide": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "wa-driver-license-chinese-study-roadtest-pack",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com"
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/wa-driver-license-chinese-study-roadtest-pack"
     },
     "healthcareKit": {
       "priceUsd": "$6.00",
