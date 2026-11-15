@@ -92,6 +92,36 @@ window.CRAFTLEAF_MONETIZATION = {
       "gumroadPermalink": "ai-prompt-pack-bilingual",
       "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/ai-prompt-pack-bilingual"
     },
+    "usPhoneBroadbandGuide": {
+      "priceUsd": "$6.00",
+      "gumroadPermalink": "us-phone-broadband-guide",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-phone-broadband-guide"
+    },
+    "techInterviewPrep": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "tech-interview-english-prep",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/tech-interview-english-prep"
+    },
+    "waHealthInsurance2027": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "sxpiu",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/sxpiu"
+    },
+    "bilingualChineseRecipes": {
+      "priceUsd": "$9.00",
+      "gumroadPermalink": "bilingual-chinese-recipes-us-grocery",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/bilingual-chinese-recipes-us-grocery"
+    },
+    "chineseGroceryCheatSheet": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "ingredient-cheat-sheet",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet"
+    },
+    "groceryCashbackStacker": {
+      "priceUsd": "$7.00",
+      "gumroadPermalink": "cashback-stacker",
+      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/cashback-stacker"
+    },
     "blackFridayGuide": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "black-friday-2026-chinese-guide",

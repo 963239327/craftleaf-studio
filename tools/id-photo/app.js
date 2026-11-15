@@ -190,6 +190,7 @@
       swatchBlue: 'Light Blue',
       btnResetAdj: 'Reset Lighting',
       chkTrimMarks: 'Draw Precision Scissor Trim Marks & 1" Scale Bar',
+      chkDrugstoreSafe: '🛡️ CVS/Walgreens Anti-Overscan Safe Bleed (0.5" Safe Margin + -2.5% Pre-Scale · FREE 4×6" Download!)',
       cropCardTitle: 'Biometric Alignment Canvas',
       dragHint: 'Drag photo directly to position eyes & crown inside green target bands · Scroll wheel to zoom',
       sheetCardTitle: '300 DPI Print Sheet Live Preview',
@@ -258,6 +259,7 @@
       swatchBlue: '浅蓝底',
       btnResetAdj: '重置光效',
       chkTrimMarks: '绘制精准剪刀裁切十字线与 1英寸 比例尺',
+      chkDrugstoreSafe: '🛡️ 药店无边距防吞边模式（四周留 0.5寸 牺牲白边 + 2.5% 防放大预缩 · 免费无水印下载！）',
       cropCardTitle: '生物识别比例对齐画布',
       dragHint: '在画布上直接按住拖动照片，使头顶、双眼和下巴落入绿色标准带 · 滚轮缩放',
       sheetCardTitle: '300 DPI 冲印拼版实时预览',
@@ -312,15 +314,16 @@
   /**
    * Computes exact 300-DPI non-distorted tile positions for 4x6" (1800x1200) or A4 (2480x3508)
    */
-  function computeSheetLayout(presetKey, sheetKey) {
+  function computeSheetLayout(presetKey, sheetKey, drugstoreSafe) {
     var preset = PRESETS[resolvePresetKey(presetKey)];
     var sheet = SHEETS[sheetKey] || SHEETS['4x6'];
     var sw = sheet.widthPx;
     var sh = sheet.heightPx;
-    var pw = preset.widthPx;
-    var ph = preset.heightPx;
+    var scaleComp = (sheetKey === '4x6' && drugstoreSafe) ? 0.975 : 1.0;
+    var pw = Math.round(preset.widthPx * scaleComp);
+    var ph = Math.round(preset.heightPx * scaleComp);
 
-    var minMargin = sheetKey === 'a4' ? 110 : 0;
+    var minMargin = sheetKey === 'a4' ? 110 : (drugstoreSafe ? 150 : 0);
     var usableW = sw - minMargin * 2;
     var usableH = sh - minMargin * 2;
 
@@ -418,6 +421,7 @@
     bgColor: '#FFFFFF',
     showGuides: true,
     showTrimMarks: true,
+    drugstoreSafe: true,
     dragging: false,
     dragStartX: 0,
     dragStartY: 0,
@@ -840,7 +844,7 @@
    * If watermarkMode is true, draws the Free preview watermark; if false, draws clean Pro cut-ready output.
    */
   function buildPrintSheetCanvas(singleCanvas, sheetKey, watermarkMode) {
-    var layout = computeSheetLayout(state.presetKey, sheetKey);
+    var layout = computeSheetLayout(state.presetKey, sheetKey, state.drugstoreSafe);
     var preset = PRESETS[state.presetKey];
     var sheetCanvas = document.createElement('canvas');
     sheetCanvas.width = layout.sheetWidthPx;
@@ -961,7 +965,7 @@
     var single = renderSingleBiometricCanvas();
     drawCropEditor(single);
 
-    var unlocked = isPro();
+    var unlocked = isPro() || (state.sheetKey === '4x6' && state.drugstoreSafe);
     var built = buildPrintSheetCanvas(single, state.sheetKey, !unlocked);
     var previewEl = $('sheetCanvas');
     // Render crisp scaled preview canvas
@@ -1182,6 +1186,8 @@
         state.lang = params.get('lang');
       } else if (savedLang === 'zh' || savedLang === 'en') {
         state.lang = savedLang;
+      } else if (navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) {
+        state.lang = 'zh';
       }
     } catch (_e) {}
 
@@ -1269,6 +1275,12 @@
       state.showTrimMarks = e.target.checked;
       refreshAllCanvases();
     });
+    if ($('drugstoreSafeCheckbox')) {
+      $('drugstoreSafeCheckbox').addEventListener('change', function (e) {
+        state.drugstoreSafe = e.target.checked;
+        refreshAllCanvases();
+      });
+    }
 
     $('brightSlider').addEventListener('input', function (e) {
       state.brightness = Number(e.target.value);
@@ -1351,13 +1363,13 @@
     });
 
     $('dl4x6Btn').addEventListener('click', function () {
-      if (!isPro()) {
+      if (!isPro() && !state.drugstoreSafe) {
         openUnlockModal();
         return;
       }
       var single = renderSingleBiometricCanvas();
       var built = buildPrintSheetCanvas(single, '4x6', false);
-      downloadCanvasPng(built.canvas, 'id-photo-' + state.presetKey + '-4x6in-1800x1200-300dpi.png');
+      downloadCanvasPng(built.canvas, 'id-photo-' + state.presetKey + (state.drugstoreSafe ? '-4x6in-safe-bleed-300dpi.png' : '-4x6in-6up-300dpi.png'));
     });
 
     $('dlA4Btn').addEventListener('click', function () {
