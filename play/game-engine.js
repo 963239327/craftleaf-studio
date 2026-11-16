@@ -120,7 +120,7 @@
   }
 
   /* ==========================================================================
-   * 3. CANONICAL GAME DATA (v0.7.9 — 8 Rondel Seats & 12 Multi-Use Cards)
+   * 3. CANONICAL GAME DATA (v0.7.12 — 8 Rondel Seats & 12 Multi-Use Cards)
    * ========================================================================== */
   var CUISINES = {
     fire:  { id: 'fire',  icon: '🔥', en: 'Flame Grill', zh: '炙烤系', cls: 'cuisine-fire' },
@@ -461,6 +461,8 @@
         canBorrowOpponentGear: false
       },
       dualGearClaimedBy: null,
+      dualGearClaimedRound: null,
+      dualGearSharedP2: false,
       endgameTriggeredBy: null,
       winner: null, // 0 | 1 | 'tie'
       winReasonEn: '',
@@ -933,13 +935,14 @@
       if (isPerfect) {
         p.perfectDishes += 1;
       } else {
-        // v0.7.9: 5°~6° Golden Sear returns +1🧂 Spice
-        p.spice += 1;
-        bonusNotesEn.push('+1🧂 Sear');
-        bonusNotesZh.push('黄金回香+1🧂');
+        // v0.7.12: 5° returns +1🧂 Spice; 6° returns +2🧂 Spice!
+        var searSpice = (temp === 6) ? 2 : 1;
+        p.spice += searSpice;
+        bonusNotesEn.push('+' + searSpice + '🧂 Sear');
+        bonusNotesZh.push('黄金锅气+' + searSpice + '🧂');
       }
 
-      // Seat ⑧ Royal Tasting Bell bonus (+2★ in v0.7.9)
+      // Seat ⑧ Royal Tasting Bell bonus (+2★ at 5°~7° in v0.7.12)
       if (w.startedAtBell) {
         bonusStars += 2;
         bonusNotesEn.push('+2★ Bell');
@@ -1234,10 +1237,23 @@
         var claimedDual2 = false;
         if (p.gears.length === 2 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
           state.dualGearClaimedBy = pIdx;
+          state.dualGearClaimedRound = state.round;
           addStars(state, pIdx, 2);
           claimedDual2 = true;
-          dualMsgEn2 = ' 🥈 Exclusive Dual-Gear Milestone: +2★ & Draw 1!';
-          dualMsgZh2 = ' 🥈 率先装满双厨具：独占 +2★ 并摸 1 牌！';
+          dualMsgEn2 = ' 🥈 Dual-Gear Milestone: +2★ & Draw 1!';
+          dualMsgZh2 = ' 🥈 率先装满双厨具：获 +2★ 并摸 1 牌！';
+        } else if (
+          pIdx === 1 &&
+          p.gears.length === 2 &&
+          state.dualGearClaimedBy === 0 &&
+          state.dualGearClaimedRound === state.round &&
+          !state.dualGearSharedP2
+        ) {
+          state.dualGearSharedP2 = true;
+          addStars(state, pIdx, 2);
+          claimedDual2 = true;
+          dualMsgEn2 = ' 🥈 Same-Round Equal-Rights Dual-Gear: +2★ & Draw 1!';
+          dualMsgZh2 = ' 🥈 当轮平权双厨具：同享 +2★ 并摸 1 牌！';
         }
 
         addLog(
@@ -1274,11 +1290,26 @@
 
         var dualMsgEn = '';
         var dualMsgZh = '';
+        var claimedDual = false;
         if (p.gears.length === 2 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
           state.dualGearClaimedBy = pIdx;
+          state.dualGearClaimedRound = state.round;
           addStars(state, pIdx, 2);
-          dualMsgEn = ' 🥈 Exclusive Dual-Gear Milestone: +2★!';
-          dualMsgZh = ' 🥈 率先装满双厨具：独占 +2★！';
+          claimedDual = true;
+          dualMsgEn = ' 🥈 Dual-Gear Milestone: +2★ & Draw 1!';
+          dualMsgZh = ' 🥈 率先装满双厨具：获 +2★ 并摸 1 牌！';
+        } else if (
+          pIdx === 1 &&
+          p.gears.length === 2 &&
+          state.dualGearClaimedBy === 0 &&
+          state.dualGearClaimedRound === state.round &&
+          !state.dualGearSharedP2
+        ) {
+          state.dualGearSharedP2 = true;
+          addStars(state, pIdx, 2);
+          claimedDual = true;
+          dualMsgEn = ' 🥈 Same-Round Equal-Rights Dual-Gear: +2★ & Draw 1!';
+          dualMsgZh = ' 🥈 当轮平权双厨具：同享 +2★ 并摸 1 牌！';
         }
 
         addLog(
@@ -1289,6 +1320,9 @@
         );
 
         state.phase = 'RESOLVING';
+        if (claimedDual) {
+          state.effectQueue.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'dualGear' });
+        }
         state.effectQueue.push({ kind: 'END_MAIN_ACTION' });
         drainEffects(state);
         return state;
@@ -1824,7 +1858,7 @@
         return { type: 'PREP_CARD', cardId: bestPrepCard };
       }
 
-      // v0.7.9: Step 2 Optional Equip Gear into empty slot (free! preserves Step 3 Cook/Restock!)
+      // v0.7.12: Step 2 Optional Equip Gear into empty slot (free! preserves Step 3 Cook/Restock!)
       if (p.hand.length > 0 && p.gears.length < 2) {
         var bestStep2Gear = null;
         var bestStep2Score = -1;
@@ -1840,7 +1874,11 @@
             if (!menuCookable) continue;
           }
           var sgs = scoreGearPower(sgid, p);
-          if (p.gears.length === 1 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
+          if (
+            p.gears.length === 1 &&
+            ((opp.gears.length < 2 && state.dualGearClaimedBy === null) ||
+              (actor === 1 && state.dualGearClaimedBy === 0 && state.dualGearClaimedRound === state.round && !state.dualGearSharedP2))
+          ) {
             sgs += 6.5; // Grab +2★ & Draw 1!
           }
           if (sgs > bestStep2Score) {
@@ -2298,8 +2336,8 @@
         }
         if (temp === 5) {
           return t(
-            '💡 Pro Tip at 5°: Paying 1🧂 for Simmer Die (+1°/+2°) has 0% bust risk & 50% shot at 7° Perfect!',
-            '💡 5°黄金锦囊：此时付 1🧂 投小火骰（+1/+2°）爆锅率为 0%，且有 50% 概率直达 7° 极品！'
+            '💡 Pro Tip at 5°: Paying 1🧂 for Simmer Die (+1°/+2°) has 0% bust — 6° returns +2🧂 (net +1🧂!) & 7° hits Perfect!',
+            '💡 5°黄金锦囊：付 1🧂 投小火骰（+1/+2°）爆锅率 0%——落 6° 领 2🧂（净赚 1🧂），落 7° 直拿极品！'
           );
         }
         if (temp === 4) {
@@ -2608,7 +2646,7 @@
           } else if (a.type === 'WOK_PLATE') {
             var plateCls = w.temp === 7 ? 'perfect' : (w.temp >= 5 ? 'gold' : 'low');
             var starPreview = w.temp === 7 ? c.starsPerf : (w.temp >= 5 ? c.starsGold : c.starsHalf);
-            var searSpiceNote = (w.temp >= 5 && w.temp <= 6) ? '+1🧂' : '';
+            var searSpiceNote = w.temp === 5 ? '+1🧂' : (w.temp === 6 ? '+2🧂' : '');
             primaryBtns.push('<button class="wok-btn plate ' + plateCls + '" data-act="wok-plate">' +
               '🛎️ ' + t('Plate at ' + w.temp + '° (' + starPreview + '★' + searSpiceNote + (w.startedAtBell && w.temp >= 5 ? '+2★Bell' : '') + ')',
                         w.temp + '° 停火出锅（' + starPreview + '★' + searSpiceNote + (w.startedAtBell && w.temp >= 5 ? '+品鉴铃2★' : '') + '）') +
@@ -2792,7 +2830,7 @@
             '</div>' +
             '<div class="ms-row">' +
               '<span>🥈 ' + t('1st Dual Gear (+2★+1🃏)', '首达双厨具 (+2★摸1牌)') + '</span>' +
-              '<b>' + (state.dualGearClaimedBy === 0 ? '🔴+2★' : (state.dualGearClaimedBy === 1 ? '🔵+2★' : t('Open!', '待争夺'))) + '</b>' +
+              '<b>' + (state.dualGearSharedP2 ? '🔴🔵+2★' : (state.dualGearClaimedBy === 0 ? '🔴+2★' : (state.dualGearClaimedBy === 1 ? '🔵+2★' : t('Open!', '待争夺')))) + '</b>' +
             '</div>' +
             '<div class="ms-row">' +
               '<span>👑 ' + t('3 Cuisine Stamps (+3★)', '集满三系章 (+3★)') + '</span>' +
