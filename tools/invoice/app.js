@@ -587,11 +587,11 @@
       perk2: 'Local Client & Service Item CRM Book (IndexedDB + localStorage) for 1-click repeat billing',
       perk3: 'Custom Brand Logo upload + custom corporate Accent Color themes',
       perk4: 'Scannable Vector SVG Payment QR Code embedded directly on your invoice',
-      perk5: '1-click Tax-Season CSV Export of your saved Invoice Ledger (also unlocked by STUDIOALL-...)',
+      perk5: '1-click Tax-Season CSV Export of your saved Invoice Ledger (also unlocked by All-Access Gumroad Key)',
       buyKeyBtn: 'Get Instant Pro Key ($9.00) →',
-      allAccessLink: 'Or unlock all 6 CraftLeaf tools with All-Access Pass ($19)',
+      allAccessLink: 'Or unlock all CraftLeaf tools with All-Access Pass ($19)',
       verifyBtn: 'Activate',
-      msgInvalid: 'Invalid key. Expected XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX or STUDIOALL-...',
+      msgInvalid: 'Invalid or refunded Gumroad License Key (expected XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX).',
       msgSuccess: 'Invoice Studio Pro Unlocked! White-label, CRM, Logo, QR & CSV are now active.'
     },
     zh: {
@@ -658,11 +658,11 @@
       perk2: '解锁本地 IndexedDB 常用客户簿、服务价目表与历史发票归档管理',
       perk3: '支持上传工作室专属高清 Logo 与自定义品牌主题色',
       perk4: '票面自动生成高清矢量可扫描二维码（附带 Stripe / PayPal 快捷付款引导）',
-      perk5: '一键导出 UTF-8 Excel 兼容 CSV 营收台账（同时支持 $19 全家桶 STUDIOALL 激活码）',
+      perk5: '一键导出 UTF-8 Excel 兼容 CSV 营收台账（同时支持 $19 全站通票 Gumroad 密钥）',
       buyKeyBtn: '立即获取 Pro 激活码 ($9.00) →',
-      allAccessLink: '或入手 $19 工坊全系 6 款效率工具通票',
+      allAccessLink: '或入手 $19 工坊全系效率工具通票',
       verifyBtn: '立即激活',
-      msgInvalid: '激活码格式有误，请输入 XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX 或 STUDIOALL-...。',
+      msgInvalid: 'Gumroad 密钥无效或已退款，请核对订单回执上的 License Key (XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX)。',
       msgSuccess: 'Pro 专业版已激活！去品牌水印、本地客户 CRM、Logo、矢量收款码与 CSV 导出已全部开启。'
     }
   };

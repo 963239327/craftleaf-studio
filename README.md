@@ -39,7 +39,7 @@ All image cropping, PDF rendering, invoice math, and duplex card alignment execu
 
 Stop leaking `.env` secrets, OpenAI/Anthropic keys, AWS/GitHub tokens, JWTs, database URIs, PEM private keys, and internal corporate IPs into ChatGPT, Claude, Cursor, or Copilot. PasteShield maps secrets in local RAM to deterministic semantic tokens (`<OPENAI_KEY_1>`, `<DB_URI_1>`) and **restores real values in 1 click** (`Cmd+Alt+C` → prompt LLM → `Cmd+Alt+R`).
 
-- [![Download PasteShield VSIX](https://img.shields.io/badge/Download_.VSIX_(v1.0.0)-VS_Code_%26_Cursor-10b981?style=flat-square&logo=visualstudiocode&logoColor=white)](https://github.com/963239327/pasteshield-secret-sanitizer/releases/download/v1.0.0/pasteshield-ai-secret-sanitizer-1.0.0.vsix) [![Live Browser Playground](https://img.shields.io/badge/Live_Playground-Try_In_Browser-06b6d4?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/) [![Dedicated CLI & Core Repo](https://img.shields.io/badge/GitHub_CLI_Repo-pasteshield--secret--sanitizer-1e293b?style=flat-square&logo=github)](https://github.com/963239327/pasteshield-secret-sanitizer) [![Unlock Pro $9](https://img.shields.io/badge/PasteShield_Pro-%249_Lifetime-f59e0b?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/#pro)
+- [![VS Code Marketplace](https://img.shields.io/badge/VS_Code_Marketplace-v1.1.0-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer) [![Open VSX Registry](https://img.shields.io/badge/Open_VSX_Verified-Cursor_%26_Windsurf-a60ee5?style=flat-square&logo=eclipseide&logoColor=white)](https://open-vsx.org/extension/craftleaf-studio/pasteshield-ai-secret-sanitizer) [![Download PasteShield VSIX](https://img.shields.io/badge/Download_.VSIX_(v1.1.0)-GitHub_Release-10b981?style=flat-square)](https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.0.vsix) [![Live Browser Playground](https://img.shields.io/badge/Live_Playground-Try_In_Browser-06b6d4?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/) [![Unlock Pro $9](https://img.shields.io/badge/PasteShield_Pro-%249_Lifetime-f59e0b?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/#pro)
 
 <p align="center">
   <a href="https://963239327.github.io/craftleaf-studio/extensions/pasteshield/">
@@ -54,7 +54,7 @@ Stop leaking `.env` secrets, OpenAI/Anthropic keys, AWS/GitHub tokens, JWTs, dat
 
 Purify cluttered web articles and long **ChatGPT / Claude / Copilot / DeepSeek / GitHub** threads into publication-grade, ink-saving vector PDFs. Prevents chopped-off code blocks across page breaks and saves up to **65% black toner** with Eco Low-Ink mode.
 
-- [![Download Edge / Chromium ZIP](https://img.shields.io/badge/Download_Chromium_%2F_Edge-v1.0.0_.zip-0078d7?style=flat-square&logo=microsoftedge&logoColor=white)](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/cleanprint-studio-edge-chromium-v1.0.0.zip) [![Download Firefox AMO ZIP](https://img.shields.io/badge/Download_Firefox_AMO-v1.0.0_.zip-ff7139?style=flat-square&logo=firefoxbrowser&logoColor=white)](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/cleanprint-studio-firefox-amo-v1.0.0.zip) [![Interactive Before/After Demo](https://img.shields.io/badge/Interactive_Preview-Before_vs._After-10b981?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/) [![Unlock CleanPrint Pro $5.99](https://img.shields.io/badge/CleanPrint_Pro-%245.99_Lifetime-f59e0b?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/#pro)
+- [![Download Edge / Chromium ZIP](https://img.shields.io/badge/Download_Chromium_%2F_Edge-v1.1.0_.zip-0078d7?style=flat-square&logo=microsoftedge&logoColor=white)](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-edge-chromium-v1.1.0.zip) [![Download Firefox AMO ZIP](https://img.shields.io/badge/Download_Firefox_AMO-v1.1.0_.zip-ff7139?style=flat-square&logo=firefoxbrowser&logoColor=white)](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-firefox-amo-v1.1.0.zip) [![Interactive Before/After Demo](https://img.shields.io/badge/Interactive_Preview-Before_vs._After-10b981?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/) [![Unlock CleanPrint Pro $5.99](https://img.shields.io/badge/CleanPrint_Pro-%245.99_Lifetime-f59e0b?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/#pro)
 
 ---
 
@@ -62,7 +62,7 @@ Purify cluttered web articles and long **ChatGPT / Claude / Copilot / DeepSeek /
 
 An offline-first financial command center built for freelancers, indie hackers, and one-person businesses (*一人公司与自由职业财务、订阅止损及 AI 提效管家*):
 - **Try Live Sandbox in Browser:** [SaaS Subscription Bleed & Reverse Hourly Rate Calculator →](https://963239327.github.io/craftleaf-studio/templates/)
-- **1-Click `$0` Free Starter Kit Download:** [![Download Free Starter Kit](https://img.shields.io/badge/Download_Free_Starter_Kit-SoloFounder_OS_(.zip)-10b981?style=flat-square)](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/SoloFounder_OS_FREE_Starter_Kit.zip) *(includes offline HTML Pricing Calculator Lite, SaaS Bleed Audit CSV & 10 Commercial AI Prompts Quickstart)*
+- **1-Click `$0` Free Starter Kit Download:** [![Download Free Starter Kit](https://img.shields.io/badge/Download_Free_Starter_Kit-SoloFounder_OS_(.zip)-10b981?style=flat-square)](https://stardustdemo.gumroad.com/l/solofounder-starter-kit) *(includes offline HTML Pricing Calculator Lite, SaaS Bleed Audit CSV & 10 Commercial AI Prompts Quickstart)*
 - **Upgrade to Complete Offline Pro OS ($9.99):** Full interactive HTML Finance & Schedule-C Tax Dashboard, 5 bilingual EN/ZH ledgers & CRM spreadsheets, Anti-Scope-Creep SOW templates, and the complete AI Automation SOP Playbook → [Explore Pro Edition](https://963239327.github.io/craftleaf-studio/templates/#pro-pack)
 
 ---
@@ -78,33 +78,33 @@ Three Monte-Carlo-balanced, tactile 3–4 sheet strategy board games crafted for
 </p>
 
 1. **🍳 Star Chef Showdown: Rondel Bistro (`《星厨对决》`)** — 8-seat clockwise rondel movement × multi-use dish cards × 21° wok push-your-luck heat control.
-   - **[▶ Play Solo vs. Sous-Chef AI in Your Browser (Free HTML5)](https://963239327.github.io/craftleaf-studio/play/)** · **[Download Free Sample PDF](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/star_chef_sample_preview.pdf)**
+   - **[▶ Play Solo vs. Sous-Chef AI in Your Browser (Free HTML5)](https://963239327.github.io/craftleaf-studio/play/)** · **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf)**
 2. **🌾 Woodland Seasons: Emerald Valley (`《四季森友》`)** — Friendly-bump worker placement across an 8-solar-term clock, 24 four-way rotating habitat tiles, stone canals & 12 symbiotic woodland critters.
-   - **[Download Free Sample PDF](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/woodland_seasons_sample_preview.pdf)**
+   - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf)**
 3. **🔮 Cloudspire Alchemy: Skyward Grimoires (`《云塔炼金》`)** — Pair 3 printed sheets (including foldable weighted **3D paper cloud towers**) with any standard 54-card poker deck for tense grimoire engine building.
-   - **[Download Free Sample PDF](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/cloudspire_alchemy_sample_preview.pdf)**
+   - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf)**
 
 👉 **Designing your own board game?** Check out the **[Tabletop PnP HTML-to-PDF & 10,000-Run Monte Carlo Creator Kit ($12.99)](https://963239327.github.io/craftleaf-studio/#creator-kit)** (dual A4/Letter CSS print framework, 3D standee/tower die-cuts, 60 commercial-free SVG icons & Python balance simulator).
 
 ---
 
-## 📦 Summary of Free `v1.0.0` GitHub Release Downloads
+## 📦 Summary of Latest Official Downloads & Free Samples
 
 | Asset | Type | Direct Download |
 | :--- | :--- | :--- |
-| `pasteshield-ai-secret-sanitizer-1.0.0.vsix` | VS Code & Cursor Extension (Freemium) | [Download `.vsix`](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/pasteshield-ai-secret-sanitizer-1.0.0.vsix) |
-| `cleanprint-studio-edge-chromium-v1.0.0.zip` | Edge / Chrome / Brave Extension (Freemium) | [Download `.zip`](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/cleanprint-studio-edge-chromium-v1.0.0.zip) |
-| `cleanprint-studio-firefox-amo-v1.0.0.zip` | Mozilla Firefox Extension (Freemium) | [Download `.zip`](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/cleanprint-studio-firefox-amo-v1.0.0.zip) |
-| `SoloFounder_OS_FREE_Starter_Kit.zip` | `$0` Solo-Founder Finance & AI Starter Pack | [Download `.zip`](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/SoloFounder_OS_FREE_Starter_Kit.zip) |
-| `star_chef_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Download `.pdf`](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/star_chef_sample_preview.pdf) |
-| `woodland_seasons_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Download `.pdf`](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/woodland_seasons_sample_preview.pdf) |
-| `cloudspire_alchemy_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Download `.pdf`](https://github.com/963239327/craftleaf-studio/releases/download/v1.0.0/cloudspire_alchemy_sample_preview.pdf) |
+| `pasteshield-ai-secret-sanitizer-1.1.0.vsix` | VS Code / Cursor / Windsurf Extension (`v1.1.0`) | [Download `.vsix`](https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.0.vsix) |
+| `cleanprint-studio-edge-chromium-v1.1.0.zip` | Edge / Chrome / Brave Extension (`v1.1.0`) | [Download `.zip`](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-edge-chromium-v1.1.0.zip) |
+| `cleanprint-studio-firefox-amo-v1.1.0.zip` | Mozilla Firefox Extension (`v1.1.0`) | [Download `.zip`](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-firefox-amo-v1.1.0.zip) |
+| `SoloFounder_OS_FREE_Starter_Kit.zip` | `$0` Solo-Founder Finance & AI Starter Pack | [Get Free on Gumroad](https://stardustdemo.gumroad.com/l/solofounder-starter-kit) |
+| `star_chef_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf) |
+| `woodland_seasons_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf) |
+| `cloudspire_alchemy_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf) |
 
 ---
 
 ## 🔑 Studio All-Access Lifetime Pro Pass ($19 / ¥69)
 
-One offline-verified `STUDIOALL-...` license key permanently unlocks Pro tiers across **all 5 CraftLeaf tools** (`IDPhoto 4×6 Studio`, `Freelancer Invoice CRM`, `CardSheet Duplex Batch Aligner`, `CleanPrint Browser Extension`, and `PasteShield for VS Code & Cursor`) — **one-time purchase, zero recurring subscriptions, zero cloud accounts**.
+One **CraftLeaf All-Access Gumroad License Key** permanently unlocks Pro tiers across **all 5 CraftLeaf tools** (`IDPhoto 4×6 Studio`, `Freelancer Invoice CRM`, `CardSheet Duplex Batch Aligner`, `CleanPrint Browser Extension`, and `PasteShield for VS Code, Cursor & CLI/MCP`) — **one-time purchase, zero recurring subscriptions, zero user data uploaded**.
 
 👉 **[Unlock Studio All-Access Pass →](https://963239327.github.io/craftleaf-studio/#all-access)**
 

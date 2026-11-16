@@ -69,8 +69,8 @@
           </ul>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-          <a class="btn" id="ctaMenuCustom" href="https://stardustdemo.gumroad.com/l/coffee?price=65&amp;wanted=true" target="_blank" rel="noopener">💳 一键锁单预约 48h 菜单翻新 ($65) →</a>
-          <a class="btn-sec" id="ctaMenuDiy" href="https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?wanted=true" target="_blank" rel="noopener">自助食材/菜名英文词典 ($7) →</a>
+          <a class="btn" id="ctaMenuCustom" href="#intake" onclick="return handleCustomB2BCta('menu', this);">📝 生成 48h 菜单翻新需求单 ($65) →</a>
+          <a class="btn-sec" id="ctaMenuDiy" href="https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?wanted=true" target="_blank" rel="noopener">💳 即买即下：食材/菜名英文词典 ($7) →</a>
         </div>
       </article>
 
@@ -85,12 +85,12 @@
           </div>
           <ul style="font-size:13.8px;color:#cbd5e1;padding-left:20px;">
             <li><strong>即买即用《美国租房合同 12 大条款解读与逐屋验房表》($7)</strong>：付款后 1 秒直接下载高清 PDF</li>
-            <li><strong>定制 3:4 手机竖版双语招租海报 + 入住欢迎页 ($35)</strong>：免注册一键下单</li>
+            <li><strong>定制 3:4 手机竖版双语招租海报 + 入住欢迎页 ($35)</strong>：免注册生成标准定制需求单</li>
           </ul>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-          <a class="btn" id="ctaLandlordKit" href="https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?wanted=true" target="_blank" rel="noopener">📋 立即下载租约解读+逐屋验房表 ($7) →</a>
-          <a class="btn-sec" id="ctaLandlordCustom" href="https://stardustdemo.gumroad.com/l/coffee?price=35&amp;wanted=true" target="_blank" rel="noopener">💳 定制双语招租海报 ($35) →</a>
+          <a class="btn" id="ctaLandlordKit" href="https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?wanted=true" target="_blank" rel="noopener">💳 立即下载租约解读+逐屋验房表 ($7) →</a>
+          <a class="btn-sec" id="ctaLandlordCustom" href="#intake" onclick="return handleCustomB2BCta('rental', this);">📝 定制双语招租海报 ($35) →</a>
         </div>
       </article>
     </div>
@@ -115,9 +115,10 @@
             <label class="fld">自动生成的标准订单摘要（100% 本地生成）：</label>
             <pre id="b2bPreview" style="background:#090f1d;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12.8px;white-space:pre-wrap;color:#d1fae5;margin:0 0 12px;"></pre>
           </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button type="button" class="btn" onclick="copyBriefAndCheckout()">📋 复制需求单并前往 Apple Pay / 卡支付 →</button>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <button type="button" class="btn" id="b2bCopyBtn" onclick="copyBriefAndCheckout()">📋 一键复制定制需求单 →</button>
             <a class="btn-sec" id="b2bMailBtn" href="#" style="display:none;">✉️ 发送需求邮件</a>
+            <span id="b2bCopyStatus" style="font-size:13px;color:#6ee7b7;"></span>
           </div>
         </div>
       </div>
@@ -155,6 +156,21 @@
           '&body=' + encodeURIComponent(summary);
       }
     }
+    function handleCustomB2BCta(kind, anchorEl) {
+      var b2b = getB2BCfg();
+      var directUrl = kind === 'menu' ? b2b.restaurantCustomCheckoutUrl : b2b.landlordCustomCheckoutUrl;
+      if (directUrl) {
+        anchorEl.href = (window.CraftLeafSDK && window.CraftLeafSDK.decorateGumroadUrl)
+          ? window.CraftLeafSDK.decorateGumroadUrl(directUrl)
+          : directUrl;
+        anchorEl.target = '_blank';
+        return true;
+      }
+      document.getElementById('b2bType').value = kind;
+      syncIntake();
+      document.getElementById('intake').scrollIntoView({ behavior: 'smooth' });
+      return false;
+    }
     function copyBriefAndCheckout() {
       syncIntake();
       var txt = document.getElementById('b2bPreview').textContent;
@@ -163,17 +179,37 @@
       }
       var b2b = getB2BCfg();
       var kind = document.getElementById('b2bType').value;
-      var rawTarget = kind === 'menu'
-        ? (b2b.restaurantCustomCheckoutUrl || 'https://stardustdemo.gumroad.com/l/coffee?price=65&wanted=true')
-        : (b2b.landlordCustomCheckoutUrl || 'https://stardustdemo.gumroad.com/l/coffee?price=35&wanted=true');
-      var finalUrl = (window.CraftLeafSDK && window.CraftLeafSDK.decorateGumroadUrl)
-        ? window.CraftLeafSDK.decorateGumroadUrl(rawTarget)
-        : rawTarget;
-      window.open(finalUrl, '_blank', 'noopener');
+      var rawTarget = kind === 'menu' ? (b2b.restaurantCustomCheckoutUrl || '') : (b2b.landlordCustomCheckoutUrl || '');
+      var st = document.getElementById('b2bCopyStatus');
+      if (rawTarget) {
+        var finalUrl = (window.CraftLeafSDK && window.CraftLeafSDK.decorateGumroadUrl)
+          ? window.CraftLeafSDK.decorateGumroadUrl(rawTarget)
+          : rawTarget;
+        if (st) st.textContent = '✓ 已复制需求单，正在打开专属结账页...';
+        window.open(finalUrl, '_blank', 'noopener');
+      } else {
+        var diyFallback = kind === 'menu'
+          ? (b2b.restaurantDiyGlossaryUrl || 'https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet')
+          : (b2b.landlordLeaseKitUrl || 'https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide');
+        if (st) st.textContent = '✓ 需求单已复制到剪贴板！可先下载 $7 自助包并在收据邮件直接回复本需求单启动 48h 定制。';
+        void diyFallback;
+      }
     }
     window.addEventListener('DOMContentLoaded', function () {
       var b2b = getB2BCfg();
-      if (b2b.restaurantCustomCheckoutUrl) document.getElementById('ctaMenuCustom').href = b2b.restaurantCustomCheckoutUrl;
+      if (b2b.restaurantCustomCheckoutUrl) {
+        var mBtn = document.getElementById('ctaMenuCustom');
+        mBtn.href = b2b.restaurantCustomCheckoutUrl;
+        mBtn.target = '_blank';
+        mBtn.textContent = '💳 一键锁单预约 48h 菜单翻新 ($65) →';
+        document.getElementById('b2bCopyBtn').textContent = '📋 复制需求单并前往专属支付 →';
+      }
+      if (b2b.landlordCustomCheckoutUrl) {
+        var lBtn = document.getElementById('ctaLandlordCustom');
+        lBtn.href = b2b.landlordCustomCheckoutUrl;
+        lBtn.target = '_blank';
+        lBtn.textContent = '💳 定制双语招租海报 ($35) →';
+      }
       if (b2b.restaurantDiyGlossaryUrl) document.getElementById('ctaMenuDiy').href = b2b.restaurantDiyGlossaryUrl;
       if (b2b.landlordCustomCheckoutUrl) document.getElementById('ctaLandlordCustom').href = b2b.landlordCustomCheckoutUrl;
       if (b2b.landlordLeaseKitUrl) document.getElementById('ctaLandlordKit').href = b2b.landlordLeaseKitUrl;

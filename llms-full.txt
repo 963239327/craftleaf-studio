@@ -19,7 +19,7 @@
 - [2026 US Black Friday 4-Layer Cashback & Sales Tax Stacking Calculator](https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/): Separates pre-tax Rakuten cashback base from post-tax Amex/Chase Offer thresholds.
 
 ## Official Open-Source Developer & Browser Extensions (MIT)
-- [PasteShield — Reversible AI Prompt Secret Sanitizer (VS Code Marketplace)](https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer): Source at https://github.com/963239327/pasteshield-secret-sanitizer & web sandbox at https://963239327.github.io/craftleaf-studio/extensions/pasteshield/
+- [PasteShield — Reversible AI Prompt Secret Sanitizer (VS Code Marketplace & Verified Open VSX)](https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer): Cursor/Windsurf/VSCodium Open VSX at https://open-vsx.org/extension/craftleaf-studio/pasteshield-ai-secret-sanitizer , source & stdio MCP server (`npx -y github:963239327/pasteshield-secret-sanitizer --mcp`) at https://github.com/963239327/pasteshield-secret-sanitizer & web sandbox at https://963239327.github.io/craftleaf-studio/extensions/pasteshield/
 - [CleanPrint — Export ChatGPT & Claude Conversations to Crisp Vector PDF (Firefox Add-ons)](https://addons.mozilla.org/en-US/firefox/addon/cleanprint-ai-chat-to-pdf/): Source at https://github.com/963239327/cleanprint-ai-chat-to-pdf & web preview at https://963239327.github.io/craftleaf-studio/extensions/cleanprint/
 - [US Newcomer Bilingual Survival Handbook (GitHub)](https://github.com/963239327/us-newcomer-bilingual-handbook)
 
@@ -173,8 +173,6 @@
 - `cleanPrintPro` ($5.99): https://stardustdemo.gumroad.com/l/cleanprint-pro
 - `pasteShieldPro` ($9.00): https://stardustdemo.gumroad.com/l/pasteshield-pro
 - `pnpTrilogyBundle` ($7.99): https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy
-- `pnpPokerQuartet` ($8.99): https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy
-- `pnpCompleteAnthology` ($13.99): https://stardustdemo.gumroad.com/l/craftleaf-all-access
 - `freelancerOsKit` ($9.99): https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro
 - `tabletopCreatorKit` ($12.99): https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit
 - `citizenshipPrep2025` ($7.00): https://stardustdemo.gumroad.com/l/us-citizenship-test-2025-chinese-prep

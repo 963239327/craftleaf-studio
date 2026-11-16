@@ -19,9 +19,11 @@
     "telecomEsimInviteUrl": ""
   },
   "b2bServices": {
-    "restaurantCustomCheckoutUrl": "https://stardustdemo.gumroad.com/l/coffee?price=65&wanted=true",
+    "pendingRestaurantGumroadPermalink": "b2b-restaurant-menu-overhaul",
+    "restaurantCustomCheckoutUrl": "",
     "restaurantDiyGlossaryUrl": "https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?wanted=true",
-    "landlordCustomCheckoutUrl": "https://stardustdemo.gumroad.com/l/coffee?price=35&wanted=true",
+    "pendingLandlordGumroadPermalink": "b2b-landlord-rental-flyer",
+    "landlordCustomCheckoutUrl": "",
     "landlordLeaseKitUrl": "https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?wanted=true",
     "intakeEmail": ""
   },
@@ -94,15 +96,15 @@
       "singlePriceUsd": "$3.99",
       "priceCny": "¥22.9",
       "pendingDedicatedGumroadPermalink": "poker-duel-quartet",
-      "itchUrl": "https://stardustdemo.itch.io/star-chef-showdown",
-      "gumroadUrl": "https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy",
+      "itchUrl": "",
+      "gumroadUrl": "",
       "mianbaoduoUrl": ""
     },
     "pnpCompleteAnthology": {
       "priceUsd": "$13.99",
       "priceCny": "¥34.9",
       "pendingDedicatedGumroadPermalink": "complete-7game-pnp-anthology",
-      "gumroadUrl": "https://stardustdemo.gumroad.com/l/craftleaf-all-access",
+      "gumroadUrl": "",
       "mianbaoduoUrl": ""
     },
     "freelancerOsKit": {

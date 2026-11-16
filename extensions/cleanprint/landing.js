@@ -156,21 +156,21 @@
         var raw = (input && input.value ? input.value : '').trim();
         if (!raw || !root.CraftLeafSDK) {
           out.textContent = pageState.lang === 'zh'
-            ? '请输入有效的 CLEANPRO-... 或 STUDIOALL-... 终身激活码。'
-            : 'Please enter a valid CLEANPRO-... or STUDIOALL-... license key.';
+            ? '请粘贴 Gumroad 订单回执上的专属 License Key。'
+            : 'Please paste the Gumroad License Key from your CleanPrint Pro or All-Access receipt.';
           out.className = 'verify-result err';
           return;
         }
-        root.CraftLeafSDK.verifyLicense('cleanPrintPro', raw, { keyPrefix: 'CLEANPRO' }).then(function (res) {
+        root.CraftLeafSDK.verifyLicense('cleanPrintPro', raw).then(function (res) {
           if (res && res.valid) {
             out.textContent = pageState.lang === 'zh'
-              ? '✓ 校验通过（' + res.mode + ' 模式）：您的激活码真实有效！请在浏览器插件弹窗中粘贴使用。'
-              : '✓ Verified (' + res.mode + ' mode): Valid lifetime key! Paste this key inside the CleanPrint extension popup to unlock Pro.';
+              ? '✓ Gumroad 激活密钥验证通过！请在浏览器插件弹窗或设置页中粘贴使用。'
+              : '✓ Verified Gumroad Pro License! Paste this key inside the CleanPrint extension popup to unlock Pro.';
             out.className = 'verify-result ok';
           } else {
             out.textContent = pageState.lang === 'zh'
-              ? '✕ 激活码校验未通过，请检查格式 XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX。'
-              : '✕ Key checksum invalid. Expected format XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX or STUDIOALL-...';
+              ? (res && res.reason === 'network_error' ? '✕ 网络连接不可用，请联网后验证 Gumroad 密钥。' : '✕ Gumroad 密钥验证未通过或已退款，请检查 XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX。')
+              : (res && res.reason === 'network_error' ? '✕ Network offline — connect to verify your Gumroad License Key.' : '✕ Invalid or refunded Gumroad License Key (expected XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX).');
             out.className = 'verify-result err';
           }
         });
