@@ -556,7 +556,7 @@
     });
   }
 
-  // Note: fnv1aHex6, verifyOfflineKey, sha256Hex, and saveUnlocked are intentionally NOT exported (#4, #22).
+  // Note: legacy offline key helpers, sha256Hex, and saveUnlocked are intentionally NOT exported (#4, #22).
   root.CraftLeafSDK = {
     verifyLicense: verifyLicense,
     reverifyStoredLicenses: reverifyStoredLicenses,

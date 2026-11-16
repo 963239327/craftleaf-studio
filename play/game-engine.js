@@ -120,7 +120,7 @@
   }
 
   /* ==========================================================================
-   * 3. CANONICAL GAME DATA (v0.7.0 — 8 Rondel Seats & 12 Multi-Use Cards)
+   * 3. CANONICAL GAME DATA (v0.7.9 — 8 Rondel Seats & 12 Multi-Use Cards)
    * ========================================================================== */
   var CUISINES = {
     fire:  { id: 'fire',  icon: '🔥', en: 'Flame Grill', zh: '炙烤系', cls: 'cuisine-fire' },
@@ -174,7 +174,7 @@
     {
       idx: 7, num: '⑧', icon: '🛎️', cls: 'seat-boss', startTag: '',
       nameEn: 'Royal Tasting Bell', nameZh: '皇家品鉴铃',
-      descEn: 'Draw 1; Cook 5°–7° here: +1★!', descZh: '摸 1 张牌；此格 5°~7° 出锅额外+1★'
+      descEn: 'Draw 1; Cook 5°–7° here: +2★!', descZh: '摸 1 张牌；此格 5°~7° 出锅额外+2★'
     }
   ];
 
@@ -932,13 +932,18 @@
 
       if (isPerfect) {
         p.perfectDishes += 1;
+      } else {
+        // v0.7.9: 5°~6° Golden Sear returns +1🧂 Spice
+        p.spice += 1;
+        bonusNotesEn.push('+1🧂 Sear');
+        bonusNotesZh.push('黄金回香+1🧂');
       }
 
-      // Seat ⑧ Royal Tasting Bell bonus
+      // Seat ⑧ Royal Tasting Bell bonus (+2★ in v0.7.9)
       if (w.startedAtBell) {
-        bonusStars += 1;
-        bonusNotesEn.push('+1★ Bell');
-        bonusNotesZh.push('品鉴铃+1★');
+        bonusStars += 2;
+        bonusNotesEn.push('+2★ Bell');
+        bonusNotesZh.push('品鉴铃+2★');
       }
 
       // First 5°~7° Dish Milestone (+1★)
@@ -1202,6 +1207,49 @@
         }
         if (prp.draw > 0) {
           state.effectQueue.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'prep' });
+        }
+        state.effectQueue.push({ kind: 'AFTER_PREP' });
+        drainEffects(state);
+        return state;
+      }
+      if (action.type === 'EQUIP_GEAR') {
+        var gIdx2 = p.hand.indexOf(action.cardId);
+        if (gIdx2 === -1 || (p.gears.length >= 2 && p.spice < 1)) {
+          state.phase = 'MAIN_ACTION';
+          return state;
+        }
+        var eqId2 = p.hand.splice(gIdx2, 1)[0];
+        var eqCard2 = CARD_BY_ID[eqId2];
+        if (p.gears.length >= 2) {
+          p.spice -= 1;
+          var repIdx2 = p.gears.indexOf(action.replaceGearId);
+          if (repIdx2 === -1) repIdx2 = 0;
+          var oldGear2 = p.gears.splice(repIdx2, 1)[0];
+          state.discard.push(oldGear2);
+        }
+        p.gears.push(eqId2);
+
+        var dualMsgEn2 = '';
+        var dualMsgZh2 = '';
+        var claimedDual2 = false;
+        if (p.gears.length === 2 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
+          state.dualGearClaimedBy = pIdx;
+          addStars(state, pIdx, 2);
+          claimedDual2 = true;
+          dualMsgEn2 = ' 🥈 Exclusive Dual-Gear Milestone: +2★ & Draw 1!';
+          dualMsgZh2 = ' 🥈 率先装满双厨具：独占 +2★ 并摸 1 牌！';
+        }
+
+        addLog(
+          state,
+          '⚙️ Step 2 Gear: ' + chefLabelEn(state, pIdx) + ' equipped ' + eqCard2.gearNameEn + ' (' + eqCard2.gearTagEn + ').' + dualMsgEn2,
+          '⚙️ 第2步装厨具：' + chefLabelZh(state, pIdx) + ' 装备【' + eqCard2.gearNameZh + '】（' + eqCard2.gearTagZh + '）。' + dualMsgZh2,
+          dualMsgEn2 ? 'gold' : 'info'
+        );
+
+        state.phase = 'RESOLVING';
+        if (claimedDual2) {
+          state.effectQueue.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'dualGear' });
         }
         state.effectQueue.push({ kind: 'AFTER_PREP' });
         drainEffects(state);
@@ -1775,10 +1823,39 @@
       if (bestPrepCard !== null && bestPrepGain >= 3.2) {
         return { type: 'PREP_CARD', cardId: bestPrepCard };
       }
+
+      // v0.7.9: Step 2 Optional Equip Gear into empty slot (free! preserves Step 3 Cook/Restock!)
+      if (p.hand.length > 0 && p.gears.length < 2) {
+        var bestStep2Gear = null;
+        var bestStep2Score = -1;
+        for (var sgi = 0; sgi < p.hand.length; sgi++) {
+          var sgid = p.hand[sgi];
+          // Don't consume our only cookable hand dish if Open Menu can't be cooked
+          var sgOpts = getCookOptionsForCard(state, actor, sgid);
+          if (sgOpts.canCook && currentBestCook > 0) {
+            var menuCookable = false;
+            for (var mci = 0; mci < state.openMenu.length; mci++) {
+              if (getCookOptionsForCard(state, actor, state.openMenu[mci]).canCook) menuCookable = true;
+            }
+            if (!menuCookable) continue;
+          }
+          var sgs = scoreGearPower(sgid, p);
+          if (p.gears.length === 1 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
+            sgs += 6.5; // Grab +2★ & Draw 1!
+          }
+          if (sgs > bestStep2Score) {
+            bestStep2Score = sgs;
+            bestStep2Gear = sgid;
+          }
+        }
+        if (bestStep2Gear !== null && bestStep2Score >= 7.8) {
+          return { type: 'EQUIP_GEAR', cardId: bestStep2Gear };
+        }
+      }
       return { type: 'SKIP_PREP' };
     }
 
-    // 4. Step 3: Core Main Action (Cook vs Equip Gear vs Restock)
+    // 4. Step 3: Core Main Action (Cook vs Restock)
     if (state.phase === 'MAIN_ACTION') {
       // A) Check all cookable dishes (Hand + Open Menu)
       var bestCookAct = null;
@@ -1802,27 +1879,7 @@
 
       if (bestCookAct) return bestCookAct;
 
-      // B) Claim Exclusive +2★ Dual-Gear Bonus or Equip Strong Early Kitchen Gear
-      if (p.hand.length > 0 && p.gears.length < 2) {
-        var bestGCard = p.hand[0];
-        var bestGScore = -1;
-        for (var gi = 0; gi < p.hand.length; gi++) {
-          var gid = p.hand[gi];
-          var gs = scoreGearPower(gid, p);
-          if (p.gears.length === 1 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
-            gs += 6.0; // Grab the exclusive +2★ milestone!
-          }
-          if (gs > bestGScore) {
-            bestGScore = gs;
-            bestGCard = gid;
-          }
-        }
-        if (bestGScore >= 8.0) {
-          return { type: 'EQUIP_GEAR', cardId: bestGCard };
-        }
-      }
-
-      // C) Restock missing ingredient (or Draw card if hand is empty)
+      // B) Restock missing ingredient (or Draw card if hand is empty)
       if (p.hand.length === 0) {
         return { type: 'RESTOCK', mode: 'DRAW' };
       }
@@ -2353,16 +2410,20 @@
           actionBtns = '<span class="card-need-hint">' + t('Need Recipe Tokens', '凑齐托盘食材可直烹') + '</span>';
         }
       } else if (context === 'hand' && isActorTurn) {
+        var actChef = state.players[actor];
         if (state.phase === 'PREP_OPTIONAL') {
-          actionBtns = '<button class="card-act-btn prep full" data-act="prep-card" data-cid="' + c.id + '">' +
-            t('① Prep: ', '① 备菜：') + t(c.prepTextEn, c.prepTextZh) + '</button>';
+          var prepBtn = '<button class="card-act-btn prep" data-act="prep-card" data-cid="' + c.id + '">' +
+            t('① Prep', '① 备菜') + '</button>';
+          var canEq = actChef.gears.length < 2 || actChef.spice >= 1;
+          var eqLbl = actChef.gears.length < 2 ? t('② Gear (Free)', '② 厨具(免)') : t('② Swap (1🧂)', '② 替旧(1🧂)');
+          var gearStep2Btn = canEq
+            ? '<button class="card-act-btn gear" data-act="equip-card" data-cid="' + c.id + '">' + eqLbl + '</button>'
+            : '<button class="card-act-btn disabled" disabled>' + eqLbl + '</button>';
+          actionBtns = prepBtn + gearStep2Btn;
         } else if (state.phase === 'MAIN_ACTION') {
-          var eqBtn = '<button class="card-act-btn gear" data-act="equip-card" data-cid="' + c.id + '">' +
-            t('② Gear', '② 装厨具') + '</button>';
-          var ckBtn = cookInfo.canCook
-            ? '<button class="card-act-btn cook" data-act="cook-hand" data-cid="' + c.id + '">' + t('③ Cook!', '③ 开火！') + '</button>'
-            : '<button class="card-act-btn disabled" disabled>' + t('③ Cook', '③ 缺食材') + '</button>';
-          actionBtns = eqBtn + ckBtn;
+          actionBtns = cookInfo.canCook
+            ? '<button class="card-act-btn cook full" data-act="cook-hand" data-cid="' + c.id + '">' + t('③ Cook Dish!', '③ 开火掌勺！') + '</button>'
+            : '<button class="card-act-btn disabled full" disabled>' + t('③ Need Ingredients', '③ 食材不足') + '</button>';
         }
       }
 
@@ -2502,8 +2563,8 @@
         { t: 2, lbl: '2°', sub: c.starsHalf + '★', cls: 'z-low' },
         { t: 3, lbl: '3°', sub: c.starsHalf + '★', cls: 'z-low' },
         { t: 4, lbl: '4°', sub: c.starsHalf + '★', cls: 'z-low' },
-        { t: 5, lbl: '5°⭐', sub: c.starsGold + '★!', cls: 'z-gold' },
-        { t: 6, lbl: '6°⭐⭐', sub: c.starsGold + '★!', cls: 'z-gold' },
+        { t: 5, lbl: '5°⭐', sub: c.starsGold + '★+1🧂', cls: 'z-gold' },
+        { t: 6, lbl: '6°⭐⭐', sub: c.starsGold + '★+1🧂', cls: 'z-gold' },
         { t: 7, lbl: '7°🔥', sub: c.starsPerf + '★+1材', cls: 'z-perf' },
         { t: 8, lbl: '💥8°+', sub: t('1★+1🧂', '爆1★+1🧂'), cls: 'z-bust' }
       ];
@@ -2540,9 +2601,10 @@
           } else if (a.type === 'WOK_PLATE') {
             var plateCls = w.temp === 7 ? 'perfect' : (w.temp >= 5 ? 'gold' : 'low');
             var starPreview = w.temp === 7 ? c.starsPerf : (w.temp >= 5 ? c.starsGold : c.starsHalf);
+            var searSpiceNote = (w.temp >= 5 && w.temp <= 6) ? '+1🧂' : '';
             primaryBtns.push('<button class="wok-btn plate ' + plateCls + '" data-act="wok-plate">' +
-              '🛎️ ' + t('Plate at ' + w.temp + '° (' + starPreview + '★' + (w.startedAtBell && w.temp >= 5 ? '+1★Bell' : '') + ')',
-                        w.temp + '° 停火出锅（' + starPreview + '★' + (w.startedAtBell && w.temp >= 5 ? '+品鉴铃1★' : '') + '）') +
+              '🛎️ ' + t('Plate at ' + w.temp + '° (' + starPreview + '★' + searSpiceNote + (w.startedAtBell && w.temp >= 5 ? '+2★Bell' : '') + ')',
+                        w.temp + '° 停火出锅（' + starPreview + '★' + searSpiceNote + (w.startedAtBell && w.temp >= 5 ? '+品鉴铃2★' : '') + '）') +
             '</button>');
           } else if (a.type === 'WOK_ACCEPT_BUST') {
             primaryBtns.push('<button class="wok-btn bust" data-act="wok-bust">' +
@@ -2661,7 +2723,7 @@
       } else if (isHumanActing && state.phase === 'PREP_OPTIONAL') {
         dockHtml = '<div class="action-dock">' +
           '<button class="dock-btn primary full" data-act="skip-prep">' +
-            t('Skip Prep → Go to Step 3 Main Action', '跳过备菜 → 进入第 3 步主行动') +
+            t('Skip Step 2 (Prep / Gear) → Go to Step 3', '跳过第 2 步（备菜/装厨具）→ 进入第 3 步') +
           '</button></div>';
       } else if (isHumanActing && state.phase === 'MAIN_ACTION') {
         dockHtml = '<div class="action-dock">' +
@@ -2722,7 +2784,7 @@
               '<b>' + (p0.firstDishDone ? '🔴✓ ' : '🔴○ ') + (p1.firstDishDone ? '🔵✓' : '🔵○') + '</b>' +
             '</div>' +
             '<div class="ms-row">' +
-              '<span>🥈 ' + t('1st Dual Gear (+2★ excl)', '首达双厨具 (+2★独占)') + '</span>' +
+              '<span>🥈 ' + t('1st Dual Gear (+2★+1🃏)', '首达双厨具 (+2★摸1牌)') + '</span>' +
               '<b>' + (state.dualGearClaimedBy === 0 ? '🔴+2★' : (state.dualGearClaimedBy === 1 ? '🔵+2★' : t('Open!', '待争夺'))) + '</b>' +
             '</div>' +
             '<div class="ms-row">' +
@@ -2829,8 +2891,8 @@
                 renderDishCard(c.id, 'inspect') +
                 '<div class="zoom-card-notes">' +
                   '<p><b>① ' + t('Discard to Prep (Step 2):', '弃牌备菜（第2步）：') + '</b> ' + t(c.prepTextEn, c.prepTextZh) + '</p>' +
-                  '<p><b>② ' + t('Equip as Kitchen Gear (Step 3A):', '横置当主动厨具（第3步A）：') + '</b> ' + t(c.gearNameEn, c.gearNameZh) + ' — ' + t(c.gearDescEn, c.gearDescZh) + '</p>' +
-                  '<p><b>③ ' + t('Cook as Signature Dish (Step 3C):', '开火烹饪名菜（第3步C）：') + '</b> ' + t(c.dishBonusEn, c.dishBonusZh) + '</p>' +
+                  '<p><b>② ' + t('Equip as Kitchen Gear (Step 2 · Free empty / 1🧂 swap):', '横置当主动厨具（第2步 · 空位免费/替旧1🧂）：') + '</b> ' + t(c.gearNameEn, c.gearNameZh) + ' — ' + t(c.gearDescEn, c.gearDescZh) + '</p>' +
+                  '<p><b>③ ' + t('Cook as Signature Dish (Step 3B):', '开火烹饪名菜（第3步B）：') + '</b> ' + t(c.dishBonusEn, c.dishBonusZh) + '</p>' +
                 '</div>' +
               '</div>' +
             '</div>' +
@@ -2852,12 +2914,12 @@
                     '每回合先顺时针走 1~2 步免费（每多走1步付1🧂），领取对应档口的食材筹码与手牌。停在对手同格触发【挤位】（对手免费摸1张牌）！') +
                 '</p></div>' +
                 '<div class="rule-step-card"><b>2. ' + t('Multi-Use Cards (Hand ≤ 2)', '一卡三用闭环（手牌上限2）') + '</b><p>' +
-                  t('Every card works 3 ways: ① Discard in Step 2 for instant Prep tokens; ② Equip as permanent Kitchen Gear (max 2; 1st chef to 2 gear scores +2★!); ③ Cook as a Signature Dish (from Hand OR Open Menu!).',
-                    '每张名菜卡兼具三种用途：①第2步弃置换取备菜筹码；②装设为常驻横置厨具（上限2件，率先满2件独占+2★）；③凑齐配方开火冲星（可直接烹饪中央公开菜单）！') +
+                  t('Every card works 3 ways: ① Discard in Step 2 for instant Prep tokens; ② Or Equip in Step 2 as permanent Kitchen Gear (empty slot free, 1🧂 to swap; 1st to 2 gear scores +2★ & Draw 1!); ③ Still Cook in Step 3!',
+                    '每张名菜卡兼具三种用途：①第2步弃置换取备菜筹码；②或第2步免费装空位厨具（替旧付1🧂，率先满2件独占+2★并摸1牌，第3步照常可掌勺）；③凑齐配方开火冲星！') +
                 '</p></div>' +
                 '<div class="rule-step-card"><b>3. ' + t('1° Start · Blackjack Wok Heat', '1°起锅 · 21点式添柴控温') + '</b><p>' +
-                  t('Every dish starts at 1° with a free Blazing Die (+1~6° → 0% first-roll bust!). Push with free Blazing Die (+1~6°) or pay 1🧂 for Simmer Die (+1°/+2°). Plate at 5°–6° for Golden ★, hit exact 7° for Master Chef ★ + keep 1 ingredient, or bust at 8°+ (save with 🧊 Ice -2°)!',
-                    '统一 1° 起锅，首投免费猛火骰（1~6°）绝不爆锅！随后可随时停火出锅，或追投免费猛火骰 / 付1🧂投小火骰（+1/+2°）。5°~6°拿黄金星，恰好7°拿极品高星并留1份食材，8°+超温可用🧊救锅冰(-2°)或砂锅救回！') +
+                  t('Every dish starts at 1° with a free Blazing Die (+1~6° → 0% first-roll bust!). Plate at 5°–6° for Golden ★ + 1🧂 Spice (+2★ at Seat ⑧!), hit exact 7° for Master Chef ★ + keep 1 ingredient, or bust at 8°+ (save with 🧊 Ice -2°)!',
+                    '统一 1° 起锅，首投免费猛火骰（1~6°）绝不爆锅！5°~6°拿黄金星并领1🧂回锅香料（⑧品鉴铃起锅额外+2★），恰好7°拿极品高星并留1份食材，8°+超温可用🧊救锅冰(-2°)或砂锅救回！') +
                 '</p></div>' +
                 '<div class="rule-step-card"><b>4. ' + t('Follow & 18★ Equal Endgame', '回合外跟随与 18★ 平权终局') + '</b><p>' +
                   t('If the active chef doesn’t cook, the other chef may pay 1🧂 to Follow (+1 Ingredient or Draw 1). Collect 3 distinct Cuisine Stamps (🔥💧🌿⚡) for +3★! Reaching 18★ triggers Equal-Turns Endgame!',

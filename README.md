@@ -7,7 +7,7 @@
 *文件绝不上传云端 · 免注册打开即用 · 零遥测编辑器与浏览器扩展 · 原创双人打印即玩策略桌游*
 
 [![Open Live Web Portal](https://img.shields.io/badge/Live_Portal-963239327.github.io-10b981?style=for-the-badge&logo=githubpages&logoColor=white)](https://963239327.github.io/craftleaf-studio/)
-[![GitHub Release v1.0.0](https://img.shields.io/badge/GitHub_Release-v1.0.0_Free_Downloads-3b82f6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/963239327/craftleaf-studio/releases/tag/v1.0.0)
+[![GitHub Release v1.1.0](https://img.shields.io/badge/GitHub_Release-v1.1.0_Free_Downloads-3b82f6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/963239327/craftleaf-studio/releases/latest)
 [![Play Star Chef in Browser](https://img.shields.io/badge/Play_Free_HTML5_Game-Star_Chef_vs._AI-f59e0b?style=for-the-badge)](https://963239327.github.io/craftleaf-studio/play/)
 [![Studio All-Access Pass](https://img.shields.io/badge/All--Access_Pro_Pass-%2419_Lifetime_Key-8b5cf6?style=for-the-badge)](https://963239327.github.io/craftleaf-studio/#all-access)
 
@@ -67,9 +67,9 @@ An offline-first financial command center built for freelancers, indie hackers, 
 
 ---
 
-## 🎲 Original 2-Player Print & Play Tabletop Trilogy + Browser AI Game
+## 🎲 Original 2-Player Print & Play Tabletop Games (7 Bilingual Titles) + Browser AI Game
 
-Three Monte-Carlo-balanced, tactile 3–4 sheet strategy board games crafted for ISO A4, North American US Letter (`8.5×11"`), and Eco Low-Ink home printing (*原创双人打印即玩微桌游三部曲*):
+Seven Monte-Carlo-balanced, tactile 2–4 sheet strategy board games crafted for ISO A4, North American US Letter (`8.5×11"`), and Eco Low-Ink home printing (*7 款原创中英双语双人打印即玩微桌游：三部曲 + 2 页扑克双人对决四重奏*):
 
 <p align="center">
   <a href="https://963239327.github.io/craftleaf-studio/play/">
@@ -77,13 +77,22 @@ Three Monte-Carlo-balanced, tactile 3–4 sheet strategy board games crafted for
   </a>
 </p>
 
-1. **🍳 Star Chef Showdown: Rondel Bistro (`《星厨对决》`)** — 8-seat clockwise rondel movement × multi-use dish cards × 21° wok push-your-luck heat control.
+1. **🍳 Star Chef Showdown: Rondel Bistro (`《星厨对决》` v0.7.9)** — 8-seat clockwise rondel movement × multi-use dish cards × 1° Blackjack wok push-your-luck heat control (18★ endgame).
    - **[▶ Play Solo vs. Sous-Chef AI in Your Browser (Free HTML5)](https://963239327.github.io/craftleaf-studio/play/)** · **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf)**
-2. **🌾 Woodland Seasons: Emerald Valley (`《四季森友》`)** — Friendly-bump worker placement across an 8-solar-term clock, 24 four-way rotating habitat tiles, stone canals & 12 symbiotic woodland critters.
+2. **🌾 Woodland Seasons: Emerald Valley (`《四季森友》` v0.8.10)** — Friendly-bump worker placement across an 8-solar-term clock, 24 four-way rotating habitat tiles, stone canals & 12 symbiotic woodland critters.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf)**
-3. **🔮 Cloudspire Alchemy: Skyward Grimoires (`《云塔炼金》`)** — Pair 3 printed sheets (including foldable weighted **3D paper cloud towers**) with any standard 54-card poker deck for tense grimoire engine building.
+3. **🔮 Cloudspire Alchemy: Skyward Grimoires (`《云塔炼金》` v0.7.5)** — Pair 3 printed sheets (including foldable weighted **3D paper cloud towers**) with any standard 54-card poker deck for tense grimoire engine building.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf)**
+4. **⛵ Tidal Trade League: Archipelago Routes (`《潮汐商盟》` v0.3.3 · 2 Sheets + Poker Deck)** — Harbor wholesale loading, live commodity market crash & monopoly contracts.
+   - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/tidal_trade_league_sample_preview.pdf)**
+5. **🏛️ Duchy of Firenze: Renaissance Guilds (`《翡冷翠公国》` v0.2.5 · 2 Sheets + Poker Deck)** — 3-Age `3-4-5` open-/hidden-row pyramid draft with instant military, guild & prestige victories.
+   - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/duchy_of_firenze_sample_preview.pdf)**
+6. **🚀 Stargate Jump: Deep Space Epoch (`《星门跃迁》` v0.3.5 · 2 Sheets + Poker Deck)** — Simultaneous `A–5` Command Order phase selection with 1-round cooldown lock & `3×3` Starmap colonization.
+   - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/stargate_jump_sample_preview.pdf)**
+7. **🏺 Grand Curio Museum: Time-Track Curators (`《万象博物院》` v0.2.5 · 2 Sheets + Poker Deck)** — Non-alternating 20-step Time Corridor (`Trailing Curator Always Acts`) & `3×3` dual-axis gallery curation.
+   - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/grand_curio_museum_sample_preview.pdf)**
 
+👉 **Explore the 2-Page Poker Quartet Guide:** [English Deep-Dive Guide](https://963239327.github.io/craftleaf-studio/seo/2-page-poker-deck-print-and-play-board-games-for-2-players.html) · [中文图解指南](https://963239327.github.io/craftleaf-studio/cn-guides/2-page-poker-deck-2-player-print-and-play-board-games-zh.html)
 👉 **Designing your own board game?** Check out the **[Tabletop PnP HTML-to-PDF & 10,000-Run Monte Carlo Creator Kit ($12.99)](https://963239327.github.io/craftleaf-studio/#creator-kit)** (dual A4/Letter CSS print framework, 3D standee/tower die-cuts, 60 commercial-free SVG icons & Python balance simulator).
 
 ---
@@ -96,9 +105,13 @@ Three Monte-Carlo-balanced, tactile 3–4 sheet strategy board games crafted for
 | `cleanprint-studio-edge-chromium-v1.1.0.zip` | Edge / Chrome / Brave Extension (`v1.1.0`) | [Download `.zip`](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-edge-chromium-v1.1.0.zip) |
 | `cleanprint-studio-firefox-amo-v1.1.0.zip` | Mozilla Firefox Extension (`v1.1.0`) | [Download `.zip`](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-firefox-amo-v1.1.0.zip) |
 | `SoloFounder_OS_FREE_Starter_Kit.zip` | `$0` Solo-Founder Finance & AI Starter Pack | [Get Free on Gumroad](https://stardustdemo.gumroad.com/l/solofounder-starter-kit) |
-| `star_chef_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf) |
-| `woodland_seasons_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf) |
-| `cloudspire_alchemy_sample_preview.pdf` | 1-Page Watermarked PnP Sample | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf) |
+| `star_chef_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.7.9`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf) |
+| `woodland_seasons_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.8.10`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf) |
+| `cloudspire_alchemy_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.7.5`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf) |
+| `tidal_trade_league_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.3.3`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/tidal_trade_league_sample_preview.pdf) |
+| `duchy_of_firenze_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.2.5`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/duchy_of_firenze_sample_preview.pdf) |
+| `stargate_jump_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.3.5`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/stargate_jump_sample_preview.pdf) |
+| `grand_curio_museum_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.2.5`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/grand_curio_museum_sample_preview.pdf) |
 
 ---
 
