@@ -993,16 +993,27 @@
         if (proCfg.priceUsd && proCfg.priceCny && priceEl) {
           priceEl.innerHTML = proCfg.priceUsd + ' <span style="font-size:16px;font-weight:600;color:#94a3b8;">/ ' + proCfg.priceCny + '</span>';
         }
-        var targetProUrl = currentLang === 'zh' ? (proCfg.checkoutUrlZh || '#pro-unlock-box') : (proCfg.checkoutUrlEn || '#pro-unlock-box');
-        if (targetProUrl.indexOf('/extensions/pasteshield/#pro') !== -1) {
-          targetProUrl = '#pro-unlock-box';
+        var rawProUrl = currentLang === 'zh' ? String(proCfg.checkoutUrlZh || '').trim() : String(proCfg.checkoutUrlEn || '').trim();
+        if (rawProUrl.indexOf('/extensions/pasteshield/#pro') !== -1) {
+          rawProUrl = '';
         }
-        if (buyProBtn) buyProBtn.href = targetProUrl;
+        if (buyProBtn) {
+          if (rawProUrl) {
+            buyProBtn.href = rawProUrl;
+            buyProBtn.style.display = '';
+          } else {
+            buyProBtn.style.display = 'none';
+          }
+        }
         if (heroProBtn) heroProBtn.href = '#pro';
         if (buyAllBtn) {
-          buyAllBtn.href = currentLang === 'zh'
-            ? (allCfg.checkoutUrlZh || '../../index.html#all-access')
-            : (allCfg.checkoutUrlEn || '../../index.html#all-access');
+          var rawAllUrl = currentLang === 'zh' ? String(allCfg.checkoutUrlZh || '').trim() : String(allCfg.checkoutUrlEn || '').trim();
+          if (rawAllUrl) {
+            buyAllBtn.href = rawAllUrl;
+            buyAllBtn.style.display = '';
+          } else {
+            buyAllBtn.style.display = 'none';
+          }
         }
       }
 

@@ -2179,24 +2179,31 @@
       var portal = (mon.brand && mon.brand.portalUrl) || 'https://963239327.github.io/craftleaf-studio/';
       if (isItchEmbed()) {
         return {
-          starChef: portal + 'games/previews/star-chef-showdown-sample.pdf',
-          woodland: portal + 'games/previews/woodland-seasons-sample.pdf',
-          cloudspire: portal + 'games/previews/cloudspire-alchemy-sample.pdf',
-          catalog: portal + 'games/'
+          starChef: portal + 'games/previews/star_chef_sample_preview.pdf',
+          woodland: portal + 'games/previews/woodland_seasons_sample_preview.pdf',
+          cloudspire: portal + 'games/previews/cloudspire_alchemy_sample_preview.pdf',
+          catalog: portal + (state.lang === 'zh'
+            ? 'cn-guides/2-page-poker-deck-2-player-print-and-play-board-games-zh.html'
+            : 'seo/2-page-poker-deck-print-and-play-board-games-for-2-players.html')
         };
       }
       return {
-        starChef: '../games/previews/star-chef-showdown-sample.pdf',
-        woodland: '../games/previews/woodland-seasons-sample.pdf',
-        cloudspire: '../games/previews/cloudspire-alchemy-sample.pdf',
-        catalog: '../games/'
+        starChef: '../games/previews/star_chef_sample_preview.pdf',
+        woodland: '../games/previews/woodland_seasons_sample_preview.pdf',
+        cloudspire: '../games/previews/cloudspire_alchemy_sample_preview.pdf',
+        catalog: state.lang === 'zh'
+          ? '../cn-guides/2-page-poker-deck-2-player-print-and-play-board-games-zh.html'
+          : '../seo/2-page-poker-deck-print-and-play-board-games-for-2-players.html'
       };
     }
 
     function getBundleCheckoutUrl() {
       var mon = getMonetization();
       var prod = (mon.products && mon.products.pnpTrilogyBundle) || DEFAULT_MONETIZATION.products.pnpTrilogyBundle;
-      if (state.lang === 'zh' && prod.mianbaoduoUrl) return prod.mianbaoduoUrl;
+      if (state.lang === 'zh') {
+        var mbd = String(prod.mianbaoduoUrl || '').trim();
+        return (mbd && mbd !== 'https://mbd.pub/') ? mbd : '';
+      }
       if (isItchEmbed() && prod.itchUrl) return prod.itchUrl;
       return prod.gumroadUrl || prod.itchUrl || 'https://963239327.github.io/craftleaf-studio/#games';
     }
@@ -2860,14 +2867,16 @@
             '</div>' +
           '</div>' +
           '<div class="trilogy-cta-row">' +
-            '<a class="cta-bundle-btn" href="' + checkoutUrl + '" target="_blank" rel="noopener">' +
-              '🖨️ ' + t('Get Complete 3-Game Print & Play Bundle (' + (prod.priceUsd || '$7.99') + ')', '立即解锁 3 款桌游完整高清打印合集包（' + priceStr + '）') +
-            '</a>' +
+            (checkoutUrl
+              ? ('<a class="cta-bundle-btn" href="' + checkoutUrl + '" target="_blank" rel="noopener">' +
+                  '🖨️ ' + t('Get Complete 3-Game Print & Play Bundle (' + (prod.priceUsd || '$7.99') + ')', '立即解锁 3 款桌游完整高清打印合集包（' + priceStr + '）') +
+                '</a>')
+              : '') +
             '<a class="cta-secondary-btn" href="' + samples.catalog + '" target="_blank" rel="noopener">' +
-              '📚 ' + t('All Free Previews', '查看全部试阅页') +
+              '📚 ' + t('All 7 Free Previews', '查看全7作免费试阅页') +
             '</a>' +
-            '<a class="cta-tip-btn" href="' + tipUrl + '" target="_blank" rel="noopener">' +
-              '☕ ' + t('Tip Jar', '请作者喝咖啡') +
+            '<a class="cta-tip-btn" href="' + tipUrl + '" data-craftleaf-tip="1" target="_blank" rel="noopener">' +
+              '☕ ' + t('Tip Jar', '微信赞赏作者') +
             '</a>' +
           '</div>' +
           affHtml +

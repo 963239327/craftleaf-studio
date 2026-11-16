@@ -823,27 +823,37 @@
 
     if ($('pnpBundleLink')) {
       var pnpHref = state.lang === 'zh'
-        ? (pnp.mianbaoduoUrl || pnp.gumroadUrl || '../play/index.html')
+        ? (pnp.mianbaoduoUrl || '../play/index.html')
         : (pnp.gumroadUrl || pnp.itchUrl || '../play/index.html');
       $('pnpBundleLink').href = pnpHref;
-      var pnpPrice = state.lang === 'zh' ? (pnp.priceCny || '¥19.9') : (pnp.priceUsd || '$7.99');
-      $('pnpBundleLink').textContent = t('pnpBuyBtn') + ' (' + pnpPrice + ')';
+      if (state.lang === 'zh' && !pnp.mianbaoduoUrl) {
+        $('pnpBundleLink').textContent = '▶ 在线试玩《星厨对决》';
+      } else {
+        var pnpPrice = state.lang === 'zh' ? (pnp.priceCny || '¥19.9') : (pnp.priceUsd || '$7.99');
+        $('pnpBundleLink').textContent = t('pnpBuyBtn') + ' (' + pnpPrice + ')';
+      }
     }
 
     if ($('modalBuyProLink')) {
-      var checkoutPro = state.lang === 'zh' ? (proCfg.checkoutUrlZh || proCfg.checkoutUrlEn) : proCfg.checkoutUrlEn;
-      // Avoid self-hash reload loop if checkoutUrl points to #unlock-pro placeholder before live store bind
-      if (!checkoutPro || checkoutPro.indexOf('#unlock-pro') !== -1) {
-        $('modalBuyProLink').href = (cfg.tips && (state.lang === 'zh' ? cfg.tips.afdianUrl : cfg.tips.kofiUrl)) || 'https://gumroad.com/';
-      } else {
+      var checkoutPro = state.lang === 'zh' ? String(proCfg.checkoutUrlZh || '').trim() : String(proCfg.checkoutUrlEn || '').trim();
+      if (checkoutPro && checkoutPro.indexOf('#unlock-pro') === -1) {
         $('modalBuyProLink').href = checkoutPro;
+        $('modalBuyProLink').style.display = '';
+        var proPrice = state.lang === 'zh' ? (proCfg.priceCny || '¥29.9') : (proCfg.priceUsd || '$9.00');
+        $('modalBuyProLink').textContent = (state.lang === 'zh' ? '购买 CardSheet Pro 激活码 (' : 'Buy CardSheet Pro Key (') + proPrice + ')';
+      } else {
+        $('modalBuyProLink').style.display = 'none';
       }
-      var proPrice = state.lang === 'zh' ? (proCfg.priceCny || '¥29.9') : (proCfg.priceUsd || '$9.00');
-      $('modalBuyProLink').textContent = (state.lang === 'zh' ? '购买 CardSheet Pro 激活码 (' : 'Buy CardSheet Pro Key (') + proPrice + ')';
     }
 
     if ($('modalBuyAllLink')) {
-      $('modalBuyAllLink').href = (state.lang === 'zh' ? allCfg.checkoutUrlZh : allCfg.checkoutUrlEn) || '../index.html#all-access';
+      var checkoutAll = state.lang === 'zh' ? String(allCfg.checkoutUrlZh || '').trim() : String(allCfg.checkoutUrlEn || '').trim();
+      if (checkoutAll) {
+        $('modalBuyAllLink').href = checkoutAll;
+        $('modalBuyAllLink').style.display = '';
+      } else {
+        $('modalBuyAllLink').style.display = 'none';
+      }
     }
   }
 

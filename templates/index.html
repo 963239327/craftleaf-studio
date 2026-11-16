@@ -470,24 +470,35 @@ Write a crisp 130-word reply that:
     Array.prototype.forEach.call(document.querySelectorAll('.js-pro-price'), function (el) {
       el.textContent = priceUsd;
     });
-    if (kit.freeLiteUrl) {
-      Array.prototype.forEach.call(document.querySelectorAll('.free-cta'), function (a) {
-        a.href = kit.freeLiteUrl;
-      });
-    }
+    var freeDirectZipUrl = 'https://github.com/963239327/craftleaf-studio/releases/latest/download/SoloFounder_OS_FREE_Starter_Kit.zip';
+    Array.prototype.forEach.call(document.querySelectorAll('.free-cta'), function (a) {
+      var isZhBtn = a.getAttribute('data-lang') === 'zh' || a.id === 'btnFreeGumroadZh';
+      a.href = isZhBtn ? (kit.freeLiteUrlZh || freeDirectZipUrl) : (kit.freeLiteUrl || freeDirectZipUrl);
+    });
     if (kit.fullPackUrlEn) {
       Array.prototype.forEach.call(document.querySelectorAll('.pro-en-cta'), function (a) {
         a.href = kit.fullPackUrlEn;
       });
     }
-    if (kit.fullPackUrlZh) {
-      Array.prototype.forEach.call(document.querySelectorAll('.pro-zh-cta'), function (a) {
+    Array.prototype.forEach.call(document.querySelectorAll('.pro-zh-cta'), function (a) {
+      if (kit.fullPackUrlZh) {
         a.href = kit.fullPackUrlZh;
-      });
-    }
+      } else {
+        a.removeAttribute('data-lang');
+        a.style.display = 'none';
+      }
+    });
     if (prods.allAccessPass) {
       if (prods.allAccessPass.checkoutUrlEn) document.getElementById('allAccessCta').href = prods.allAccessPass.checkoutUrlEn;
-      if (prods.allAccessPass.checkoutUrlZh) document.getElementById('allAccessCtaZh').href = prods.allAccessPass.checkoutUrlZh;
+      var aaZhBtn = document.getElementById('allAccessCtaZh');
+      if (aaZhBtn) {
+        if (prods.allAccessPass.checkoutUrlZh) {
+          aaZhBtn.href = prods.allAccessPass.checkoutUrlZh;
+        } else {
+          aaZhBtn.removeAttribute('data-lang');
+          aaZhBtn.style.display = 'none';
+        }
+      }
     }
 
     // 3. Instant Browser-Generated Free Sample SaaS Audit CSV (Zero static .zip/.pdf files in public-web!)

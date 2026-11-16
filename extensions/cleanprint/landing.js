@@ -73,12 +73,24 @@
 
     var buyProBtn = document.getElementById('btnCheckoutPro');
     if (buyProBtn) {
-      buyProBtn.href = (pageState.lang === 'zh' ? proMeta.checkoutUrlZh : proMeta.checkoutUrlEn) || '#pro-verifier';
+      var proUrl = pageState.lang === 'zh' ? String(proMeta.checkoutUrlZh || '').trim() : String(proMeta.checkoutUrlEn || '').trim();
+      if (proUrl) {
+        buyProBtn.href = proUrl;
+        buyProBtn.style.display = '';
+      } else {
+        buyProBtn.style.display = 'none';
+      }
     }
 
     var buyAllBtn = document.getElementById('btnCheckoutAllAccess');
     if (buyAllBtn) {
-      buyAllBtn.href = (pageState.lang === 'zh' ? bundleMeta.checkoutUrlZh : bundleMeta.checkoutUrlEn) || '../../index.html#all-access';
+      var allUrl = pageState.lang === 'zh' ? String(bundleMeta.checkoutUrlZh || '').trim() : String(bundleMeta.checkoutUrlEn || '').trim();
+      if (allUrl) {
+        buyAllBtn.href = allUrl;
+        buyAllBtn.style.display = '';
+      } else {
+        buyAllBtn.style.display = 'none';
+      }
     }
 
     var affContainer = document.getElementById('affiliateSuppliesMount');

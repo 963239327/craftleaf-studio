@@ -286,9 +286,12 @@
   function detectActiveLang() {
     if (typeof document === 'undefined') return 'en';
     var de = document.documentElement;
-    if (de.classList && de.classList.contains('zh')) return 'zh';
-    if (document.body && (document.body.classList.contains('lang-zh') || document.body.getAttribute('data-lang') === 'zh')) return 'zh';
-    var hl = (de.getAttribute('lang') || '').toLowerCase();
+    if (de && de.classList && de.classList.contains('zh')) return 'zh';
+    if (document.body) {
+      if (document.body.classList && document.body.classList.contains('lang-zh')) return 'zh';
+      if (document.body.getAttribute && document.body.getAttribute('data-lang') === 'zh') return 'zh';
+    }
+    var hl = (de && de.getAttribute ? (de.getAttribute('lang') || '') : ((de && de.lang) || '')).toLowerCase();
     if (hl.indexOf('zh') === 0) return 'zh';
     try {
       var sl = localStorage.getItem('craftleaf_lang');
@@ -315,40 +318,65 @@
     return (p || 'portal-home').replace(/[^a-zA-Z0-9_-]+/g, '-').slice(0, 64);
   }
 
+  function parseQueryMap(qStr) {
+    var out = Object.create(null);
+    var clean = String(qStr || '').replace(/^\?/, '');
+    if (!clean) return out;
+    var parts = clean.split('&');
+    for (var i = 0; i < parts.length; i++) {
+      if (!parts[i]) continue;
+      var eq = parts[i].indexOf('=');
+      var k = eq === -1 ? parts[i] : parts[i].slice(0, eq);
+      var v = eq === -1 ? '' : parts[i].slice(eq + 1);
+      try {
+        out[decodeURIComponent(k.replace(/\+/g, ' '))] = decodeURIComponent(v.replace(/\+/g, ' '));
+      } catch (_e) {}
+    }
+    return out;
+  }
+
   function captureIncomingUtm() {
-    if (typeof location === 'undefined' || !location.search) return;
+    if (typeof location === 'undefined' || !location.search || typeof sessionStorage === 'undefined' || !sessionStorage) return;
     try {
-      var sp = new URLSearchParams(location.search);
-      var src = sp.get('utm_source');
+      var sp = parseQueryMap(location.search);
+      var src = sp.utm_source;
       if (!src) return;
       var saved = {
-        utm_source: src.slice(0, 48),
-        utm_medium: (sp.get('utm_medium') || 'social').slice(0, 32),
-        utm_campaign: (sp.get('utm_campaign') || 'organic').slice(0, 64)
+        utm_source: String(src).slice(0, 48),
+        utm_medium: String(sp.utm_medium || 'social').slice(0, 32),
+        utm_campaign: String(sp.utm_campaign || 'organic').slice(0, 64)
       };
       sessionStorage.setItem(UTM_SESSION_KEY, JSON.stringify(saved));
     } catch (_e) {}
   }
 
   function decorateGumroadUrl(href) {
-    if (!href || href.indexOf('gumroad.com') === -1) return href;
+    if (!href || String(href).indexOf('gumroad.com') === -1) return href;
     try {
-      var u = new URL(href, typeof location !== 'undefined' ? location.href : 'https://963239327.github.io');
+      var raw = String(href);
+      var hashIdx = raw.indexOf('#');
+      var hashPart = hashIdx === -1 ? '' : raw.slice(hashIdx);
+      var beforeHash = hashIdx === -1 ? raw : raw.slice(0, hashIdx);
+      var qIdx = beforeHash.indexOf('?');
+      var basePart = qIdx === -1 ? beforeHash : beforeHash.slice(0, qIdx);
+      var qPart = qIdx === -1 ? '' : beforeHash.slice(qIdx + 1);
+      var params = parseQueryMap(qPart);
+
       var stored = null;
-      try { stored = JSON.parse(sessionStorage.getItem(UTM_SESSION_KEY) || 'null'); } catch (_e) {}
-      if (!u.searchParams.get('utm_source')) {
-        u.searchParams.set('utm_source', (stored && stored.utm_source) || 'craftleaf-portal');
+      if (typeof sessionStorage !== 'undefined' && sessionStorage) {
+        try { stored = JSON.parse(sessionStorage.getItem(UTM_SESSION_KEY) || 'null'); } catch (_e) {}
       }
-      if (!u.searchParams.get('utm_medium')) {
-        u.searchParams.set('utm_medium', (stored && stored.utm_medium) || 'web');
+      if (!params.utm_source) params.utm_source = (stored && stored.utm_source) || 'craftleaf-portal';
+      if (!params.utm_medium) params.utm_medium = (stored && stored.utm_medium) || 'web';
+      if (stored && stored.utm_campaign && !params.utm_campaign) params.utm_campaign = stored.utm_campaign;
+      if (!params.utm_content) params.utm_content = currentPageSlug();
+
+      var pairs = [];
+      var keys = Object.keys(params);
+      for (var i = 0; i < keys.length; i++) {
+        pairs.push(encodeURIComponent(keys[i]) + '=' + encodeURIComponent(String(params[keys[i]])));
       }
-      if (stored && stored.utm_campaign && !u.searchParams.get('utm_campaign')) {
-        u.searchParams.set('utm_campaign', stored.utm_campaign);
-      }
-      if (!u.searchParams.get('utm_content')) {
-        u.searchParams.set('utm_content', currentPageSlug());
-      }
-      return u.toString();
+      return basePart + (pairs.length ? '?' + pairs.join('&') : '') + hashPart;
     } catch (_e) {
       return href;
     }
@@ -471,10 +499,15 @@
     titleEl.textContent = isZh ? (opts.titleZh || '✅ 已在本地导出完成（0字节上传）！') : (opts.titleEn || '✅ Exported 100% Locally!');
     toast.appendChild(titleEl);
 
+    var resolvedProUrl = isZh ? String(opts.proUrlZh || '').trim() : String(opts.proUrl || '').trim();
+    if (!resolvedProUrl && isZh && opts.proUrl && String(opts.proUrl).toLowerCase().indexOf('gumroad.com') === -1) {
+      resolvedProUrl = String(opts.proUrl).trim();
+    }
+
     var bodyEl = document.createElement('div');
     bodyEl.style.cssText = 'font-size:12.8px;color:#cbd5e1;line-height:1.45;margin-bottom:12px;';
     bodyEl.textContent = isZh
-      ? (opts.bodyZh || '如果这个免费工具帮您省下了开销或时间，欢迎请作者喝杯咖啡或解锁终身 Pro 版！')
+      ? (resolvedProUrl ? (opts.bodyZh || '如果这个免费工具帮您省下了开销或时间，欢迎请作者喝杯咖啡或解锁终身 Pro 版！') : '100% 纯浏览器本地完成，0 字节上传云端。如果帮您省下了开销或时间，欢迎微信扫码请作者喝杯咖啡！')
       : (opts.bodyEn || 'Saved time or money today? Support ongoing ad-free maintenance or unlock Lifetime Pro!');
     toast.appendChild(bodyEl);
 
@@ -484,16 +517,16 @@
     var tipB = document.createElement('button');
     tipB.type = 'button';
     tipB.style.cssText = 'flex:1;padding:8px 10px;border-radius:9px;border:none;background:#10b981;color:#042f1e;font-weight:800;font-size:12.5px;cursor:pointer;';
-    tipB.textContent = isZh ? '☕ 赞赏支持' : '☕ Buy a Coffee';
+    tipB.textContent = isZh ? '☕ 微信赞赏支持' : '☕ Buy a Coffee';
     tipB.onclick = function () {
       if (toast.parentNode) toast.parentNode.removeChild(toast);
       openTipModal(lang);
     };
     row.appendChild(tipB);
 
-    if (opts.proUrl) {
+    if (resolvedProUrl) {
       var proA = document.createElement('a');
-      proA.href = decorateGumroadUrl(opts.proUrl);
+      proA.href = decorateGumroadUrl(resolvedProUrl);
       proA.target = '_blank';
       proA.rel = 'noopener';
       proA.style.cssText = 'flex:1;text-align:center;padding:8px 10px;border-radius:9px;background:#f59e0b;color:#111827;font-weight:800;font-size:12.5px;text-decoration:none;';
@@ -574,7 +607,7 @@
       var buyEl = ev.target && ev.target.closest ? ev.target.closest('[data-buy-event], a[href*="gumroad.com"], a[href*="mbd.pub"], a[href*="afdian.com"]') : null;
       if (buyEl) {
         var evtId = buyEl.getAttribute('data-buy-event') ||
-          ((detectPageLang() === 'zh' ? 'zh-' : 'en-') + ((location && location.pathname) || '/').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, ''));
+          ((detectActiveLang() === 'zh' ? 'zh-' : 'en-') + ((location && location.pathname) || '/').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, ''));
         trackEvent(evtId, (buyEl.textContent || '').trim());
       }
       var gumA = ev.target && ev.target.closest ? ev.target.closest('a[href*="gumroad.com"]') : null;

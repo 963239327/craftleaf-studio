@@ -69,8 +69,8 @@
           </ul>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-          <a class="btn" id="ctaMenuCustom" href="#intake" onclick="return handleCustomB2BCta('menu', this);">📝 生成 48h 菜单翻新需求单 ($65) →</a>
-          <a class="btn-sec" id="ctaMenuDiy" href="https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?wanted=true" target="_blank" rel="noopener">💳 即买即下：食材/菜名英文词典 ($7) →</a>
+          <a class="btn" id="ctaMenuCustom" href="#intake" onclick="return handleCustomB2BCta('menu', this);">📝 生成 48h 菜单翻新需求单 →</a>
+          <a class="btn-sec" id="ctaMenuDiy" href="../cn-guides/us-grocery-bilingual-chinese-cooking-ingredients-mapping.html">📖 免费查阅食材/菜名中英对照指南 →</a>
         </div>
       </article>
 
@@ -84,13 +84,13 @@
             <div class="good" style="margin-top:6px;">✅ 专业客观房源描述：”Sun-drenched 1BR/1BA Private-Entry Suite · In-unit W/D, dedicated EV-ready parking, 8-min walk to Light Rail. Verifiable income 3× rent, 700+ credit &amp; clean rental history.“</div>
           </div>
           <ul style="font-size:13.8px;color:#cbd5e1;padding-left:20px;">
-            <li><strong>即买即用《美国租房合同 12 大条款解读与逐屋验房表》($7)</strong>：付款后 1 秒直接下载高清 PDF</li>
-            <li><strong>定制 3:4 手机竖版双语招租海报 + 入住欢迎页 ($35)</strong>：免注册生成标准定制需求单</li>
+            <li><strong>配套免费查阅《美国租房合同高频英文条款解读与验房避坑指南》</strong></li>
+            <li><strong>定制 3:4 手机竖版双语招租海报 + 入住欢迎页</strong>：免注册生成标准定制需求单</li>
           </ul>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-          <a class="btn" id="ctaLandlordKit" href="https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?wanted=true" target="_blank" rel="noopener">💳 立即下载租约解读+逐屋验房表 ($7) →</a>
-          <a class="btn-sec" id="ctaLandlordCustom" href="#intake" onclick="return handleCustomB2BCta('rental', this);">📝 定制双语招租海报 ($35) →</a>
+          <a class="btn" id="ctaLandlordCustom" href="#intake" onclick="return handleCustomB2BCta('rental', this);">📝 生成双语招租海报需求单 →</a>
+          <a class="btn-sec" id="ctaLandlordKit" href="../cn-guides/us-apartment-lease-security-deposit-early-termination-clauses.html">📖 免费阅读租约条款与验房指南 →</a>
         </div>
       </article>
     </div>
@@ -188,15 +188,26 @@
         if (st) st.textContent = '✓ 已复制需求单，正在打开专属结账页...';
         window.open(finalUrl, '_blank', 'noopener');
       } else {
-        var diyFallback = kind === 'menu'
-          ? (b2b.restaurantDiyGlossaryUrl || 'https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet')
-          : (b2b.landlordLeaseKitUrl || 'https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide');
-        if (st) st.textContent = '✓ 需求单已复制到剪贴板！可先下载 $7 自助包并在收据邮件直接回复本需求单启动 48h 定制。';
-        void diyFallback;
+        if (st) st.textContent = '✓ 定制需求单已复制到剪贴板！在线直付通道开通前请暂存备用。';
       }
     }
     window.addEventListener('DOMContentLoaded', function () {
       var b2b = getB2BCfg();
+      var prods = (window.CRAFTLEAF_MONETIZATION && window.CRAFTLEAF_MONETIZATION.products) || {};
+      var ingZh = prods.chineseGroceryCheatSheet && prods.chineseGroceryCheatSheet.checkoutUrlZh;
+      var leaseZh = prods.leaseGuide && prods.leaseGuide.checkoutUrlZh;
+      if (ingZh) {
+        var d1 = document.getElementById('ctaMenuDiy');
+        d1.href = ingZh;
+        d1.target = '_blank';
+        d1.textContent = '💳 即买即下：食材/菜名中英速查包 →';
+      }
+      if (leaseZh) {
+        var d2 = document.getElementById('ctaLandlordKit');
+        d2.href = leaseZh;
+        d2.target = '_blank';
+        d2.textContent = '💳 立即下载租约解读+逐屋验房表 →';
+      }
       if (b2b.restaurantCustomCheckoutUrl) {
         var mBtn = document.getElementById('ctaMenuCustom');
         mBtn.href = b2b.restaurantCustomCheckoutUrl;

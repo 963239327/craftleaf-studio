@@ -1001,11 +1001,23 @@
     var allCfg = cfg.allAccessPass || {};
     var buyEl = $('buyProCta');
     if (buyEl) {
-      buyEl.href = (state.lang === 'zh' && idCfg.checkoutUrlZh) ? idCfg.checkoutUrlZh : (idCfg.checkoutUrlEn || '#unlock-pro');
+      var targetIdUrl = state.lang === 'zh' ? String(idCfg.checkoutUrlZh || '').trim() : String(idCfg.checkoutUrlEn || '').trim();
+      if (targetIdUrl) {
+        buyEl.href = targetIdUrl;
+        buyEl.style.display = '';
+      } else {
+        buyEl.style.display = 'none';
+      }
     }
     var allEl = $('buyAllAccessCta');
-    if (allEl && allCfg.checkoutUrlEn) {
-      allEl.href = (state.lang === 'zh' && allCfg.checkoutUrlZh) ? allCfg.checkoutUrlZh : allCfg.checkoutUrlEn;
+    if (allEl) {
+      var targetAllUrl = state.lang === 'zh' ? String(allCfg.checkoutUrlZh || '').trim() : String(allCfg.checkoutUrlEn || '').trim();
+      if (targetAllUrl) {
+        allEl.href = targetAllUrl;
+        allEl.style.display = '';
+      } else {
+        allEl.style.display = 'none';
+      }
     }
 
     var tips = (root.CRAFTLEAF_MONETIZATION && root.CRAFTLEAF_MONETIZATION.tips) || {};
