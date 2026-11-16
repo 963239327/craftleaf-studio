@@ -122,7 +122,7 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
       <a href="../../../tools/id-photo/index.html">🪪 $0.39 证件照</a>
       <a href="../../../cn-guides/index.html">📚 华人避坑指南库</a>
       <a href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">⭐ GitHub 开源手册</a>
-      <a href="../../../store/index.html" style="color:#fcd34d;font-weight:700;">🛒 精品 PDF 书架 (26款)</a>
+      <a href="../../../store/index.html" style="color:#fcd34d;font-weight:700;">🛍️ 数字总目录</a>
     </nav>
   </div>
 </header>
@@ -157,13 +157,19 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
         <button class="btn btn-primary" type="button" onclick="nextCard()">下一句考官指令 →</button>
       </div>
     </div>
-    <div class="cta-banner">
+    
+    <div class="cta-banner no-print">
       <div>
-        <h3 style="margin:0 0 6px;">想要《华盛顿州笔试高频数字精讲 + 36 张可裁剪路考口令卡 + 办证清单》完整 PDF？</h3>
-        <div style="color:#cbd5e1;font-size:14px;">原创提炼限速/停车距离/校车避让/坡道口诀（不含抄袭题库），考前打印装兜里随时过一遍。</div>
+        <span class="pill" style="margin-bottom:6px;">100% 纯本地免费工具 &amp; 开源速查库</span>
+        <h3 style="margin:4px 0;">边算边用：所有在线计算器均在浏览器本地运行，零注册零隐私上传</h3>
+        <div style="color:#cbd5e1;font-size:14px;">配套双语速查清单已开源在 GitHub；若觉得帮您省下了真金白银，欢迎点击页脚微信赞赏支持独立维护。</div>
       </div>
-      <a class="btn btn-gold" id="ctaWaStore" href="https://stardustdemo.gumroad.com/l/wa-driver-license-chinese-study-roadtest-pack" target="_blank" rel="noopener">查看华州驾照通关 PDF 包 →</a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-primary" href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">⭐ 免费查阅 GitHub 开源双语速查库 →</a>
+        
+      </div>
     </div>
+    
     <div class="disclaimer">声明：本训练器为基于华盛顿州公开驾驶考试项目的原创英文听力与安全动作辅助工具，不包含任何官方笔试真题题库，亦非 WA DOL 官方软件；最新法规请以 dol.wa.gov 官方《Washington Driver Guide》为准。</div>
     <script>
     const RAW_CMDS = [["Start the engine and show me your left, right, and stop hand signals.", "启动车辆，并向考官演示左转、右转和停车手势信号", "左臂平伸=左转；左臂向上弯90°=右转；左臂向下弯90°=减速/停车。出发前检查考官安全带！"], ["Turn on your windshield wipers, defroster, and hazard lights.", "依次打开雨刷、前挡风除雾器和危险报警双闪灯", "上车先认准除雾图标（扇形波浪线）和红色双三角应急灯，盲摸秒开不低头慌乱。"], ["When it is safe, pull out into traffic.", "确认安全后，起步汇入车流", "打转向灯 → 看内后视镜+侧镜 → 必须明显扭头过肩看盲区 (Shoulder Check) 再动轮！"], ["At the next traffic light, make a left turn.", "在下一个红绿灯路口左转", "绿圆灯（非绿箭头）左转必须礼让对向直行车与斑马线行人，严禁切入对向车道。"], ["When safe, change lanes to the left.", "在安全时向左变道", "SMOG 四步：Signal 打灯 → Mirror 看双镜 → Over-the-shoulder 扭头看左盲区 → Go 平稳保持车速变道（切忌边看盲区边猛减速）。"], ["Change lanes back to the right when safe.", "安全时变回右侧车道", "同样必须做右侧明显扭头看盲区！变道完成后记得回正关闭转向灯。"], ["Pull parallel to the curb and stop.", "靠路边道牙平行停车", "打右转向灯 + 看右后视镜 + 扭头看右盲区（防自行车道！），距路缘 12 英寸（约30cm）以内停稳，不要蹭轮胎！"], ["Back around the corner. Stay close to the curb.", "华州必考灵魂项目：沿弯道倒车绕过街角", "挂 R 档前 360° 环视 → 右手可扶副驾椅背，全程扭头透过后挡风玻璃往后看（只盯倒车影像直接不及格！），车速极慢，轮胎距马路牙子保持 12–18 英寸，遇到任何车或行人立刻刹停礼让！"], ["Park as if you are parking uphill with a curb.", "模拟「有道牙上坡停车」", "口诀唯一特例 Up-Up-and-Away：方向盘向【左】打（远离马路牙子），让前轮后侧抵住道牙，拉手刹挂 P 档！"], ["Now imagine you are parking downhill with a curb.", "模拟「有道牙下坡停车」", "除了上坡有牙向左，其余三种坡道停车方向盘一律向【右】（朝向路边）打！拉紧手刹挂 P 档。"], ["Imagine parking uphill WITHOUT a curb.", "模拟「无道牙上坡停车」", "没有道牙挡轮胎时，无论上坡下坡方向盘一律向【右】打（万一溜车滑向路外草地而非滚入车道中心）。"], ["Approach this uncontrolled intersection and proceed straight.", "通过前方无红绿灯也无 Stop 牌的无控路口", "松油门备刹，左右观察，严格礼让已经在路口内的车辆以及你【右手边】同时到达的车辆！"], ["Notice the school zone ahead. Adjust your speed accordingly.", "注意前方学区限速标志，调整车速", "黄灯闪烁或指示牌时段内必须提前把车速稳稳压在 20 mph 或以下（21 mph 都可能直接挂科）！"], ["Perform a parallel park behind that vehicle.", "在那辆车后方完成侧方平行泊车", "与前车平行对齐打右灯 → 倒车前360°观察+回头看 → 停稳后车身与路缘平行且在 12 英寸内。"], ["Turn right at the next stop sign.", "在下一个 Stop 标志处右转", "必须在白色停止线（无停止线则在人行横道前）完全刹停死 2 秒（轮胎零滚动），先看左-右-左确认无行人再走。"], ["Enter the roundabout and take the second exit.", "进入环岛并从第二个出口驶出", "进环岛前减速礼让环岛内【左侧】来车，严禁在环岛内变道或停车，出环岛前打右转向灯。"], ["Merge onto the highway and match the flow of traffic.", "经匝道汇入高速并匹配车流速度", "在加速车道果断提速，打左灯+看镜+扭头看左后盲区汇入，跟车保持至少 3–4 秒安全车距。"], ["Return to the testing office and park in any open stall.", "返回考点停车场并停入任意空车位", "进停车场依然限速慢行、打转向灯、礼让行人；停稳拉手刹 → 挂 P 档 → 考官说熄火后再熄火，圆满通关！"]];
@@ -199,8 +205,6 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
     }
     window.addEventListener('DOMContentLoaded', () => {
       renderCard();
-      const u = window.CRAFTLEAF_MONETIZATION?.products?.waDriverGuide?.checkoutUrlZh;
-      if (u) document.getElementById('ctaWaStore').href = u;
     });
     </script>
     
@@ -209,13 +213,13 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
 <footer>
   <div class="container">
     <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-      <div>© 2026 CraftLeaf &amp; Pixel Studio · 100% 浏览器本地计算，零隐私数据上传</div>
+      <div>© 2026 CraftLeaf Studio (青叶像素工坊) · 100% 浏览器本地计算，零隐私数据上传</div>
       <div>
         <button type="button" data-craftleaf-tip="1" style="background:rgba(245,158,11,0.18);color:#fcd34d;border:1px solid rgba(245,158,11,0.45);border-radius:8px;padding:4px 10px;font-size:12.5px;font-weight:700;cursor:pointer;margin-right:8px;">☕ 请作者喝杯咖啡</button>
         <a href="../../../index.html">主站首页</a> ·
         <a href="../../../tools/us-life/index.html">北美生活工具</a> ·
         <a href="../../../cn-guides/index.html">50篇中文指南</a> ·
-        <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">Gumroad 数字商店</a>
+        <a href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">GitHub 开源库</a>
       </div>
     </div>
   </div>

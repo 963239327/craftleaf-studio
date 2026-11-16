@@ -239,10 +239,10 @@
             <p data-lang="zh">复制代码或报错日志给外部 AI 前自动替换密钥与内网地址为可读占位符，收到回复后一键无损还原。</p>
           </div>
           <div class="card-actions">
-            <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer" target="_blank" rel="noopener noreferrer" data-lang="en">VS Code Marketplace →</a>
-            <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer" target="_blank" rel="noopener noreferrer" data-lang="zh">VS Code 官方市场 →</a>
-            <a class="btn btn-secondary" href="https://open-vsx.org/extension/craftleaf-studio/pasteshield-ai-secret-sanitizer" target="_blank" rel="noopener noreferrer" data-lang="en">Open VSX (Cursor) →</a>
-            <a class="btn btn-secondary" href="https://open-vsx.org/extension/craftleaf-studio/pasteshield-ai-secret-sanitizer" target="_blank" rel="noopener noreferrer" data-lang="zh">Open VSX (Cursor) →</a>
+            <a class="btn btn-primary" href="https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.0.vsix" target="_blank" rel="noopener noreferrer" data-lang="en">Download v1.1.0 (.vsix) →</a>
+            <a class="btn btn-primary" href="https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.0.vsix" target="_blank" rel="noopener noreferrer" data-lang="zh">下载 v1.1.0 (.vsix) →</a>
+            <a class="btn btn-secondary" href="https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer" target="_blank" rel="noopener noreferrer" data-lang="en">VS Marketplace (v1.0)</a>
+            <a class="btn btn-secondary" href="https://open-vsx.org/extension/craftleaf-studio/pasteshield-ai-secret-sanitizer" target="_blank" rel="noopener noreferrer" data-lang="en">Open VSX (v1.0)</a>
             <a class="btn btn-secondary" href="./extensions/pasteshield/index.html" data-lang="en">Live Playground</a>
             <a class="btn btn-secondary" href="./extensions/pasteshield/index.html" data-lang="zh">在线脱敏沙盒</a>
           </div>
@@ -560,19 +560,30 @@
       var prods = cfg.products || {};
       var tips = cfg.tips || {};
       if (prods.allAccessPass) {
-        document.getElementById('allAccessLink').href = prods.allAccessPass.checkoutUrlEn || '#all-access';
-        document.getElementById('allAccessLinkZh').href = prods.allAccessPass.checkoutUrlZh || '#all-access';
+        var aaEn = document.getElementById('allAccessLink');
+        var aaZh = document.getElementById('allAccessLinkZh');
+        aaEn.href = prods.allAccessPass.checkoutUrlEn || '#all-access';
+        aaEn.setAttribute('data-buy-event', 'home-en-primary-all-access');
+        if (prods.allAccessPass.checkoutUrlZh) {
+          aaZh.href = prods.allAccessPass.checkoutUrlZh;
+          aaZh.setAttribute('data-buy-event', 'home-zh-primary-all-access');
+        } else {
+          aaZh.style.display = 'none';
+        }
       }
       if (prods.tabletopCreatorKit) {
         document.getElementById('creatorKitBtn').href = prods.tabletopCreatorKit.gumroadUrl || prods.tabletopCreatorKit.itchUrl || '#creator-kit';
-        document.getElementById('creatorKitBtnZh').href = prods.tabletopCreatorKit.gumroadUrl || '#creator-kit';
+        var ckZh = document.getElementById('creatorKitBtnZh');
+        if (prods.tabletopCreatorKit.checkoutUrlZh) ckZh.href = prods.tabletopCreatorKit.checkoutUrlZh;
+        else ckZh.style.display = 'none';
       }
       if (prods.pnpTrilogyBundle) {
         Array.prototype.forEach.call(document.querySelectorAll('.pnp-bundle-link'), function (a) {
           a.href = prods.pnpTrilogyBundle.gumroadUrl || prods.pnpTrilogyBundle.itchUrl || '#games';
         });
         Array.prototype.forEach.call(document.querySelectorAll('.pnp-bundle-link-zh'), function (a) {
-          a.href = prods.pnpTrilogyBundle.gumroadUrl || prods.pnpTrilogyBundle.mianbaoduoUrl || '#games';
+          if (prods.pnpTrilogyBundle.mianbaoduoUrl) a.href = prods.pnpTrilogyBundle.mianbaoduoUrl;
+          else a.style.display = 'none';
         });
       }
       if (tips.kofiUrl) {

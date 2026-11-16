@@ -514,15 +514,37 @@
     return false;
   }
 
-  function initOptionalAnalytics() {
-    if (typeof Image === 'undefined' || typeof location === 'undefined' || isExtensionRuntime()) return;
+  function resolveGoatCounterEndpoint() {
+    if (typeof Image === 'undefined' || typeof location === 'undefined' || isExtensionRuntime()) return '';
     var cfg = getConfig();
     var gc = cfg.analytics && cfg.analytics.goatcounterEndpoint ? String(cfg.analytics.goatcounterEndpoint).trim() : '';
-    if (!gc || !/^https:\/\//i.test(gc)) return;
+    if (!gc || !/^https:\/\//i.test(gc)) return '';
+    var endpoint = gc.replace(/\/+$/, '');
+    if (endpoint.slice(-6) !== '/count') endpoint += '/count';
+    return endpoint;
+  }
+
+  function trackEvent(eventCode, title) {
+    var endpoint = resolveGoatCounterEndpoint();
+    if (!endpoint || !eventCode) return;
     try {
-      var endpoint = gc.replace(/\/+$/, '');
-      if (endpoint.slice(-6) !== '/count') endpoint += '/count';
-      var q = '?p=' + encodeURIComponent((location.pathname || '/') + (location.search || '')) +
+      var safeCode = String(eventCode).replace(/[^a-zA-Z0-9/_-]+/g, '-').slice(0, 80);
+      var q = '?p=' + encodeURIComponent('buy-click/' + safeCode) +
+        '&e=true' +
+        '&t=' + encodeURIComponent(String(title || safeCode).slice(0, 120)) +
+        '&rnd=' + String(Date.now());
+      var beacon = new Image(1, 1);
+      beacon.decoding = 'async';
+      beacon.src = endpoint + q;
+    } catch (_e) {}
+  }
+
+  function initOptionalAnalytics() {
+    var endpoint = resolveGoatCounterEndpoint();
+    if (!endpoint) return;
+    try {
+      // Zero PII: send pathname only — never send query strings, hashes, keys, emails, or photos (#42)
+      var q = '?p=' + encodeURIComponent(location.pathname || '/') +
         '&t=' + encodeURIComponent((typeof document !== 'undefined' && document.title) || '') +
         '&rnd=' + String(Date.now());
       var beacon = new Image(1, 1);
@@ -549,6 +571,12 @@
         openTipModal(forced);
         return;
       }
+      var buyEl = ev.target && ev.target.closest ? ev.target.closest('[data-buy-event], a[href*="gumroad.com"], a[href*="mbd.pub"], a[href*="afdian.com"]') : null;
+      if (buyEl) {
+        var evtId = buyEl.getAttribute('data-buy-event') ||
+          ((detectPageLang() === 'zh' ? 'zh-' : 'en-') + ((location && location.pathname) || '/').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, ''));
+        trackEvent(evtId, (buyEl.textContent || '').trim());
+      }
       var gumA = ev.target && ev.target.closest ? ev.target.closest('a[href*="gumroad.com"]') : null;
       if (gumA && gumA.href) {
         gumA.href = decorateGumroadUrl(gumA.href);
@@ -566,7 +594,8 @@
     renderAffiliateBar: renderAffiliateBar,
     openTipModal: openTipModal,
     showValueMomentPrompt: showValueMomentPrompt,
-    decorateGumroadUrl: decorateGumroadUrl
+    decorateGumroadUrl: decorateGumroadUrl,
+    trackEvent: trackEvent
   };
 
   if (typeof module !== 'undefined' && module.exports) {

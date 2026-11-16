@@ -41,7 +41,7 @@
       "priceCny": "¥69",
       "gumroadPermalink": "craftleaf-all-access",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/craftleaf-all-access",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/craftleaf-all-access"
+      "checkoutUrlZh": ""
     },
     "idPhotoPro": {
       "keyPrefix": "IDPRO",
@@ -49,7 +49,7 @@
       "priceCny": "¥12.9",
       "gumroadPermalink": "idphoto-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/idphoto-pro",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/idphoto-pro"
+      "checkoutUrlZh": ""
     },
     "invoicePro": {
       "keyPrefix": "INVPRO",
@@ -57,7 +57,7 @@
       "priceCny": "¥29.9",
       "gumroadPermalink": "invoice-studio-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/invoice-studio-pro",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/invoice-studio-pro"
+      "checkoutUrlZh": ""
     },
     "cardsheetPro": {
       "keyPrefix": "CARDPRO",
@@ -65,7 +65,7 @@
       "priceCny": "¥29.9",
       "gumroadPermalink": "cardsheet-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/cardsheet-pro",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/cardsheet-pro"
+      "checkoutUrlZh": ""
     },
     "cleanPrintPro": {
       "keyPrefix": "CLEANPRO",
@@ -73,7 +73,7 @@
       "priceCny": "¥19.9",
       "gumroadPermalink": "cleanprint-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/cleanprint-pro",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/cleanprint-pro"
+      "checkoutUrlZh": ""
     },
     "pasteShieldPro": {
       "keyPrefix": "SHIELDPRO",
@@ -81,7 +81,7 @@
       "priceCny": "¥29.9",
       "gumroadPermalink": "pasteshield-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/pasteshield-pro",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/pasteshield-pro"
+      "checkoutUrlZh": ""
     },
     "pnpTrilogyBundle": {
       "priceUsd": "$7.99",
@@ -111,7 +111,7 @@
       "priceUsd": "$9.99",
       "freeLiteUrl": "https://stardustdemo.gumroad.com/l/solofounder-starter-kit",
       "fullPackUrlEn": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro",
-      "fullPackUrlZh": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro"
+      "fullPackUrlZh": ""
     },
     "tabletopCreatorKit": {
       "priceUsd": "$12.99",
@@ -121,82 +121,82 @@
     "citizenshipPrep2025": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-citizenship-test-2025-chinese-prep",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-citizenship-test-2025-chinese-prep"
+      "checkoutUrlZh": ""
     },
     "bilingualAiPrompts": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "ai-prompt-pack-bilingual",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/ai-prompt-pack-bilingual"
+      "checkoutUrlZh": ""
     },
     "usPhoneBroadbandGuide": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "us-phone-broadband-guide",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-phone-broadband-guide"
+      "checkoutUrlZh": ""
     },
     "techInterviewPrep": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "tech-interview-english-prep",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/tech-interview-english-prep"
+      "checkoutUrlZh": ""
     },
     "waHealthInsurance2027": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "sxpiu",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/sxpiu"
+      "checkoutUrlZh": ""
     },
     "bilingualChineseRecipes": {
       "priceUsd": "$9.00",
       "gumroadPermalink": "bilingual-chinese-recipes-us-grocery",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/bilingual-chinese-recipes-us-grocery"
+      "checkoutUrlZh": ""
     },
     "chineseGroceryCheatSheet": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "ingredient-cheat-sheet",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet"
+      "checkoutUrlZh": ""
     },
     "groceryCashbackStacker": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "cashback-stacker",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/cashback-stacker"
+      "checkoutUrlZh": ""
     },
     "blackFridayGuide": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "black-friday-2026-chinese-guide",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/black-friday-2026-chinese-guide"
+      "checkoutUrlZh": ""
     },
     "taxPrepGuide": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-first-year-tax-prep-chinese-organizer",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-first-year-tax-prep-chinese-organizer"
+      "checkoutUrlZh": ""
     },
     "creditStarterGuide": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-credit-from-zero-chinese-guide",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-credit-from-zero-chinese-guide"
+      "checkoutUrlZh": ""
     },
     "waDriverGuide": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "wa-driver-license-chinese-study-roadtest-pack",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/wa-driver-license-chinese-study-roadtest-pack"
+      "checkoutUrlZh": ""
     },
     "healthcareKit": {
       "priceUsd": "$6.00",
       "gumroadPermalink": "us-healthcare-doctor-visit-bilingual-kit",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-healthcare-doctor-visit-bilingual-kit"
+      "checkoutUrlZh": ""
     },
     "leaseGuide": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-apartment-lease-12-clauses-chinese-guide",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide"
+      "checkoutUrlZh": ""
     },
     "settlingCarGuide": {
       "priceUsd": "$7.00",
       "gumroadPermalink": "us-settling-in-and-first-car-chinese-playbook",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-settling-in-and-first-car-chinese-playbook"
+      "checkoutUrlZh": ""
     },
     "newcomerMasterBundle": {
       "priceUsd": "$24.00",
       "gumroadPermalink": "us-newcomer-first-year-7in1-bundle",
-      "checkoutUrlZh": "https://stardustdemo.gumroad.com/l/us-newcomer-first-year-7in1-bundle"
+      "checkoutUrlZh": ""
     }
   },
   "affiliates": {

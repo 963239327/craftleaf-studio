@@ -122,7 +122,7 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
       <a href="../../../tools/id-photo/index.html">🪪 $0.39 证件照</a>
       <a href="../../../cn-guides/index.html">📚 华人避坑指南库</a>
       <a href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">⭐ GitHub 开源手册</a>
-      <a href="../../../store/index.html" style="color:#fcd34d;font-weight:700;">🛒 精品 PDF 书架 (26款)</a>
+      <a href="../../../store/index.html" style="color:#fcd34d;font-weight:700;">🛍️ 数字总目录</a>
     </nav>
   </div>
 </header>
@@ -190,13 +190,19 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
         </tbody>
       </table>
     </div>
+    
     <div class="cta-banner no-print">
       <div>
-        <h3 style="margin:0 0 6px;">想要《美国看病买药 140+ 症状词表 + 医保术语 + 天价账单 CPT 核对申诉脚本》完整 PDF？</h3>
-        <div style="color:#cbd5e1;font-size:14px;">含电话预约、CVS/Walgreens 处方转药房、华盛顿州医保选计划避坑与随身钱包急救卡。</div>
+        <span class="pill" style="margin-bottom:6px;">100% 纯本地免费工具 &amp; 开源速查库</span>
+        <h3 style="margin:4px 0;">边算边用：所有在线计算器均在浏览器本地运行，零注册零隐私上传</h3>
+        <div style="color:#cbd5e1;font-size:14px;">配套双语速查清单已开源在 GitHub；若觉得帮您省下了真金白银，欢迎点击页脚微信赞赏支持独立维护。</div>
       </div>
-      <a class="btn btn-gold" id="ctaMedStore" href="https://stardustdemo.gumroad.com/l/us-healthcare-doctor-visit-bilingual-kit" target="_blank" rel="noopener">查看看病与医保双语工具包 →</a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-primary" href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">⭐ 免费查阅 GitHub 开源双语速查库 →</a>
+        
+      </div>
     </div>
+    
     <script>
     const SYMPTOMS = [
       ["发烧寒战", "Fever and chills"],
@@ -255,8 +261,6 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
     }
     window.addEventListener('DOMContentLoaded', () => {
       initChips(); renderMed();
-      const u = window.CRAFTLEAF_MONETIZATION?.products?.healthcareKit?.checkoutUrlZh;
-      if (u) document.getElementById('ctaMedStore').href = u;
     });
     </script>
     
@@ -265,13 +269,13 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
 <footer>
   <div class="container">
     <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-      <div>© 2026 CraftLeaf &amp; Pixel Studio · 100% 浏览器本地计算，零隐私数据上传</div>
+      <div>© 2026 CraftLeaf Studio (青叶像素工坊) · 100% 浏览器本地计算，零隐私数据上传</div>
       <div>
         <button type="button" data-craftleaf-tip="1" style="background:rgba(245,158,11,0.18);color:#fcd34d;border:1px solid rgba(245,158,11,0.45);border-radius:8px;padding:4px 10px;font-size:12.5px;font-weight:700;cursor:pointer;margin-right:8px;">☕ 请作者喝杯咖啡</button>
         <a href="../../../index.html">主站首页</a> ·
         <a href="../../../tools/us-life/index.html">北美生活工具</a> ·
         <a href="../../../cn-guides/index.html">50篇中文指南</a> ·
-        <a href="https://stardustdemo.gumroad.com" target="_blank" rel="noopener">Gumroad 数字商店</a>
+        <a href="https://github.com/963239327/us-newcomer-bilingual-handbook" target="_blank" rel="noopener">GitHub 开源库</a>
       </div>
     </div>
   </div>
