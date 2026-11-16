@@ -20,10 +20,10 @@
   },
   "b2bServices": {
     "pendingRestaurantGumroadPermalink": "b2b-restaurant-menu-overhaul",
-    "restaurantCustomCheckoutUrl": "",
+    "restaurantCustomCheckoutUrl": "https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?option=3omHx0zNVUK8PW-b9tVg0A==&wanted=true",
     "restaurantDiyGlossaryUrl": "https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?wanted=true",
     "pendingLandlordGumroadPermalink": "b2b-landlord-rental-flyer",
-    "landlordCustomCheckoutUrl": "",
+    "landlordCustomCheckoutUrl": "https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?option=t8XKOlskRq76_g5d3h7ODA==&wanted=true",
     "landlordLeaseKitUrl": "https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?wanted=true",
     "intakeEmail": ""
   },
@@ -39,6 +39,7 @@
       "keyPrefix": "STUDIOALL",
       "priceUsd": "$19",
       "priceCny": "¥69",
+      "gumroadProductId": "_ozQI3vwerYovvH_VYeHYw==",
       "gumroadPermalink": "craftleaf-all-access",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/craftleaf-all-access",
       "checkoutUrlZh": ""
@@ -47,6 +48,7 @@
       "keyPrefix": "IDPRO",
       "priceUsd": "$3.99",
       "priceCny": "¥12.9",
+      "gumroadProductId": "T7A38LqQJjHcRe8BLTVwkg==",
       "gumroadPermalink": "idphoto-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/idphoto-pro",
       "checkoutUrlZh": ""
@@ -55,6 +57,7 @@
       "keyPrefix": "INVPRO",
       "priceUsd": "$9.00",
       "priceCny": "¥29.9",
+      "gumroadProductId": "GY_adoyDJdv8jaJ4qR6rTQ==",
       "gumroadPermalink": "invoice-studio-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/invoice-studio-pro",
       "checkoutUrlZh": ""
@@ -63,6 +66,7 @@
       "keyPrefix": "CARDPRO",
       "priceUsd": "$9.00",
       "priceCny": "¥29.9",
+      "gumroadProductId": "e7S_Kns46ox1pluH-heWAA==",
       "gumroadPermalink": "cardsheet-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/cardsheet-pro",
       "checkoutUrlZh": ""
@@ -71,6 +75,7 @@
       "keyPrefix": "CLEANPRO",
       "priceUsd": "$5.99",
       "priceCny": "¥19.9",
+      "gumroadProductId": "8I2tijAIf2opR98RlC6dSw==",
       "gumroadPermalink": "cleanprint-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/cleanprint-pro",
       "checkoutUrlZh": ""
@@ -79,6 +84,7 @@
       "keyPrefix": "SHIELDPRO",
       "priceUsd": "$9.00",
       "priceCny": "¥29.9",
+      "gumroadProductId": "bZpK_yrf74s1q7yszWnN-g==",
       "gumroadPermalink": "pasteshield-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/pasteshield-pro",
       "checkoutUrlZh": ""

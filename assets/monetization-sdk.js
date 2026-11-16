@@ -19,6 +19,14 @@
   var LEGACY_PREFIXES = ['craftleaf_license_', 'craftleaf_license_v2_'];
   var UTM_SESSION_KEY = 'craftleaf_utm_v1';
   var GUMROAD_VERIFY_URL = 'https://api.gumroad.com/v2/licenses/verify';
+  var GUMROAD_PRODUCT_IDS = {
+    'craftleaf-all-access': '_ozQI3vwerYovvH_VYeHYw==',
+    'idphoto-pro': 'T7A38LqQJjHcRe8BLTVwkg==',
+    'invoice-studio-pro': 'GY_adoyDJdv8jaJ4qR6rTQ==',
+    'cardsheet-pro': 'e7S_Kns46ox1pluH-heWAA==',
+    'cleanprint-pro': '8I2tijAIf2opR98RlC6dSw==',
+    'pasteshield-pro': 'bZpK_yrf74s1q7yszWnN-g=='
+  };
 
   // Strictly private in-memory verification map — never exported, never serialized as proof.
   var verifiedSessionSlots = Object.create(null);
@@ -85,15 +93,20 @@
     } catch (_e) {}
   }
 
-  async function verifyGumroadEndpoint(permalink, trimmedKey) {
+  async function verifyGumroadEndpoint(permalink, trimmedKey, explicitProductId) {
+    var gumroadProductId = explicitProductId || GUMROAD_PRODUCT_IDS[permalink] || '';
+    var formParams = {
+      product_permalink: permalink,
+      license_key: trimmedKey,
+      increment_uses_count: 'false'
+    };
+    if (gumroadProductId) {
+      formParams.product_id = gumroadProductId;
+    }
     var resp = await fetch(GUMROAD_VERIFY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: encodeFormBody({
-        product_permalink: permalink,
-        license_key: trimmedKey,
-        increment_uses_count: 'false'
-      })
+      body: encodeFormBody(formParams)
     });
     var data = await resp.json();
     if (data && data.success === true) {
@@ -101,7 +114,10 @@
       if (p && (p.refunded || p.chargebacked || p.disputed)) {
         return { valid: false, reason: 'refunded' };
       }
-      if (p && p.permalink && String(p.permalink) !== String(permalink)) {
+      if (p && p.product_id && gumroadProductId && String(p.product_id) !== String(gumroadProductId)) {
+        return { valid: false, reason: 'invalid' };
+      }
+      if (p && (!p.product_id || !gumroadProductId) && p.permalink && String(p.permalink) !== String(permalink)) {
         return { valid: false, reason: 'invalid' };
       }
       return { valid: true };
@@ -119,11 +135,14 @@
     var cfg = getConfig();
     var prod = (cfg.products && cfg.products[productId]) || {};
     var permalink = options.gumroadPermalink || prod.gumroadPermalink;
-    var allAccessPermalink = (cfg.products && cfg.products.allAccessPass && cfg.products.allAccessPass.gumroadPermalink) || 'craftleaf-all-access';
+    var explicitPid = options.gumroadProductId || prod.gumroadProductId || '';
+    var allAccessProd = (cfg.products && cfg.products.allAccessPass) || {};
+    var allAccessPermalink = allAccessProd.gumroadPermalink || 'craftleaf-all-access';
+    var allAccessPid = allAccessProd.gumroadProductId || GUMROAD_PRODUCT_IDS[allAccessPermalink] || '';
     if (!permalink) return { valid: false, reason: 'invalid' };
 
     try {
-      var primary = await verifyGumroadEndpoint(permalink, trimmed);
+      var primary = await verifyGumroadEndpoint(permalink, trimmed, explicitPid);
       if (primary.reason === 'refunded') {
         verifiedSessionSlots[productId] = false;
         removeCachedLicenseKey(productId);
@@ -138,7 +157,7 @@
       }
 
       if (permalink !== allAccessPermalink) {
-        var fallbackAll = await verifyGumroadEndpoint(allAccessPermalink, trimmed);
+        var fallbackAll = await verifyGumroadEndpoint(allAccessPermalink, trimmed, allAccessPid);
         if (fallbackAll.reason === 'refunded') {
           verifiedSessionSlots.allAccessPass = false;
           removeCachedLicenseKey('allAccessPass');
@@ -193,7 +212,7 @@
 
       checked++;
       try {
-        var res = await verifyGumroadEndpoint(expectedPermalink, parsed.licenseKey.trim());
+        var res = await verifyGumroadEndpoint(expectedPermalink, parsed.licenseKey.trim(), prod.gumroadProductId || '');
         if (res.valid) {
           verifiedSessionSlots[slot] = true;
           unlockedCount++;
