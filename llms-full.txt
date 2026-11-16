@@ -11,7 +11,8 @@
 - [Passport & Visa 4x6" ID Photo Print Sheet Maker ($0.39 CVS/Walgreens + Anti-Overscan Safe Bleed)](https://963239327.github.io/craftleaf-studio/tools/id-photo/): US 2x2", China 33x48mm, Schengen/UK 35x45mm, Canada 50x70mm, Japan 45x45mm on 300 DPI 4x6" sheet.
 - [No-Signup Freelancer Invoice, Quote & Receipt PDF Studio](https://963239327.github.io/craftleaf-studio/tools/invoice/): Instant commercial vector PDF invoices with QR payment links.
 - [CardSheet Duplex Flashcard & Tabletop PnP Aligner](https://963239327.github.io/craftleaf-studio/cardsheet/): Sub-millimeter back-side mirror X/Y offset calibration and guillotine crop marks.
-- [Star Chef Showdown — Free Browser Rondel Bistro Strategy Game](https://963239327.github.io/craftleaf-studio/play/): Playable solo vs. AI funnel for our single-sided Print-and-Play tabletop trilogy.
+- [Star Chef Showdown — Free Browser Rondel Bistro Strategy Game](https://963239327.github.io/craftleaf-studio/play/): Playable solo vs. AI funnel for our 7-game single-sided Print-and-Play tabletop lineup.
+- [7 Original 2-Player Print & Play Strategy Board Games (Including 4 Ultra-Minimalist 2-Page Standard Poker-Deck Duels)](https://963239327.github.io/craftleaf-studio/seo/2-page-poker-deck-print-and-play-board-games-for-2-players.html): *Tidal Trade League*, *Duchy of Firenze*, *Stargate Jump*, *Grand Curio Museum* (2 sheets + 1 54-card poker deck, zero coins, zero dice) plus *Woodland Seasons*, *Star Chef Showdown*, and *Cloudspire Alchemy* with 7 free sample PDFs.
 - [WA Driver License Road Test 36 Examiner Audio Flashcard Trainer](https://963239327.github.io/craftleaf-studio/tools/us-life/wa-road-test-trainer/): Interactive English audio command trainer for Washington State driving skills test.
 - [US Doctor Visit & Urgent Care English Nurse Triage Symptom Card Maker](https://963239327.github.io/craftleaf-studio/tools/us-life/doctor-symptom-card/): 100% local bilingual symptom, pain scale, allergy & free Mandarin interpreter request card generator.
 - [US Credit Card Statement Closing Date vs. Due Date & <9% FICO Simulator](https://963239327.github.io/craftleaf-studio/tools/us-life/credit-score-simulator/): Calculates exact pre-statement payment day & amount for newcomers starting from $500 secured cards.
@@ -40,6 +41,7 @@
 - [美国信用卡账单日 vs 还款日 & FICO <9% 黄金信用利用率提分模拟器](https://963239327.github.io/craftleaf-studio/tools/us-life/credit-score-simulator/): 刚来美国第一张$500押金卡怎么快速涨信用分？输入额度与Statement Closing Date，一秒算出提前还款日与金额，0利息养成750+信用分。
 - [2026 北美黑五折上折 + Rakuten返利 + 信用卡 + 消费税真实到手价计算器](https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/): 免费纯本地计算北美黑五折上折、商家Coupon、Rakuten/TopCashback税前返利、礼卡与各州消费税真实净到手价，一键对比官网高返现与Amazon直降谁更省钱。
 - [北美 Offer 税后到手薪资 & F-1 OPT 免 7.65% FICA 税对比计算器 (华州 vs 加州 vs 纽约)](https://963239327.github.io/craftleaf-studio/tools/us-life/offer-tax-calculator/): 100%本地计算：对比西雅图(华盛顿州0州税)、湾区(加州)与纽约市 Offer 税后真实到手收入，内置留学生 F-1 OPT Nonresident 免征 7.65% FICA 社保医保税核算。
+- [家里只有一副普通扑克牌，两个人怎么玩深度策略桌游？4款「2页A4免硬币」原创打印即玩双人神作 | 青叶像素工坊](https://963239327.github.io/craftleaf-studio/cn-guides/2-page-poker-deck-2-player-print-and-play-board-games-zh.html): 告别千篇一律的斗地主和干瞪眼！只需家用打印机打2张纸（第2页整张免裁棋盘，仅剪13～20枚立标）+ 1副54张普通扑克牌，零硬币零骰子畅玩《潮汐商盟》《翡冷翠公国》《星门跃迁》《万象博物院》四款蒙特卡洛平衡双人中策桌游。
 - [周末宅家不想刷手机？两张 A4 / Letter 纸打印就能玩的 3 款 20 分钟双人策略微桌游推荐 | CraftLeaf 北美华人实用指南](https://963239327.github.io/craftleaf-studio/cn-guides/couple-two-player-print-and-play-board-games-date-night.html): 免买几十刀大盒子吃灰，家用打印机 5 分钟印好就能跟伴侣或室友开局的料理对决、四季林地与云顶炼金术。
 - [给孩子印中英识字闪卡或备考单词卡，家用打印机正反面总是错位 3 毫米怎么校准？ | CraftLeaf 北美华人实用指南](https://963239327.github.io/craftleaf-studio/cn-guides/diy-flashcards-anki-printable-duplex-alignment-study-cards.html): 用毫米级背面镜像偏移补偿（Duplex Back-Offset Calibration）+ 共线直刀裁剪线，普通家用打印机也能做出工整双面卡片。
 - [为什么直接 Ctrl+P 打印 ChatGPT / Claude 长对话只出第一页且代码块被腰斩？省墨矢量 PDF 导出方案 | CraftLeaf 北美华人实用指南](https://963239327.github.io/craftleaf-studio/cn-guides/export-chatgpt-claude-conversations-to-clean-vector-pdf.html): 解决刷题笔记、报税问答、英文合同审阅长对话保存打印时的滚动容器截断、深色背景费墨粉与侧边栏遮挡顽疾。
@@ -94,6 +96,7 @@
 - [华盛顿州遇到校车闪红灯伸 Stop 牌，对向车道到底要不要停？分清这一条省下巨额罚单 | CraftLeaf 北美华人实用指南](https://963239327.github.io/craftleaf-studio/cn-guides/wa-school-bus-stop-paddle-two-lane-vs-median-rule.html): 拆解华州校车停靠避让三大场景：双向两车道必须全停 vs 三车道及以上/有实体隔离带的对向规则。
 - [华盛顿州坡道停车方向盘往哪打？3秒记住有无马路牙子上下坡口诀 | CraftLeaf 北美华人实用指南](https://963239327.github.io/craftleaf-studio/cn-guides/wa-uphill-downhill-curb-parking-wheel-direction.html): 一张表彻底搞清 Uphill with Curb（唯一向左打）与其余三种坡道停车向右打的物理原理与路考标准动作。
 - [西雅图第一个冬天雨夜反光与山口积雪开车保命清单：黑冰（Black Ice）、防雾与 WSDOT 轮胎防滑链规定 | CraftLeaf 北美华人实用指南](https://963239327.github.io/craftleaf-studio/cn-guides/wa-winter-driving-rain-black-ice-snoqualmie-pass-checklist.html): 帮刚拿华州驾照的新手适应太平洋西北岸冬季下午 4 点天黑、车道线反光看不清与 I-90 山口天气突变。
+- [4 Deep 2-Player Strategy Board Games Using 1 Standard Poker Deck + 2 Printed Sheets — CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/seo/2-page-poker-deck-print-and-play-board-games-for-2-players.html): Turn any household 54-card playing card deck + 2 single-sided printed sheets into 4 Monte-Carlo balanced 2-player euro & space-4X strategy board games (zero coins, zero dice, free sample PDFs).
 - [3D Papercraft Board Game Standee & Custom Deck Tuckbox Folding Guide](https://963239327.github.io/craftleaf-studio/seo/3d-papercraft-board-game-standee-folding-guide.html): Generate printable 3D A-frame monster/hero paper standees and custom millimeter-thick card tuckboxes in your browser — plus scoring, GSM cardstock & coin-weighting tips.
 - [Airbnb, Direct-Booking & Furnished Rental Stay Receipt PDF Generator](https://963239327.github.io/craftleaf-studio/seo/airbnb-short-term-rental-stay-receipt-pdf.html): Create itemized corporate lodging folios & paid stay receipts for direct-booking vacation rentals, Furnished Finder travel nurses, insurance ALE relocations & extended stays.
 - [Anki & Quizlet CSV/TSV to Printable Duplex PDF Flashcards Maker](https://963239327.github.io/craftleaf-studio/seo/anki-csv-to-printable-pdf-flashcards.html): Convert Anki decks, Quizlet exports, or pipe/tab-delimited CSV lists into double-sided A4 or US Letter PDF flashcards with millimeter duplex printer offset calibration.
@@ -170,6 +173,8 @@
 - `cleanPrintPro` ($5.99): https://stardustdemo.gumroad.com/l/cleanprint-pro
 - `pasteShieldPro` ($9.00): https://stardustdemo.gumroad.com/l/pasteshield-pro
 - `pnpTrilogyBundle` ($7.99): https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy
+- `pnpPokerQuartet` ($8.99): https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy
+- `pnpCompleteAnthology` ($13.99): https://stardustdemo.gumroad.com/l/craftleaf-all-access
 - `freelancerOsKit` ($9.99): https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro
 - `tabletopCreatorKit` ($12.99): https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit
 - `citizenshipPrep2025` ($7.00): https://stardustdemo.gumroad.com/l/us-citizenship-test-2025-chinese-prep

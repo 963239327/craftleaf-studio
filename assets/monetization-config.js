@@ -89,6 +89,22 @@
       "gumroadUrl": "https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy",
       "mianbaoduoUrl": ""
     },
+    "pnpPokerQuartet": {
+      "priceUsd": "$8.99",
+      "singlePriceUsd": "$3.99",
+      "priceCny": "¥22.9",
+      "pendingDedicatedGumroadPermalink": "poker-duel-quartet",
+      "itchUrl": "https://stardustdemo.itch.io/star-chef-showdown",
+      "gumroadUrl": "https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy",
+      "mianbaoduoUrl": ""
+    },
+    "pnpCompleteAnthology": {
+      "priceUsd": "$13.99",
+      "priceCny": "¥34.9",
+      "pendingDedicatedGumroadPermalink": "complete-7game-pnp-anthology",
+      "gumroadUrl": "https://stardustdemo.gumroad.com/l/craftleaf-all-access",
+      "mianbaoduoUrl": ""
+    },
     "freelancerOsKit": {
       "priceUsd": "$9.99",
       "freeLiteUrl": "https://stardustdemo.gumroad.com/l/solofounder-starter-kit",
