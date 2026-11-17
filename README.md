@@ -9,6 +9,7 @@
 [![Open Live Web Portal](https://img.shields.io/badge/Live_Portal-963239327.github.io-10b981?style=for-the-badge&logo=githubpages&logoColor=white)](https://963239327.github.io/craftleaf-studio/)
 [![GitHub Release v1.1.0](https://img.shields.io/badge/GitHub_Release-v1.1.0_Free_Downloads-3b82f6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/963239327/craftleaf-studio/releases/latest)
 [![Play Star Chef in Browser](https://img.shields.io/badge/Play_Free_HTML5_Game-Star_Chef_vs._AI-f59e0b?style=for-the-badge)](https://963239327.github.io/craftleaf-studio/play/)
+[![Afdian Official Page](https://img.shields.io/badge/%E7%88%B1%E5%8F%91%E7%94%B5_Afdian-ifdian.net%2Fa%2Fcraftleaf-9333ea?style=for-the-badge)](https://ifdian.net/a/craftleaf)
 [![Studio All-Access Pass](https://img.shields.io/badge/All--Access_Pro_Pass-%2419_Lifetime_Key-8b5cf6?style=for-the-badge)](https://963239327.github.io/craftleaf-studio/#all-access)
 
 ![100% Client-Side](https://img.shields.io/badge/architecture-100%25_local_browser_%26_RAM-success)

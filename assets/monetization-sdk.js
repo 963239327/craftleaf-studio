@@ -445,13 +445,16 @@
       qrImg.style.cssText = 'width:246px;height:246px;object-fit:contain;border-radius:14px;border:1px solid #e2e8f0;display:block;margin:0 auto 14px;';
       card.appendChild(qrImg);
 
-      var usdLink = document.createElement('a');
-      usdLink.href = coffeeUrl;
-      usdLink.target = '_blank';
-      usdLink.rel = 'noopener';
-      usdLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px 14px;border-radius:10px;background:#0f172a;color:#f8fafc;font-size:13.5px;font-weight:700;text-decoration:none;';
-      usdLink.textContent = '💳 使用美元信用卡 / Apple Pay 赞助 ($3+) →';
-      card.appendChild(usdLink);
+      var afdianUrl = String(tips.afdianUrl || '').trim();
+      var zhAltLink = document.createElement('a');
+      zhAltLink.href = afdianUrl || coffeeUrl;
+      zhAltLink.target = '_blank';
+      zhAltLink.rel = 'noopener';
+      zhAltLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px 14px;border-radius:10px;background:#7c3aed;color:#ffffff;font-size:13.5px;font-weight:700;text-decoration:none;';
+      zhAltLink.textContent = afdianUrl
+        ? '⚡ 前往爱发电主页支持（微信 / 支付宝）→'
+        : '💳 使用美元信用卡 / Apple Pay 赞助 ($3+) →';
+      card.appendChild(zhAltLink);
     } else {
       var hEn = document.createElement('h3');
       hEn.style.cssText = 'margin:2px 0 8px;font-size:21px;color:#0f172a;';
@@ -623,7 +626,7 @@
         openTipModal(forced);
         return;
       }
-      var buyEl = ev.target && ev.target.closest ? ev.target.closest('[data-buy-event], a[href*="gumroad.com"], a[href*="mbd.pub"], a[href*="afdian.com"]') : null;
+      var buyEl = ev.target && ev.target.closest ? ev.target.closest('[data-buy-event], a[href*="gumroad.com"], a[href*="mbd.pub"], a[href*="afdian.com"], a[href*="ifdian.net"]') : null;
       if (buyEl) {
         var evtId = buyEl.getAttribute('data-buy-event') ||
           ((detectActiveLang() === 'zh' ? 'zh-' : 'en-') + ((location && location.pathname) || '/').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, ''));

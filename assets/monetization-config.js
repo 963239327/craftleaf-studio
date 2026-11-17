@@ -31,7 +31,7 @@
     "kofiUrl": "https://stardustdemo.gumroad.com/l/coffee",
     "buyMeACoffeeUrl": "https://stardustdemo.gumroad.com/l/coffee",
     "stripeTipUrl": "https://stardustdemo.gumroad.com/l/coffee",
-    "afdianUrl": "",
+    "afdianUrl": "https://ifdian.net/a/craftleaf",
     "wechatQrPath": "assets/wechat-reward-qr.png"
   },
   "products": {
