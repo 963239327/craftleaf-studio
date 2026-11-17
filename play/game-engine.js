@@ -120,7 +120,7 @@
   }
 
   /* ==========================================================================
-   * 3. CANONICAL GAME DATA (v0.7.12 — 8 Rondel Seats & 12 Multi-Use Cards)
+   * 3. CANONICAL GAME DATA (v0.7.14 — 8 Rondel Seats & 12 Multi-Use Cards)
    * ========================================================================== */
   var CUISINES = {
     fire:  { id: 'fire',  icon: '🔥', en: 'Flame Grill', zh: '炙烤系', cls: 'cuisine-fire' },
@@ -1235,25 +1235,14 @@
         var dualMsgEn2 = '';
         var dualMsgZh2 = '';
         var claimedDual2 = false;
-        if (p.gears.length === 2 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
+        // v0.7.14 (#112): Sole ⭐ Dual-Gear +2★ & Draw 1 badge is claimed in Step 2 once chef already holds ≥1 Cuisine Stamp (0-stamp equip does not retroactively claim)
+        if (p.gears.length === 2 && countStamps(p) >= 1 && state.dualGearClaimedBy === null) {
           state.dualGearClaimedBy = pIdx;
           state.dualGearClaimedRound = state.round;
           addStars(state, pIdx, 2);
           claimedDual2 = true;
-          dualMsgEn2 = ' 🥈 Dual-Gear Milestone: +2★ & Draw 1!';
-          dualMsgZh2 = ' 🥈 率先装满双厨具：获 +2★ 并摸 1 牌！';
-        } else if (
-          pIdx === 1 &&
-          p.gears.length === 2 &&
-          state.dualGearClaimedBy === 0 &&
-          state.dualGearClaimedRound === state.round &&
-          !state.dualGearSharedP2
-        ) {
-          state.dualGearSharedP2 = true;
-          addStars(state, pIdx, 2);
-          claimedDual2 = true;
-          dualMsgEn2 = ' 🥈 Same-Round Equal-Rights Dual-Gear: +2★ & Draw 1!';
-          dualMsgZh2 = ' 🥈 当轮平权双厨具：同享 +2★ 并摸 1 牌！';
+          dualMsgEn2 = ' 🥈 Dual-Gear Badge (≥1 Stamp): +2★ & Draw 1!';
+          dualMsgZh2 = ' 🥈 双厨具神兵奖（≥1流派章）：夺唯一 +2★ 并摸 1 牌！';
         }
 
         addLog(
@@ -1291,25 +1280,13 @@
         var dualMsgEn = '';
         var dualMsgZh = '';
         var claimedDual = false;
-        if (p.gears.length === 2 && opp.gears.length < 2 && state.dualGearClaimedBy === null) {
+        if (p.gears.length === 2 && countStamps(p) >= 1 && state.dualGearClaimedBy === null) {
           state.dualGearClaimedBy = pIdx;
           state.dualGearClaimedRound = state.round;
           addStars(state, pIdx, 2);
           claimedDual = true;
-          dualMsgEn = ' 🥈 Dual-Gear Milestone: +2★ & Draw 1!';
-          dualMsgZh = ' 🥈 率先装满双厨具：获 +2★ 并摸 1 牌！';
-        } else if (
-          pIdx === 1 &&
-          p.gears.length === 2 &&
-          state.dualGearClaimedBy === 0 &&
-          state.dualGearClaimedRound === state.round &&
-          !state.dualGearSharedP2
-        ) {
-          state.dualGearSharedP2 = true;
-          addStars(state, pIdx, 2);
-          claimedDual = true;
-          dualMsgEn = ' 🥈 Same-Round Equal-Rights Dual-Gear: +2★ & Draw 1!';
-          dualMsgZh = ' 🥈 当轮平权双厨具：同享 +2★ 并摸 1 牌！';
+          dualMsgEn = ' 🥈 Dual-Gear Badge (≥1 Stamp): +2★ & Draw 1!';
+          dualMsgZh = ' 🥈 双厨具神兵奖（≥1流派章）：夺唯一 +2★ 并摸 1 牌！';
         }
 
         addLog(
@@ -1876,10 +1853,10 @@
           var sgs = scoreGearPower(sgid, p);
           if (
             p.gears.length === 1 &&
-            ((opp.gears.length < 2 && state.dualGearClaimedBy === null) ||
-              (actor === 1 && state.dualGearClaimedBy === 0 && state.dualGearClaimedRound === state.round && !state.dualGearSharedP2))
+            countStamps(p) >= 1 &&
+            state.dualGearClaimedBy === null
           ) {
-            sgs += 6.5; // Grab +2★ & Draw 1!
+            sgs += 6.5; // Grab sole +2★ & Draw 1 badge!
           }
           if (sgs > bestStep2Score) {
             bestStep2Score = sgs;
@@ -2609,7 +2586,7 @@
         { t: 3, lbl: '3°', sub: c.starsHalf + '★', cls: 'z-low' },
         { t: 4, lbl: '4°', sub: c.starsHalf + '★', cls: 'z-low' },
         { t: 5, lbl: '5°⭐', sub: c.starsGold + '★+1🧂', cls: 'z-gold' },
-        { t: 6, lbl: '6°⭐⭐', sub: c.starsGold + '★+1🧂', cls: 'z-gold' },
+        { t: 6, lbl: '6°⭐⭐', sub: c.starsGold + '★+2🧂', cls: 'z-gold' },
         { t: 7, lbl: '7°🔥', sub: c.starsPerf + '★+1材', cls: 'z-perf' },
         { t: 8, lbl: '💥8°+', sub: t('1★+1🧂', '爆1★+1🧂'), cls: 'z-bust' }
       ];
@@ -2829,8 +2806,8 @@
               '<b>' + (p0.firstDishDone ? '🔴✓ ' : '🔴○ ') + (p1.firstDishDone ? '🔵✓' : '🔵○') + '</b>' +
             '</div>' +
             '<div class="ms-row">' +
-              '<span>🥈 ' + t('1st Dual Gear (+2★+1🃏)', '首达双厨具 (+2★摸1牌)') + '</span>' +
-              '<b>' + (state.dualGearSharedP2 ? '🔴🔵+2★' : (state.dualGearClaimedBy === 0 ? '🔴+2★' : (state.dualGearClaimedBy === 1 ? '🔵+2★' : t('Open!', '待争夺')))) + '</b>' +
+              '<span>🥈 ' + t('Dual Gear w/ ≥1 Stamp (+2★+1🃏)', '有章首达双厨具 (+2★摸1牌)') + '</span>' +
+              '<b>' + (state.dualGearClaimedBy === 0 ? '🔴+2★' : (state.dualGearClaimedBy === 1 ? '🔵+2★' : t('Open!', '待争夺'))) + '</b>' +
             '</div>' +
             '<div class="ms-row">' +
               '<span>👑 ' + t('3 Cuisine Stamps (+3★)', '集满三系章 (+3★)') + '</span>' +

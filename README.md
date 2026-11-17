@@ -40,7 +40,7 @@ All image cropping, PDF rendering, invoice math, and duplex card alignment execu
 
 Stop leaking `.env` secrets, OpenAI/Anthropic keys, AWS/GitHub tokens, JWTs, database URIs, PEM private keys, and internal corporate IPs into ChatGPT, Claude, Cursor, or Copilot. PasteShield maps secrets in local RAM to deterministic semantic tokens (`<OPENAI_KEY_1>`, `<DB_URI_1>`) and **restores real values in 1 click** (`Cmd+Alt+C` → prompt LLM → `Cmd+Alt+R`).
 
-- [![VS Code Marketplace](https://img.shields.io/badge/VS_Code_Marketplace-v1.1.1_Live-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer) [![Open VSX Registry](https://img.shields.io/badge/Open_VSX_Verified-v1.1.1_Live-a60ee5?style=flat-square&logo=eclipseide&logoColor=white)](https://open-vsx.org/extension/craftleaf-studio/pasteshield-ai-secret-sanitizer) [![Download PasteShield VSIX v1.1.1](https://img.shields.io/badge/Download_.VSIX_(v1.1.1)-GitHub_Release-10b981?style=flat-square)](https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.1.vsix) [![Live Browser Playground](https://img.shields.io/badge/Live_Playground-Try_In_Browser-06b6d4?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/)
+- [![VS Code Marketplace](https://img.shields.io/badge/VS_Code_Marketplace-v1.1.2_Live-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=craftleaf-studio.pasteshield-ai-secret-sanitizer) [![Open VSX Registry](https://img.shields.io/badge/Open_VSX_Verified-v1.1.2_Live-a60ee5?style=flat-square&logo=eclipseide&logoColor=white)](https://open-vsx.org/extension/craftleaf-studio/pasteshield-ai-secret-sanitizer) [![Download PasteShield VSIX v1.1.2](https://img.shields.io/badge/Download_.VSIX_(v1.1.2)-GitHub_Release-10b981?style=flat-square)](https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.2.vsix) [![Live Browser Playground](https://img.shields.io/badge/Live_Playground-Try_In_Browser-06b6d4?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/)
 
 <p align="center">
   <a href="https://963239327.github.io/craftleaf-studio/extensions/pasteshield/">
@@ -55,7 +55,7 @@ Stop leaking `.env` secrets, OpenAI/Anthropic keys, AWS/GitHub tokens, JWTs, dat
 
 Purify cluttered web articles and long **ChatGPT / Claude / Copilot / DeepSeek / GitHub** threads into publication-grade, ink-saving vector PDFs. Prevents chopped-off code blocks across page breaks and saves up to **65% black toner** with Eco Low-Ink mode.
 
-- [![Download Edge / Chromium ZIP](https://img.shields.io/badge/Download_Chromium_%2F_Edge-v1.1.0_.zip-0078d7?style=flat-square&logo=microsoftedge&logoColor=white)](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-edge-chromium-v1.1.0.zip) [![Download Firefox AMO ZIP](https://img.shields.io/badge/Download_Firefox_AMO-v1.1.0_.zip-ff7139?style=flat-square&logo=firefoxbrowser&logoColor=white)](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-firefox-amo-v1.1.0.zip) [![Interactive Before/After Demo](https://img.shields.io/badge/Interactive_Preview-Before_vs._After-10b981?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/) [![Unlock CleanPrint Pro $5.99](https://img.shields.io/badge/CleanPrint_Pro-%245.99_Lifetime-f59e0b?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/#pro)
+- [![Firefox Add-ons Official Store](https://img.shields.io/badge/Firefox_Add--ons-Official_Store_Live-ff7139?style=flat-square&logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/cleanprint-ai-chat-to-pdf/) [![Download Edge / Chromium ZIP](https://img.shields.io/badge/Download_Chromium_%2F_Edge-v1.1.1_.zip-0078d7?style=flat-square&logo=microsoftedge&logoColor=white)](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-edge-chromium-v1.1.1.zip) [![Interactive Before/After Demo](https://img.shields.io/badge/Interactive_Preview-Before_vs._After-10b981?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/) [![Unlock CleanPrint Pro $5.99](https://img.shields.io/badge/CleanPrint_Pro-%245.99_Lifetime-f59e0b?style=flat-square)](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/#pro)
 
 ---
 
@@ -78,17 +78,17 @@ Seven Monte-Carlo-balanced, tactile 2–4 sheet strategy board games crafted for
   </a>
 </p>
 
-1. **🍳 Star Chef Showdown: Rondel Bistro (`《星厨对决》` v0.7.12)** — 8-seat clockwise rondel movement × multi-use dish cards × 1° Blackjack wok push-your-luck heat control (18★ endgame).
+1. **🍳 Star Chef Showdown: Rondel Bistro (`《星厨对决》` v0.7.14)** — 8-seat clockwise rondel movement × multi-use dish cards × 1° Blackjack wok push-your-luck heat control (18★ endgame).
    - **[▶ Play Solo vs. Sous-Chef AI in Your Browser (Free HTML5)](https://963239327.github.io/craftleaf-studio/play/)** · **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf)**
-2. **🌾 Woodland Seasons: Emerald Valley (`《四季森友》` v0.8.13)** — Friendly-bump worker placement across an 8-solar-term clock, 24 four-way rotating habitat tiles, stone canals & 12 symbiotic woodland critters.
+2. **🌾 Woodland Seasons: Emerald Valley (`《四季森友》` v0.8.15)** — Friendly-bump worker placement across an 8-solar-term clock, 24 four-way rotating habitat tiles, stone canals & 12 symbiotic woodland critters.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf)**
-3. **🔮 Cloudspire Alchemy: Skyward Grimoires (`《云塔炼金》` v0.7.8)** — Pair 3 printed sheets (including foldable weighted **3D paper cloud towers**) with any standard 54-card poker deck for tense grimoire engine building.
+3. **🔮 Cloudspire Alchemy: Skyward Grimoires (`《云塔炼金》` v0.7.10)** — Pair 3 printed sheets (including foldable weighted **3D paper cloud towers**) with any standard 54-card poker deck for tense grimoire engine building.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf)**
-4. **⛵ Tidal Trade League: Archipelago Routes (`《潮汐商盟》` v0.3.5 · 2 Sheets + Poker Deck)** — Harbor wholesale loading, live commodity market crash & monopoly contracts.
+4. **⛵ Tidal Trade League: Archipelago Routes (`《潮汐商盟》` v0.3.6 · 2 Sheets + Poker Deck)** — Harbor wholesale loading, live commodity market crash & monopoly contracts.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/tidal_trade_league_sample_preview.pdf)**
 5. **🏛️ Duchy of Firenze: Renaissance Guilds (`《翡冷翠公国》` v0.2.5 · 2 Sheets + Poker Deck)** — 3-Age `3-4-5` open-/hidden-row pyramid draft with instant military, guild & prestige victories.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/duchy_of_firenze_sample_preview.pdf)**
-6. **🚀 Stargate Jump: Deep Space Epoch (`《星门跃迁》` v0.3.8 · 2 Sheets + Poker Deck)** — Simultaneous `A–5` Command Order phase selection with 1-round cooldown lock & `3×3` Starmap colonization.
+6. **🚀 Stargate Jump: Deep Space Epoch (`《星门跃迁》` v0.3.9 · 2 Sheets + Poker Deck)** — Simultaneous `A–5` Command Order phase selection with 1-round cooldown lock & `3×3` Starmap colonization.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/stargate_jump_sample_preview.pdf)**
 7. **🏺 Grand Curio Museum: Time-Track Curators (`《万象博物院》` v0.2.5 · 2 Sheets + Poker Deck)** — Non-alternating 20-step Time Corridor (`Trailing Curator Always Acts`) & `3×3` dual-axis gallery curation.
    - **[Download Free Sample PDF](https://963239327.github.io/craftleaf-studio/games/previews/grand_curio_museum_sample_preview.pdf)**
@@ -102,16 +102,16 @@ Seven Monte-Carlo-balanced, tactile 2–4 sheet strategy board games crafted for
 
 | Asset | Type | Direct Download |
 | :--- | :--- | :--- |
-| `pasteshield-ai-secret-sanitizer-1.1.1.vsix` | VS Code / Cursor / Windsurf Extension (`v1.1.1`) | [Download `.vsix`](https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.1.vsix) |
-| `cleanprint-studio-edge-chromium-v1.1.0.zip` | Edge / Chrome / Brave Extension (`v1.1.0`) | [Download `.zip`](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-edge-chromium-v1.1.0.zip) |
-| `cleanprint-studio-firefox-amo-v1.1.0.zip` | Mozilla Firefox Extension (`v1.1.0`) | [Download `.zip`](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-firefox-amo-v1.1.0.zip) |
+| `pasteshield-ai-secret-sanitizer-1.1.2.vsix` | VS Code / Cursor / Windsurf Extension (`v1.1.2`) | [Download `.vsix`](https://github.com/963239327/pasteshield-secret-sanitizer/releases/latest/download/pasteshield-ai-secret-sanitizer-1.1.2.vsix) |
+| `cleanprint-studio-edge-chromium-v1.1.1.zip` | Edge / Chrome / Brave Extension (`v1.1.1`) | [Download `.zip`](https://github.com/963239327/cleanprint-ai-chat-to-pdf/releases/latest/download/cleanprint-studio-edge-chromium-v1.1.1.zip) |
+| `cleanprint-studio-firefox-amo-v1.1.1.zip` | Mozilla Firefox Extension (`v1.1.1` + Official AMO) | [Install on Firefox AMO](https://addons.mozilla.org/en-US/firefox/addon/cleanprint-ai-chat-to-pdf/) |
 | `SoloFounder_OS_FREE_Starter_Kit.zip` | `$0` Solo-Founder Finance & AI Starter Pack | [Get Free on Gumroad](https://stardustdemo.gumroad.com/l/solofounder-starter-kit) |
-| `star_chef_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.7.12`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf) |
-| `woodland_seasons_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.8.13`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf) |
-| `cloudspire_alchemy_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.7.8`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf) |
-| `tidal_trade_league_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.3.5`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/tidal_trade_league_sample_preview.pdf) |
+| `star_chef_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.7.14`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/star_chef_sample_preview.pdf) |
+| `woodland_seasons_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.8.15`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/woodland_seasons_sample_preview.pdf) |
+| `cloudspire_alchemy_sample_preview.pdf` | 1-Page Watermarked PnP Sample (`v0.7.10`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/cloudspire_alchemy_sample_preview.pdf) |
+| `tidal_trade_league_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.3.6`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/tidal_trade_league_sample_preview.pdf) |
 | `duchy_of_firenze_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.2.5`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/duchy_of_firenze_sample_preview.pdf) |
-| `stargate_jump_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.3.8`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/stargate_jump_sample_preview.pdf) |
+| `stargate_jump_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.3.9`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/stargate_jump_sample_preview.pdf) |
 | `grand_curio_museum_sample_preview.pdf` | 1-Page Watermarked 2-Sheet Poker Sample (`v0.2.5`) | [Open `.pdf`](https://963239327.github.io/craftleaf-studio/games/previews/grand_curio_museum_sample_preview.pdf) |
 
 ---
