@@ -83,10 +83,12 @@
     "pasteShieldPro": {
       "keyPrefix": "SHIELDPRO",
       "priceUsd": "$9.00",
+      "teamPriceUsd": "$29.00",
       "priceCny": "¥29.9",
       "gumroadProductId": "bZpK_yrf74s1q7yszWnN-g==",
       "gumroadPermalink": "pasteshield-pro",
       "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/pasteshield-pro",
+      "teamCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/pasteshield-pro?option=Gd9HmsGpCHtfxz4g5tQLCw==",
       "checkoutUrlZh": ""
     },
     "pnpTrilogyBundle": {
@@ -103,14 +105,14 @@
       "priceCny": "¥22.9",
       "pendingDedicatedGumroadPermalink": "poker-duel-quartet",
       "itchUrl": "",
-      "gumroadUrl": "",
+      "gumroadUrl": "https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy?option=IcGCvNC7LFH_0moT4RUlkQ==",
       "mianbaoduoUrl": ""
     },
     "pnpCompleteAnthology": {
       "priceUsd": "$13.99",
       "priceCny": "¥34.9",
       "pendingDedicatedGumroadPermalink": "complete-7game-pnp-anthology",
-      "gumroadUrl": "",
+      "gumroadUrl": "https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy?option=qiH0_D58nuVgnd4SC3q3lQ==",
       "mianbaoduoUrl": ""
     },
     "freelancerOsKit": {
@@ -156,6 +158,7 @@
     },
     "chineseGroceryCheatSheet": {
       "priceUsd": "$7.00",
+      "gumroadProductId": "4-usHUBHQ7Cqt-BkTW_scQ==",
       "gumroadPermalink": "ingredient-cheat-sheet",
       "checkoutUrlZh": ""
     },
@@ -191,6 +194,7 @@
     },
     "leaseGuide": {
       "priceUsd": "$7.00",
+      "gumroadProductId": "bJDlNWRdHY0gZNlae6WJVw==",
       "gumroadPermalink": "us-apartment-lease-12-clauses-chinese-guide",
       "checkoutUrlZh": ""
     },

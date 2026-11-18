@@ -146,8 +146,8 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
         <label class="fld">返利网比例 Rakuten / TopCashback (%) — 按税前实付计</label>
         <input type="number" id="a_portal" value="12" min="0" max="80" step="0.5" oninput="calcBF()" />
         <div id="rakutenRefSlot" style="display:none;margin:-4px 0 12px;padding:9px 11px;border-radius:9px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.35);font-size:12.5px;line-height:1.45;">
-          🎁 还没有 Rakuten 返利账号？<a id="rakutenRefLink" href="#" target="_blank" rel="noopener sponsored" style="font-weight:700;color:#6ee7b7;">点此领取新用户首单满额 $30–$40 现金奖励 →</a>
-          <div style="color:#94a3b8;font-size:11.5px;margin-top:3px;">推荐声明 (Referral Disclosure)：通过好友邀请注册达标后您与作者均可获平台新人返现奖励，无任何额外费用。</div>
+          🎁 还没有 Rakuten 返利账号？<a id="rakutenRefLink" data-buy-event="referral-rakuten" href="#" target="_blank" rel="noopener sponsored" style="font-weight:700;color:#6ee7b7;">点此领取新用户首单满额 $30–$40 现金奖励 →</a>
+          <div style="color:#94a3b8;font-size:11.5px;margin-top:3px;">推荐声明 / FTC Referral Disclosure：通过好友邀请链接注册达标后，您与本站作者均可获得平台官方新人返现奖励，商品结账价格无任何额外费用（Qualifying referral bonus for both reader &amp; creator at zero extra cost）。</div>
         </div>
         <label class="fld">信用卡返现 / Offer 返点 (%) — 按税后刷卡额计</label>
         <input type="number" id="a_cc" value="5" min="0" max="50" step="0.5" oninput="calcBF()" />

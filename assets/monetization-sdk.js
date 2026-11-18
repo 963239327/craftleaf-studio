@@ -25,7 +25,9 @@
     'invoice-studio-pro': 'GY_adoyDJdv8jaJ4qR6rTQ==',
     'cardsheet-pro': 'e7S_Kns46ox1pluH-heWAA==',
     'cleanprint-pro': '8I2tijAIf2opR98RlC6dSw==',
-    'pasteshield-pro': 'bZpK_yrf74s1q7yszWnN-g=='
+    'pasteshield-pro': 'bZpK_yrf74s1q7yszWnN-g==',
+    'ingredient-cheat-sheet': '4-usHUBHQ7Cqt-BkTW_scQ==',
+    'us-apartment-lease-12-clauses-chinese-guide': 'bJDlNWRdHY0gZNlae6WJVw=='
   };
 
   // Strictly private in-memory verification map — never exported, never serialized as proof.
@@ -280,6 +282,7 @@
       a.href = buildAmazonUrl(it.url, assocTag);
       a.target = '_blank';
       a.rel = assocTag ? 'noopener sponsored' : 'noopener';
+      a.setAttribute('data-buy-event', 'affiliate-' + String(it.id || 'item'));
       a.style.cssText = 'display:block;padding:8px 10px;background:#ffffff;border:1px solid #cbd5e1;border-radius:8px;color:#1e293b;text-decoration:none;line-height:1.4;';
       var lbl = document.createElement('span');
       lbl.textContent = (isZh ? it.titleZh : it.titleEn) + ' ';

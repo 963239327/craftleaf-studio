@@ -231,7 +231,16 @@ footer { border-top: 1px solid var(--border); margin-top: 44px; padding: 28px 0 
         box.innerHTML = '💼 <strong>FICA 社保医保代扣明细：</strong>当前年包预计代扣 Social Security + Medicare 约 <strong>$' + Math.round(regularFica).toLocaleString() + '/年</strong>；华盛顿州无个人州所得税，相比同薪加州每年直接多留存约 <strong>$' + (netWA - netCA).toLocaleString() + '</strong> 净现金！';
       }
     }
-    window.addEventListener('DOMContentLoaded', calcOfferTax);
+    window.addEventListener('DOMContentLoaded', () => {
+      calcOfferTax();
+      const esimRef = window.CRAFTLEAF_MONETIZATION?.referrals?.telecomEsimInviteUrl;
+      if (esimRef && String(esimRef).trim()) {
+        const slot = document.createElement('div');
+        slot.style.cssText = 'margin:14px 0;padding:11px 14px;border-radius:10px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.35);font-size:13px;line-height:1.5;';
+        slot.innerHTML = '📱 <strong>刚入职/落地办高性价比美国手机卡？</strong> <a data-buy-event="referral-telecom-esim" href="' + String(esimRef).trim().replace(/"/g, '&quot;') + '" target="_blank" rel="noopener sponsored" style="font-weight:700;color:#6ee7b7;">点此领取美国主流 eSIM 预付费套餐新人话费立减优惠 ($15–$25 Credit) →</a><div style="color:#94a3b8;font-size:11.5px;margin-top:3px;">推荐声明 / FTC Referral Disclosure：使用好友推荐链接激活套餐后，您与本站作者均可获运营商话费抵扣奖励，无任何额外费用（Qualifying referral credit for both reader &amp; creator at zero extra cost）。</div>';
+        document.getElementById('fica_callout')?.insertAdjacentElement('afterend', slot);
+      }
+    });
     </script>
     
   </main>

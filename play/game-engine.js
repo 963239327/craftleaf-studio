@@ -120,7 +120,7 @@
   }
 
   /* ==========================================================================
-   * 3. CANONICAL GAME DATA (v0.7.14 — 8 Rondel Seats & 12 Multi-Use Cards)
+   * 3. CANONICAL GAME DATA (v0.8.0 — 8 Rondel Seats, 0–8🧂 Track & 12 Cards)
    * ========================================================================== */
   var CUISINES = {
     fire:  { id: 'fire',  icon: '🔥', en: 'Flame Grill', zh: '炙烤系', cls: 'cuisine-fire' },
@@ -164,7 +164,7 @@
     {
       idx: 5, num: '⑥', icon: '🧂', cls: 'seat-elec', startTag: '',
       nameEn: 'Spice Bazaar', nameZh: '丝路香料坊',
-      descEn: '+2🧂 Spice + Borrow 1 Rival Gear', descZh: '领 2🧂 + 本回掌勺可借对手1厨具'
+      descEn: '+2🧂 Spice + Draw 1 Card', descZh: '领 2🧂香料 + 摸 1 张牌'
     },
     {
       idx: 6, num: '⑦', icon: '🍳', cls: 'seat-fire', startTag: '',
@@ -174,7 +174,7 @@
     {
       idx: 7, num: '⑧', icon: '🛎️', cls: 'seat-boss', startTag: '',
       nameEn: 'Royal Tasting Bell', nameZh: '皇家品鉴铃',
-      descEn: 'Draw 1; Cook 5°–7° here: +2★!', descZh: '摸 1 张牌；此格 5°~7° 出锅额外+2★'
+      descEn: 'Draw 1; Cook here: 5–6° +3★, 7° +2★!', descZh: '摸1牌；此格起锅5~6°+3★、7°+2★'
     }
   ];
 
@@ -370,12 +370,12 @@
       seat: startSeat,
       stars: 0,
       ing: { meat: 0, shrimp: 0, mushroom: 0 },
-      spice: 1,
+      spice: id === 0 ? 2 : 1,
       ice: 0,
       hand: [],
       gears: [],
       stamps: { fire: false, water: false, grass: false, elec: false },
-      firstDishDone: false,
+      dualGearDone: false,
       threeStampsDone: false,
       dishesCooked: 0,
       perfectDishes: 0,
@@ -524,6 +524,10 @@
     p.stars = Math.min(35, p.stars + amount);
   }
 
+  function addSpice(player, amount) {
+    player.spice = Math.max(0, Math.min(8, player.spice + amount));
+  }
+
   function resolveSeatArrivalEffects(state, pIdx, seatIdx, fromKamameshi) {
     var p = state.players[pIdx];
     var oppIdx = 1 - pIdx;
@@ -543,7 +547,7 @@
 
     switch (seatIdx) {
       case 0: // ① Draw 1 + 1 Spice
-        p.spice += 1;
+        addSpice(p, 1);
         queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat1' });
         break;
       case 1: // ② +1 Meat + Draw 1
@@ -556,23 +560,21 @@
         break;
       case 3: // ④ +1 Mushroom + 1 Spice
         p.ing.mushroom += 1;
-        p.spice += 1;
+        addSpice(p, 1);
         break;
       case 4: // ⑤ +1 Ice (max 1) + Draw 1
         if (p.ice < 1) p.ice = 1;
         queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat5' });
         break;
-      case 5: // ⑥ +2 Spice + Borrow 1 Opponent Gear this turn
-        p.spice += 2;
-        if (!fromKamameshi) {
-          state.turnContext.canBorrowOpponentGear = true;
-        }
+      case 5: // ⑥ v0.8.0: +2 Spice + Draw 1
+        addSpice(p, 2);
+        queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat6' });
         break;
       case 6: // ⑦ +1 Any Ing + 1 Spice
-        p.spice += 1;
+        addSpice(p, 1);
         queueFront.push({ kind: 'PICK_ANY_ING', player: pIdx, reason: 'seat7' });
         break;
-      case 7: // ⑧ Draw 1 (+1★ passive checked when starting cook on seat 7)
+      case 7: // ⑧ Draw 1 (+3★ at 5–6° / +2★ at 7° when starting cook on seat ⑧)
         queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat8' });
         break;
     }
@@ -908,7 +910,7 @@
     if (outcome === 'bust' || temp >= 8) {
       p.busts += 1;
       addStars(state, pIdx, 1);
-      p.spice += 1;
+      addSpice(p, 1);
       addLog(
         state,
         '💥 WOK BUST at ' + temp + '° on ' + card.nameEn + '! Consolation: +1★ & +1🧂.',
@@ -935,26 +937,19 @@
       if (isPerfect) {
         p.perfectDishes += 1;
       } else {
-        // v0.7.12: 5° returns +1🧂 Spice; 6° returns +2🧂 Spice!
+        // v0.8.0: 5° returns +1🧂 Spice; 6° returns +2🧂 Spice!
         var searSpice = (temp === 6) ? 2 : 1;
-        p.spice += searSpice;
+        addSpice(p, searSpice);
         bonusNotesEn.push('+' + searSpice + '🧂 Sear');
         bonusNotesZh.push('黄金锅气+' + searSpice + '🧂');
       }
 
-      // Seat ⑧ Royal Tasting Bell bonus (+2★ at 5°~7° in v0.7.12)
+      // Seat ⑧ Royal Tasting Bell bonus (v0.8.0: +3★ at 5°~6°, +2★ at 7°)
       if (w.startedAtBell) {
-        bonusStars += 2;
-        bonusNotesEn.push('+2★ Bell');
-        bonusNotesZh.push('品鉴铃+2★');
-      }
-
-      // First 5°~7° Dish Milestone (+1★)
-      if (!p.firstDishDone) {
-        p.firstDishDone = true;
-        bonusStars += 1;
-        bonusNotesEn.push('+1★ 1st Dish');
-        bonusNotesZh.push('首菜里程碑+1★');
+        var bellBonus = isPerfect ? 2 : 3;
+        bonusStars += bellBonus;
+        bonusNotesEn.push('+' + bellBonus + '★ Bell');
+        bonusNotesZh.push('品鉴铃+' + bellBonus + '★');
       }
 
       // Cuisine Stamp & 3-Cuisine Grand Banquet (+3★)
@@ -989,27 +984,27 @@
 
       // Card-specific 5°~7° Dish Completion Effect
       switch (card.id) {
-        case 1: p.spice += 2; break;
+        case 1: addSpice(p, 2); break;
         case 2: p.ing.mushroom += 1; break;
         case 3: postQueue.push({ kind: 'ADVANCE_RONDEL_1', player: pIdx }); break;
         case 4:
           if (opp.spice > 0) {
             opp.spice -= 1;
-            p.spice += 1;
+            addSpice(p, 1);
             bonusNotesEn.push('Stole 1🧂');
             bonusNotesZh.push('夺对手1🧂');
           } else {
-            p.spice += 1;
+            addSpice(p, 1);
           }
           break;
         case 5: p.ing.mushroom += 1; break;
         case 6: postQueue.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'dish6' }); break;
         case 7: if (p.ice < 1) p.ice = 1; break;
-        case 8: p.spice += 1; break;
+        case 8: addSpice(p, 1); break;
         case 9: postQueue.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'dish9' }); break;
         case 10: p.ing.meat += 1; break;
-        case 11: p.spice += 2; break;
-        case 12: p.spice += 1; break;
+        case 11: addSpice(p, 2); break;
+        case 12: addSpice(p, 1); break;
       }
 
       // Passive Completion Kitchen Gears (NO.09 Pasta Roller & NO.11 Silver Cloche)
@@ -1021,23 +1016,9 @@
       }
       if (p.gears.indexOf(11) !== -1 && !w.usedGears[11]) {
         w.usedGears[11] = true;
-        p.spice += 1;
+        addSpice(p, 1);
         bonusNotesEn.push('Cloche +1🧂');
         bonusNotesZh.push('银托盘+1🧂');
-      }
-      // Seat ⑥ Auto-borrow passive completion gear if no opponent gear borrowed yet
-      if (state.turnContext.canBorrowOpponentGear && !w.borrowedOpponentGear) {
-        if (opp.gears.indexOf(9) !== -1) {
-          w.borrowedOpponentGear = true;
-          postQueue.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'borrow9' });
-          bonusNotesEn.push('Borrowed Pasta Roller');
-          bonusNotesZh.push('借用压面机摸1牌');
-        } else if (opp.gears.indexOf(11) !== -1) {
-          w.borrowedOpponentGear = true;
-          p.spice += 1;
-          bonusNotesEn.push('Borrowed Silver Cloche +1🧂');
-          bonusNotesZh.push('借用银托盘+1🧂');
-        }
       }
 
       var totalEarned = baseStars + bonusStars;
@@ -1194,7 +1175,7 @@
         p.ing.meat += prp.meat;
         p.ing.shrimp += prp.shrimp;
         p.ing.mushroom += prp.mushroom;
-        p.spice += prp.spice;
+        addSpice(p, prp.spice);
         if (prp.ice > 0 && p.ice < 1) p.ice = 1;
 
         addLog(
@@ -1235,14 +1216,13 @@
         var dualMsgEn2 = '';
         var dualMsgZh2 = '';
         var claimedDual2 = false;
-        // v0.7.14 (#112): Sole ⭐ Dual-Gear +2★ & Draw 1 badge is claimed in Step 2 once chef already holds ≥1 Cuisine Stamp (0-stamp equip does not retroactively claim)
-        if (p.gears.length === 2 && countStamps(p) >= 1 && state.dualGearClaimedBy === null) {
-          state.dualGearClaimedBy = pIdx;
-          state.dualGearClaimedRound = state.round;
-          addStars(state, pIdx, 2);
-          claimedDual2 = true;
-          dualMsgEn2 = ' 🥈 Dual-Gear Badge (≥1 Stamp): +2★ & Draw 1!';
-          dualMsgZh2 = ' 🥈 双厨具神兵奖（≥1流派章）：夺唯一 +2★ 并摸 1 牌！';
+        // v0.8.0: First time each chef equips 2nd Gear = instant +1★ & +1🧂
+        if (p.gears.length === 2 && !p.dualGearDone) {
+          p.dualGearDone = true;
+          addStars(state, pIdx, 1);
+          addSpice(p, 1);
+          dualMsgEn2 = ' 🥈 1st 2-Gear Bonus: +1★ & +1🧂!';
+          dualMsgZh2 = ' 🥈 首次装满双厨具：立得 +1★ 与 +1🧂！';
         }
 
         addLog(
@@ -1280,13 +1260,12 @@
         var dualMsgEn = '';
         var dualMsgZh = '';
         var claimedDual = false;
-        if (p.gears.length === 2 && countStamps(p) >= 1 && state.dualGearClaimedBy === null) {
-          state.dualGearClaimedBy = pIdx;
-          state.dualGearClaimedRound = state.round;
-          addStars(state, pIdx, 2);
-          claimedDual = true;
-          dualMsgEn = ' 🥈 Dual-Gear Badge (≥1 Stamp): +2★ & Draw 1!';
-          dualMsgZh = ' 🥈 双厨具神兵奖（≥1流派章）：夺唯一 +2★ 并摸 1 牌！';
+        if (p.gears.length === 2 && !p.dualGearDone) {
+          p.dualGearDone = true;
+          addStars(state, pIdx, 1);
+          addSpice(p, 1);
+          dualMsgEn = ' 🥈 1st 2-Gear Bonus: +1★ & +1🧂!';
+          dualMsgZh = ' 🥈 首次装满双厨具：立得 +1★ 与 +1🧂！';
         }
 
         addLog(
@@ -1528,7 +1507,7 @@
         } else if (gid === 10 && w.temp <= 7) {
           w.usedGears[10] = true;
           if (borrowsIt) w.borrowedOpponentGear = true;
-          p.spice += 1;
+          addSpice(p, 1);
         } else if (gid === 12 && w.lastRoll && w.lastRoll.type === 'simmer') {
           var adj = action.adj === -1 ? -1 : 1;
           w.usedGears[12] = true;
@@ -1851,12 +1830,8 @@
             if (!menuCookable) continue;
           }
           var sgs = scoreGearPower(sgid, p);
-          if (
-            p.gears.length === 1 &&
-            countStamps(p) >= 1 &&
-            state.dualGearClaimedBy === null
-          ) {
-            sgs += 6.5; // Grab sole +2★ & Draw 1 badge!
+          if (p.gears.length === 1 && !p.dualGearDone) {
+            sgs += 4.5; // Grab +1★ & +1🧂!
           }
           if (sgs > bestStep2Score) {
             bestStep2Score = sgs;
@@ -2624,9 +2599,11 @@
             var plateCls = w.temp === 7 ? 'perfect' : (w.temp >= 5 ? 'gold' : 'low');
             var starPreview = w.temp === 7 ? c.starsPerf : (w.temp >= 5 ? c.starsGold : c.starsHalf);
             var searSpiceNote = w.temp === 5 ? '+1🧂' : (w.temp === 6 ? '+2🧂' : '');
+            var bellNoteEn = w.startedAtBell && w.temp >= 5 ? ('+' + (w.temp === 7 ? 2 : 3) + '★Bell') : '';
+            var bellNoteZh = w.startedAtBell && w.temp >= 5 ? ('+品鉴铃' + (w.temp === 7 ? 2 : 3) + '★') : '';
             primaryBtns.push('<button class="wok-btn plate ' + plateCls + '" data-act="wok-plate">' +
-              '🛎️ ' + t('Plate at ' + w.temp + '° (' + starPreview + '★' + searSpiceNote + (w.startedAtBell && w.temp >= 5 ? '+2★Bell' : '') + ')',
-                        w.temp + '° 停火出锅（' + starPreview + '★' + searSpiceNote + (w.startedAtBell && w.temp >= 5 ? '+品鉴铃2★' : '') + '）') +
+              '🛎️ ' + t('Plate at ' + w.temp + '° (' + starPreview + '★' + searSpiceNote + bellNoteEn + ')',
+                        w.temp + '° 停火出锅（' + starPreview + '★' + searSpiceNote + bellNoteZh + '）') +
             '</button>');
           } else if (a.type === 'WOK_ACCEPT_BUST') {
             primaryBtns.push('<button class="wok-btn bust" data-act="wok-bust">' +
@@ -2800,14 +2777,10 @@
         '<div class="left-column">' +
           renderChefSummaryPanel(rivalIdx, true) +
           '<div class="milestones-card">' +
-            '<div class="milestones-title">🏆 ' + t('Star Milestones (Race to 18★)', '三大冲星里程碑（满18★平权终局）') + '</div>' +
+            '<div class="milestones-title">🏆 ' + t('Star Milestones (Race to 18★)', '冲星里程碑（满18★平权终局）') + '</div>' +
             '<div class="ms-row">' +
-              '<span>🥇 ' + t('1st 5°–7° Dish (+1★ ea)', '首道黄金菜 (+1★/人)') + '</span>' +
-              '<b>' + (p0.firstDishDone ? '🔴✓ ' : '🔴○ ') + (p1.firstDishDone ? '🔵✓' : '🔵○') + '</b>' +
-            '</div>' +
-            '<div class="ms-row">' +
-              '<span>🥈 ' + t('Dual Gear w/ ≥1 Stamp (+2★+1🃏)', '有章首达双厨具 (+2★摸1牌)') + '</span>' +
-              '<b>' + (state.dualGearClaimedBy === 0 ? '🔴+2★' : (state.dualGearClaimedBy === 1 ? '🔵+2★' : t('Open!', '待争夺'))) + '</b>' +
+              '<span>🥈 ' + t('1st 2-Gear (+1★+1🧂 ea)', '首满双厨具 (+1★+1🧂/人)') + '</span>' +
+              '<b>' + (p0.dualGearDone ? '🔴✓ ' : '🔴○ ') + (p1.dualGearDone ? '🔵✓' : '🔵○') + '</b>' +
             '</div>' +
             '<div class="ms-row">' +
               '<span>👑 ' + t('3 Cuisine Stamps (+3★)', '集满三系章 (+3★)') + '</span>' +

@@ -190,30 +190,38 @@
       swatchBlue: 'Light Blue',
       btnResetAdj: 'Reset Lighting',
       chkTrimMarks: 'Draw Precision Scissor Trim Marks & 1" Scale Bar',
-      chkDrugstoreSafe: '🛡️ CVS/Walgreens Anti-Overscan Safe Bleed (0.5" Safe Margin + -2.5% Pre-Scale · FREE 4×6" Download!)',
+      chkDrugstoreSafe: '🛡️ Single-Applicant CVS/Walgreens Anti-Overscan Safe Bleed (0.5" Safe Margin + -2.5% Pre-Scale · FREE 4×6" Download!)',
+      familyTrayTitle: '👨‍👩‍👧 Family Multi-Person / Mixed-Spec Sheet (Pro)',
+      familyTrayDesc: 'Queue 2–4 family portraits or mix 2 country specs (e.g., US 2×2" + China 33×48mm) onto one $0.39 4×6" or A4 sheet!',
+      btnAddFamilySlot: '＋ Add Current Crop to Sheet',
+      btnDemoFamilyMix: '✨ Demo 2-Person Mix',
+      btnClearFamilyTray: '✕ Reset Solo',
       cropCardTitle: 'Biometric Alignment Canvas',
       dragHint: 'Drag photo directly to position eyes & crown inside green target bands · Scroll wheel to zoom',
       sheetCardTitle: '300 DPI Print Sheet Live Preview',
       tab4x6: '4×6" Sheet ($0.39)',
       tabA4: 'A4 Sheet',
       freeCardTitle: 'Single Cropped Photo',
-      freeCardDesc: 'Exact 300 DPI biometric PNG ready for online visa/USCIS digital portals.',
+      freeCardDesc: 'Exact 300 DPI biometric PNG ready for standard digital portals (plus FREE solo Anti-Overscan 4×6" sheet!).',
       btnDlSingle: '⬇ Download Single 300 DPI PNG',
-      pro4x6Title: '4×6" Cut-Ready Print Sheet',
-      pro4x6Desc: 'Unwatermarked 1800×1200 px 300 DPI sheet with scissor trim ticks for CVS, Walgreens, Walmart, Boots.',
+      pro4x6Title: '4×6" Family / Full 6-Up Sheet',
+      pro4x6Desc: 'Solo 2-photo Anti-Overscan 4×6" is FREE! Pro unlocks 2–4 person Family / Mixed-Spec 4×6" & full 6-up 300 DPI sheets.',
       btnDl4x6: '⬇ Download 4×6" Sheet PNG',
       proA4Title: 'A4 Sheet + Direct Print',
       proA4Desc: 'Unwatermarked 2480×3508 px A4 sheet PNG + 1:1 physical scale print view.',
       btnDlA4: '⬇ Download A4 PNG',
       btnPrintSheet: '🖨️ Print Cut-Ready Sheet',
+      proPortalTitle: 'Portal KB-Target JPEG',
+      proPortalDesc: 'Auto-compress exact sRGB JPEG bytes for strict visa upload gates (CEAC DS-160 ≤240 KB · China COVA 40–120 KB).',
+      btnDlPortalJpeg: '⬇ Export Compliant JPEG',
       tipText: 'Saved $16+ vs. retail passport photo booths? Support independent privacy-first tools:',
       tipCta: '☕ Leave a Tip / Support Studio',
       guidesFooterTitle: 'Official Country Photo Size & Drugstore Printing Guides:',
-      modalTitle: 'Unlock ID Photo Print Sheet Pro',
-      modalSub: 'One-time $3.99 lifetime browser unlock — zero subscription, works 100% offline forever.',
-      perk1: 'Clean, unwatermarked 300 DPI 4×6" (1800×1200 px) & A4 (2480×3508 px) tiled sheets',
-      perk2: 'Precision corner crop ticks, scissor cut lines & 1-inch calibration bar',
-      perk3: '1:1 physical-size Print View for home inkjet/laser printers',
+      modalTitle: 'Unlock ID Photo Family Mixer & Portal KB Pro',
+      modalSub: 'One-time $3.99 Gumroad License Key — 100% local in-browser photo processing (zero portrait uploads), zero subscription.',
+      perk1: 'Family Multi-Person & Mixed-Spec 4×6" ($0.39) / A4 Sheet Mixer (combine 2–4 portraits or US 2×2" + China 33×48mm on 1 sheet!)',
+      perk2: '1-Click Visa Portal KB-Target JPEG Optimizer (US CEAC DS-160 ≤240 KB & China COVA 40–120 KB sRGB compliance)',
+      perk3: 'Full-density 6–8 photo 300 DPI 4×6" & A4 sheets + 1:1 physical-scale home Print View',
       perk4: 'Also unlocked automatically with your $19 CraftLeaf All-Access Gumroad License Key',
       buyKeyBtn: 'Buy Instant Pro Key ($3.99) →',
       allAccessLink: 'Or get All-Access Pass for all CraftLeaf Studio tools ($19)',
@@ -259,30 +267,38 @@
       swatchBlue: '浅蓝底',
       btnResetAdj: '重置光效',
       chkTrimMarks: '绘制精准剪刀裁切十字线与 1英寸 比例尺',
-      chkDrugstoreSafe: '🛡️ 药店无边距防吞边模式（四周留 0.5寸 牺牲白边 + 2.5% 防放大预缩 · 免费无水印下载！）',
+      chkDrugstoreSafe: '🛡️ 单人药店防吞边模式（四周留 0.5寸 白边 + 2.5% 预缩 · 单人 2–4 张版免费无水印下载！）',
+      familyTrayTitle: '👨‍👩‍👧 全家多人混排 / 多国规格合拼相纸 (Pro)',
+      familyTrayDesc: '一张 $0.39 4×6寸相纸同时拼入 2–4 位家人头像，或同版混排美签 2×2寸 + 中国护照/签证 33×48mm！',
+      btnAddFamilySlot: '＋ 将当前裁剪照加入合拼队列',
+      btnDemoFamilyMix: '✨ 预览双人美签+中签混排',
+      btnClearFamilyTray: '✕ 恢复单人模式',
       cropCardTitle: '生物识别比例对齐画布',
       dragHint: '在画布上直接按住拖动照片，使头顶、双眼和下巴落入绿色标准带 · 滚轮缩放',
       sheetCardTitle: '300 DPI 冲印拼版实时预览',
       tab4x6: '4×6寸相纸 (6-8张)',
       tabA4: 'A4 打印纸',
       freeCardTitle: '单张高清电子版证件照',
-      freeCardDesc: '标准 300 DPI 电子版 PNG，直接用于美签 DS-160 / I-765 / 各国网申系统上传。',
+      freeCardDesc: '标准 300 DPI 电子版 PNG（单人药店防吞边 4×6寸相纸同样免费无水印下载！）。',
       btnDlSingle: '⬇ 免费下载单张 300 DPI 电子照',
-      pro4x6Title: '4×6寸 无水印冲印拼版大图',
-      pro4x6Desc: '1800×1200 px 真 300 DPI 无水印相纸拼版 + 精准裁切线，支持药店/网店/家用相纸冲印。',
+      pro4x6Title: '4×6寸 全家混排 / 6张满版相纸',
+      pro4x6Desc: '单人防吞边版免费！Pro 解锁 2–4 人全家合拼、多国尺寸混排与 6–8 张满版无水印 300 DPI 相纸。',
       btnDl4x6: '⬇ 下载 4×6寸 冲印拼版 PNG',
       proA4Title: 'A4 排版大图 + 1:1 物理打印',
       proA4Desc: '2480×3508 px A4 高清无水印排版 + 浏览器直连打印机 1:1 原尺寸输出。',
       btnDlA4: '⬇ 下载 A4 拼版 PNG',
       btnPrintSheet: '🖨️ 1:1 打印裁切版',
+      proPortalTitle: '网申系统精准控 KB 压缩 (JPEG)',
+      proPortalDesc: '自动二分压缩 sRGB JPEG 文件体积，精准命中美签 DS-160 (≤240 KB) 与中国签证 COVA (40–120 KB) 严苛门槛。',
+      btnDlPortalJpeg: '⬇ 导出合规 KB 电子照 (.jpg)',
       tipText: '省下了照相馆上百元费用？欢迎支持坚持零上传隐私保护的独立开发者：',
       tipCta: '☕ 请作者喝杯咖啡 / 赞助支持',
       guidesFooterTitle: '各国官方护照签证照尺寸标准与省钱冲印攻略：',
-      modalTitle: '解锁证件照冲印拼版 Pro 专业版',
-      modalSub: '一次性买断仅 $3.99 (¥12.9) — 无订阅套路，激活码本地永久生效。',
-      perk1: '导出无水印 300 DPI 4×6寸 (1800×1200) 与 A4 (2480×3508) 高清冲印拼版图',
-      perk2: '自带四角精准剪刀裁切刻度线与 1英寸/25.4mm 实体防缩印校验尺',
-      perk3: '解锁浏览器 1:1 原尺寸激光/喷墨直打模式',
+      modalTitle: '解锁全家多人混排 & 网申控 KB 专业版',
+      modalSub: '一次性买断仅 $3.99 (¥12.9) — 照片 100% 浏览器本地处理零上传，通过 Gumroad 密钥在线验证解锁。',
+      perk1: '解锁全家 2–4 人合拼 & 多国规格混排（如美签 2×2寸 + 中签 33×48mm 合印一张 $0.39 相纸！）',
+      perk2: '解锁美签 CEAC DS-160 (≤240KB) 与中签 COVA (40–120KB) 自动精准控 KB JPEG 导出',
+      perk3: '解锁 6–8 张满版 300 DPI 4×6寸 / A4 无水印相纸与 1:1 物理尺寸直打模式',
       perk4: '支持使用 $19 工坊全站通票 All-Access Gumroad 密钥一键通用解锁',
       buyKeyBtn: '立即获取 Pro 激活码 ($3.99) →',
       allAccessLink: '或入手 $19 工坊全系工具通票 (All-Access Pass)',
@@ -385,14 +401,157 @@
     return sideways.count > upright.count ? sideways : upright;
   }
 
+  var PORTAL_KB_SPECS = {
+    ds160: {
+      id: 'ds160',
+      widthPx: 600,
+      heightPx: 600,
+      minBytes: 12 * 1024,
+      maxBytes: 240 * 1024,
+      labelEn: 'US CEAC DS-160 / DV (600×600 · ≤240 KB)',
+      labelZh: '美签 CEAC DS-160 / 绿卡抽签 (600×600 · ≤240 KB)'
+    },
+    cova: {
+      id: 'cova',
+      widthPx: 354,
+      heightPx: 472,
+      minBytes: 40 * 1024,
+      maxBytes: 120 * 1024,
+      labelEn: 'China Visa COVA (354×472 · 40–120 KB)',
+      labelZh: '中国签证 COVA 网申系统 (354×472 · 40–120 KB)'
+    },
+    uscis: {
+      id: 'uscis',
+      widthPx: 1200,
+      heightPx: 1200,
+      minBytes: 20 * 1024,
+      maxBytes: 240 * 1024,
+      labelEn: 'MyUSCIS Online OPT / I-765 (1200×1200 · ≤240 KB)',
+      labelZh: 'USCIS OPT / I-765 网申电子照 (1200×1200 · ≤240 KB)'
+    }
+  };
+
+  /**
+   * Computes a multi-person / mixed-spec 300-DPI shelf layout for 2–4 queued portraits
+   * (giving 2 physical prints per queued member on 4x6", or up to 3–4 prints per member on A4).
+   */
+  function computeMixedSheetLayout(presetKeys, sheetKey, drugstoreSafe) {
+    var keys = (presetKeys || []).map(resolvePresetKey);
+    if (!keys.length) return computeSheetLayout('us', sheetKey, drugstoreSafe);
+    var sheet = SHEETS[sheetKey] || SHEETS['4x6'];
+    var sw = sheet.widthPx;
+    var sh = sheet.heightPx;
+    var scaleComp = (sheetKey === '4x6' && drugstoreSafe) ? 0.96 : 1.0;
+    var minMargin = sheetKey === 'a4' ? 96 : (drugstoreSafe ? 72 : 24);
+    var gutter = sheetKey === 'a4' ? 26 : 18;
+    var usableW = sw - minMargin * 2;
+    var usableH = sh - minMargin * 2;
+
+    // Expand each queued member into 2 copies first (then extra round-robin copies on A4)
+    var maxCopiesPerItem = sheetKey === 'a4' ? 4 : 2;
+    var desired = [];
+    for (var copy = 0; copy < maxCopiesPerItem; copy++) {
+      for (var i = 0; i < keys.length; i++) {
+        var pk = keys[i];
+        var pr = PRESETS[pk];
+        var rawW = Math.round(pr.widthPx * scaleComp);
+        var rawH = Math.round(pr.heightPx * scaleComp);
+        // On landscape 4x6", orient portrait-aspect tiles sideways (h x w) so 2 mixed rows fit comfortably inside safe bleed!
+        var rot = (sheetKey === '4x6' && rawH > rawW && keys.length >= 2);
+        desired.push({
+          itemIndex: i,
+          presetKey: pk,
+          w: rot ? rawH : rawW,
+          h: rot ? rawW : rawH,
+          rotated: rot
+        });
+      }
+    }
+    if (sheetKey === '4x6') {
+      desired.sort(function (a, b) { return a.itemIndex - b.itemIndex; });
+    }
+
+    var rows = [];
+    var curRow = { items: [], width: 0, height: 0 };
+    var usedH = 0;
+    for (var d = 0; d < desired.length; d++) {
+      var cand = desired[d];
+      var nextW = curRow.items.length === 0 ? cand.w : (curRow.width + gutter + cand.w);
+      var nextRowH = Math.max(curRow.height, cand.h);
+      if (curRow.items.length > 0 && nextW > usableW) {
+        if (usedH + (rows.length > 0 ? gutter : 0) + curRow.height + gutter + cand.h > usableH) {
+          break;
+        }
+        usedH += (rows.length > 0 ? gutter : 0) + curRow.height;
+        rows.push(curRow);
+        curRow = { items: [cand], width: cand.w, height: cand.h };
+      } else {
+        if (usedH + (rows.length > 0 ? gutter : 0) + nextRowH > usableH) {
+          break;
+        }
+        curRow.items.push(cand);
+        curRow.width = nextW;
+        curRow.height = nextRowH;
+      }
+    }
+    if (curRow.items.length > 0 && usedH + (rows.length > 0 ? gutter : 0) + curRow.height <= usableH) {
+      usedH += (rows.length > 0 ? gutter : 0) + curRow.height;
+      rows.push(curRow);
+    }
+
+    var startY = Math.round((sh - usedH) / 2);
+    var tiles = [];
+    var yCursor = startY;
+    var minStartX = sw;
+    for (var r = 0; r < rows.length; r++) {
+      var row = rows[r];
+      var xCursor = Math.round((sw - row.width) / 2);
+      if (xCursor < minStartX) minStartX = xCursor;
+      for (var c = 0; c < row.items.length; c++) {
+        var it = row.items[c];
+        tiles.push({
+          x: xCursor,
+          y: yCursor + Math.round((row.height - it.h) / 2),
+          w: it.w,
+          h: it.h,
+          rotated: it.rotated,
+          itemIndex: it.itemIndex,
+          presetKey: it.presetKey
+        });
+        xCursor += it.w + gutter;
+      }
+      yCursor += row.height + gutter;
+    }
+
+    return {
+      sheetId: sheet.id,
+      sheetWidthPx: sw,
+      sheetHeightPx: sh,
+      tileWidthPx: tiles[0] ? tiles[0].w : 600,
+      tileHeightPx: tiles[0] ? tiles[0].h : 600,
+      cols: rows[0] ? rows[0].items.length : 1,
+      rows: rows.length,
+      gutterX: gutter,
+      gutterY: gutter,
+      marginX: minStartX < sw ? minStartX : minMargin,
+      marginY: startY,
+      rotated: false,
+      mixed: true,
+      count: tiles.length,
+      tiles: tiles
+    };
+  }
+
   // Export testable pure core on global object
   var StudioAPI = {
     DPI: DPI,
     PRESETS: PRESETS,
     SHEETS: SHEETS,
+    PORTAL_KB_SPECS: PORTAL_KB_SPECS,
     I18N: I18N,
     resolvePresetKey: resolvePresetKey,
-    computeSheetLayout: computeSheetLayout
+    computeSheetLayout: computeSheetLayout,
+    computeMixedSheetLayout: computeMixedSheetLayout
   };
   root.IDPhotoStudio = StudioAPI;
 
@@ -422,6 +581,8 @@
     showGuides: true,
     showTrimMarks: true,
     drugstoreSafe: true,
+    familyTray: [],
+    portalSpecKey: 'ds160',
     dragging: false,
     dragStartX: 0,
     dragStartY: 0,
@@ -844,7 +1005,10 @@
    * If watermarkMode is true, draws the Free preview watermark; if false, draws clean Pro cut-ready output.
    */
   function buildPrintSheetCanvas(singleCanvas, sheetKey, watermarkMode) {
-    var layout = computeSheetLayout(state.presetKey, sheetKey, state.drugstoreSafe);
+    var useMixed = state.familyTray && state.familyTray.length >= 2;
+    var layout = useMixed
+      ? computeMixedSheetLayout(state.familyTray.map(function (it) { return it.presetKey; }), sheetKey, state.drugstoreSafe)
+      : computeSheetLayout(state.presetKey, sheetKey, state.drugstoreSafe);
     var preset = PRESETS[state.presetKey];
     var sheetCanvas = document.createElement('canvas');
     sheetCanvas.width = layout.sheetWidthPx;
@@ -857,13 +1021,14 @@
 
     // Place each 300-DPI photo tile
     layout.tiles.forEach(function (t) {
+      var tileSource = (useMixed && state.familyTray[t.itemIndex]) ? state.familyTray[t.itemIndex].canvas : singleCanvas;
       ctx.save();
       if (t.rotated) {
         ctx.translate(t.x + t.w / 2, t.y + t.h / 2);
         ctx.rotate(-Math.PI / 2);
-        ctx.drawImage(singleCanvas, -singleCanvas.width / 2, -singleCanvas.height / 2);
+        ctx.drawImage(tileSource, -t.h / 2, -t.w / 2, t.h, t.w);
       } else {
-        ctx.drawImage(singleCanvas, t.x, t.y, t.w, t.h);
+        ctx.drawImage(tileSource, t.x, t.y, t.w, t.h);
       }
       ctx.restore();
 
@@ -889,10 +1054,16 @@
           ctx.beginPath();
           ctx.moveTo(cx + dx * 3, cy);
           ctx.lineTo(cx + dx * tickLen, cy);
-          ctx.moveTo(cx, cy + dy * 3);
-          ctx.lineTo(cx, cy + dy * tickLen);
+          ctx.moveTo(cx, cy + dy * tickLen);
+          ctx.lineTo(cx, cy + dy * 3);
           ctx.stroke();
         });
+        if (useMixed && t.presetKey && PRESETS[t.presetKey]) {
+          var prMeta = PRESETS[t.presetKey];
+          ctx.fillStyle = '#334155';
+          ctx.font = '600 16px -apple-system, BlinkMacSystemFont, sans-serif';
+          ctx.fillText('#' + (t.itemIndex + 1) + ' ' + prMeta.widthMm + '×' + prMeta.heightMm + 'mm', t.x + 4, t.y + t.h + 17);
+        }
         ctx.restore();
       }
     });
@@ -903,7 +1074,10 @@
       ctx.fillStyle = '#475569';
       ctx.strokeStyle = '#475569';
       ctx.font = '600 22px -apple-system, BlinkMacSystemFont, sans-serif';
-      var headerNote = '✂ ' + preset.nameEn + ' · 300 DPI Exact Cut Sheet (' + layout.count + 'x)';
+      var headerTitle = useMixed
+        ? ('Family / Mixed-Spec Sheet (' + state.familyTray.length + ' Portraits)')
+        : preset.nameEn;
+      var headerNote = '✂ ' + headerTitle + ' · 300 DPI Exact Cut Sheet (' + layout.count + 'x)';
       ctx.fillText(headerNote, Math.max(36, layout.marginX), Math.max(28, layout.marginY - 14));
 
       // 1-inch = 300px physical scale check bar at bottom margin
@@ -961,11 +1135,124 @@
     return { canvas: sheetCanvas, layout: layout };
   }
 
+  function renderFamilyTrayUI() {
+    var listEl = $('familyTrayList');
+    var clearBtn = $('clearFamilyTrayBtn');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    if (clearBtn) clearBtn.style.display = state.familyTray.length > 0 ? '' : 'none';
+    state.familyTray.forEach(function (item, idx) {
+      var pr = PRESETS[item.presetKey] || PRESETS.us;
+      var chip = document.createElement('div');
+      chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border-radius:7px;background:#ffffff;border:1px solid #93c5fd;font-size:11px;color:#0f172a;font-weight:600;';
+      var thumb = document.createElement('img');
+      thumb.src = item.thumbUrl;
+      thumb.alt = '#' + (idx + 1);
+      thumb.style.cssText = 'width:20px;height:20px;object-fit:cover;border-radius:3px;border:1px solid #cbd5e1;';
+      var lbl = document.createElement('span');
+      lbl.textContent = '#' + (idx + 1) + ' ' + pr.widthMm + '×' + pr.heightMm + 'mm';
+      var rm = document.createElement('button');
+      rm.type = 'button';
+      rm.textContent = '×';
+      rm.style.cssText = 'border:0;background:transparent;color:#64748b;cursor:pointer;font-weight:800;padding:0 2px;';
+      rm.addEventListener('click', function () {
+        state.familyTray.splice(idx, 1);
+        renderFamilyTrayUI();
+        refreshAllCanvases();
+      });
+      chip.appendChild(thumb);
+      chip.appendChild(lbl);
+      chip.appendChild(rm);
+      listEl.appendChild(chip);
+    });
+  }
+
+  function dataUrlByteLength(dataUrl) {
+    var comma = dataUrl.indexOf(',');
+    if (comma === -1) return 0;
+    var b64 = dataUrl.slice(comma + 1);
+    var padding = b64.endsWith('==') ? 2 : (b64.endsWith('=') ? 1 : 0);
+    return Math.floor((b64.length * 3) / 4) - padding;
+  }
+
+  function encodePortalTargetJpeg(singleCanvas, specKey) {
+    var spec = PORTAL_KB_SPECS[specKey] || PORTAL_KB_SPECS.ds160;
+    var out = document.createElement('canvas');
+    out.width = spec.widthPx;
+    out.height = spec.heightPx;
+    var octx = out.getContext('2d');
+    octx.fillStyle = '#FFFFFF';
+    octx.fillRect(0, 0, out.width, out.height);
+
+    // Center-cover crop into target portal aspect ratio
+    var srcRatio = singleCanvas.width / singleCanvas.height;
+    var dstRatio = out.width / out.height;
+    var sx = 0, sy = 0, sw = singleCanvas.width, sh = singleCanvas.height;
+    if (srcRatio > dstRatio) {
+      sw = Math.round(singleCanvas.height * dstRatio);
+      sx = Math.round((singleCanvas.width - sw) / 2);
+    } else if (srcRatio < dstRatio) {
+      sh = Math.round(singleCanvas.width / dstRatio);
+      sy = Math.round((singleCanvas.height - sh) / 2);
+    }
+    octx.imageSmoothingEnabled = true;
+    if ('imageSmoothingQuality' in octx) octx.imageSmoothingQuality = 'high';
+    octx.drawImage(singleCanvas, sx, sy, sw, sh, 0, 0, out.width, out.height);
+
+    // Binary search highest JPEG quality <= maxBytes
+    var lo = 0.32, hi = 0.99, bestUrl = out.toDataURL('image/jpeg', 0.88);
+    var bestBytes = dataUrlByteLength(bestUrl);
+    for (var iter = 0; iter < 10; iter++) {
+      var mid = (lo + hi) / 2;
+      var candUrl = out.toDataURL('image/jpeg', mid);
+      var candBytes = dataUrlByteLength(candUrl);
+      if (candBytes <= spec.maxBytes) {
+        bestUrl = candUrl;
+        bestBytes = candBytes;
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+
+    // If synthetic/ultra-flat white background compresses below COVA's 40 KB floor, add imperceptible ±2 luma grain
+    if (bestBytes < spec.minBytes) {
+      var imgData = octx.getImageData(0, 0, out.width, out.height);
+      var d = imgData.data;
+      var seed = 1337;
+      for (var p = 0; p < d.length; p += 4) {
+        seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+        var delta = (seed % 5) - 2;
+        d[p] = Math.max(0, Math.min(255, d[p] + delta));
+        d[p + 1] = Math.max(0, Math.min(255, d[p + 1] + delta));
+        d[p + 2] = Math.max(0, Math.min(255, d[p + 2] + delta));
+      }
+      octx.putImageData(imgData, 0, 0);
+      lo = 0.5;
+      hi = 0.99;
+      for (var iter2 = 0; iter2 < 10; iter2++) {
+        var mid2 = (lo + hi) / 2;
+        var candUrl2 = out.toDataURL('image/jpeg', mid2);
+        var candBytes2 = dataUrlByteLength(candUrl2);
+        if (candBytes2 <= spec.maxBytes) {
+          bestUrl = candUrl2;
+          bestBytes = candBytes2;
+          lo = mid2;
+        } else {
+          hi = mid2;
+        }
+      }
+    }
+
+    return { dataUrl: bestUrl, bytes: bestBytes, spec: spec };
+  }
+
   function refreshAllCanvases() {
     var single = renderSingleBiometricCanvas();
     drawCropEditor(single);
 
-    var unlocked = isPro() || (state.sheetKey === '4x6' && state.drugstoreSafe);
+    var useMixed = state.familyTray && state.familyTray.length >= 2;
+    var unlocked = isPro() || (!useMixed && state.sheetKey === '4x6' && state.drugstoreSafe);
     var built = buildPrintSheetCanvas(single, state.sheetKey, !unlocked);
     var previewEl = $('sheetCanvas');
     // Render crisp scaled preview canvas
@@ -980,10 +1267,13 @@
     // Update metadata stats
     var preset = PRESETS[state.presetKey];
     var dict = I18N[state.lang];
+    var mmLabel = useMixed
+      ? (state.lang === 'zh' ? (state.familyTray.length + '人/混排规格') : (state.familyTray.length + ' portraits mixed'))
+      : (preset.widthMm + '×' + preset.heightMm);
     var stats = dict.sheetStatsTpl
       .replace('{count}', String(built.layout.count))
       .replace('{dim}', built.layout.sheetWidthPx + '×' + built.layout.sheetHeightPx)
-      .replace('{mm}', preset.widthMm + '×' + preset.heightMm);
+      .replace('{mm}', mmLabel);
     $('sheetStatsText').textContent = stats;
     $('specCallout').textContent = state.lang === 'zh' ? preset.noteZh : preset.noteEn;
   }
@@ -1387,13 +1677,15 @@
     });
 
     $('dl4x6Btn').addEventListener('click', function () {
-      if (!isPro() && !state.drugstoreSafe) {
+      var useMixed = state.familyTray && state.familyTray.length >= 2;
+      if (!isPro() && (useMixed || !state.drugstoreSafe)) {
         openUnlockModal();
         return;
       }
       var single = renderSingleBiometricCanvas();
       var built = buildPrintSheetCanvas(single, '4x6', false);
-      downloadCanvasPng(built.canvas, 'id-photo-' + state.presetKey + (state.drugstoreSafe ? '-4x6in-safe-bleed-300dpi.png' : '-4x6in-6up-300dpi.png'));
+      var suffix = useMixed ? '-family-mixed-4x6in-300dpi.png' : (state.drugstoreSafe ? '-4x6in-safe-bleed-300dpi.png' : '-4x6in-6up-300dpi.png');
+      downloadCanvasPng(built.canvas, 'id-photo-' + state.presetKey + suffix);
     });
 
     $('dlA4Btn').addEventListener('click', function () {
@@ -1405,6 +1697,84 @@
       var built = buildPrintSheetCanvas(single, 'a4', false);
       downloadCanvasPng(built.canvas, 'id-photo-' + state.presetKey + '-A4-2480x3508-300dpi.png');
     });
+
+    if ($('addFamilySlotBtn')) {
+      $('addFamilySlotBtn').addEventListener('click', function () {
+        if (state.familyTray.length >= 4) state.familyTray.shift();
+        var cropped = renderSingleBiometricCanvas();
+        var clone = document.createElement('canvas');
+        clone.width = cropped.width;
+        clone.height = cropped.height;
+        clone.getContext('2d').drawImage(cropped, 0, 0);
+        state.familyTray.push({
+          presetKey: state.presetKey,
+          canvas: clone,
+          thumbUrl: clone.toDataURL('image/jpeg', 0.72)
+        });
+        renderFamilyTrayUI();
+        refreshAllCanvases();
+      });
+    }
+
+    if ($('demoFamilyMixBtn')) {
+      $('demoFamilyMixBtn').addEventListener('click', function () {
+        var prevSource = state.sourceCanvas;
+        var prevPreset = state.presetKey;
+        state.familyTray = [];
+        state.sourceCanvas = generateDemoPortraitCanvas(0);
+        state.presetKey = 'us';
+        var c1 = renderSingleBiometricCanvas();
+        state.familyTray.push({ presetKey: 'us', canvas: c1, thumbUrl: c1.toDataURL('image/jpeg', 0.72) });
+
+        state.sourceCanvas = generateDemoPortraitCanvas(1);
+        state.presetKey = 'china';
+        var c2 = renderSingleBiometricCanvas();
+        state.familyTray.push({ presetKey: 'china', canvas: c2, thumbUrl: c2.toDataURL('image/jpeg', 0.72) });
+
+        state.sourceCanvas = prevSource;
+        state.presetKey = prevPreset;
+        renderFamilyTrayUI();
+        refreshAllCanvases();
+      });
+    }
+
+    if ($('clearFamilyTrayBtn')) {
+      $('clearFamilyTrayBtn').addEventListener('click', function () {
+        state.familyTray = [];
+        renderFamilyTrayUI();
+        refreshAllCanvases();
+      });
+    }
+
+    if ($('portalKbSelect')) {
+      $('portalKbSelect').addEventListener('change', function (e) {
+        state.portalSpecKey = e.target.value || 'ds160';
+      });
+    }
+
+    if ($('dlPortalJpegBtn')) {
+      $('dlPortalJpegBtn').addEventListener('click', function () {
+        if (!isPro()) {
+          openUnlockModal();
+          return;
+        }
+        var single = renderSingleBiometricCanvas();
+        var specKey = ($('portalKbSelect') && $('portalKbSelect').value) || state.portalSpecKey || 'ds160';
+        var res = encodePortalTargetJpeg(single, specKey);
+        var kb = (res.bytes / 1024).toFixed(1);
+        var link = document.createElement('a');
+        link.download = 'id-photo-' + res.spec.id + '-' + res.spec.widthPx + 'x' + res.spec.heightPx + '-' + Math.round(res.bytes / 1024) + 'KB.jpg';
+        link.href = res.dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        if ($('portalKbStatus')) {
+          $('portalKbStatus').textContent = state.lang === 'zh'
+            ? ('✓ 已导出合规 sRGB JPEG：' + kb + ' KB (' + res.spec.widthPx + '×' + res.spec.heightPx + ')')
+            : ('✓ Saved compliant sRGB JPEG: ' + kb + ' KB (' + res.spec.widthPx + '×' + res.spec.heightPx + ')');
+        }
+      });
+    }
 
     $('printSheetBtn').addEventListener('click', function () {
       triggerPrintSheet(state.sheetKey);

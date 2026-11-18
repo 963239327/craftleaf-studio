@@ -3,225 +3,513 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>北美商家与房东双语排版定制服务 (餐馆英文菜单 FDA 过敏原升级 / 招租海报) | CraftLeaf Studio</title>
-  <meta name="description" content="免注册账号、支持 Apple Pay / 信用卡一键下单：专为北美华人餐饮店主、独立房东打造的地道美式英文菜单 FDA 9大过敏原排版升级与合规双语招租图文包。" />
+  <title>北美餐馆双语菜单 FDA 过敏原生成器 &amp; 房东双语合规招租海报自助工坊 | CraftLeaf Studio</title>
+  <meta name="description" content="100% 浏览器纯本地即改即打、零等待零隐私上传：自助生成印刷级 300 DPI 北美中餐馆地道美式英文菜单（含 FDA 9大过敏原图标）与公平住房法合规双语招租海报 PDF。" />
   <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/services/" />
-  <meta property="og:title" content="北美中餐馆双语菜单翻新 &amp; 房东双语招租图文包 | CraftLeaf Studio" />
-  <meta property="og:description" content="告别生硬机翻菜名与违规招租措辞：印刷级 300 DPI 矢量双语菜单与招租套件，免注册一键获取。" />
+  <meta property="og:title" content="北美中餐馆双语菜单 FDA 生成器 &amp; 房东双语招租海报自助 PDF 工坊 | CraftLeaf Studio" />
+  <meta property="og:description" content="告别生硬机翻菜名、违规招租措辞与漫长人工等待：在线实时预览，输入 Gumroad 许可证密钥即刻导出无水印印刷级矢量 PDF。" />
   <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/services/" />
   <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
   <style>
     :root { --bg:#0b1120; --card:#1e293b; --border:#334155; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --gold:#f59e0b; }
     * { box-sizing:border-box; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; background:radial-gradient(circle at 20% 0%,#172554 0%,var(--bg) 55%); color:var(--text); line-height:1.65; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; background:radial-gradient(circle at 20% 0%,#172554 0%,var(--bg) 55%); color:var(--text); line-height:1.6; }
     a { color:#67e8f9; text-decoration:none; }
-    header { position:sticky; top:0; z-index:30; backdrop-filter:blur(12px); background:rgba(11,17,32,0.9); border-bottom:1px solid var(--border); }
-    .nav { max-width:1080px; margin:0 auto; padding:13px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
-    .wrap { max-width:1080px; margin:0 auto; padding:0 20px 64px; }
-    .hero { padding:44px 0 24px; }
-    .pill { display:inline-block; font-size:12px; font-weight:700; padding:4px 11px; border-radius:999px; background:rgba(245,158,11,0.18); color:#fcd34d; border:1px solid rgba(245,158,11,0.4); }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; margin-top:18px; }
-    .card { background:rgba(30,41,59,0.88); border:1px solid var(--border); border-radius:16px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; }
-    .ba-box { background:#090f1d; border:1px solid var(--border); border-radius:12px; padding:14px; margin:12px 0; font-size:13.5px; }
-    .bad { color:#f87171; }
-    .good { color:#34d399; font-weight:700; }
-    .btn { display:inline-block; text-align:center; padding:11px 16px; border-radius:10px; font-weight:800; font-size:14px; color:#111827; background:linear-gradient(135deg,#f59e0b,#fbbf24); border:none; cursor:pointer; }
-    .btn-sec { display:inline-block; text-align:center; padding:10px 14px; border-radius:10px; font-weight:700; font-size:13.5px; color:#e2e8f0; border:1px solid var(--border); background:#0f172a; cursor:pointer; }
-    .intake-panel { margin-top:24px; background:rgba(30,41,59,0.9); border:1px solid rgba(16,185,129,0.45); border-radius:16px; padding:24px; }
-    .fld { display:block; font-size:13px; font-weight:700; color:#cbd5e1; margin-bottom:5px; }
-    input, select, textarea { width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#090f1d; color:#fff; font-size:14px; margin-bottom:12px; }
+    header.site-hdr { position:sticky; top:0; z-index:30; backdrop-filter:blur(12px); background:rgba(11,17,32,0.92); border-bottom:1px solid var(--border); }
+    .nav { max-width:1180px; margin:0 auto; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .wrap { max-width:1180px; margin:0 auto; padding:0 20px 64px; }
+    .hero { padding:34px 0 18px; }
+    .pill { display:inline-block; font-size:12px; font-weight:700; padding:4px 11px; border-radius:999px; background:rgba(16,185,129,0.16); color:#6ee7b7; border:1px solid rgba(16,185,129,0.4); }
+    .tab-row { display:flex; gap:10px; flex-wrap:wrap; margin:16px 0 18px; }
+    .tab-btn { padding:11px 18px; border-radius:12px; border:1px solid var(--border); background:#0f172a; color:#cbd5e1; font-weight:800; font-size:14.5px; cursor:pointer; }
+    .tab-btn.active { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#0f172a; border-color:#fbbf24; }
+    .studio-grid { display:grid; grid-template-columns:1fr 1.12fr; gap:20px; align-items:start; }
+    @media (max-width:920px) { .studio-grid { grid-template-columns:1fr; } }
+    .panel { background:rgba(30,41,59,0.9); border:1px solid var(--border); border-radius:16px; padding:20px; }
+    .fld { display:block; font-size:12.5px; font-weight:700; color:#cbd5e1; margin-bottom:4px; }
+    input, select, textarea { width:100%; padding:9px 11px; border-radius:9px; border:1px solid var(--border); background:#090f1d; color:#fff; font-size:13.5px; margin-bottom:10px; font-family:inherit; }
+    .btn { display:inline-block; text-align:center; padding:10px 15px; border-radius:10px; font-weight:800; font-size:13.5px; color:#111827; background:linear-gradient(135deg,#f59e0b,#fbbf24); border:none; cursor:pointer; }
+    .btn-green { background:linear-gradient(135deg,#10b981,#34d399); color:#052e16; }
+    .btn-sec { display:inline-block; text-align:center; padding:9px 13px; border-radius:10px; font-weight:700; font-size:13px; color:#e2e8f0; border:1px solid var(--border); background:#0f172a; cursor:pointer; }
+    .print-sheet { position:relative; background:#fffdf9; color:#1c1917; border-radius:12px; padding:28px 30px; box-shadow:0 20px 50px rgba(0,0,0,0.45); overflow:hidden; border:1px solid #e7e5e4; }
+    .wm-overlay { position:absolute; inset:0; pointer-events:none; display:flex; align-items:center; justify-content:center; transform:rotate(-22deg); font-size:24px; font-weight:900; color:rgba(15,23,42,0.12); text-align:center; letter-spacing:1px; user-select:none; }
+    .menu-hdr { text-align:center; border-bottom:2.5px double #991b1b; padding-bottom:12px; margin-bottom:14px; }
+    .menu-hdr h2 { margin:0; font-size:24px; color:#7f1d1d; letter-spacing:0.5px; }
+    .menu-hdr p { margin:4px 0 0; font-size:12.5px; color:#57534e; }
+    .dish-list { display:grid; grid-template-columns:1fr 1fr; gap:12px 20px; }
+    .dish-list.single-col { grid-template-columns:1fr; }
+    .dish-item { border-bottom:1px dotted #d6d3d1; padding-bottom:8px; break-inside:avoid; }
+    .dish-top { display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-weight:800; font-size:14px; color:#1c1917; }
+    .dish-zh { font-size:13px; color:#7f1d1d; font-weight:700; }
+    .dish-price { color:#991b1b; font-weight:900; white-space:nowrap; }
+    .dish-desc { font-size:11.5px; color:#44403c; margin-top:2px; line-height:1.38; }
+    .dish-tags { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; }
+    .atag { font-size:10px; font-weight:700; padding:1px 6px; border-radius:4px; background:#fef3c7; color:#92400e; border:1px solid #fcd34d; }
+    .stag { background:#fee2e2; color:#991b1b; border-color:#fca5a5; }
+    .menu-ftr { margin-top:16px; padding-top:10px; border-top:1.5px solid #d6d3d1; font-size:10.5px; color:#57534e; line-height:1.45; }
+    .flyer-hdr { background:linear-gradient(135deg,#0f172a,#1e3a8a); color:#fff; padding:18px 20px; border-radius:10px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .flyer-photos { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:12px; }
+    .flyer-photos img { width:100%; height:132px; object-fit:cover; border-radius:8px; border:1px solid #cbd5e1; }
+    .fh-warn { padding:10px 12px; border-radius:9px; font-size:12.5px; margin-bottom:10px; }
+    .fh-ok { background:rgba(16,185,129,0.14); border:1px solid rgba(52,211,153,0.4); color:#a7f3d0; }
+    .fh-bad { background:rgba(239,68,68,0.16); border:1px solid rgba(248,113,113,0.5); color:#fecaca; }
+    .unlock-bar { margin-top:14px; padding:14px; border-radius:12px; background:#090f1d; border:1px solid rgba(245,158,11,0.45); }
     .disc { margin-top:26px; font-size:12.5px; color:var(--muted); background:rgba(15,23,42,0.8); border-left:3px solid var(--gold); padding:12px 16px; border-radius:8px; }
+    @media print {
+      body { background:#fff !important; }
+      header.site-hdr, .no-print { display:none !important; }
+      .wrap { max-width:none !important; padding:0 !important; margin:0 !important; }
+      .studio-grid { display:block !important; }
+      .print-sheet { box-shadow:none !important; border:none !important; border-radius:0 !important; padding:10mm !important; }
+    }
   </style>
 </head>
 <body>
-  <header>
+  <header class="site-hdr">
     <div class="nav">
-      <a href="../index.html" style="font-weight:800;font-size:17px;color:#fff;">🌿 CraftLeaf Studio · B2B 双语视觉工坊</a>
+      <a href="../index.html" style="font-weight:800;font-size:17px;color:#fff;">🌿 CraftLeaf Studio · 自助双语商业排版工坊</a>
       <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:14px;">
         <a href="../index.html">🏠 免费工具大厅</a>
-        <a href="../store/index.html" style="color:#fcd34d;font-weight:700;">🛍️ 数字书架 (26款)</a>
+        <a href="../store/index.html" style="color:#fcd34d;font-weight:700;">🛍️ 数字书架 (27款)</a>
         <a href="../tools/invoice/index.html">🧾 商业发票工具</a>
         <a href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 微信/美元赞赏</a>
       </div>
     </div>
   </header>
+
   <main class="wrap">
-    <section class="hero">
-      <span class="pill">免注册任何账号 · 支持 Apple Pay / 信用卡一键直达</span>
-      <h1 style="font-size:clamp(24px,3.8vw,38px);margin:12px 0;">🏢 北美华人餐馆英文菜单翻新 &amp; 独立房东合规双语招租图文包</h1>
-      <p style="color:var(--muted);max-width:820px;">用地道美式英文菜名和清晰的 FDA 9大过敏原图标，帮餐厅提升老外堂食与外卖客单价；用客观专业的双语房源海报与逐屋验房表，帮独立房东快速吸引高信用租客。</p>
+    <section class="hero no-print">
+      <span class="pill">⚡ 100% 浏览器纯本地自助生成 · 零人工等待 · 输入许可证密钥即刻无水印打印 PDF</span>
+      <h1 style="font-size:clamp(23px,3.5vw,36px);margin:10px 0 8px;">🏢 北美餐馆双语菜单 (FDA 9大过敏原) &amp; 独立房东合规双语招租海报自助 PDF 工坊</h1>
+      <p style="color:var(--muted);max-width:880px;margin:0;">无需发邮件等 48 小时人工排版！直接在下方输入菜品或房源信息（照片与数据 100% 留在您自己电脑内存，0 字节上传云端），免费实时预览版式，使用 Gumroad 许可证密钥（或 $19 全站通票）一键解锁无限次无水印 300 DPI 矢量 PDF 打印与外卖/Zillow 文案导出。</p>
+
+      <div class="tab-row">
+        <button type="button" class="tab-btn active" id="tabMenuBtn" onclick="switchStudioTab('menu')">🍜 1. 中餐馆地道美式双语菜单 + FDA 过敏原 PDF 工坊 ($29 买断)</button>
+        <button type="button" class="tab-btn" id="tabRentalBtn" onclick="switchStudioTab('rental')">🏡 2. 房东公平住房合规双语招租海报 + Zillow 文案工坊 ($19 买断)</button>
+      </div>
     </section>
 
-    <div class="grid">
-      <article class="card">
-        <div>
-          <span class="pill">餐饮店长 / UberEats / DoorDash 提效</span>
-          <h2 style="margin:10px 0 8px;">🍜 北美中餐馆双语菜单本地化 + FDA 9大过敏原图标排版升级</h2>
-          <p style="color:#cbd5e1;font-size:14px;">告别让美国食客不敢点单的生硬直译！按烹饪工艺 + 主料口感 + 秘制酱汁重构地道美式菜单描述，配齐花生/坚果/麸质/芝麻/乳制品等 FDA Big-9 视觉图标。</p>
-          <div class="ba-box">
-            <div class="bad">❌ 旧菜单常见机翻：Husband and Wife Lung Slice / Fried Intestine ($16.95)</div>
-            <div class="good" style="margin-top:6px;">✅ 升级后高溢价英文：Chili-Oil Braised Beef Shank &amp; Tripe Cold Platter — Thinly sliced Angus shank tossed in toasted Sichuan peppercorn vinaigrette, crushed peanuts &amp; cilantro [🥜 Peanuts · 🌾 Soy/Wheat · 🌶️ Medium] ($19.95)</div>
-          </div>
-          <ul style="font-size:13.8px;color:#cbd5e1;padding-left:20px;">
-            <li><strong>可打印 300 DPI 矢量双面菜单 PDF</strong>（US Letter / 11×17 Tabloid，直接送印 Staples / FedEx Office）</li>
-            <li><strong>配套扫码点餐牌 + 外卖平台高点击英文菜名对照表</strong></li>
-            <li><strong>自助速查包 ($7 即买即下载)</strong> 或 <strong>48h 全套定制排版 ($65起)</strong></li>
-          </ul>
+    <!-- ==================== STUDIO 1: RESTAURANT BILINGUAL MENU + FDA BIG-9 ==================== -->
+    <section id="studioMenuSection" class="studio-grid">
+      <div class="panel no-print">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+          <h3 style="margin:0;font-size:16.5px;">🍜 菜单参数与菜品批量编辑器</h3>
+          <button type="button" class="btn-sec" style="font-size:12px;padding:5px 10px;" onclick="autoTranslateChineseDishes()">✨ 一键地道美式润色常见中餐菜名</button>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-          <a class="btn" id="ctaMenuCustom" href="#intake" onclick="return handleCustomB2BCta('menu', this);">📝 生成 48h 菜单翻新需求单 →</a>
-          <a class="btn-sec" id="ctaMenuDiy" href="../cn-guides/us-grocery-bilingual-chinese-cooking-ingredients-mapping.html">📖 免费查阅食材/菜名中英对照指南 →</a>
-        </div>
-      </article>
-
-      <article class="card">
-        <div>
-          <span class="pill">北美华人房东 / ADU / Airbnb 房主</span>
-          <h2 style="margin:10px 0 8px;">🏡 独立房东中英双语高颜值招租海报 + 入住验房交接全套模板</h2>
-          <p style="color:#cbd5e1;font-size:14px;">不仅能在小红书/微信群发中文招租，更能一键生成发 Zillow / Apartments / Facebook 本地群的专业英文房源海报，避开容易踩雷的歧视性措辞风险。</p>
-          <div class="ba-box">
-            <div class="bad">❌ 高风险口语招租：”Single quiet young professional only, no kids“（易触碰联邦公平住房法偏好限制争议）</div>
-            <div class="good" style="margin-top:6px;">✅ 专业客观房源描述：”Sun-drenched 1BR/1BA Private-Entry Suite · In-unit W/D, dedicated EV-ready parking, 8-min walk to Light Rail. Verifiable income 3× rent, 700+ credit &amp; clean rental history.“</div>
-          </div>
-          <ul style="font-size:13.8px;color:#cbd5e1;padding-left:20px;">
-            <li><strong>配套免费查阅《美国租房合同高频英文条款解读与验房避坑指南》</strong></li>
-            <li><strong>定制 3:4 手机竖版双语招租海报 + 入住欢迎页</strong>：免注册生成标准定制需求单</li>
-          </ul>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-          <a class="btn" id="ctaLandlordCustom" href="#intake" onclick="return handleCustomB2BCta('rental', this);">📝 生成双语招租海报需求单 →</a>
-          <a class="btn-sec" id="ctaLandlordKit" href="../cn-guides/us-apartment-lease-security-deposit-early-termination-clauses.html">📖 免费阅读租约条款与验房指南 →</a>
-        </div>
-      </article>
-    </div>
-
-    <section class="intake-panel" id="intake">
-      <h3 style="margin:0 0 6px;">📝 免注册 30 秒生成定制需求单（下单后随收据回复即可启动制作）</h3>
-      <p style="margin:0 0 16px;color:var(--muted);font-size:13.8px;">无需注册任何技术网站账号！填写下方 3 项基本信息，一键复制双语需求单并在付款收据邮件中直接回复原菜单/房源照片即可，48 小时内交付印刷级矢量 PDF。</p>
-      <div class="grid" style="margin-top:0;">
-        <div>
-          <label class="fld" for="b2bType">定制类型 / Service Package</label>
-          <select id="b2bType" onchange="syncIntake()">
-            <option value="menu">🍜 中餐馆双语菜单 + FDA 9大过敏原翻新 ($65 · 35道菜内)</option>
-            <option value="rental">🏡 房东双语合规招租海报 + 租客入住指南 ($35)</option>
-          </select>
-          <label class="fld" for="b2bName">餐厅名称或房源城市街区 / Business or City</label>
-          <input id="b2bName" type="text" placeholder="例如：Sichuan Bistro (Bellevue WA) 或 Redmond 2B2B Condo" oninput="syncIntake()" />
-          <label class="fld" for="b2bNotes">核心需求备注（菜品数量/尺寸 或 租金/亮点/看房联系方式）</label>
-          <textarea id="b2bNotes" rows="3" placeholder="例如：共 32 道川菜，需 US Letter 双面打印 + DoorDash 英文菜名对照..." oninput="syncIntake()"></textarea>
-        </div>
-        <div style="display:flex;flex-direction:column;justify-content:space-between;">
+        <label class="fld">餐厅中英文店名 / Restaurant Title</label>
+        <input id="mTitle" type="text" value="Sichuan Alley Bistro · 锦里川味小馆" oninput="renderMenuSheet()" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
           <div>
-            <label class="fld">自动生成的标准订单摘要（100% 本地生成）：</label>
-            <pre id="b2bPreview" style="background:#090f1d;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12.8px;white-space:pre-wrap;color:#d1fae5;margin:0 0 12px;"></pre>
+            <label class="fld">副标题 / 营业电话与地址</label>
+            <input id="mSub" type="text" value="Authentic Hand-Crafted Sichuan Cuisine · Bellevue, WA · (425) 555-0198" oninput="renderMenuSheet()" />
           </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-            <button type="button" class="btn" id="b2bCopyBtn" onclick="copyBriefAndCheckout()">📋 一键复制定制需求单 →</button>
-            <a class="btn-sec" id="b2bMailBtn" href="#" style="display:none;">✉️ 发送需求邮件</a>
-            <span id="b2bCopyStatus" style="font-size:13px;color:#6ee7b7;"></span>
+          <div>
+            <label class="fld">排版列数 / Print Columns</label>
+            <select id="mCols" onchange="renderMenuSheet()">
+              <option value="2">双栏紧凑堂食菜单 (US Letter / 11×17)</option>
+              <option value="1">单栏大字精装菜单 (US Letter)</option>
+            </select>
+          </div>
+        </div>
+        <label class="fld">菜品列表（每行 1 道：`中文菜名 | English Name | 美式工艺配料描述 | 价格 | 过敏原代码(P,TN,W,S,D,E,SH,F,SE) | 辣度0-3`）</label>
+        <textarea id="mDishes" rows="10" oninput="renderMenuSheet()">夫妻肺片 | Chili-Oil Braised Beef Shank & Tripe | Thinly sliced Angus beef shank & honeycomb tripe tossed in toasted Sichuan peppercorn vinaigrette, crushed peanuts & cilantro | $18.95 | P,S,W,SE | 2
+宫保鸡丁 | Kung Pao Wok-Seared Chicken | Crispy velveted chicken breast wok-tossed with roasted peanuts, scorched heaven-facing chilies & aged black vinegar glaze | $17.50 | P,S,W | 2
+麻婆豆腐 | Mapo Silken Tofu in Mala Bean Sauce | Organic soft tofu simmered with minced heritage pork, Pixian fermented broad-bean chili paste & numbing green Sichuan pepper | $15.95 | S,W | 3
+招牌小笼包(8只) | Handmade Kurobuta Pork Soup Dumplings (8 pcs) | Delicate pleated wheat wrappers filled with slow-simmered pork bone aspic & ginger-scallion broth | $14.95 | W,S,SE | 0
+干煸四季豆 | Blistered String Beans w/ Crispy Minced Pork | Wok-charred green beans stir-fried dry with preserved Ya'an芽菜 mustard greens, garlic & cracked chili | $15.50 | S | 1
+黑松露虾仁炒饭 | Black Truffle & Wild Gulf Shrimp Fried Rice | Jasmine rice wok-fired over high flame with wild shrimp, farm egg, scallions & aromatic black truffle oil | $19.50 | SH,E,S | 0</textarea>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-green" onclick="exportMenuPdf()">🖨️ 导出无水印 300 DPI 矢量菜单 PDF</button>
+          <button type="button" class="btn-sec" onclick="copyDeliveryMenuCopy()">📋 复制 UberEats / DoorDash 英文上架文案</button>
+          <a class="btn-sec" id="ctaMenuDiy" href="../cn-guides/us-grocery-bilingual-chinese-cooking-ingredients-mapping.html">📖 免费食材中英对照</a>
+        </div>
+        <div id="menuExportMsg" style="font-size:12.5px;color:#6ee7b7;margin-top:6px;"></div>
+
+        <div class="unlock-bar" id="menuUnlockBar">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+            <strong id="menuLockTitle" style="color:#fcd34d;font-size:13.5px;">🔒 解锁无水印印刷级 PDF 无限次导出 ($29 一次买断 · 免人工等待)</strong>
+            <a class="btn" id="buyMenuStudioBtn" href="https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet?option=3omHx0zNVUK8PW-b9tVg0A==&wanted=true" target="_blank" rel="noopener" style="padding:6px 12px;font-size:12.5px;">💳 获取自助菜单工坊密钥 ($29) →</a>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <input id="menuLicenseInput" type="text" placeholder="粘贴 Gumroad 订单回执中的 License Key（或 $19 All-Access 通票密钥）" style="margin:0;flex:1;" />
+            <button type="button" class="btn-sec" onclick="activateStudioKey('chineseGroceryCheatSheet', 'menuLicenseInput', 'menuLicenseMsg')">立即激活</button>
+          </div>
+          <div id="menuLicenseMsg" style="font-size:12px;margin-top:5px;"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="print-sheet" id="menuPrintSheet">
+          <div class="wm-overlay" id="menuWatermark">PREVIEW · UNLOCK SELF-SERVE MENU STUDIO ($29)<br/>免费实时排版预览 · 激活密钥即刻去除水印导出 PDF</div>
+          <div class="menu-hdr">
+            <h2 id="pvMenuTitle"></h2>
+            <p id="pvMenuSub"></p>
+          </div>
+          <div class="dish-list" id="pvDishGrid"></div>
+          <div class="menu-ftr">
+            <strong>🛡️ FDA Major Food Allergen Key (美国 FDA 九大常见过敏原提示)：</strong>
+            <code>[🥜 P]</code> Peanuts 花生 · <code>[🌰 TN]</code> Tree Nuts 坚果 · <code>[🌾 W]</code> Wheat/Gluten 小麦麸质 · <code>[🫘 S]</code> Soy 大豆酱油 · <code>[🥛 D]</code> Milk/Dairy 乳制品 · <code>[🥚 E]</code> Egg 蛋类 · <code>[🦐 SH]</code> Crustacean Shellfish 虾蟹甲壳类 · <code>[🐟 F]</code> Fish 鱼类 · <code>[⚪ SE]</code> Sesame 芝麻香油。<br/>
+            <em>Consumer Advisory: Please inform your server of any severe food allergies before ordering; shared woks &amp; fryers may have cross-contact.</em>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="disc">
-      <strong>⚠️ 重要合规与免责声明 (Compliance Disclaimer)：</strong>本页面提供的双语菜单排版、过敏原图标设计与房源文案润色仅属于平面视觉排版与双语语言表达服务，<strong>绝不构成任何法律、食品安全监管或房产合规意见（Not Legal or Regulatory Advice）</strong>。餐饮过敏原最终核实请以厨房实际配料与当地卫生局规定为准；住宅租赁广告及租约条款请遵守联邦《公平住房法》(Fair Housing Act) 及所在州市最新租赁法规。
+    <!-- ==================== STUDIO 2: FAIR-HOUSING BILINGUAL LANDLORD FLYER ==================== -->
+    <section id="studioRentalSection" class="studio-grid" style="display:none;">
+      <div class="panel no-print">
+        <h3 style="margin:0 0 8px;font-size:16.5px;">🏡 房东双语招租海报 + 公平住房法实时合规自检</h3>
+        <div id="fhScannerBox" class="fh-warn fh-ok">✅ 公平住房措辞自检通过：仅描述房屋客观硬件与统一财务筛选标准，未检测到偏好/家庭状况敏感词。</div>
+
+        <label class="fld">房源双语主标题 / Listing Headline</label>
+        <input id="rTitle" type="text" value="Sun-Drenched 2BR/2BA Modern Condo · 东区轻轨旁采光两房两卫整租" oninput="renderRentalSheet()" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <label class="fld">城市街区 &amp; 核心参数 / City &amp; Specs</label>
+            <input id="rSpecs" type="text" value="Bellevue / Redmond, WA · 2 Bed · 2 Bath · 1,060 sqft" oninput="renderRentalSheet()" />
+          </div>
+          <div>
+            <label class="fld">月租、押金与起租日 / Rent &amp; Available Date</label>
+            <input id="rRent" type="text" value="$2,850/mo · 1-Mo Deposit · Available Dec 1" oninput="renderRentalSheet()" />
+          </div>
+        </div>
+        <label class="fld">房屋硬件亮点（中英双语要点，每行一条）</label>
+        <textarea id="rBullets" rows="5" oninput="renderRentalSheet()">In-unit full-size washer/dryer & central A/C · 室内独立洗烘套装与中央冷暖空调
+1 covered garage parking spot w/ Level-2 EV charger · 含地下车库固定车位（支持电车快充）
+8-min walk to Light Rail, grocery & parks · 步行 8 分钟直达轻轨站、超市与社区公园
+Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处理，室内禁烟</textarea>
+        <label class="fld">统一客观申请标准 &amp; 看房联系方式 / Uniform Screening Criteria &amp; Contact</label>
+        <input id="rContact" type="text" value="Uniform Criteria: Verifiable income ≥ 3× rent, 700+ credit & background check · Text/WeChat: (425) 555-0142" oninput="renderRentalSheet()" />
+        <label class="fld">导入 1–4 张房源实拍图（100% 本地浏览器读取，绝不上传服务器）</label>
+        <input id="rPhotosInput" type="file" accept="image/*" multiple onchange="loadLocalPropertyPhotos(this)" />
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-green" onclick="exportRentalPdf()">🖨️ 导出无水印双语招租海报 PDF</button>
+          <button type="button" class="btn-sec" onclick="copyZillowListingCopy()">📋 一键复制 Zillow / Facebook 纯英文招租文案</button>
+          <a class="btn-sec" id="ctaLandlordKit" href="../cn-guides/us-apartment-lease-security-deposit-early-termination-clauses.html">📖 免费阅读租约避坑指南</a>
+        </div>
+        <div id="rentalExportMsg" style="font-size:12.5px;color:#6ee7b7;margin-top:6px;"></div>
+
+        <div class="unlock-bar">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+            <strong id="rentalLockTitle" style="color:#fcd34d;font-size:13.5px;">🔒 解锁无水印招租海报 PDF 无限次导出 ($19 一次买断 · 附赠 17 页租约验房包)</strong>
+            <a class="btn" id="buyRentalStudioBtn" href="https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?option=t8XKOlskRq76_g5d3h7ODA==&wanted=true" target="_blank" rel="noopener" style="padding:6px 12px;font-size:12.5px;">💳 获取自助招租工坊密钥 ($19) →</a>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <input id="rentalLicenseInput" type="text" placeholder="粘贴 Gumroad 订单回执中的 License Key（或 $19 All-Access 通票密钥）" style="margin:0;flex:1;" />
+            <button type="button" class="btn-sec" onclick="activateStudioKey('leaseGuide', 'rentalLicenseInput', 'rentalLicenseMsg')">立即激活</button>
+          </div>
+          <div id="rentalLicenseMsg" style="font-size:12px;margin-top:5px;"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="print-sheet" id="rentalPrintSheet">
+          <div class="wm-overlay" id="rentalWatermark">PREVIEW · UNLOCK LANDLORD FLYER STUDIO ($19)<br/>免费实时海报预览 · 激活密钥即刻去除水印导出 PDF</div>
+          <div class="flyer-hdr">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:#93c5fd;text-transform:uppercase;letter-spacing:0.8px;">FOR RENT · 精品房源直租</div>
+              <h2 id="pvRentalTitle" style="margin:4px 0;font-size:20px;line-height:1.25;"></h2>
+              <div id="pvRentalSpecs" style="font-size:12.5px;color:#cbd5e1;"></div>
+            </div>
+            <div id="pvRentalRent" style="background:#fbbf24;color:#0f172a;font-weight:900;padding:8px 12px;border-radius:8px;font-size:13.5px;text-align:right;white-space:nowrap;"></div>
+          </div>
+          <div class="flyer-photos" id="pvRentalPhotos"></div>
+          <h4 style="margin:8px 0 6px;color:#0f172a;font-size:14px;">✨ Property Highlights · 房屋核心配置与社区亮点</h4>
+          <ul id="pvRentalBullets" style="margin:0 0 12px;padding-left:18px;font-size:12.8px;color:#334155;line-height:1.55;"></ul>
+          <div style="background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;font-size:12px;color:#0f172a;">
+            <strong>📋 Application &amp; Tour Contact (看房预约与统一申请标准)：</strong>
+            <div id="pvRentalContact" style="margin-top:3px;"></div>
+          </div>
+          <div class="menu-ftr">
+            <strong>Equal Housing Opportunity · 公平住房声明：</strong> We welcome all qualified applicants and apply uniform, objective income, credit, and rental-history criteria in accordance with federal, state, and local Fair Housing laws.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="disc no-print">
+      <strong>⚠️ 重要合规与免责声明 (Compliance Disclaimer)：</strong>本页面为 100% 浏览器本地运行的自助平面排版与双语语言润色工具，<strong>绝不构成任何法律、食品安全监管或房产合规意见（Not Legal or Regulatory Advice）</strong>。餐饮过敏原标注请务必由主厨核对厨房实际酱料配方与当地卫生局规定；住宅租赁广告请严格遵守联邦《公平住房法》(Fair Housing Act) 及所在州市最新租赁法规。
     </div>
   </main>
+
   <script src="../assets/monetization-config.js"></script>
   <script src="../assets/monetization-sdk.js"></script>
   <script>
-    function getB2BCfg() {
-      return (window.CRAFTLEAF_MONETIZATION && window.CRAFTLEAF_MONETIZATION.b2bServices) || {};
-    }
-    function syncIntake() {
-      var kind = document.getElementById('b2bType').value;
-      var name = (document.getElementById('b2bName').value || '').trim() || '[待填写名称 / TBD]';
-      var notes = (document.getElementById('b2bNotes').value || '').trim() || '[付款后直接回复收据邮件附上原图 / Attach photos to receipt reply]';
-      var pkgLabel = kind === 'menu'
-        ? 'Restaurant Bilingual Menu + FDA Big-9 Allergen Overhaul ($65)'
-        : 'Bilingual Fair-Housing-Safe Rental Flyer + Move-In Sheet ($35)';
-      var summary = '【CraftLeaf B2B Order Brief】\n' +
-        '• Package: ' + pkgLabel + '\n' +
-        '• Business / Property: ' + name + '\n' +
-        '• Scope & Details: ' + notes;
-      document.getElementById('b2bPreview').textContent = summary;
+    var ALLERGEN_MAP = {
+      P: '🥜 Peanuts', TN: '🌰 Tree Nuts', W: '🌾 Wheat', S: '🫘 Soy',
+      D: '🥛 Dairy', E: '🥚 Egg', SH: '🦐 Shellfish', F: '🐟 Fish', SE: '⚪ Sesame'
+    };
+    var IDIOMATIC_DISH_DICT = {
+      '夫妻肺片': ['Chili-Oil Braised Beef Shank & Tripe', 'Thinly sliced Angus shank & honeycomb tripe in toasted Sichuan peppercorn vinaigrette w/ crushed peanuts', 'P,S,W,SE', 2],
+      '宫保鸡丁': ['Kung Pao Wok-Seared Chicken', 'Velveted chicken tossed with crunchy roasted peanuts, scorched chilies & aged black vinegar glaze', 'P,S,W', 2],
+      '麻婆豆腐': ['Mapo Silken Tofu in Mala Sauce', 'Soft organic tofu braised in Pixian fermented chili-bean sauce & fragrant Sichuan peppercorn oil', 'S,W', 3],
+      '水煮牛肉': ['Poached Sliced Beef in Sizzling Chili Broth', 'Tender ribeye slices poached in rich marrow broth topped with toasted chilies & garlic', 'S,W', 3],
+      '回锅肉': ['Twice-Cooked Heritage Pork Belly', 'Caramelized pork belly wok-seared with green garlic leeks, fermented black beans & chili paste', 'S,W', 2],
+      '左宗棠鸡': ["General Tso's Crispy Tangy Chicken", 'Lightly battered dark-meat chicken glazed in sweet-tangy ginger-garlic chili reduction', 'S,W,E', 1],
+      '担担面': ['Sichuan Dan Dan Street Noodles', 'Springy wheat noodles in creamy toasted-sesame chili oil, savory minced pork & preserved greens', 'W,S,SE,P', 2],
+      '红油抄手': ['Sichuan Chili-Oil Pork Wontons', 'Delicate handmade pork wontons steeped in house-infused sweet-spicy aromatic soy chili oil', 'W,S,SE', 2],
+      '酸辣汤': ['Classic Hot & Sour Bamboo Soup', 'Velvety wood-ear mushroom, bamboo shoot & silken tofu broth brightened with aged black vinegar & white pepper', 'S,W,E', 1],
+      '葱爆牛肉': ['Scallion & Ginger Wok-Seared Beef', 'Flank steak flash-seared over roaring wok hei flame with sweet Vidalia onions & scallions', 'S,W', 0]
+    };
+    var FAIR_HOUSING_RISKY_RE = /\b(no kids|no children|adults only|single professional|young professional|female only|male only|christian|church|chinese only|asian only|married couple|students only)\b|(不租带娃|不要小孩|仅限单身|仅限女生|仅限华人|基督徒优先)/i;
+    var rentalPhotos = [];
+    var activeTab = 'menu';
 
-      var b2b = getB2BCfg();
-      if (b2b.intakeEmail) {
-        var mailBtn = document.getElementById('b2bMailBtn');
-        mailBtn.style.display = 'inline-block';
-        mailBtn.href = 'mailto:' + encodeURIComponent(b2b.intakeEmail) +
-          '?subject=' + encodeURIComponent('CraftLeaf B2B Order: ' + name) +
-          '&body=' + encodeURIComponent(summary);
+    function isMenuPro() {
+      return !!(window.CraftLeafSDK && window.CraftLeafSDK.isUnlocked('chineseGroceryCheatSheet'));
+    }
+    function isRentalPro() {
+      return !!(window.CraftLeafSDK && window.CraftLeafSDK.isUnlocked('leaseGuide'));
+    }
+
+    function switchStudioTab(tab) {
+      activeTab = tab;
+      document.getElementById('studioMenuSection').style.display = tab === 'menu' ? '' : 'none';
+      document.getElementById('studioRentalSection').style.display = tab === 'rental' ? '' : 'none';
+      document.getElementById('tabMenuBtn').classList.toggle('active', tab === 'menu');
+      document.getElementById('tabRentalBtn').classList.toggle('active', tab === 'rental');
+    }
+
+    function parseMenuRows() {
+      var raw = (document.getElementById('mDishes').value || '').split(/\r?\n/);
+      var out = [];
+      for (var i = 0; i < raw.length; i++) {
+        var ln = raw[i].trim();
+        if (!ln) continue;
+        var p = ln.split('|').map(function (s) { return s.trim(); });
+        out.push({
+          zh: p[0] || '',
+          en: p[1] || p[0] || '',
+          desc: p[2] || '',
+          price: p[3] || '',
+          allergens: (p[4] || '').split(',').map(function (c) { return c.trim().toUpperCase(); }).filter(Boolean),
+          spice: parseInt(p[5] || '0', 10) || 0
+        });
+      }
+      return out;
+    }
+
+    function autoTranslateChineseDishes() {
+      var lines = (document.getElementById('mDishes').value || '').split(/\r?\n/);
+      var updated = lines.map(function (ln) {
+        var p = ln.split('|').map(function (s) { return s.trim(); });
+        var zhKey = p[0] || '';
+        if (IDIOMATIC_DISH_DICT[zhKey]) {
+          var d = IDIOMATIC_DISH_DICT[zhKey];
+          return [zhKey, d[0], d[1], p[3] || '$16.95', p[4] || d[2], p[5] !== undefined ? p[5] : d[3]].join(' | ');
+        }
+        return ln;
+      });
+      document.getElementById('mDishes').value = updated.join('\n');
+      renderMenuSheet();
+    }
+
+    function renderMenuSheet() {
+      document.getElementById('pvMenuTitle').textContent = document.getElementById('mTitle').value || 'Bilingual Menu';
+      document.getElementById('pvMenuSub').textContent = document.getElementById('mSub').value || '';
+      var cols = document.getElementById('mCols').value;
+      var grid = document.getElementById('pvDishGrid');
+      grid.className = cols === '1' ? 'dish-list single-col' : 'dish-list';
+      grid.innerHTML = '';
+      var rows = parseMenuRows();
+      rows.forEach(function (r) {
+        var card = document.createElement('div');
+        card.className = 'dish-item';
+        var top = document.createElement('div');
+        top.className = 'dish-top';
+        var left = document.createElement('div');
+        left.textContent = r.en + (r.zh && r.zh !== r.en ? (' · ' + r.zh) : '');
+        var pr = document.createElement('div');
+        pr.className = 'dish-price';
+        pr.textContent = r.price;
+        top.appendChild(left);
+        top.appendChild(pr);
+        card.appendChild(top);
+        if (r.desc) {
+          var dc = document.createElement('div');
+          dc.className = 'dish-desc';
+          dc.textContent = r.desc;
+          card.appendChild(dc);
+        }
+        if (r.allergens.length || r.spice > 0) {
+          var tg = document.createElement('div');
+          tg.className = 'dish-tags';
+          r.allergens.forEach(function (code) {
+            if (!ALLERGEN_MAP[code]) return;
+            var sp = document.createElement('span');
+            sp.className = 'atag';
+            sp.textContent = ALLERGEN_MAP[code];
+            tg.appendChild(sp);
+          });
+          if (r.spice > 0) {
+            var sp2 = document.createElement('span');
+            sp2.className = 'atag stag';
+            sp2.textContent = new Array(Math.min(3, r.spice) + 1).join('🌶️');
+            tg.appendChild(sp2);
+          }
+          card.appendChild(tg);
+        }
+        grid.appendChild(card);
+      });
+      var unlocked = isMenuPro();
+      document.getElementById('menuWatermark').style.display = unlocked ? 'none' : 'flex';
+      document.getElementById('menuLockTitle').textContent = unlocked
+        ? '✅ 已解锁无水印菜单 PDF 工坊 Pro！可直接点击上方打印/导出 PDF'
+        : '🔒 解锁无水印印刷级 PDF 无限次导出 ($29 一次买断 · 免人工等待)';
+    }
+
+    function createDefaultRentalSvgDataUrl(label, bg1, bg2) {
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="' + bg1 + '"/><stop offset="100%" stop-color="' + bg2 + '"/></linearGradient></defs><rect width="600" height="360" fill="url(#g)"/><text x="300" y="188" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="24" font-weight="700">' + label + '</text></svg>';
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    function loadLocalPropertyPhotos(inp) {
+      var files = Array.prototype.slice.call((inp && inp.files) || []).slice(0, 4);
+      if (!files.length) return;
+      rentalPhotos = [];
+      var remaining = files.length;
+      files.forEach(function (f) {
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          rentalPhotos.push(ev.target.result);
+          remaining -= 1;
+          if (remaining === 0) renderRentalSheet();
+        };
+        reader.readAsDataURL(f);
+      });
+    }
+
+    function renderRentalSheet() {
+      var title = document.getElementById('rTitle').value || '';
+      var specs = document.getElementById('rSpecs').value || '';
+      var rent = document.getElementById('rRent').value || '';
+      var bulletsRaw = document.getElementById('rBullets').value || '';
+      var contact = document.getElementById('rContact').value || '';
+      var combined = [title, specs, rent, bulletsRaw, contact].join(' ');
+      var warnBox = document.getElementById('fhScannerBox');
+      var m = combined.match(FAIR_HOUSING_RISKY_RE);
+      if (m) {
+        warnBox.className = 'fh-warn fh-bad';
+        warnBox.textContent = '⚠️ 检测到潜在公平住房敏感措辞「' + m[0] + '」！建议改为客观物理条件或统一收入/信用标准（如 Verifiable income 3× rent, max occupancy per local code）。';
+      } else {
+        warnBox.className = 'fh-warn fh-ok';
+        warnBox.textContent = '✅ 公平住房措辞自检通过：仅描述房屋客观硬件与统一财务筛选标准，未检测到敏感偏好词。';
+      }
+      document.getElementById('pvRentalTitle').textContent = title;
+      document.getElementById('pvRentalSpecs').textContent = specs;
+      document.getElementById('pvRentalRent').textContent = rent;
+      document.getElementById('pvRentalContact').textContent = contact;
+      var ul = document.getElementById('pvRentalBullets');
+      ul.innerHTML = '';
+      bulletsRaw.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (b) {
+        var li = document.createElement('li');
+        li.textContent = b;
+        ul.appendChild(li);
+      });
+      var pWrap = document.getElementById('pvRentalPhotos');
+      pWrap.innerHTML = '';
+      var pics = rentalPhotos.length ? rentalPhotos : [
+        createDefaultRentalSvgDataUrl('Living Room · 采光客厅实拍位', '#1e3a8a', '#0ea5e9'),
+        createDefaultRentalSvgDataUrl('Modern Kitchen · 厨卫电器实拍位', '#0f766e', '#10b981')
+      ];
+      pics.forEach(function (src) {
+        var img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Property Photo';
+        pWrap.appendChild(img);
+      });
+      var unlocked = isRentalPro();
+      document.getElementById('rentalWatermark').style.display = unlocked ? 'none' : 'flex';
+      document.getElementById('rentalLockTitle').textContent = unlocked
+        ? '✅ 已解锁无水印招租海报 PDF 工坊 Pro！可直接导出印刷级海报'
+        : '🔒 解锁无水印招租海报 PDF 无限次导出 ($19 一次买断 · 附赠 17 页租约验房包)';
+    }
+
+    async function activateStudioKey(slot, inputId, msgId) {
+      var raw = document.getElementById(inputId).value;
+      var msgEl = document.getElementById(msgId);
+      if (!window.CraftLeafSDK) return;
+      msgEl.textContent = '正在向 Gumroad 验证许可证密钥...';
+      msgEl.style.color = '#93c5fd';
+      var res = await window.CraftLeafSDK.verifyLicense(slot, raw);
+      if (res && res.valid) {
+        msgEl.textContent = '✓ 激活成功！预览水印已移除，现在可无限次导出无水印高清矢量 PDF！';
+        msgEl.style.color = '#6ee7b7';
+        renderMenuSheet();
+        renderRentalSheet();
+      } else {
+        msgEl.textContent = res && res.reason === 'network_error'
+          ? '网络连接失败，请检查网络后重试。'
+          : '密钥无效或与当前商品不匹配，请核对 Gumroad 收据中的 License Key。';
+        msgEl.style.color = '#fca5a5';
       }
     }
-    function handleCustomB2BCta(kind, anchorEl) {
-      var b2b = getB2BCfg();
-      var directUrl = kind === 'menu' ? b2b.restaurantCustomCheckoutUrl : b2b.landlordCustomCheckoutUrl;
-      if (directUrl) {
-        anchorEl.href = (window.CraftLeafSDK && window.CraftLeafSDK.decorateGumroadUrl)
-          ? window.CraftLeafSDK.decorateGumroadUrl(directUrl)
-          : directUrl;
-        anchorEl.target = '_blank';
-        return true;
+
+    function exportMenuPdf() {
+      if (!isMenuPro()) {
+        document.getElementById('menuLicenseInput').focus();
+        document.getElementById('menuExportMsg').textContent = '请先在下方输入 $29 自助菜单工坊密钥（或 $19 全站通票密钥）去除水印后打印 PDF！';
+        return;
       }
-      document.getElementById('b2bType').value = kind;
-      syncIntake();
-      document.getElementById('intake').scrollIntoView({ behavior: 'smooth' });
-      return false;
+      switchStudioTab('menu');
+      window.print();
     }
-    function copyBriefAndCheckout() {
-      syncIntake();
-      var txt = document.getElementById('b2bPreview').textContent;
+
+    function exportRentalPdf() {
+      if (!isRentalPro()) {
+        document.getElementById('rentalLicenseInput').focus();
+        document.getElementById('rentalExportMsg').textContent = '请先在下方输入 $19 自助招租工坊密钥（或 $19 全站通票密钥）去除水印后打印 PDF！';
+        return;
+      }
+      switchStudioTab('rental');
+      window.print();
+    }
+
+    function copyDeliveryMenuCopy() {
+      var rows = parseMenuRows();
+      var txt = rows.map(function (r) {
+        var tags = r.allergens.map(function (a) { return ALLERGEN_MAP[a] || a; }).join(', ');
+        return r.en + ' (' + r.zh + ') — ' + r.price + '\n' + r.desc + (tags ? (' [Contains: ' + tags + ']') : '');
+      }).join('\n\n');
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(txt).catch(function () {});
       }
-      var b2b = getB2BCfg();
-      var kind = document.getElementById('b2bType').value;
-      var rawTarget = kind === 'menu' ? (b2b.restaurantCustomCheckoutUrl || '') : (b2b.landlordCustomCheckoutUrl || '');
-      var st = document.getElementById('b2bCopyStatus');
-      if (rawTarget) {
-        var finalUrl = (window.CraftLeafSDK && window.CraftLeafSDK.decorateGumroadUrl)
-          ? window.CraftLeafSDK.decorateGumroadUrl(rawTarget)
-          : rawTarget;
-        if (st) st.textContent = '✓ 已复制需求单，正在打开专属结账页...';
-        window.open(finalUrl, '_blank', 'noopener');
-      } else {
-        if (st) st.textContent = '✓ 定制需求单已复制到剪贴板！在线直付通道开通前请暂存备用。';
-      }
+      document.getElementById('menuExportMsg').textContent = '✓ 已复制 ' + rows.length + ' 道菜品的 UberEats / DoorDash 标准英文上架文案！';
     }
+
+    function copyZillowListingCopy() {
+      var txt = [
+        document.getElementById('rTitle').value,
+        document.getElementById('rSpecs').value + ' | ' + document.getElementById('rRent').value,
+        '',
+        'Highlights:',
+        document.getElementById('rBullets').value,
+        '',
+        document.getElementById('rContact').value
+      ].join('\n');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).catch(function () {});
+      }
+      document.getElementById('rentalExportMsg').textContent = '✓ 已复制 Zillow / Apartments / Facebook 招租文案到剪贴板！';
+    }
+
+    window.addEventListener('craftleaf:license-updated', function () {
+      renderMenuSheet();
+      renderRentalSheet();
+    });
+
     window.addEventListener('DOMContentLoaded', function () {
-      var b2b = getB2BCfg();
-      var prods = (window.CRAFTLEAF_MONETIZATION && window.CRAFTLEAF_MONETIZATION.products) || {};
-      var ingZh = prods.chineseGroceryCheatSheet && prods.chineseGroceryCheatSheet.checkoutUrlZh;
-      var leaseZh = prods.leaseGuide && prods.leaseGuide.checkoutUrlZh;
-      if (ingZh) {
-        var d1 = document.getElementById('ctaMenuDiy');
-        d1.href = ingZh;
-        d1.target = '_blank';
-        d1.textContent = '💳 即买即下：食材/菜名中英速查包 →';
-      }
-      if (leaseZh) {
-        var d2 = document.getElementById('ctaLandlordKit');
-        d2.href = leaseZh;
-        d2.target = '_blank';
-        d2.textContent = '💳 立即下载租约解读+逐屋验房表 →';
-      }
+      var b2b = (window.CRAFTLEAF_MONETIZATION && window.CRAFTLEAF_MONETIZATION.b2bServices) || {};
       if (b2b.restaurantCustomCheckoutUrl) {
-        var mBtn = document.getElementById('ctaMenuCustom');
-        mBtn.href = b2b.restaurantCustomCheckoutUrl;
-        mBtn.target = '_blank';
-        mBtn.textContent = '💳 一键锁单预约 48h 菜单翻新 ($65) →';
-        document.getElementById('b2bCopyBtn').textContent = '📋 复制需求单并前往专属支付 →';
+        document.getElementById('buyMenuStudioBtn').href = b2b.restaurantCustomCheckoutUrl;
       }
       if (b2b.landlordCustomCheckoutUrl) {
-        var lBtn = document.getElementById('ctaLandlordCustom');
-        lBtn.href = b2b.landlordCustomCheckoutUrl;
-        lBtn.target = '_blank';
-        lBtn.textContent = '💳 定制双语招租海报 ($35) →';
+        document.getElementById('buyRentalStudioBtn').href = b2b.landlordCustomCheckoutUrl;
       }
-      syncIntake();
+      renderMenuSheet();
+      renderRentalSheet();
     });
   </script>
 </body>
