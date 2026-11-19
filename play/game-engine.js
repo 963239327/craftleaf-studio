@@ -120,7 +120,7 @@
   }
 
   /* ==========================================================================
-   * 3. CANONICAL GAME DATA (v0.8.0 — 8 Rondel Seats, 0–8🧂 Track & 12 Cards)
+   * 3. CANONICAL GAME DATA (v0.9.3 — 8 Rondel Seats, 0–8🧂 Track & 12 Cards)
    * ========================================================================== */
   var CUISINES = {
     fire:  { id: 'fire',  icon: '🔥', en: 'Flame Grill', zh: '炙烤系', cls: 'cuisine-fire' },
@@ -232,8 +232,8 @@
       gearDescEn: 'Reroll the die you just rolled for free!',
       gearDescZh: '掌勺时将刚投出的 1 颗骰子免费重投 1 次！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ / 7°: 7★ (+Keep 1), Steal 1🧂!',
-      dishBonusZh: '5°~6°得5★ / 7°得7★(留1材)，均夺对手1🧂(无则领1)'
+      dishBonusEn: '5°–6°: 5★ / 7°: 7★ (+Keep 1), All: Steal 1🧂 (0→+1)!',
+      dishBonusZh: '5°~6°得5★ / 7°得7★(留材)，均夺对手1🧂(无则领1)'
     },
     {
       id: 5, code: 'NO.05', cuisine: 'grass', art: 'herbSalad', isBoss: false,
@@ -274,8 +274,8 @@
       gearDescEn: 'When die rolls 1 or 6: set that roll to +2°!',
       gearDescZh: '投出 1 点或 6 点时：将该骰结果改为 +2°！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ +1🧊 | 7°: 7★ +1🧊 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得5★+1🧊(限1)；7°得7★+1🧊且留1材'
+      dishBonusEn: '5°–6°: 5★ / 7°: 7★ (+Keep 1), All: +1🧊 (max 1)',
+      dishBonusZh: '5°~6°得5★ / 7°得7★(留材)，均+1🧊(限1)'
     },
     {
       id: 8, code: 'NO.08', cuisine: 'water', art: 'seafoodPot', isBoss: false,
@@ -368,9 +368,9 @@
     return {
       id: id,
       seat: startSeat,
-      stars: 0,
+      stars: id === 0 ? 0 : 1,
       ing: { meat: 0, shrimp: 0, mushroom: 0 },
-      spice: id === 0 ? 2 : 1,
+      spice: 2,
       ice: 0,
       hand: [],
       gears: [],
@@ -2911,12 +2911,12 @@
                     '每回合先顺时针走 1~2 步免费（每多走1步付1🧂），领取对应档口的食材筹码与手牌。停在对手同格触发【挤位】（对手免费摸1张牌）！') +
                 '</p></div>' +
                 '<div class="rule-step-card"><b>2. ' + t('Multi-Use Cards (Hand ≤ 2)', '一卡三用闭环（手牌上限2）') + '</b><p>' +
-                  t('Every card works 3 ways: ① Discard in Step 2 for instant Prep tokens; ② Or Equip in Step 2 as permanent Kitchen Gear (empty slot free, 1🧂 to swap; 1st to 2 gear scores +2★ & Draw 1!); ③ Still Cook in Step 3!',
-                    '每张名菜卡兼具三种用途：①第2步弃置换取备菜筹码；②或第2步免费装空位厨具（替旧付1🧂，率先满2件独占+2★并摸1牌，第3步照常可掌勺）；③凑齐配方开火冲星！') +
+                  t('Every card works 3 ways: ① Discard in Step 2 for instant Prep tokens; ② Or Equip in Step 2 as permanent Kitchen Gear (empty slot free, 1🧂 to swap; your 1st time at 2 gear = +1★ & +1🧂!); ③ Still Cook in Step 3!',
+                    '每张名菜卡兼具三种用途：①第2步弃置换取备菜筹码；②或第2步免费装空位厨具（替旧付1🧂，每人首次满2件立得+1★与+1🧂，第3步照常可掌勺）；③凑齐配方开火冲星！') +
                 '</p></div>' +
                 '<div class="rule-step-card"><b>3. ' + t('1° Start · Blackjack Wok Heat', '1°起锅 · 21点式添柴控温') + '</b><p>' +
-                  t('Every dish starts at 1° with a free Blazing Die (+1~6° → 0% first-roll bust!). Plate at 5°–6° for Golden ★ + 1🧂 Spice (+2★ at Seat ⑧!), hit exact 7° for Master Chef ★ + keep 1 ingredient, or bust at 8°+ (save with 🧊 Ice -2°)!',
-                    '统一 1° 起锅，首投免费猛火骰（1~6°）绝不爆锅！5°~6°拿黄金星并领1🧂回锅香料（⑧品鉴铃起锅额外+2★），恰好7°拿极品高星并留1份食材，8°+超温可用🧊救锅冰(-2°)或砂锅救回！') +
+                  t('Every dish starts at 1° with a free Blazing Die (+1~6° → 0% first-roll bust!). Plate at 5°/6° for Golden ★ + 1/2🧂 Spice (+3★ at 5°–6° or +2★ at 7° on Seat ⑧!), hit exact 7° for Master Chef ★ + keep 1 ingredient, or bust at 8°+ (save with 🧊 Ice -2°)!',
+                    '统一 1° 起锅，首投免费猛火骰（1~6°）绝不爆锅！5°/6°拿黄金星并领1/2🧂回锅香料（⑧品鉴铃起锅5~6°额外+3★、7°额外+2★），恰好7°拿极品高星并留1份食材，8°+超温可用🧊救锅冰(-2°)或砂锅救回！') +
                 '</p></div>' +
                 '<div class="rule-step-card"><b>4. ' + t('Follow & 18★ Equal Endgame', '回合外跟随与 18★ 平权终局') + '</b><p>' +
                   t('If the active chef doesn’t cook, the other chef may pay 1🧂 to Follow (+1 Ingredient or Draw 1). Collect 3 distinct Cuisine Stamps (🔥💧🌿⚡) for +3★! Reaching 18★ triggers Equal-Turns Endgame!',
