@@ -169,7 +169,10 @@
     },
     "blackFridayGuide": {
       "priceUsd": "$6.00",
+      "comboPriceUsd": "$10.00",
       "gumroadPermalink": "black-friday-2026-chinese-guide",
+      "sellerCalendarCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/black-friday-2026-chinese-guide?option=ZkPspjCNLQRV5Y6uhmYtvQ==&wanted=true",
+      "sellerComboCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/black-friday-2026-chinese-guide?option=hYZHxF-J4N_uszKLsib_6A==&wanted=true",
       "checkoutUrlZh": ""
     },
     "taxPrepGuide": {

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2027 US Holiday E-Commerce &amp; Amazon FBA Lead-Time Calendar Calculator | CraftLeaf Studio</title>
+  <meta name="description" content="Free interactive 2027 US retail &amp; cross-border seller holiday marketing calendar. Calculate exact Ocean FBA (T-90d), Fast-Boat/Air (T-42d), Vine/PPC warmup, and 30-day deal-lock dates across all 22 verified 2027 US shopping peaks." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/" />
+  <meta property="og:title" content="2027 US Holiday E-Commerce &amp; Amazon FBA Reverse Lead-Time Calculator" />
+  <meta property="og:description" content="All 22 verified 2027 US shopping peaks (incl. Feb 14 Super Bowl LXI + Valentine's Sunday clash &amp; early Mar 28 Easter) with live FBA PO cutoff math." />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "2027 US Holiday E-Commerce & FBA Lead-Time Calendar Calculator",
+    "url": "https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <style>
+    :root { --bg:#0b1120; --card:#1e293b; --alt:#0f172a; --border:#334155; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --gold:#f59e0b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; background:radial-gradient(circle at 18% 0%,#172554 0%,var(--bg) 55%); color:var(--text); line-height:1.6; }
+    a { color:#67e8f9; text-decoration:none; }
+    header { position:sticky; top:0; z-index:40; backdrop-filter:blur(12px); background:rgba(11,17,32,0.9); border-bottom:1px solid var(--border); }
+    .wrap { max-width:1180px; margin:0 auto; padding:0 20px; }
+    .nav { display:flex; justify-content:space-between; align-items:center; padding:13px 0; gap:12px; flex-wrap:wrap; }
+    .pill { display:inline-block; font-size:12px; font-weight:800; padding:4px 11px; border-radius:999px; background:rgba(16,185,129,0.18); color:#6ee7b7; border:1px solid rgba(52,211,153,0.42); }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border-radius:10px; font-weight:800; font-size:13.5px; cursor:pointer; border:1px solid transparent; text-decoration:none; font-family:inherit; }
+    .btn-gold { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#0f172a; }
+    .btn-green { background:linear-gradient(135deg,#10b981,#34d399); color:#052e16; }
+    .btn-sec { background:var(--card); color:var(--text); border-color:var(--border); }
+    .ctrl-bar { background:rgba(30,41,59,0.88); border:1px solid var(--border); border-radius:16px; padding:18px; margin:18px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; align-items:end; }
+    label.fld { display:block; font-size:12px; font-weight:700; color:#cbd5e1; margin-bottom:5px; }
+    select, input[type="number"] { width:100%; padding:9px 11px; border-radius:9px; border:1px solid var(--border); background:var(--alt); color:#fff; font-size:13.5px; }
+    .alert-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin-bottom:18px; }
+    .al-card { background:rgba(15,23,42,0.9); border:1px solid var(--border); border-left:4px solid var(--gold); border-radius:12px; padding:13px 15px; font-size:13px; }
+    .tbl-wrap { background:rgba(30,41,59,0.82); border:1px solid var(--border); border-radius:16px; overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:13px; min-width:860px; }
+    th { background:var(--alt); color:#cbd5e1; text-align:left; font-size:11.5px; text-transform:uppercase; padding:11px 12px; border-bottom:1px solid var(--border); }
+    td { padding:11px 12px; border-bottom:1px solid rgba(51,65,85,0.6); vertical-align:top; }
+    tr.mega td { background:rgba(16,185,129,0.09); }
+    .qtag { display:inline-block; font-size:11px; font-weight:800; padding:2px 7px; border-radius:5px; background:rgba(59,130,246,0.22); color:#93c5fd; }
+    .disc { margin:26px 0 48px; padding:14px 16px; border-radius:10px; background:rgba(15,23,42,0.85); border-left:3px solid var(--gold); font-size:12.5px; color:var(--muted); }
+    html:not(.zh) [data-lang="zh"] { display:none !important; }
+    html.zh [data-lang="en"] { display:none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="../../index.html" style="font-weight:800;font-size:16.5px;color:#fff;">🌿 CraftLeaf Studio</a>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13.5px;">
+        <a href="../../index.html"><span data-lang="en">🏠 All Free Tools</span><span data-lang="zh">🏠 免费工具大厅</span></a>
+        <a href="../../templates/index.html"><span data-lang="en">💼 Solo-Founder OS</span><span data-lang="zh">💼 一人公司财务管家</span></a>
+        <a href="../../store/index.html" style="color:#fcd34d;font-weight:700;"><span data-lang="en">🛍️ Storefront</span><span data-lang="zh">🛍️ 数字书架</span></a>
+        <button type="button" class="btn btn-sec" style="padding:6px 12px;font-size:12.5px;" id="langToggleBtn">中文 / EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section style="padding:32px 0 10px;">
+      <span class="pill">
+        <span data-lang="en">🚢 100% Local Browser Tool · All 22 Verified 2027 US Retail &amp; FBA Nodes</span>
+        <span data-lang="zh">🚢 100% 浏览器纯本地推算 · 逐日核准 2027 全美 22 大跨境大促与备货节点</span>
+      </span>
+      <h1 style="font-size:clamp(24px,3.6vw,38px);margin:12px 0 8px;line-height:1.18;">
+        <span data-lang="en">2027 US Holiday Marketing &amp; Amazon FBA Reverse Lead-Time Calculator</span>
+        <span data-lang="zh">2027 美国节日营销日历 &amp; 亚马逊 FBA / 独立站备货倒推计算器</span>
+      </h1>
+      <p style="color:var(--muted);max-width:860px;margin:0 0 18px;">
+        <span data-lang="en">Select your freight mode and factory buffer below to compute exact Purchase Order, Vine/PPC warmup, and 30-day deal-lock dates across every 2027 US shopping peak. Preview the 2-page PDF or export Q1 <code>.ics</code> calendar alerts free.</span>
+        <span data-lang="zh">切换普船海运、美森快船或空派模式并填入春节/工厂缓冲天数，实时倒推 2027 全年 22 个美国消费节点的下单死线、Vine/PPC 预热日与 30 天最低价锁定期。支持免费预览样稿与导出 Q1 日历闹钟。</span>
+      </p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-gold" data-lang="en" data-buy-event="holiday-cal-primary" href="https://stardustdemo.gumroad.com/l/black-friday-2026-chinese-guide?option=ZkPspjCNLQRV5Y6uhmYtvQ==&amp;wanted=true" target="_blank" rel="noopener">
+          📦 Get Full 2027 Calendar PDF + CSV + 88-Alarm .ICS Pack ($6) →
+        </a>
+        <button type="button" class="btn btn-green" id="dlSampleIcsBtn">
+          <span data-lang="en">📅 Free Download: Q1 2027 Sample .ICS Alarms</span>
+          <span data-lang="zh">📅 免费导出：2027 Q1 备货闹钟 (.ics 日历)</span>
+        </button>
+        <a class="btn btn-sec" href="../../previews/2027_us_holiday_calendar_sample_preview.pdf" target="_blank" rel="noopener">
+          <span data-lang="en">👁️ View 2-Page Sample PDF</span>
+          <span data-lang="zh">👁️ 查看 2 页高清样稿 PDF</span>
+        </a>
+        <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 觉得排期表省心实用？微信赞赏支持独立维护</a>
+      </div>
+    </section>
+
+    <section class="alert-grid">
+      <div class="al-card">
+        <strong style="color:#fcd34d;"><span data-lang="en">⚡ 2027 Clash #1: Feb 14 (Sun)</span><span data-lang="zh">⚡ 2027 反常撞档 #1：2月14日周日</span></strong>
+        <div style="margin-top:4px;color:#cbd5e1;">
+          <span data-lang="en">Super Bowl LXI &amp; Valentine's Day hit the <b>exact same Sunday</b> in 2027—front-load ad budgets before party &amp; gift CPCs collide.</span>
+          <span data-lang="zh">2027 年第 61 届超级碗与情人节<b>同在 2月14日周日</b>！派对零食音响与情侣礼盒流量正面撞车，务必在 1 月底前置抢量。</span>
+        </div>
+      </div>
+      <div class="al-card">
+        <strong style="color:#6ee7b7;"><span data-lang="en">🐣 2027 Clash #2: Early Mar 28 Easter</span><span data-lang="zh">🐣 2027 早春预警 #2：复活节提前至 3月28日</span></strong>
+        <div style="margin-top:4px;color:#cbd5e1;">
+          <span data-lang="en">Easter Sunday lands early on <b>2027-03-28</b>, overlapping Lunar New Year factory closures—book ocean freight before late Dec 2026.</span>
+          <span data-lang="zh">2027 复活节（3/28 周日）比常年早近两周，恰好撞上春节工厂停工期，普船海运须在 2026 年 12 月底前锁单。</span>
+        </div>
+      </div>
+      <div class="al-card">
+        <strong style="color:#fda4af;"><span data-lang="en">🛡️ 30-Day Lowest-Price Guardrail</span><span data-lang="zh">🛡️ 亚马逊 30 天最低价红线预警</span></strong>
+        <div style="margin-top:4px;color:#cbd5e1;">
+          <span data-lang="en">Use clipped Coupons (not base Sale Price cuts) during Oct Prime Big Deal Days so you don't invalidate Nov 26 Black Friday strikethrough badges.</span>
+          <span data-lang="zh">10 月秋季促测款切忌直接改低 Sale Price，优先用 Coupon 优惠券，防止击穿 30 天最低价导致 11/26 黑五专享标失效！</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="ctrl-bar">
+      <div>
+        <label class="fld" for="shipMode"><span data-lang="en">Freight &amp; Fulfillment Mode</span><span data-lang="zh">跨境头程物流方式</span></label>
+        <select id="shipMode">
+          <option value="90">🚢 Ocean Freight FBA / 普船海运入仓 (T - 90d)</option>
+          <option value="42">⛴️ Matson Fast Boat / 美森快船或空派 (T - 42d)</option>
+          <option value="21">⚡ Air Express / 美国本土海外仓调拨 (T - 21d)</option>
+        </select>
+      </div>
+      <div>
+        <label class="fld" for="bufDays"><span data-lang="en">Extra Factory / Holiday Buffer (Days)</span><span data-lang="zh">额外工厂生产 / 春节缓冲天数</span></label>
+        <input id="bufDays" type="number" min="0" max="45" value="0" />
+      </div>
+      <div>
+        <label class="fld" for="qFilter"><span data-lang="en">Quarter Filter</span><span data-lang="zh">按季度筛选</span></label>
+        <select id="qFilter">
+          <option value="ALL">All 2027 (Q1–Q4 · 22 Nodes)</option>
+          <option value="Q1">Q1 (Jan – Mar · 6 Nodes)</option>
+          <option value="Q2">Q2 (Apr – Jun · 7 Nodes)</option>
+          <option value="Q3">Q3 (Jul – Sep · 4 Nodes)</option>
+          <option value="Q4">Q4 (Oct – Dec · 5 Nodes)</option>
+        </select>
+      </div>
+      <div>
+        <label class="fld" for="catFilter"><span data-lang="en">Category Focus</span><span data-lang="zh">选品赛道筛选</span></label>
+        <select id="catFilter">
+          <option value="ALL">All Categories / 全品类</option>
+          <option value="mega">🔥 Mega-Sale Peaks / 平台级大促</option>
+          <option value="gifting">🎁 High-AOV Gifting / 礼盒送礼季</option>
+          <option value="home">🏡 Home, Patio &amp; Kitchen / 家居庭院户外</option>
+          <option value="apparel">👕 Apparel &amp; Party POD / 服饰派对定制</option>
+          <option value="tech">💻 Tech, Office &amp; Dorm / 数码办公返校</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><span data-lang="en">2027 Date &amp; Day</span><span data-lang="zh">2027 日期与星期</span></th>
+            <th><span data-lang="en">US Retail / Holiday Peak</span><span data-lang="zh">美国节日 / 促销节点</span></th>
+            <th><span data-lang="en">Winning Cross-Border SKU Angles</span><span data-lang="zh">高转化选品方向</span></th>
+            <th><span data-lang="en">Calculated Ship / PO Deadlines</span><span data-lang="zh">倒推下单与运营死线</span></th>
+          </tr>
+        </thead>
+        <tbody id="calBody"></tbody>
+      </table>
+    </section>
+
+    <div class="disc">
+      <span data-lang="en"><strong>Disclaimer:</strong> Provided for e-commerce inventory planning and educational reference only (Not Financial, Legal, or Tax Advice). Exact 2027 Amazon Prime Day and Fall Prime Big Deal Days dates (*starred) are announced by Amazon Seller Central ~3–4 weeks ahead; always verify live FBA inbound cutoffs in Seller Central.</span>
+      <span data-lang="zh"><strong>免责声明：</strong>本工具与排期表仅供跨境电商备货规划与教育参考，不构成任何投资、收益承诺、税务或法律建议（Not Financial, Legal, or Tax Advice）。带星号节点（亚马逊会员日）具体日期待 Amazon 官方公布，实际 FBA 最晚入仓截单日请以卖家后台当期通知为准。</span>
+    </div>
+  </main>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script>
+  (function() {
+    var NODES = [{"idx": 1, "q": "Q1", "date": "2027-01-01", "wday_idx": 4, "tbd": false, "cat": "home", "name_en": "New Year's Day & Fitness Reset", "name_zh": "元旦 & 新年自律焕新季", "note_en": "Resolution surge (Jan 1–15)", "note_zh": "新年立 Flag 消费潮 (1/1–1/15)", "sell_en": "Resistance bands, yoga mats, closet organizers, meal-prep containers, undated planners", "sell_zh": "居家健身器材、衣柜收纳盒、备餐保鲜盒、效率手账与习惯打卡本", "prep_days": 75}, {"idx": 2, "q": "Q1", "date": "2027-01-18", "wday_idx": 0, "tbd": false, "cat": "apparel", "name_en": "MLK Jr. Day Long Weekend", "name_zh": "马丁·路德·金纪念日小长假", "note_en": "3rd Mon of Jan · Winter clearance", "note_zh": "1月第3个周一 · 冬装清仓节点", "sell_en": "Thermal fleece, heated gloves, humidifiers, indoor bedding & winter clearance bundles", "sell_zh": "保暖抓绒服饰、发热手套、加湿器、冬季床品清仓换现组合", "prep_days": 60}, {"idx": 3, "q": "Q1", "date": "2027-02-14", "wday_idx": 6, "tbd": false, "cat": "gifting", "name_en": "Super Bowl LXI + Valentine's Day (Same-Day Clash!)", "name_zh": "超级碗 LXI + 情人节（2027 罕见同日撞档！）", "note_en": "Both hit Sun Feb 14, 2027!", "note_zh": "2027年2月14日周日双节同日爆发！", "sell_en": "Air-fryer liners, party snack trays, projector screens + engraved jewelry, gift boxes, plush", "sell_zh": "派对餐盘气炸锅纸、投影幕布音响 + 情侣定制首饰、永生花礼盒", "prep_days": 90}, {"idx": 4, "q": "Q1", "date": "2027-02-15", "wday_idx": 0, "tbd": false, "cat": "home", "name_en": "Presidents' Day Home & Mattress Sale", "name_zh": "总统日家居床垫与小家电大促", "note_en": "3rd Mon of Feb · Day after V-Day", "note_zh": "2月第3个周一 · 紧接情人节次日", "sell_en": "Mattress toppers, robot vacuums, air purifiers, ergonomic chairs & kitchen appliances", "sell_zh": "记忆棉床垫保护套、扫地机、空气净化器、人体工学椅与厨房小家电", "prep_days": 75}, {"idx": 5, "q": "Q1", "date": "2027-03-17", "wday_idx": 2, "tbd": false, "cat": "apparel", "name_en": "St. Patrick's Day", "name_zh": "圣帕特里克节（绿帽节派对季）", "note_en": "High impulse POD & party decor", "note_zh": "高冲动消费服饰与酒吧聚会装饰", "sell_en": "Shamrock graphic tees, green LED party glasses, barware, temporary tattoos & pet bandanas", "sell_zh": "三叶草印花卫衣T恤、绿色发光派对眼镜、酒具配件与宠物三角巾", "prep_days": 65}, {"idx": 6, "q": "Q1", "date": "2027-03-28", "wday_idx": 6, "tbd": false, "cat": "gifting", "name_en": "Easter Sunday (Early Late-March Date!)", "name_zh": "复活节周日（2027 偏早在 3月28日！）", "note_en": "Verified Computus: Mar 28, 2027", "note_zh": "已核准历法：3月28日周日（防断货）", "sell_en": "Prefilled Easter eggs, bunny baskets, kids spring dresses, pastel wreath & garden decor", "sell_zh": "彩蛋盲盒玩具、兔子手提篮、儿童春装礼服、马卡龙色门挂与庭院装饰", "prep_days": 90}, {"idx": 7, "q": "Q2", "date": "2027-04-15", "wday_idx": 3, "tbd": false, "cat": "tech", "name_en": "US Tax Day & Refund Upgrade Window", "name_zh": "美国报税截止日 & 退税大额消费窗", "note_en": "IRS filing deadline · Refund spend", "note_zh": "IRS 截止日 · 家庭收到退税换新", "sell_en": "Document shredders, fireproof file bags, standing desks, monitors & higher-AOV upgrades", "sell_zh": "碎纸机、防火文件收纳包、升降桌、显示器支架及高客单价升级品", "prep_days": 60}, {"idx": 8, "q": "Q2", "date": "2027-04-22", "wday_idx": 3, "tbd": false, "cat": "home", "name_en": "Earth Day & Climate-Pledge Friendly Push", "name_zh": "世界地球日（亚马逊绿标流量扶持）", "note_en": " Eco-badge CTR boost all week", "note_zh": "环保材质与太阳能品类高转化周", "sell_en": "Reusable silicone bags, bamboo kitchenware, solar pathway lights, compostable mailers", "sell_zh": "可重复使用硅胶保鲜袋、竹制餐厨具、太阳能庭院灯、可降解耗材", "prep_days": 70}, {"idx": 9, "q": "Q2", "date": "2027-05-05", "wday_idx": 2, "tbd": false, "cat": "apparel", "name_en": "Cinco de Mayo Patio Fiesta", "name_zh": "五月五日节（北美户外聚餐派对季）", "note_en": "Outdoor entertaining kickoff", "note_zh": "春季后院聚会与墨西哥风餐饮热", "sell_en": "Taco holders, margarita glasses, outdoor string lights, disposable fiesta tableware", "sell_zh": "Taco玉米饼架、鸡尾酒杯、户外防水串灯、派对桌布与一次性餐具包", "prep_days": 65}, {"idx": 10, "q": "Q2", "date": "2027-05-09", "wday_idx": 6, "tbd": false, "cat": "gifting", "name_en": "Mother's Day (#1 Spring Gifting Peak)", "name_zh": "母亲节（上半年第一大礼盒爆发节点）", "note_en": "2nd Sun of May · High gift AOV", "note_zh": "5月第2个周日 · 礼盒溢价空间最高", "sell_en": "Neck massagers, silk pillowcases, vanity mirrors, personalized jewelry & spa gift sets", "sell_zh": "肩颈按摩仪、真丝枕套眼罩、LED化妆镜、定制姓名项链与香薰礼盒", "prep_days": 90}, {"idx": 11, "q": "Q2", "date": "2027-05-31", "wday_idx": 0, "tbd": false, "cat": "home", "name_en": "Memorial Day Summer & Camping Kickoff", "name_zh": "阵亡将士纪念日（美国入夏露营烧烤大促）", "note_en": "Last Mon of May · Graduation overlap", "note_zh": "5月最后1个周一 · 叠加5–6月毕业季", "sell_en": "BBQ tool sets, camping tents, cooler bags, pool floats, patio awnings & grad gifts", "sell_zh": "烧烤工具箱、露营折叠椅天幕、保温冰包、泳池浮排及毕业季纪念礼", "prep_days": 90}, {"idx": 12, "q": "Q2", "date": "2027-06-19", "wday_idx": 5, "tbd": false, "cat": "apparel", "name_en": "Juneteenth Federal Holiday Weekend", "name_zh": "六月节联邦小长假（6/18 周五补休连休）", "note_en": "Observed Fri Jun 18, 2027", "note_zh": "6/19周六正日 · 6/18周五联邦补休", "sell_en": "Summer travel organizers, portable fans, UV sunglasses, festival & community apparel", "sell_zh": "夏季出行分装包、挂脖小风扇、防晒墨镜、文化主题服饰与野餐垫", "prep_days": 65}, {"idx": 13, "q": "Q2", "date": "2027-06-20", "wday_idx": 6, "tbd": false, "cat": "gifting", "name_en": "Father's Day Gadgets, EDC & Golf Peak", "name_zh": "父亲节（工具/高尔夫/数码/车品送礼高峰）", "note_en": "3rd Sun of Jun · Day after Juneteenth", "note_zh": "6月第3个周日 · 紧连六月节周末", "sell_en": "Magnetic tool wristbands, golf rangefinders, dashcams, beard trimmers & whiskey stones", "sell_zh": "磁吸工具护腕、高尔夫测距配件、行车记录仪、剃须理容与威士忌冰石", "prep_days": 85}, {"idx": 14, "q": "Q3", "date": "2027-07-04", "wday_idx": 6, "tbd": false, "cat": "home", "name_en": "Independence Day (4th of July Weekend)", "name_zh": "美国独立日国庆大促（7/5 周一补休小长假）", "note_en": "Observed Mon Jul 5, 2027", "note_zh": "7/4周日正日 · 7/5周一联邦带薪假", "sell_en": " Patriotic yard flags, red-white-blue apparel, portable power stations, picnic & RV gear", "sell_zh": "星条旗庭院装饰、红白蓝派对服饰、户外储能电源、房车露营餐垫", "prep_days": 80}, {"idx": 15, "q": "Q3", "date": "2027-07-13", "wday_idx": 1, "tbd": true, "cat": "mega", "name_en": "Amazon Summer Prime Day (Mid-Jul TBD*)", "name_zh": "亚马逊夏季 Prime Day 会员日（7月中旬待官宣*）", "note_en": "*Est. Tue Jul 13–14; Amazon announces ~3w prior", "note_zh": "*暂锚定7/13周二；具体日期待Amazon官宣", "sell_en": "Hero electronics, smart home, beauty devices, consumables & multi-pack household stock-ups", "sell_zh": "3C数码爆品、智能家居、美容个护、宠物耗材与家庭日用囤货装", "prep_days": 95}, {"idx": 16, "q": "Q3", "date": "2027-08-01", "wday_idx": 6, "tbd": false, "cat": "tech", "name_zh": "美国返校季 & 大学住宿采购潮 (7/15–9/6)", "name_en": "Back-to-School & Back-to-College Peak", "note_en": "NRF #2 retail season after Q4 holidays!", "note_zh": "全美仅次于黑五圣诞的第2大零售季！", "sell_en": "Backpacks, Twin-XL dorm bedding, under-bed storage, USB-C hubs, calculators & lunchboxes", "sell_zh": "双肩书包、大学宿舍 Twin-XL 床品、床底收纳箱、拓展坞与保温便当盒", "prep_days": 90}, {"idx": 17, "q": "Q3", "date": "2027-09-06", "wday_idx": 0, "tbd": false, "cat": "home", "name_en": "Labor Day End-of-Summer & Fall Transition", "name_zh": "美国劳工节（夏末清仓 + 秋季家装换季）", "note_en": "1st Mon of Sep · Clear summer SKU aging", "note_zh": "9月第1个周一 · 必清夏季冗余库存", "sell_en": "Fall porch wreaths, flannel throws, leaf blowers, garage storage & summer clearance", "sell_zh": "早秋枫叶门环、法兰绒盖毯、庭院落叶鼓风机、车库收纳及夏款清仓", "prep_days": 70}, {"idx": 18, "q": "Q4", "date": "2027-10-12", "wday_idx": 1, "tbd": true, "cat": "mega", "name_en": "Fall Prime Big Deal Days (Mid-Oct TBD*)", "name_zh": "秋季会员日 Prime Big Deal Days（10月中旬待官宣*）", "note_en": "*Est. Oct 12–13; Q4 BSR & review warmup", "note_zh": "*暂锚定10/12周二；黑五前冲BSR排名关键战", "sell_en": "Early holiday gift sets, winter heaters, home decor, test-batch Q4 new launches", "sell_zh": "Q4新款测款、取暖器、早鸟圣诞礼盒（注意锁住黑五30天最低价红线！）", "prep_days": 90}, {"idx": 19, "q": "Q4", "date": "2027-10-31", "wday_idx": 6, "tbd": false, "cat": "apparel", "name_en": "Halloween (Full Sunday Night Peak!)", "name_zh": "万圣节正日（2027 恰逢周日全天狂欢！）", "note_en": "Sun Oct 31 -> Peak demand Oct 1–26", "note_zh": "10/31周日正日 · 真实出单高峰在10/1–10/25", "sell_en": "Yard inflatables, pet & family costumes, LED spider webs, makeup & candy treat bags", "sell_zh": "庭院充气大摆件、宠物搞怪服、亲子Cos服、LED蜘蛛网灯串与糖果袋", "prep_days": 100}, {"idx": 20, "q": "Q4", "date": "2027-11-11", "wday_idx": 3, "tbd": false, "cat": "gifting", "name_en": "Veterans Day & Early Holiday VIP Preview", "name_zh": "退伍军人节 & 双11北美独立站早鸟预热", "note_en": "Federal holiday · DTC email VIP drop", "note_zh": "联邦假日 · Shopify/TikTok 早鸟蓄水期", "sell_en": "Tactical/outdoor gear, American-flag gifts, early VIP holiday bundles (coupon-only!)", "sell_zh": "户外战术通勤装备、保暖服饰、独立站邮件订户专属早鸟礼盒", "prep_days": 85}, {"idx": 21, "q": "Q4", "date": "2027-11-26", "wday_idx": 4, "tbd": false, "cat": "mega", "name_en": "Black Friday (Nov 26) & Cyber Monday (Nov 29)", "name_zh": "黑五网一决战周（感恩节11/25 · 黑五11/26 · 网一11/29）", "note_en": "5-Day Cyber Week: Thu Nov 25 – Mon Nov 29", "note_zh": "全年最高流量5天：11/25周四至11/29周一", "sell_en": "All flagship giftable SKUs, multi-unit family bundles, electronics, toys, kitchen & beauty", "sell_zh": "全品类年度主力款、高毛利礼盒套装、数码家电、玩具桌游与美妆个护", "prep_days": 110}, {"idx": 22, "q": "Q4", "date": "2027-12-25", "wday_idx": 5, "tbd": false, "cat": "gifting", "name_en": "Super Saturday (Dec 18) & Christmas Day (Dec 25)", "name_zh": "超级星期六急单冲刺 (12/18) & 圣诞节 (12/25)", "note_en": "Prime shipping cutoff ~Dec 21; Dec 26 gift cards", "note_zh": "12/18周六末班急单 · 12/26礼品卡自购潮", "sell_en": "Ready-to-gift stocking stuffers (<$25), digital gift cards, protective cases for new tech", "sell_zh": "25美元内圣诞袜小礼物、免包装礼盒，以及12/26节后新手机平板保护壳配件", "prep_days": 110}];
+    var WDAY_EN = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    var WDAY_ZH = ["周一","周二","周三","周四","周五","周六","周日"];
+
+    function isZh() {
+      return document.documentElement.classList.contains("zh");
+    }
+    function setLang(lang) {
+      if (lang === "zh") {
+        document.documentElement.classList.add("zh");
+        document.documentElement.setAttribute("lang", "zh-CN");
+      } else {
+        document.documentElement.classList.remove("zh");
+        document.documentElement.setAttribute("lang", "en");
+      }
+      try { localStorage.setItem("craftleaf_lang", lang); } catch (e) {}
+      renderTable();
+    }
+
+    function shiftIso(iso, minusDays) {
+      var p = iso.split("-");
+      var d = new Date(Date.UTC(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10)));
+      d.setUTCDate(d.getUTCDate() - minusDays);
+      var y = d.getUTCFullYear();
+      var m = String(d.getUTCMonth() + 1).padStart(2, "0");
+      var day = String(d.getUTCDate()).padStart(2, "0");
+      return y + "-" + m + "-" + day;
+    }
+
+    function makeEl(tag, cls, text) {
+      var el = document.createElement(tag);
+      if (cls) el.className = cls;
+      if (text !== undefined && text !== null) el.textContent = text;
+      return el;
+    }
+
+    function renderTable() {
+      var lead = parseInt(document.getElementById("shipMode").value, 10) || 90;
+      var buf = Math.max(0, Math.min(45, parseInt(document.getElementById("bufDays").value, 10) || 0));
+      var qf = document.getElementById("qFilter").value;
+      var cf = document.getElementById("catFilter").value;
+      var zh = isZh();
+      var tbody = document.getElementById("calBody");
+      while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+
+      for (var i = 0; i < NODES.length; i++) {
+        var n = NODES[i];
+        if (qf !== "ALL" && n.q !== qf) continue;
+        if (cf !== "ALL" && n.cat !== cf) continue;
+
+        var tr = document.createElement("tr");
+        if (n.cat === "mega" || n.idx === 3) tr.className = "mega";
+
+        var tdIdx = makeEl("td", "");
+        var qSpan = makeEl("span", "qtag", n.q);
+        tdIdx.appendChild(qSpan);
+        tdIdx.appendChild(document.createTextNode(" #" + String(n.idx).padStart(2, "0")));
+
+        var tdDate = makeEl("td", "");
+        tdDate.appendChild(makeEl("strong", "", n.date + (n.tbd ? "*" : "")));
+        tdDate.appendChild(document.createElement("br"));
+        var wSpan = makeEl("span", "", zh ? WDAY_ZH[n.wday_idx] : WDAY_EN[n.wday_idx]);
+        wSpan.style.color = "#94a3b8";
+        tdDate.appendChild(wSpan);
+
+        var tdName = makeEl("td", "");
+        tdName.appendChild(makeEl("strong", "", zh ? n.name_zh : n.name_en));
+        tdName.appendChild(document.createElement("br"));
+        var noteSpan = makeEl("span", "", zh ? n.note_zh : n.note_en);
+        noteSpan.style.color = "#34d399";
+        noteSpan.style.fontSize = "12px";
+        tdName.appendChild(noteSpan);
+
+        var tdSell = makeEl("td", "", zh ? n.sell_zh : n.sell_en);
+
+        var poDate = shiftIso(n.date, lead + buf);
+        var ppcDate = shiftIso(n.date, 45);
+        var lockDate = shiftIso(n.date, 21);
+        var tdDead = makeEl("td", "");
+        tdDead.style.whiteSpace = "nowrap";
+        tdDead.style.fontSize = "12px";
+        var l1 = makeEl("div", "");
+        l1.appendChild(document.createTextNode(zh ? "📦 最晚下单: " : "📦 PO/Ship: "));
+        var st1 = makeEl("strong", "", poDate);
+        st1.style.color = "#fcd34d";
+        l1.appendChild(st1);
+        var l2 = makeEl("div", "", (zh ? "📣 测款PPC: " : "📣 Vine/PPC: ") + ppcDate);
+        var l3 = makeEl("div", "", (zh ? "🔒 提报锁价: " : "🔒 Deal Lock: ") + lockDate);
+        tdDead.appendChild(l1);
+        tdDead.appendChild(l2);
+        tdDead.appendChild(l3);
+
+        tr.appendChild(tdIdx);
+        tr.appendChild(tdDate);
+        tr.appendChild(tdName);
+        tr.appendChild(tdSell);
+        tr.appendChild(tdDead);
+        tbody.appendChild(tr);
+      }
+    }
+
+    function downloadSampleIcs() {
+      var lead = parseInt(document.getElementById("shipMode").value, 10) || 90;
+      var buf = Math.max(0, Math.min(45, parseInt(document.getElementById("bufDays").value, 10) || 0));
+      var lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//CraftLeaf Studio//2027 Q1 Sample FBA Calendar//EN",
+        "CALSCALE:GREGORIAN"
+      ];
+      for (var i = 0; i < 4; i++) {
+        var n = NODES[i];
+        var po = shiftIso(n.date, lead + buf).replace(/-/g, "");
+        var pk = n.date.replace(/-/g, "");
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:craftleaf-q1-sample-po-" + n.idx + "@craftleaf.studio");
+        lines.push("DTSTAMP:20261120T000000Z");
+        lines.push("DTSTART;VALUE=DATE:" + po);
+        lines.push("SUMMARY:[FBA PO Cutoff] " + n.name_en);
+        lines.push("END:VEVENT");
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:craftleaf-q1-sample-peak-" + n.idx + "@craftleaf.studio");
+        lines.push("DTSTAMP:20261120T000000Z");
+        lines.push("DTSTART;VALUE=DATE:" + pk);
+        lines.push("SUMMARY:[2027 US Peak] " + n.name_en);
+        lines.push("END:VEVENT");
+      }
+      lines.push("END:VCALENDAR");
+      var blob = new Blob([lines.join("\r\n") + "\r\n"], { type: "text/calendar;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "CraftLeaf_2027_Q1_Sample_FBA_Alarms.ics";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.showValueMomentPrompt === "function") {
+        window.CraftLeafSDK.showValueMomentPrompt({
+          productKey: "allAccessPass",
+          lang: isZh() ? "zh" : "en",
+          messageEn: " exported Q1 2027 FBA cutoff alarms! Need all 22 holidays + printable PDFs & CSVs?",
+          messageZh: " 已导出 2027 Q1 备货闹钟！觉得工具省心实用，欢迎赞赏支持独立开发。"
+        });
+      }
+    }
+
+    document.getElementById("langToggleBtn").addEventListener("click", function() {
+      setLang(isZh() ? "en" : "zh");
+    });
+    document.getElementById("shipMode").addEventListener("change", renderTable);
+    document.getElementById("bufDays").addEventListener("input", renderTable);
+    document.getElementById("qFilter").addEventListener("change", renderTable);
+    document.getElementById("catFilter").addEventListener("change", renderTable);
+    document.getElementById("dlSampleIcsBtn").addEventListener("click", downloadSampleIcs);
+
+    var params = new URLSearchParams(window.location.search || "");
+    var initLang = params.get("lang");
+    if (!initLang) {
+      try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
+    }
+    setLang(initLang === "zh" ? "zh" : "en");
+  })();
+  </script>
+</body>
+</html>
