@@ -214,6 +214,7 @@
         <div class="demo-tabs" id="demoTabs">
           <button type="button" class="dtab active" data-dtab="bleed">🩸 Subscription Bleed Simulator</button>
           <button type="button" class="dtab" data-dtab="rate">🎯 Reverse Rate &amp; 3-Tier Quote</button>
+          <button type="button" class="dtab" data-dtab="payout">🏦 Gumroad Payout → Bank Check</button>
           <button type="button" class="dtab" data-dtab="sop">⚡ AI SOP Vault Preview</button>
         </div>
       </div>
@@ -317,6 +318,43 @@ Write a crisp 130-word reply that:
         </div>
       </div>
 
+      <!-- DEMO PANEL 4: GUMROAD PAYOUT -> BANK DEPOSIT WORKED EXAMPLE (#69) -->
+      <div class="dpanel" id="dpanel-payout">
+        <div class="sim-kpis" id="demoPayoutKpis"></div>
+        <div class="demo-two">
+          <div class="mini-box">
+            <span class="badge-pill" style="margin-bottom:8px;">Worked Example · Cent-Exact Integer Math</span>
+            <h3 style="margin:0 0 6px;font-size:16px;" data-lang="en">4 Fictional Gumroad Payout CSVs vs. Pasted USD Bank Lines</h3>
+            <h3 style="margin:0 0 6px;font-size:16px;" data-lang="zh">4 份虚拟 Gumroad 结算 CSV 报表 vs. 美元银行入账行逐分核对演示</h3>
+            <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted);" data-lang="en">
+              Edit the pasted <code>Posting Date, USD Amount</code> lines below to see how duplicate CSVs are skipped and why two plausible <code>$42.10</code> deposits stay <strong>AMBIGUOUS</strong> instead of silently matching the first one:
+            </p>
+            <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted);" data-lang="zh">
+              可直接在下方修改粘贴的银行入账日期与美元金额，体验自动去重与同名同额 <code>$42.10</code> 双笔冲突保留待查（绝不盲目静默配对第一笔）：
+            </p>
+            <textarea id="demoBankPaste" spellcheck="false" style="width:100%;min-height:112px;border-radius:10px;border:1px solid var(--border);background:var(--card-alt);color:var(--text);padding:10px 12px;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12px;line-height:1.45;">2026-11-09, $44.73, GUMROAD INC ACH
+2026-11-16, $42.10, ACH CREDIT DEPOSIT A
+2026-11-18, $42.10, ACH CREDIT DEPOSIT B
+2026-11-19, $88.00, OTHER CLIENT PAYOUT</textarea>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+              <button type="button" class="btn btn-secondary" id="btnResetPayoutDemo" style="padding:7px 12px;font-size:12px;">↻ Reset Worked Example</button>
+              <button type="button" class="btn btn-secondary" id="btnDownloadWorkedPayoutCsv" style="padding:7px 12px;font-size:12px;">⬇ Download Worked Audit .CSV</button>
+              <a class="btn btn-secondary" href="../previews/gumroad_payout_reconciler_sample_preview.pdf" target="_blank" rel="noopener" style="padding:7px 12px;font-size:12px;">👁️ 1-Page Visual Guide PDF</a>
+            </div>
+          </div>
+          <div class="mini-box" style="overflow-x:auto;">
+            <strong style="font-size:13.5px;display:block;margin-bottom:8px;" data-lang="en">Live Cent-Exact Reconciliation Output (USD Bank Payouts Only):</strong>
+            <strong style="font-size:13.5px;display:block;margin-bottom:8px;" data-lang="zh">实时整数美分对账结果（仅限 USD 美元银行入账核对）：</strong>
+            <table class="dtable">
+              <thead>
+                <tr><th>Status</th><th>Net USD</th><th>Source &amp; Resolution</th></tr>
+              </thead>
+              <tbody id="demoPayoutRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <div class="pro-lock-bar">
         <span data-lang="en">🔒 <strong>Pro Command Center Modules:</strong> Schedule C Multi-Project Tax Ledger · CSV Import/Export · 🖨️ One-Click Printable Accountant P&amp;L Statement · 5 Excel/Notion CSVs</span>
         <span data-lang="zh">🔒 <strong>完整专业版额外解锁：</strong> 多项目经营成本抵扣台账 · 季度预留税费池 · Excel/Notion CSV 双向导入导出 · 🖨️ 一键打印白底财务损益报表</span>
@@ -354,6 +392,13 @@ Write a crisp 130-word reply that:
           <p data-lang="en">Publication-grade 6-page guide + Notion/Obsidian Weekly CEO Ritual &amp; protective SOW contract clauses for proposals, cold outreach, change orders, and raw bank CSV bookkeeping.</p>
           <p data-lang="zh">收录 10 套工程级商业提示词工作流 + Notion/Obsidian 每周 30 分钟 CEO 复盘模板与防白嫖加需求合同护栏条款。</p>
         </article>
+        <article class="dcard">
+          <span class="badge-pill">Payout ↔ Bank HTML</span>
+          <h3 data-lang="en">Gumroad Payout Reconciler</h3>
+          <h3 data-lang="zh">Gumroad 回款与银行入账核对器</h3>
+          <p data-lang="en">Drop paid-payout CSVs and paste only posting dates &amp; USD bank amounts to verify cleared deposits in exact cents, skip duplicate CSVs, and flag ambiguous multi-deposit collisions.</p>
+          <p data-lang="zh">导入已结算 CSV 并仅粘贴入账日期与金额，按整数美分精准核对、自动跳过重复报表，并将同金额多笔入账冲突保留待查。</p>
+        </article>
       </div>
     </section>
 
@@ -366,18 +411,18 @@ Write a crisp 130-word reply that:
           <span class="badge-pill" style="background:rgba(59,130,246,0.18);color:#93c5fd;border-color:rgba(96,165,250,0.4);" data-lang="zh">免费体验入门包</span>
           <h2 style="margin:10px 0 4px;font-size:22px;" data-lang="en">Solo-Founder Free Starter Kit</h2>
           <h2 style="margin:10px 0 4px;font-size:22px;" data-lang="zh">自由职业定价与订阅审计免费入门包</h2>
-          <div class="price-big">$0+ <small data-lang="en">Pay What You Want</small><small data-lang="zh">免费领取 / 随心打赏</small></div>
+          <div class="price-big"><span data-lang="en">$0+</span><span data-lang="zh">免费</span> <small data-lang="en">Pay What You Want</small><small data-lang="zh">开源直链下载</small></div>
           <p style="margin:0;font-size:13.5px;color:var(--muted);" data-lang="en">Audit your SaaS stack and stop undercharging on your very next client quote.</p>
           <p style="margin:0;font-size:13.5px;color:var(--muted);" data-lang="zh">快速盘点手头吃灰会员，并在下一次给客户报价前算清保本底线。</p>
           <ul class="check-list">
             <li><span>✓</span><span data-lang="en"><strong>Pricing Calculator Lite HTML</strong> (Offline hourly/day/3-tier quote tool)</span><span data-lang="zh"><strong>时薪与三档报价精简计算器</strong>（离线单页版）</span></li>
             <li><span>✓</span><span data-lang="en"><strong>SaaS Subscription Bleed Audit CSV</strong> (Excel / Notion ready)</span><span data-lang="zh"><strong>SaaS 订阅刺客审计表格模板 (.CSV)</strong></span></li>
-            <li><span>✓</span><span data-lang="en"><strong>10-Prompt Commercial Quickstart (.MD)</strong></span><span data-lang="zh"><strong>10 条高频商业 AI 提示词速查卡 (.MD)</strong></span></li>
+            <li><span>✓</span><span data-lang="en"><strong>10-Prompt Commercial Quickstart (.MD) + Worked Payout Audit Sample (.CSV)</strong></span><span data-lang="zh"><strong>10 条高频商业 AI 提示词速查卡 (.MD) + 回款对账样例表 (.CSV)</strong></span></li>
           </ul>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <a class="btn btn-secondary free-cta" id="btnFreeGumroad" href="#free-lite" target="_blank" rel="noopener" data-lang="en">🎁 Get Free Starter Kit on Gumroad ($0+) →</a>
-          <a class="btn btn-secondary free-cta" id="btnFreeGumroadZh" href="#free-lite" target="_blank" rel="noopener" data-lang="zh">🎁 前往领取 $0+ 免费入门包 →</a>
+          <a class="btn btn-secondary free-cta" id="btnFreeGumroadZh" href="#free-lite" target="_blank" rel="noopener" data-lang="zh">🎁 免费下载开源入门工具包 (.ZIP) →</a>
           <button type="button" class="btn btn-secondary" id="btnInstantSampleCsv" style="font-size:12.5px;padding:9px 14px;">⬇ Instant Browser Export: Sample SaaS Audit .CSV</button>
         </div>
       </article>
@@ -389,14 +434,14 @@ Write a crisp 130-word reply that:
           <span class="badge-pill" data-lang="zh">★ 完整商业买断版 · 含英文国际版 / 中文深度本土化版</span>
           <h2 style="margin:10px 0 4px;font-size:24px;" data-lang="en">Solo-Founder &amp; Freelancer OS — Complete Pro v1.0</h2>
           <h2 style="margin:10px 0 4px;font-size:24px;" data-lang="zh">一人公司与自由职业财务订阅管家 &amp; AI 提效全套包 Pro</h2>
-          <div class="price-big"><span class="js-pro-price">$9.99</span> <small data-lang="en">one-time · zero subscriptions</small><small data-lang="zh">国际版 $9.99 / 面包多中文全套买断</small></div>
-          <p style="margin:0;font-size:13.5px;color:#cbd5e1;" data-lang="en">Pays for itself the moment you cancel one forgotten $15/mo SaaS tool or write off one missed business receipt.</p>
+          <div class="price-big"><span class="js-pro-price" data-lang="en">$9.99</span><span data-lang="zh">专业完整版</span> <small data-lang="en">one-time · zero subscriptions</small><small data-lang="zh">一次买断 · 零订阅月租</small></div>
+          <p style="margin:0;font-size:13.5px;color:#cbd5e1;" data-lang="en">Pays for itself the moment you cancel one forgotten $15/mo SaaS tool or catch one missing creator payout.</p>
           <p style="margin:0;font-size:13.5px;color:#cbd5e1;" data-lang="zh">只要帮你提前关掉 1 个忘退的连续包月软件，或用三档报价多谈成 ¥500 差价，瞬间十倍回本。</p>
           <ul class="check-list">
             <li><span>🌟</span><span data-lang="en"><strong>Full 5-Tab Offline Finance, Subscription &amp; Tax OS HTML</strong> (SVG Cashflow Charts, Renewal Radar, Cancel Savings Simulator, Multi-Currency)</span><span data-lang="zh"><strong>完整五合一离线财务订阅管家 HTML</strong>（6月现金流图、续费预警、砍单复利模拟、JSON备份）</span></li>
+            <li><span>🌟</span><span data-lang="en"><strong>Gumroad Paid-Payout ↔ USD Bank Deposit Reconciler HTML + 1-Page Guide PDF</strong> (Cent-exact matching, duplicate CSV shield &amp; ambiguous deposit safety)</span><span data-lang="zh"><strong>Gumroad 结算报表 ↔ 银行入账逐美分对账器 HTML + 图解指南 PDF</strong>（防重计、同名冲突保留待查）</span></li>
             <li><span>🌟</span><span data-lang="en"><strong>IRS Schedule C Tax Write-Off Ledger + Printable P&amp;L Statement</strong> (Quarterly tax vault + 1-click CSV import/export)</span><span data-lang="zh"><strong>多项目经营成本抵扣台账 + 一键打印白底损益报表</strong>（支持 CSV 批量导入导出）</span></li>
-            <li><span>🌟</span><span data-lang="en"><strong>All 5 Structured Business CSV Trackers</strong> (Income, Write-Offs, SaaS Audit, Client Pipeline CRM, SOW Checklist)</span><span data-lang="zh"><strong>全套 5 张 Excel / Notion / 飞书防乱码商业表格</strong>（收支、抵扣、订阅、客户CRM、SOW清单）</span></li>
-            <li><span>🌟</span><span data-lang="en"><strong>6-Page Illustrated AI Automation SOP Playbook + Notion/Obsidian CEO Rituals</strong></span><span data-lang="zh"><strong>6 页商业 AI 提效实战手册 + Notion/Obsidian 周复盘与防白嫖合同条款库</strong></span></li>
+            <li><span>🌟</span><span data-lang="en"><strong>All 5 Structured Business CSV Trackers + 6-Page AI SOP Playbook PDF</strong> (Income, Write-Offs, SaaS Audit, Client CRM, SOW Checklist &amp; CEO Rituals)</span><span data-lang="zh"><strong>全套 5 张 Excel / Notion 商业表格 + 6 页 AI 实战手册 PDF</strong>（收支、抵扣、订阅、CRM、SOW清单）</span></li>
           </ul>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
@@ -665,6 +710,205 @@ Write a crisp 130-word reply that:
     });
 
     renderDemoRate();
+
+    // 7. Interactive Gumroad Payout -> Bank Deposit Worked Example (#69 — Zero .innerHTML)
+    var DEFAULT_DEMO_BANK_PASTE = [
+      '2026-11-09, $44.73, GUMROAD INC ACH',
+      '2026-11-16, $42.10, ACH CREDIT DEPOSIT A',
+      '2026-11-18, $42.10, ACH CREDIT DEPOSIT B',
+      '2026-11-19, $88.00, OTHER CLIENT PAYOUT'
+    ].join('\n');
+
+    var WORKED_GUMROAD_CSVS = [
+      { name: 'Payout of 2026-11-06.csv', payoutDate: '2026-11-06', netCents: 4473, fp: 'nov06-4473', note: 'Totals Row #9 (PayPal $6.50 netted to $0.00)' },
+      { name: 'Payout of 2026-11-06 (1).csv', payoutDate: '2026-11-06', netCents: 4473, fp: 'nov06-4473', note: 'Exact duplicate CSV upload' },
+      { name: 'Payout of 2026-11-13.csv', payoutDate: '2026-11-13', netCents: 4210, fp: 'nov13-4210', note: 'Totals Row #5' },
+      { name: 'Payout of 2026-11-20.csv', payoutDate: '2026-11-20', netCents: 12725, fp: 'nov20-12725', note: 'Totals Row #9 (Stripe Connect netted to $0.00)' }
+    ];
+
+    function parseUsdCentsSimple(token) {
+      var s = String(token || '').replace(/\bUSD\b/gi, '').trim();
+      if (!s || /[€£¥]|(?:\b(?:EUR|GBP|CAD|AUD|JPY|CNY)\b)/i.test(s)) return null;
+      if (s.charAt(0) === '+') s = s.slice(1).trim();
+      if (s.charAt(0) === '$') s = s.slice(1).trim();
+      var m = /^(\d{1,3}(?:,\d{3})*|\d+)(?:\.(\d{1,2}))?$/.exec(s);
+      if (!m) return null;
+      var frac = m[2] || '';
+      if (frac.length === 1) frac += '0';
+      else if (frac.length === 0) frac = '00';
+      return parseInt(m[1].replace(/,/g, ''), 10) * 100 + parseInt(frac, 10);
+    }
+
+    function fmtCents(cents) {
+      var abs = Math.abs(Math.trunc(cents || 0));
+      var rem = String(abs % 100);
+      if (rem.length < 2) rem = '0' + rem;
+      return '$' + Math.trunc(abs / 100).toLocaleString() + '.' + rem;
+    }
+
+    function isoToUtcDay(iso) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+      if (!m) return null;
+      return Math.round(Date.UTC(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10)) / 86400000);
+    }
+
+    function clearEl(el) {
+      while (el && el.firstChild) el.removeChild(el.firstChild);
+    }
+
+    function mkEl(tag, text, styleStr) {
+      var el = document.createElement(tag);
+      if (text !== undefined && text !== null) el.textContent = String(text);
+      if (styleStr) el.setAttribute('style', styleStr);
+      return el;
+    }
+
+    var latestWorkedAuditRows = [];
+
+    function renderDemoPayout() {
+      var rawText = document.getElementById('demoBankPaste').value || '';
+      var bankRows = [];
+      rawText.split(/\r?\n/).forEach(function (line, idx) {
+        var s = line.trim();
+        if (!s || s.charAt(0) === '#') return;
+        var m = /^(\d{4}-\d{2}-\d{2})(?:[\s,|\t]+)(.+)$/.exec(s);
+        if (!m) return;
+        var parts = m[2].split(/[,|\t]+/).map(function (x) { return x.trim(); }).filter(Boolean);
+        var cents = parseUsdCentsSimple(parts[0] || '');
+        if (cents && cents > 0) {
+          bankRows.push({ lineNum: idx + 1, date: m[1], cents: cents, memo: parts.slice(1).join(' · ') });
+        }
+      });
+
+      var seenFp = {};
+      var uniqPayouts = [];
+      var dupRows = [];
+      WORKED_GUMROAD_CSVS.forEach(function (p) {
+        if (seenFp[p.fp]) {
+          dupRows.push({ status: 'DUPLICATE SKIPPED', color: '#c084fc', cents: p.netCents, detail: p.name + ' — identical activity fingerprint to ' + seenFp[p.fp] + ' (never counted twice).' });
+        } else {
+          seenFp[p.fp] = p.name;
+          uniqPayouts.push(p);
+        }
+      });
+
+      var pAdj = uniqPayouts.map(function () { return []; });
+      var bAdj = bankRows.map(function () { return []; });
+      uniqPayouts.forEach(function (p, pi) {
+        var pd = isoToUtcDay(p.payoutDate);
+        bankRows.forEach(function (b, bi) {
+          var bd = isoToUtcDay(b.date);
+          var lag = bd - pd;
+          if (p.netCents === b.cents && lag >= -1 && lag <= 10) {
+            pAdj[pi].push(bi);
+            bAdj[bi].push(pi);
+          }
+        });
+      });
+
+      var pVis = {}, bVis = {};
+      var outRows = [];
+      var matchedCents = 0, ambigCount = 0, missingCents = 0;
+
+      uniqPayouts.forEach(function (p, pi) {
+        if (pVis[pi]) return;
+        if (pAdj[pi].length === 0) {
+          pVis[pi] = true;
+          missingCents += p.netCents;
+          outRows.push({ status: 'MISSING ON BANK', color: '#fb7185', cents: p.netCents, detail: p.name + ' (' + p.note + ') — 0 matching USD bank rows in [-1, +10]d window.' });
+          return;
+        }
+        var compP = [], compB = [], q = [{ k: 'P', i: pi }];
+        pVis[pi] = true;
+        while (q.length) {
+          var cur = q.shift();
+          if (cur.k === 'P') {
+            compP.push(cur.i);
+            pAdj[cur.i].forEach(function (bi) { if (!bVis[bi]) { bVis[bi] = true; q.push({ k: 'B', i: bi }); } });
+          } else {
+            compB.push(cur.i);
+            bAdj[cur.i].forEach(function (pi2) { if (!pVis[pi2]) { pVis[pi2] = true; q.push({ k: 'P', i: pi2 }); } });
+          }
+        }
+        if (compP.length === 1 && compB.length === 1) {
+          var mp = uniqPayouts[compP[0]], mb = bankRows[compB[0]];
+          matchedCents += mp.netCents;
+          outRows.push({ status: 'MATCHED', color: '#34d399', cents: mp.netCents, detail: mp.name + ' ↔ Bank Line #' + mb.lineNum + ' (' + mb.date + ')' });
+        } else {
+          ambigCount += compP.length;
+          var candStr = compB.map(function (bi) { return 'Line #' + bankRows[bi].lineNum + ' (' + bankRows[bi].date + ')'; }).join(' & ');
+          compP.forEach(function (cpi) {
+            var ap = uniqPayouts[cpi];
+            outRows.push({ status: 'AMBIGUOUS', color: '#fbbf24', cents: ap.netCents, detail: ap.name + ' vs ' + compB.length + ' plausible bank rows (' + candStr + ') — kept unresolved!' });
+          });
+        }
+      });
+
+      dupRows.forEach(function (d) { outRows.push(d); });
+      bankRows.forEach(function (b, bi) {
+        if (!bVis[bi]) {
+          outRows.push({ status: 'UNMATCHED BANK', color: '#60a5fa', cents: b.cents, detail: 'Bank Line #' + b.lineNum + ' (' + b.date + ') — no uploaded Gumroad CSV matches ' + fmtCents(b.cents) + '.' });
+        }
+      });
+
+      latestWorkedAuditRows = outRows;
+
+      var kpiBox = document.getElementById('demoPayoutKpis');
+      clearEl(kpiBox);
+      [
+        { lbl: 'Matched 1-to-1', val: fmtCents(matchedCents), col: '#34d399' },
+        { lbl: 'Ambiguous (Unresolved)', val: ambigCount + ' payout(s)', col: '#fbbf24' },
+        { lbl: 'Missing / In-Transit', val: fmtCents(missingCents), col: '#fb7185' },
+        { lbl: 'Duplicate CSVs Skipped', val: String(dupRows.length), col: '#c084fc' }
+      ].forEach(function (k) {
+        var card = mkEl('div', null);
+        card.className = 'sk';
+        card.appendChild(mkEl('small', k.lbl));
+        card.appendChild(mkEl('strong', k.val, 'color:' + k.col + ';'));
+        kpiBox.appendChild(card);
+      });
+
+      var tbody = document.getElementById('demoPayoutRows');
+      clearEl(tbody);
+      outRows.forEach(function (r) {
+        var tr = document.createElement('tr');
+        var tdSt = document.createElement('td');
+        tdSt.appendChild(mkEl('span', r.status, 'font-size:11px;font-weight:800;color:' + r.color + ';'));
+        var tdAmt = document.createElement('td');
+        tdAmt.appendChild(mkEl('strong', fmtCents(r.cents)));
+        var tdDet = mkEl('td', r.detail, 'font-size:12px;color:#cbd5e1;');
+        tr.appendChild(tdSt);
+        tr.appendChild(tdAmt);
+        tr.appendChild(tdDet);
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('demoBankPaste').addEventListener('input', renderDemoPayout);
+    document.getElementById('btnResetPayoutDemo').addEventListener('click', function () {
+      document.getElementById('demoBankPaste').value = DEFAULT_DEMO_BANK_PASTE;
+      renderDemoPayout();
+    });
+    document.getElementById('btnDownloadWorkedPayoutCsv').addEventListener('click', function () {
+      var lines = ['Status,Net_USD,Source_and_Resolution'];
+      latestWorkedAuditRows.forEach(function (r) {
+        var plain = (r.cents / 100).toFixed(2);
+        lines.push('"' + r.status + '",' + plain + ',"' + String(r.detail).replace(/"/g, '""') + '"');
+      });
+      var blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'Sample_Gumroad_Payout_vs_Bank_Worked_Example.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 500);
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.showValueMomentPrompt === 'function') {
+        window.CraftLeafSDK.showValueMomentPrompt('freelancerOsKit');
+      }
+    });
+    renderDemoPayout();
   })();
   </script>
 </body>
