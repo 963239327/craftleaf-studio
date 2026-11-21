@@ -120,56 +120,60 @@
   }
 
   /* ==========================================================================
-   * 3. CANONICAL GAME DATA (v0.9.3 — 8 Rondel Seats, 0–8🧂 Track & 12 Cards)
+   * 3. CANONICAL GAME DATA (v0.10.2 — 8 Rondel Seats, 4-Suit Poker Ingredients, J Broth & 12 Cards)
    * ========================================================================== */
   var CUISINES = {
-    fire:  { id: 'fire',  icon: '🔥', en: 'Flame Grill', zh: '炙烤系', cls: 'cuisine-fire' },
-    water: { id: 'water', icon: '💧', en: 'Seafood',     zh: '海鲜系', cls: 'cuisine-water' },
-    grass: { id: 'grass', icon: '🌿', en: 'Mountain',    zh: '山珍系', cls: 'cuisine-grass' },
-    elec:  { id: 'elec',  icon: '⚡', en: 'Pastry',      zh: '甜品系', cls: 'cuisine-elec' }
+    fire:  { id: 'fire',  icon: '🔥', suit: '♥️', en: 'Flame Grill', zh: '炙烤系', cls: 'cuisine-fire' },
+    water: { id: 'water', icon: '💧', suit: '♠️', en: 'Seafood',     zh: '海鲜系', cls: 'cuisine-water' },
+    grass: { id: 'grass', icon: '🌿', suit: '♣️', en: 'Mountain',    zh: '山珍系', cls: 'cuisine-grass' },
+    elec:  { id: 'elec',  icon: '⚡', suit: '♦️', en: 'Pastry',      zh: '甜品系', cls: 'cuisine-elec' }
   };
+
+  var BASE_INGS = ['meat', 'shrimp', 'mushroom', 'cheese'];
 
   var ING_META = {
     meat:     { id: 'meat',     icon: '🥩', en: 'Wagyu',   zh: '和牛' },
     shrimp:   { id: 'shrimp',   icon: '🦐', en: 'Lobster', zh: '龙虾' },
-    mushroom: { id: 'mushroom', icon: '🍄', en: 'Truffle', zh: '松露' }
+    mushroom: { id: 'mushroom', icon: '🍄', en: 'Truffle', zh: '松露' },
+    cheese:   { id: 'cheese',   icon: '🧀', en: 'Cheese',  zh: '芝士' },
+    broth:    { id: 'broth',    icon: '🍲', en: 'J Broth', zh: 'J高汤' }
   };
 
   var RONDEL_SEATS = [
     {
       idx: 0, num: '①', icon: '👨‍🍳', cls: 'seat-elec', startTag: 'P1',
       nameEn: 'Welcome Bar', nameZh: '主厨迎宾台',
-      descEn: 'Draw 1 Card + +1🧂 Spice', descZh: '摸 1 张牌 + 领 1🧂香料'
+      descEn: 'Draw 1 Card + +1🧂 Spice', descZh: '摸 1 张菜牌 + 领 1🧂香料'
     },
     {
       idx: 1, num: '②', icon: '🥩', cls: 'seat-fire', startTag: '',
       nameEn: 'Wagyu Butcher', nameZh: '雪花和牛档',
-      descEn: '+1🥩 Wagyu + Draw 1 Card', descZh: '拿 1🥩和牛 + 摸 1 张牌'
+      descEn: '+1♥️🥩 Wagyu + Draw 1 Card', descZh: '拿 1份♥️🥩和牛 + 摸 1 张菜牌'
     },
     {
       idx: 2, num: '③', icon: '🦐', cls: 'seat-water', startTag: '',
       nameEn: 'Lobster Tank', nameZh: '深海龙虾池',
-      descEn: '+1🦐 Lobster + Pick 1 Menu Card', descZh: '拿 1🦐龙虾 + 拿公开菜单1张'
+      descEn: '+1♠️🦐 Lobster + Pick 1 Menu', descZh: '拿 1份♠️🦐龙虾 + 拿公开菜单1张'
     },
     {
       idx: 3, num: '④', icon: '🍄', cls: 'seat-grass', startTag: '',
       nameEn: 'Truffle Grove', nameZh: '云雾松露林',
-      descEn: '+1🍄 Truffle + +1🧂 Spice', descZh: '拿 1🍄松露 + 领 1🧂香料'
+      descEn: '+1♣️🍄 Truffle + +1🧂 Spice', descZh: '拿 1份♣️🍄松露 + 领 1🧂香料'
     },
     {
       idx: 4, num: '⑤', icon: '🧊', cls: 'seat-water', startTag: 'P2',
-      nameEn: 'Polar Ice Vault', nameZh: '极地冰块库',
-      descEn: '+1🧊 Ice (Max 1) + Draw 1 Card', descZh: '领 1🧊救锅冰(限1) + 摸 1 张牌'
+      nameEn: 'Arctic Ice Vault', nameZh: '极地冰鲜柜',
+      descEn: '+1🃏 Ice (Max 1) + Draw 1 Card', descZh: '领 1张🃏救锅冰(限1) + 摸 1 张菜牌'
     },
     {
-      idx: 5, num: '⑥', icon: '🧂', cls: 'seat-elec', startTag: '',
+      idx: 5, num: '⑥', icon: '🧀', cls: 'seat-elec', startTag: '',
+      nameEn: 'Cheese Cellar', nameZh: '醇香芝士坊',
+      descEn: '+1♦️🧀 Cheese + Draw 1 Card', descZh: '拿 1份♦️🧀芝士 + 摸 1 张菜牌'
+    },
+    {
+      idx: 6, num: '⑦', icon: '🧂', cls: 'seat-fire', startTag: '',
       nameEn: 'Spice Bazaar', nameZh: '丝路香料坊',
-      descEn: '+2🧂 Spice + Draw 1 Card', descZh: '领 2🧂香料 + 摸 1 张牌'
-    },
-    {
-      idx: 6, num: '⑦', icon: '🍳', cls: 'seat-fire', startTag: '',
-      nameEn: 'Blazing Station', nameZh: '猛火掌勺台',
-      descEn: '+1 Any 🥩/🦐/🍄 + +1🧂 Spice', descZh: '任选 1 份食材入盘 + 领 1🧂香料'
+      descEn: '+2🧂 Spice + Draw 1 Card', descZh: '领 2🧂香料 + 摸 1 张菜牌'
     },
     {
       idx: 7, num: '⑧', icon: '🛎️', cls: 'seat-boss', startTag: '',
@@ -182,170 +186,170 @@
     {
       id: 1, code: 'NO.01', cuisine: 'fire', art: 'steakDish', isBoss: false,
       nameEn: 'Flaming Tomahawk Wagyu', nameZh: '烈焰战斧和牛排',
-      recipe: { meat: 2, shrimp: 0, mushroom: 0, spice: 1 }, recipeTotal: 3,
-      prepTextEn: '+1🥩 +1🧂', prepTextZh: '拿 1🥩 + 领 1🧂',
-      prep: { meat: 1, shrimp: 0, mushroom: 0, spice: 1, ice: 0, draw: 0, anyIng: false },
-      gearNameEn: 'Applewood Smoker', gearNameZh: '果木熏烤架',
+      recipe: { meat: 2, shrimp: 0, mushroom: 0, cheese: 0, spice: 1 }, recipeTotal: 3,
+      prepTextEn: '+1🥩 +1🧂', prepTextZh: '拿 1♥️🥩 + 领 1🧂',
+      prep: { meat: 1, shrimp: 0, mushroom: 0, cheese: 0, broth: 0, spice: 1, ice: 0, draw: 0 },
+      gearNameEn: 'Hickory Smoker', gearNameZh: '果木熏烤架',
       gearTagEn: 'Heat +1°', gearTagZh: '升温+1°',
       gearDescEn: 'After 1st roll: free +1° wok heat (1/dish).',
-      gearDescZh: '首投后可发动：当前灶台温度免费 +1°。',
+      gearDescZh: '首投猛火骰后可发动：当前灶台温度免费 +1°。',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ +2🧂 | 7°: 7★ +2🧂 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得5★+2🧂；7°得7★+2🧂且留1材'
+      dishBonusEn: '5°:5★+3🧂 · 6°:5★+4🧂 · 7°:7★+2🧂 & Keep 1',
+      dishBonusZh: '5°:5★+3🧂｜6°:5★+4🧂｜7°:7★+2🧂+留1材'
     },
     {
       id: 2, code: 'NO.02', cuisine: 'water', art: 'seafoodPot', isBoss: false,
-      nameEn: 'Golden Truffle Seafood Pot', nameZh: '黄金松露海皇煲',
-      recipe: { meat: 0, shrimp: 2, mushroom: 1, spice: 0 }, recipeTotal: 3,
-      prepTextEn: '+1🦐 + Draw 1', prepTextZh: '拿 1🦐 + 摸 1 牌',
-      prep: { meat: 0, shrimp: 1, mushroom: 0, spice: 0, ice: 0, draw: 1, anyIng: false },
+      nameEn: 'Golden Cheese Lobster', nameZh: '黄金芝士焗龙虾',
+      recipe: { meat: 0, shrimp: 2, mushroom: 0, cheese: 1, spice: 0 }, recipeTotal: 3,
+      prepTextEn: '+1🦐 + Draw 1', prepTextZh: '拿 1♠️🦐 + 摸 1 牌',
+      prep: { meat: 0, shrimp: 1, mushroom: 0, cheese: 0, broth: 0, spice: 0, ice: 0, draw: 1 },
       gearNameEn: 'Deep-Sea Claypot', gearNameZh: '深海高汤砂锅',
       gearTagEn: 'Cool -1°', gearTagZh: '降温-1°',
       gearDescEn: 'After rolling: -1° heat (min 2°, rescues 8°→7°!).',
       gearDescZh: '投骰后可发动：降温 -1°（最低2°，可救回7°）！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ +1🍄 | 7°: 7★ +1🍄 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得5★+1🍄；7°得7★+1🍄且留1材'
+      dishBonusEn: '5/6°:5★+1/2🧂 · 7°:7★+Keep 1 (All +1🧀)',
+      dishBonusZh: '5/6°:5★+1/2🧂｜7°:7★+留材（均+1♦️🧀）'
     },
     {
       id: 3, code: 'NO.03', cuisine: 'grass', art: 'herbSalad', isBoss: false,
       nameEn: 'Misty Matsutake Kamameshi', nameZh: '迷雾森林松茸釜饭',
-      recipe: { meat: 0, shrimp: 0, mushroom: 2, spice: 1 }, recipeTotal: 3,
-      prepTextEn: '+1🍄 +1🧂', prepTextZh: '拿 1🍄 + 领 1🧂',
-      prep: { meat: 0, shrimp: 0, mushroom: 1, spice: 1, ice: 0, draw: 0, anyIng: false },
+      recipe: { meat: 0, shrimp: 0, mushroom: 2, cheese: 0, spice: 1 }, recipeTotal: 3,
+      prepTextEn: '+1🍄 +1🧂', prepTextZh: '拿 1♣️🍄 + 领 1🧂',
+      prep: { meat: 0, shrimp: 0, mushroom: 1, cheese: 0, broth: 0, spice: 1, ice: 0, draw: 0 },
       gearNameEn: 'Kyoto Copper Kamado', gearNameZh: '京都紫铜釜锅',
       gearTagEn: 'Free Simmer', gearTagZh: '免费小火骰',
       gearDescEn: 'Roll 1 Simmer Die (+1/+2°) for 0🧂!',
       gearDescZh: '追投时免费投 1 次小火骰（+1/+2°）免付🧂！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ +Step 1 | 7°: 7★ +Step 1 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得5★+进1步(含停留)；7°得7★+进1步+留1材'
+      dishBonusEn: '5/6°:5★+1/2🧂 · 7°:7★+Keep 1 (All +1↻ no trig)',
+      dishBonusZh: '5/6°:5★+1/2🧂｜7°:7★+留材（均顺移1格免效）'
     },
     {
-      id: 4, code: 'NO.04', cuisine: 'fire', art: 'seafoodPot', isBoss: false,
-      nameEn: 'Typhoon Garlic Lobster', nameZh: '避风塘爆炒金蒜龙虾',
-      recipe: { meat: 1, shrimp: 1, mushroom: 0, spice: 1 }, recipeTotal: 3,
-      prepTextEn: '+1🦐 +1🥩', prepTextZh: '拿 1🦐 + 拿 1🥩',
-      prep: { meat: 1, shrimp: 1, mushroom: 0, spice: 0, ice: 0, draw: 0, anyIng: false },
+      id: 4, code: 'NO.04', cuisine: 'fire', art: 'wokPan', isBoss: false,
+      nameEn: 'Typhoon Garlic Lobster', nameZh: '避风塘金蒜炒龙虾',
+      recipe: { meat: 1, shrimp: 1, mushroom: 0, cheese: 0, spice: 1 }, recipeTotal: 3,
+      prepTextEn: '+1🥩 +1🦐', prepTextZh: '拿 1♥️🥩 + 拿 1♠️🦐',
+      prep: { meat: 1, shrimp: 1, mushroom: 0, cheese: 0, broth: 0, spice: 0, ice: 0, draw: 0 },
       gearNameEn: 'Carbon Steel Wok', gearNameZh: '百炼中华铁锅',
       gearTagEn: 'Free Reroll', gearTagZh: '免费重投',
       gearDescEn: 'Reroll the die you just rolled for free!',
       gearDescZh: '掌勺时将刚投出的 1 颗骰子免费重投 1 次！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ / 7°: 7★ (+Keep 1), All: Steal 1🧂 (0→+1)!',
-      dishBonusZh: '5°~6°得5★ / 7°得7★(留材)，均夺对手1🧂(无则领1)'
+      dishBonusEn: '5/6°:5★+1/2🧂 · 7°:7★+Keep 1 (Steal 1🧂/0→+1)',
+      dishBonusZh: '5/6°:5★+1/2🧂｜7°:7★+留材（夺敌1🧂/0领1）'
     },
     {
       id: 5, code: 'NO.05', cuisine: 'grass', art: 'herbSalad', isBoss: false,
-      nameEn: 'Jade Abalone Braised Greens', nameZh: '翡翠鲍汁扣百蔬',
-      recipe: { meat: 0, shrimp: 1, mushroom: 1, spice: 0 }, recipeTotal: 2,
-      prepTextEn: '+1🍄 + Draw 1', prepTextZh: '拿 1🍄 + 摸 1 牌',
-      prep: { meat: 0, shrimp: 0, mushroom: 1, spice: 0, ice: 0, draw: 1, anyIng: false },
+      nameEn: 'Abalone Truffle Prawns', nameZh: '翡翠鲍汁松露鲜虾',
+      recipe: { meat: 0, shrimp: 1, mushroom: 1, cheese: 0, spice: 0 }, recipeTotal: 2,
+      prepTextEn: '+1🍄 + Draw 1', prepTextZh: '拿 1♣️🍄 + 摸 1 牌',
+      prep: { meat: 0, shrimp: 0, mushroom: 1, cheese: 0, broth: 0, spice: 0, ice: 0, draw: 1 },
       gearNameEn: 'Damascus Chef Knife', gearNameZh: '大马士革主厨刀',
       gearTagEn: '-1 Recipe Ing', gearTagZh: '抵1份食材',
-      gearDescEn: 'On 3-cost recipes (incl. 🧂): pay 1 fewer 🥩/🦐/🍄!',
+      gearDescEn: 'On 3-cost recipes (incl. 🧂): pay 1 fewer base ing!',
       gearDescZh: '烹饪总配方3份(含🧂)名菜时：少交 1 份基础食材！',
       starsHalf: 1, starsGold: 4, starsPerf: 6,
-      dishBonusEn: '5°–6°: 4★ +1🍄 | 7°: 6★ +1🍄 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得4★+1🍄；7°得6★+1🍄且留1材'
+      dishBonusEn: '5/6°:4★+1/2🧂 · 7°:6★+Keep 1 (All +1🍄)',
+      dishBonusZh: '5/6°:4★+1/2🧂｜7°:6★+留材（均+1♣️🍄）'
     },
     {
-      id: 6, code: 'NO.06', cuisine: 'elec', art: 'wokPan', isBoss: false,
-      nameEn: 'Molten Matcha Lava Soufflé', nameZh: '流心熔岩抹茶舒芙蕾',
-      recipe: { meat: 1, shrimp: 0, mushroom: 1, spice: 1 }, recipeTotal: 3,
-      prepTextEn: '+1🥩 +1🧂', prepTextZh: '拿 1🥩 + 领 1🧂',
-      prep: { meat: 1, shrimp: 0, mushroom: 0, spice: 1, ice: 0, draw: 0, anyIng: false },
+      id: 6, code: 'NO.06', cuisine: 'elec', art: 'cheeseDessert', isBoss: false,
+      nameEn: 'Molten Cheese Lava Soufflé', nameZh: '流心熔岩芝士舒芙蕾',
+      recipe: { meat: 0, shrimp: 0, mushroom: 0, cheese: 2, spice: 1 }, recipeTotal: 3,
+      prepTextEn: '+1🧀 +1🧂', prepTextZh: '拿 1♦️🧀 + 领 1🧂',
+      prep: { meat: 0, shrimp: 0, mushroom: 0, cheese: 1, broth: 0, spice: 1, ice: 0, draw: 0 },
       gearNameEn: 'Molecular Blowtorch', gearNameZh: '分子料理喷枪',
       gearTagEn: '4°/6° → +1°', gearTagZh: '精准+1°',
       gearDescEn: 'At exact 4° or 6°: +1° directly without rolling!',
       gearDescZh: '灶台处于 4° 或 6° 时：不投骰直接升温 +1°！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ +Draw 1 | 7°: 7★ +Draw 1 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得5★+摸1牌；7°得7★+摸1牌且留1材'
+      dishBonusEn: '5/6°:5★+1/2🧂 · 7°:7★+Keep 1 (All Draw 1)',
+      dishBonusZh: '5°:5★+1🧂｜6°:5★+2🧂｜7°:7★+留材（均摸1牌）'
     },
     {
-      id: 7, code: 'NO.07', cuisine: 'elec', art: 'steakDish', isBoss: false,
-      nameEn: 'Royal Foie Gras Brûlée', nameZh: '皇家焦糖鹅肝布蕾',
-      recipe: { meat: 2, shrimp: 0, mushroom: 1, spice: 0 }, recipeTotal: 3,
-      prepTextEn: '+1🥩 +1🧊 Ice', prepTextZh: '拿 1🥩 + 领 1🧊冰',
-      prep: { meat: 1, shrimp: 0, mushroom: 0, spice: 0, ice: 1, draw: 0, anyIng: false },
+      id: 7, code: 'NO.07', cuisine: 'elec', art: 'cheeseDessert', isBoss: false,
+      nameEn: 'Alba White Truffle Brûlée', nameZh: '阿尔巴白松露布蕾',
+      recipe: { meat: 0, shrimp: 0, mushroom: 1, cheese: 2, spice: 0 }, recipeTotal: 3,
+      prepTextEn: '+1🧀 +1🃏 Ice', prepTextZh: '拿 1♦️🧀 + 领 1🃏冰',
+      prep: { meat: 0, shrimp: 0, mushroom: 0, cheese: 1, broth: 0, spice: 0, ice: 1, draw: 0 },
       gearNameEn: 'Royal Convection Oven', gearNameZh: '皇家旋转烤箱',
       gearTagEn: '1/6 → +2°', gearTagZh: '定温+2°',
       gearDescEn: 'When die rolls 1 or 6: set that roll to +2°!',
       gearDescZh: '投出 1 点或 6 点时：将该骰结果改为 +2°！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ / 7°: 7★ (+Keep 1), All: +1🧊 (max 1)',
-      dishBonusZh: '5°~6°得5★ / 7°得7★(留材)，均+1🧊(限1)'
+      dishBonusEn: '5/6°:5★+1/2🧂 · 7°:7★+Keep 1 (All +1🃏Ice max 1)',
+      dishBonusZh: '5/6°:5★+1/2🧂｜7°:7★+留材（均+1🃏冰限1）'
     },
     {
       id: 8, code: 'NO.08', cuisine: 'water', art: 'seafoodPot', isBoss: false,
       nameEn: 'Aurora Seared Bluefin Tuna', nameZh: '极光炙烤蓝鳍金枪鱼',
-      recipe: { meat: 0, shrimp: 2, mushroom: 0, spice: 0 }, recipeTotal: 2,
-      prepTextEn: '+2🦐 Lobster', prepTextZh: '拿 2🦐龙虾',
-      prep: { meat: 0, shrimp: 2, mushroom: 0, spice: 0, ice: 0, draw: 0, anyIng: false },
+      recipe: { meat: 0, shrimp: 2, mushroom: 0, cheese: 0, spice: 0 }, recipeTotal: 2,
+      prepTextEn: '+2🦐 Lobster', prepTextZh: '拿 2♠️🦐龙虾',
+      prep: { meat: 0, shrimp: 2, mushroom: 0, cheese: 0, broth: 0, spice: 0, ice: 0, draw: 0 },
       gearNameEn: 'Polar Chilling Platter', gearNameZh: '极地锁鲜冰盘',
       gearTagEn: 'Cool -1/-2°', gearTagZh: '降温-1或-2°',
       gearDescEn: 'After rolling: -1° or -2° heat (min 2°, saves 8°/9°!).',
       gearDescZh: '投骰后可发动：降温 1° 或 2°（最低2°，可救回7°）！',
       starsHalf: 1, starsGold: 4, starsPerf: 6,
-      dishBonusEn: '5°–6°: 4★ +1🧂 | 7°: 6★ +1🧂 & Keep 1🦐',
-      dishBonusZh: '5°~6°得4★+1🧂；7°得6★+1🧂且留1🦐'
+      dishBonusEn: '5°:4★+2🧂 · 6°:4★+3🧂 · 7°:6★+1🧂 & Keep 1',
+      dishBonusZh: '5°:4★+2🧂｜6°:4★+3🧂｜7°:6★+1🧂+留1材'
     },
     {
       id: 9, code: 'NO.09', cuisine: 'grass', art: 'herbSalad', isBoss: false,
-      nameEn: 'Black Truffle Egg Pappardelle', nameZh: '黑松露温泉蛋宽面',
-      recipe: { meat: 1, shrimp: 0, mushroom: 1, spice: 0 }, recipeTotal: 2,
-      prepTextEn: '+1🍄 + Draw 1', prepTextZh: '拿 1🍄 + 摸 1 牌',
-      prep: { meat: 0, shrimp: 0, mushroom: 1, spice: 0, ice: 0, draw: 1, anyIng: false },
+      nameEn: 'Truffle Cream Tagliatelle', nameZh: '黑松露奶油芝士宽面',
+      recipe: { meat: 0, shrimp: 0, mushroom: 1, cheese: 1, spice: 0 }, recipeTotal: 2,
+      prepTextEn: '+1🍄 +1🧀', prepTextZh: '拿 1♣️🍄 + 拿 1♦️🧀',
+      prep: { meat: 0, shrimp: 0, mushroom: 1, cheese: 1, broth: 0, spice: 0, ice: 0, draw: 0 },
       gearNameEn: 'Artisan Pasta Roller', gearNameZh: '手工意面压面机',
       gearTagEn: '5°–7°: Draw 1', gearTagZh: '出锅摸1牌',
       gearDescEn: 'Passive: Finish dish at 5°–7° to draw +1 card!',
       gearDescZh: '被动：本次在 5°~7° 成功出锅额外摸 1 张牌！',
       starsHalf: 1, starsGold: 4, starsPerf: 6,
-      dishBonusEn: '5°–6°: 4★ +Draw 1 | 7°: 6★ +Draw 1 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得4★+摸1牌；7°得6★+摸1牌且留1材'
+      dishBonusEn: '5/6°:4★+1/2🧂 · 7°:6★+Keep 1 (All Draw 1)',
+      dishBonusZh: '5°:4★+1🧂｜6°:4★+2🧂｜7°:6★+留材（均摸1牌）'
     },
     {
       id: 10, code: 'NO.10', cuisine: 'fire', art: 'steakDish', isBoss: false,
-      nameEn: 'Dongpo Braised Pork Belly', nameZh: '东坡红烧慢炖肉',
-      recipe: { meat: 2, shrimp: 0, mushroom: 0, spice: 1 }, recipeTotal: 3,
-      prepTextEn: '+1🥩 +1🧂', prepTextZh: '拿 1🥩 + 领 1🧂',
-      prep: { meat: 1, shrimp: 0, mushroom: 0, spice: 1, ice: 0, draw: 0, anyIng: false },
+      nameEn: 'Truffle Beef Wellington', nameZh: '惠灵顿松露酥皮牛排',
+      recipe: { meat: 2, shrimp: 0, mushroom: 1, cheese: 0, spice: 0 }, recipeTotal: 3,
+      prepTextEn: '+1🥩 +1🧂', prepTextZh: '拿 1♥️🥩 + 领 1🧂',
+      prep: { meat: 1, shrimp: 0, mushroom: 0, cheese: 0, broth: 0, spice: 1, ice: 0, draw: 0 },
       gearNameEn: 'Aged Shaoxing Wine Jar', gearNameZh: '绍兴陈年花雕坛',
-      gearTagEn: 'Start +1🧂', gearTagZh: '开火赠1🧂',
-      gearDescEn: 'When cooking: immediately gain +1🧂 Spice!',
-      gearDescZh: '开火掌勺时可发动：立即领 1🧂香料控温！',
+      gearTagEn: 'Cook +1🧂', gearTagZh: '开火赠1🧂',
+      gearDescEn: 'Right after paying recipe: gain +1🧂 Spice!',
+      gearDescZh: '付清配方开火后可发动：推进香料轨 +1🧂 控温！',
       starsHalf: 1, starsGold: 5, starsPerf: 7,
-      dishBonusEn: '5°–6°: 5★ +1🥩 | 7°: 7★ +1🥩 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得5★+1🥩；7°得7★+1🥩且留1材'
+      dishBonusEn: '5/6°:5★+1/2🧂 · 7°:7★+Keep 1 (All +1🥩)',
+      dishBonusZh: '5/6°:5★+1/2🧂｜7°:7★+留材（均+1♥️🥩）'
     },
     {
-      id: 11, code: 'NO.11', cuisine: 'elec', art: 'herbSalad', isBoss: false,
-      nameEn: 'Prosciutto Caramelized Melon', nameZh: '帕尔玛火腿焦糖蜜瓜',
-      recipe: { meat: 1, shrimp: 0, mushroom: 1, spice: 0 }, recipeTotal: 2,
-      prepTextEn: '+1 Any 🥩/🦐/🍄', prepTextZh: '任选 1 份 🥩/🦐/🍄',
-      prep: { meat: 0, shrimp: 0, mushroom: 0, spice: 0, ice: 0, draw: 0, anyIng: true },
+      id: 11, code: 'NO.11', cuisine: 'elec', art: 'cheeseDessert', isBoss: false,
+      nameEn: 'Prosciutto Cheese Melon', nameZh: '帕尔玛火腿芝士蜜瓜',
+      recipe: { meat: 1, shrimp: 0, mushroom: 0, cheese: 1, spice: 0 }, recipeTotal: 2,
+      prepTextEn: '+1🍲 Broth + Draw 1', prepTextZh: '拿 1🍲J高汤 + 摸 1 牌',
+      prep: { meat: 0, shrimp: 0, mushroom: 0, cheese: 0, broth: 1, spice: 0, ice: 0, draw: 1 },
       gearNameEn: 'Royal Silver Cloche', gearNameZh: '皇家银质托盘',
-      gearTagEn: '5°–7°: +1🧂', gearTagZh: '黄金赠1🧂',
+      gearTagEn: '5°–7°: +1🧂', gearTagZh: '出锅赠1🧂',
       gearDescEn: 'Passive: Finish dish at 5°–7° to gain +1🧂!',
       gearDescZh: '被动：本次在 5°~7° 成功出锅额外领 1🧂！',
       starsHalf: 1, starsGold: 4, starsPerf: 6,
-      dishBonusEn: '5°–6°: 4★ +2🧂 | 7°: 6★ +2🧂 & Keep 1 Ing',
-      dishBonusZh: '5°~6°得4★+2🧂；7°得6★+2🧂且留1材'
+      dishBonusEn: '5°:4★+3🧂 · 6°:4★+4🧂 · 7°:6★+2🧂 & Keep 1',
+      dishBonusZh: '5°:4★+3🧂｜6°:4★+4🧂｜7°:6★+2🧂+留1材'
     },
     {
       id: 12, code: 'NO.12', cuisine: 'water', art: 'seafoodPot', isBoss: true,
-      nameEn: 'Buddha Jumps Over the Wall', nameZh: '佛跳墙·山海国宴盅',
-      recipe: { meat: 1, shrimp: 1, mushroom: 1, spice: 0 }, recipeTotal: 3,
-      prepTextEn: '+1🦐 +1🍄', prepTextZh: '拿 1🦐 + 拿 1🍄',
-      prep: { meat: 0, shrimp: 1, mushroom: 1, spice: 0, ice: 0, draw: 0, anyIng: false },
+      nameEn: 'Buddha Four-Seas Feast', nameZh: '佛跳墙·四海国宴盅',
+      recipe: { meat: 0, shrimp: 0, mushroom: 0, cheese: 0, spice: 0, any3Distinct: true }, recipeTotal: 3,
+      prepTextEn: '+1🍲 Broth +1🍄', prepTextZh: '拿 1🍲J高汤 + 拿 1♣️🍄',
+      prep: { meat: 0, shrimp: 0, mushroom: 1, cheese: 0, broth: 1, spice: 0, ice: 0, draw: 0 },
       gearNameEn: 'Imperial Dragon Cauldron', gearNameZh: '御膳房九龙金鼎',
       gearTagEn: 'Simmer ±1°', gearTagZh: '小火骰±1°',
       gearDescEn: 'After rolling Simmer Die: adjust delta +1° or -1°!',
       gearDescZh: '投出小火骰后：将该骰升温值 +1° 或 -1°！',
       starsHalf: 2, starsGold: 6, starsPerf: 8,
-      dishBonusEn: '5°–6°: 6★ +1🧂 | 7°: 8★ +1🧂 & Keep 1 Ing!',
-      dishBonusZh: '5°~6°得6★+1🧂；7°极品得8★+1🧂且留1材！'
+      dishBonusEn: '5°:6★+2🧂 · 6°:6★+3🧂 · 7°:8★+1🧂 & Keep 1!',
+      dishBonusZh: '5°:6★+2🧂｜6°:6★+3🧂｜7°:8★+1🧂+留1材！'
     }
   ];
 
@@ -358,7 +362,8 @@
     steakDish: '<svg viewBox="0 0 64 64" width="100%" height="100%"><circle cx="32" cy="32" r="28" fill="#ffe4e6" stroke="#1c1917" stroke-width="2.4"/><ellipse cx="32" cy="36" rx="22" ry="14" fill="#ffffff" stroke="#1c1917" stroke-width="2"/><ellipse cx="30" cy="35" rx="14" ry="9" fill="#fb7185" stroke="#1c1917" stroke-width="2"/><line x1="22" y1="31" x2="34" y2="39" stroke="#881337" stroke-width="2"/><line x1="26" y1="28" x2="38" y2="36" stroke="#881337" stroke-width="2"/><circle cx="43" cy="32" r="4" fill="#4ade80" stroke="#1c1917" stroke-width="1.5"/></svg>',
     seafoodPot: '<svg viewBox="0 0 64 64" width="100%" height="100%"><circle cx="32" cy="32" r="28" fill="#e0f2fe" stroke="#1c1917" stroke-width="2.4"/><path d="M14 32 L50 32 L46 48 L18 48 Z" fill="#38bdf8" stroke="#1c1917" stroke-width="2.2"/><path d="M20 32 C22 20, 32 20, 34 32" fill="#fb7185" stroke="#1c1917" stroke-width="2"/><circle cx="40" cy="28" r="5" fill="#fde047" stroke="#1c1917" stroke-width="1.8"/></svg>',
     wokPan: '<svg viewBox="0 0 64 64" width="100%" height="100%"><circle cx="32" cy="32" r="28" fill="#fef9c3" stroke="#1c1917" stroke-width="2.4"/><path d="M12 30 C14 48, 44 48, 46 30 Z" fill="#475569" stroke="#1c1917" stroke-width="2.2"/><line x1="45" y1="31" x2="56" y2="25" stroke="#1c1917" stroke-width="4" stroke-linecap="round"/><path d="M22 26 C20 18, 28 16, 26 12 M34 26 C32 18, 40 16, 38 12" fill="none" stroke="#f97316" stroke-width="2.2"/></svg>',
-    herbSalad: '<svg viewBox="0 0 64 64" width="100%" height="100%"><circle cx="32" cy="32" r="28" fill="#dcfce7" stroke="#1c1917" stroke-width="2.4"/><path d="M16 34 C16 48, 48 48, 48 34 Z" fill="#ffffff" stroke="#1c1917" stroke-width="2.2"/><circle cx="24" cy="29" r="7" fill="#4ade80" stroke="#1c1917" stroke-width="1.8"/><circle cx="38" cy="29" r="7" fill="#22c55e" stroke="#1c1917" stroke-width="1.8"/><circle cx="31" cy="25" r="5" fill="#fb7185" stroke="#1c1917" stroke-width="1.8"/></svg>'
+    herbSalad: '<svg viewBox="0 0 64 64" width="100%" height="100%"><circle cx="32" cy="32" r="28" fill="#dcfce7" stroke="#1c1917" stroke-width="2.4"/><path d="M16 34 C16 48, 48 48, 48 34 Z" fill="#ffffff" stroke="#1c1917" stroke-width="2.2"/><circle cx="24" cy="29" r="7" fill="#4ade80" stroke="#1c1917" stroke-width="1.8"/><circle cx="38" cy="29" r="7" fill="#22c55e" stroke="#1c1917" stroke-width="1.8"/><circle cx="31" cy="25" r="5" fill="#fb7185" stroke="#1c1917" stroke-width="1.8"/></svg>',
+    cheeseDessert: '<svg viewBox="0 0 64 64" width="100%" height="100%"><circle cx="32" cy="32" r="28" fill="#fef9c3" stroke="#1c1917" stroke-width="2.4"/><ellipse cx="32" cy="43" rx="20" ry="7" fill="#ffffff" stroke="#1c1917" stroke-width="2"/><path d="M18 41 L21 25 C21 20 43 20 43 25 L46 41 Z" fill="#fde047" stroke="#1c1917" stroke-width="2"/><ellipse cx="32" cy="25" rx="11" ry="4.5" fill="#d97706" stroke="#1c1917" stroke-width="1.8"/><circle cx="32" cy="19" r="3.6" fill="#e11d48" stroke="#1c1917" stroke-width="1.6"/></svg>'
   };
 
   /* ==========================================================================
@@ -369,7 +374,7 @@
       id: id,
       seat: startSeat,
       stars: id === 0 ? 0 : 1,
-      ing: { meat: 0, shrimp: 0, mushroom: 0 },
+      ing: { meat: 0, shrimp: 0, mushroom: 0, cheese: 0, broth: 0 },
       spice: 2,
       ice: 0,
       hand: [],
@@ -377,6 +382,7 @@
       stamps: { fire: false, water: false, grass: false, elec: false },
       dualGearDone: false,
       threeStampsDone: false,
+      fourStampsDone: false,
       dishesCooked: 0,
       perfectDishes: 0,
       busts: 0
@@ -393,7 +399,7 @@
   }
 
   function countRemainingResources(player) {
-    return player.ing.meat + player.ing.shrimp + player.ing.mushroom + player.spice;
+    return player.ing.meat + player.ing.shrimp + player.ing.mushroom + player.ing.cheese + player.ing.broth + player.spice;
   }
 
   function addLog(state, en, zh, tone) {
@@ -566,13 +572,13 @@
         if (p.ice < 1) p.ice = 1;
         queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat5' });
         break;
-      case 5: // ⑥ v0.8.0: +2 Spice + Draw 1
-        addSpice(p, 2);
+      case 5: // ⑥ v0.10.2: +1 Cheese + Draw 1
+        p.ing.cheese += 1;
         queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat6' });
         break;
-      case 6: // ⑦ +1 Any Ing + 1 Spice
-        addSpice(p, 1);
-        queueFront.push({ kind: 'PICK_ANY_ING', player: pIdx, reason: 'seat7' });
+      case 6: // ⑦ v0.10.2: +2 Spice + Draw 1
+        addSpice(p, 2);
+        queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat7' });
         break;
       case 7: // ⑧ Draw 1 (+3★ at 5–6° / +2★ at 7° when starting cook on seat ⑧)
         queueFront.push({ kind: 'DRAW_DECK', player: pIdx, reason: 'seat8' });
@@ -703,11 +709,10 @@
         mover.seat = (mover.seat + 1) % 8;
         addLog(
           state,
-          '🚶 Kamameshi bonus: ' + chefLabelEn(state, eff.player) + ' advances 1 step to ' + RONDEL_SEATS[mover.seat].num + ' ' + RONDEL_SEATS[mover.seat].nameEn + '!',
-          '🚶 松茸釜饭特效：' + chefLabelZh(state, eff.player) + ' 顺时针进1步至 ' + RONDEL_SEATS[mover.seat].num + RONDEL_SEATS[mover.seat].nameZh + '！',
+          '🚶 Kamameshi bonus: ' + chefLabelEn(state, eff.player) + ' advances 1↻ step to ' + RONDEL_SEATS[mover.seat].num + ' ' + RONDEL_SEATS[mover.seat].nameEn + ' (no stop/jostle trigger).',
+          '🚶 松茸釜饭特效：' + chefLabelZh(state, eff.player) + ' 顺时针进1步至 ' + RONDEL_SEATS[mover.seat].num + RONDEL_SEATS[mover.seat].nameZh + '（不触发格效与挤位）。',
           'accent'
         );
-        resolveSeatArrivalEffects(state, eff.player, mover.seat, true);
       } else if (eff.kind === 'AFTER_RONDEL') {
         if (state.players[state.activePlayer].hand.length === 0) {
           state.phase = 'MAIN_ACTION';
@@ -733,6 +738,27 @@
   /* ==========================================================================
    * 5. COOKABILITY & WOK ACTION QUERIES
    * ========================================================================== */
+  function buildPaymentIfAffordable(p, reqMap, spiceNeed, useKnife, knifeSource, reducedIng) {
+    if (p.spice < spiceNeed) return null;
+    var used = { meat: 0, shrimp: 0, mushroom: 0, cheese: 0, broth: 0, spice: spiceNeed };
+    var brothNeed = 0;
+    for (var i = 0; i < BASE_INGS.length; i++) {
+      var k = BASE_INGS[i];
+      var need = reqMap[k] || 0;
+      var take = Math.min(p.ing[k] || 0, need);
+      used[k] = take;
+      brothNeed += (need - take);
+    }
+    if ((p.ing.broth || 0) < brothNeed) return null;
+    used.broth = brothNeed;
+    return {
+      useKnife: Boolean(useKnife),
+      knifeSource: knifeSource || null,
+      reducedIng: reducedIng || null,
+      cost: used
+    };
+  }
+
   function getCookOptionsForCard(state, pIdx, cardId) {
     var p = state.players[pIdx];
     var opp = state.players[1 - pIdx];
@@ -741,42 +767,49 @@
 
     var modes = [];
     var r = card.recipe;
-
-    // Standard full recipe cost
-    if (
-      p.ing.meat >= r.meat &&
-      p.ing.shrimp >= r.shrimp &&
-      p.ing.mushroom >= r.mushroom &&
-      p.spice >= r.spice
-    ) {
-      modes.push({
-        useKnife: false,
-        knifeSource: null,
-        reducedIng: null,
-        cost: { meat: r.meat, shrimp: r.shrimp, mushroom: r.mushroom, spice: r.spice }
-      });
-    }
-
-    // Damascus Chef Knife (NO.05) on 3-cost recipes
     var hasOwnKnife = p.gears.indexOf(5) !== -1;
     var canBorrowKnife = !hasOwnKnife && state.turnContext.canBorrowOpponentGear && opp.gears.indexOf(5) !== -1;
-    if (card.recipeTotal === 3 && (hasOwnKnife || canBorrowKnife)) {
-      var knifeSource = hasOwnKnife ? 'self' : 'opp';
-      var ings = ['meat', 'shrimp', 'mushroom'];
-      for (var i = 0; i < ings.length; i++) {
-        var k = ings[i];
-        if (r[k] > 0) {
-          var cm = r.meat - (k === 'meat' ? 1 : 0);
-          var cs = r.shrimp - (k === 'shrimp' ? 1 : 0);
-          var cmu = r.mushroom - (k === 'mushroom' ? 1 : 0);
-          if (p.ing.meat >= cm && p.ing.shrimp >= cs && p.ing.mushroom >= cmu && p.spice >= r.spice) {
-            modes.push({
-              useKnife: true,
-              knifeSource: knifeSource,
-              reducedIng: k,
-              cost: { meat: cm, shrimp: cs, mushroom: cmu, spice: r.spice }
-            });
-          }
+    var knifeSource = hasOwnKnife ? 'self' : (canBorrowKnife ? 'opp' : null);
+
+    if (r.any3Distinct) {
+      // NO.12 Buddha Four-Seas Feast: Any 3 distinct suits (or 2 distinct suits with Chef Knife!)
+      // Prefer suits the player actually owns so J Broth is conserved when possible
+      var sortedSuits = BASE_INGS.slice().sort(function (a, b) {
+        return (p.ing[b] || 0) - (p.ing[a] || 0);
+      });
+      if (knifeSource) {
+        var req2 = { meat: 0, shrimp: 0, mushroom: 0, cheese: 0 };
+        req2[sortedSuits[0]] = 1;
+        req2[sortedSuits[1]] = 1;
+        var m2 = buildPaymentIfAffordable(p, req2, 0, true, knifeSource, sortedSuits[2]);
+        if (m2) modes.push(m2);
+      }
+      var req3 = { meat: 0, shrimp: 0, mushroom: 0, cheese: 0 };
+      req3[sortedSuits[0]] = 1;
+      req3[sortedSuits[1]] = 1;
+      req3[sortedSuits[2]] = 1;
+      var m3 = buildPaymentIfAffordable(p, req3, 0, false, null, null);
+      if (m3) modes.push(m3);
+      return { canCook: modes.length > 0, modes: modes };
+    }
+
+    // Standard recipe cost (with J Broth automatically covering any missing suit!)
+    var fullMode = buildPaymentIfAffordable(p, r, r.spice || 0, false, null, null);
+    if (fullMode) modes.push(fullMode);
+
+    // Damascus Chef Knife (NO.05) on 3-cost recipes (incl. spice)
+    if (card.recipeTotal === 3 && knifeSource) {
+      for (var i = 0; i < BASE_INGS.length; i++) {
+        var k = BASE_INGS[i];
+        if ((r[k] || 0) > 0) {
+          var redMap = {
+            meat: (r.meat || 0) - (k === 'meat' ? 1 : 0),
+            shrimp: (r.shrimp || 0) - (k === 'shrimp' ? 1 : 0),
+            mushroom: (r.mushroom || 0) - (k === 'mushroom' ? 1 : 0),
+            cheese: (r.cheese || 0) - (k === 'cheese' ? 1 : 0)
+          };
+          var km = buildPaymentIfAffordable(p, redMap, r.spice || 0, true, knifeSource, k);
+          if (km) modes.push(km);
         }
       }
     }
@@ -952,22 +985,28 @@
         bonusNotesZh.push('品鉴铃+' + bellBonus + '★');
       }
 
-      // Cuisine Stamp & 3-Cuisine Grand Banquet (+3★)
+      // Cuisine Suit Flip & Four-Seas Banquet (3 suits = +3★, all 4 suits = +2★!)
       if (!p.stamps[card.cuisine]) {
         p.stamps[card.cuisine] = true;
-        bonusNotesEn.push(CUISINES[card.cuisine].icon + ' Stamp');
-        bonusNotesZh.push('打卡' + CUISINES[card.cuisine].icon + CUISINES[card.cuisine].zh);
+        bonusNotesEn.push(CUISINES[card.cuisine].suit + CUISINES[card.cuisine].icon + ' Suit');
+        bonusNotesZh.push('翻亮' + CUISINES[card.cuisine].suit + CUISINES[card.cuisine].zh);
         if (countStamps(p) >= 3 && !p.threeStampsDone) {
           p.threeStampsDone = true;
           bonusStars += 3;
-          bonusNotesEn.push('👑 +3★ 3-Cuisine Banquet!');
+          bonusNotesEn.push('👑 +3★ 3-Suit Banquet!');
           bonusNotesZh.push('👑 三系满汉奖+3★！');
+        }
+        if (countStamps(p) >= 4 && !p.fourStampsDone) {
+          p.fourStampsDone = true;
+          bonusStars += 2;
+          bonusNotesEn.push('🌟 +2★ All 4 Suits!');
+          bonusNotesZh.push('🌟 四海全齐再+2★！');
         }
       }
 
       addStars(state, pIdx, baseStars + bonusStars);
 
-      // Keep 1 spent basic ingredient at exact 7° Perfect Sear
+      // Keep 1 spent ingredient card (incl. J Broth) at exact 7° Perfect Sear
       if (isPerfect && w.paidBasic.length > 0) {
         var uniq = [];
         for (var ui = 0; ui < w.paidBasic.length; ui++) {
@@ -982,10 +1021,10 @@
         }
       }
 
-      // Card-specific 5°~7° Dish Completion Effect
+      // Card-specific 5°~7° Dish Completion Effect (v0.10.2)
       switch (card.id) {
         case 1: addSpice(p, 2); break;
-        case 2: p.ing.mushroom += 1; break;
+        case 2: p.ing.cheese += 1; break;
         case 3: postQueue.push({ kind: 'ADVANCE_RONDEL_1', player: pIdx }); break;
         case 4:
           if (opp.spice > 0) {
@@ -1172,10 +1211,12 @@
         state.discard.push(cid);
         var card = CARD_BY_ID[cid];
         var prp = card.prep;
-        p.ing.meat += prp.meat;
-        p.ing.shrimp += prp.shrimp;
-        p.ing.mushroom += prp.mushroom;
-        addSpice(p, prp.spice);
+        p.ing.meat += prp.meat || 0;
+        p.ing.shrimp += prp.shrimp || 0;
+        p.ing.mushroom += prp.mushroom || 0;
+        p.ing.cheese += prp.cheese || 0;
+        p.ing.broth += prp.broth || 0;
+        addSpice(p, prp.spice || 0);
         if (prp.ice > 0 && p.ice < 1) p.ice = 1;
 
         addLog(
@@ -1344,17 +1385,21 @@
         // Remove card from hand or openMenu into wok
         pool.splice(cPos, 1);
 
-        // Deduct cost and record paid basic ingredients
-        p.ing.meat -= chosenMode.cost.meat;
-        p.ing.shrimp -= chosenMode.cost.shrimp;
-        p.ing.mushroom -= chosenMode.cost.mushroom;
-        p.spice -= chosenMode.cost.spice;
+        // Deduct cost and record paid ingredient cards (incl. J Broth)
+        p.ing.meat -= chosenMode.cost.meat || 0;
+        p.ing.shrimp -= chosenMode.cost.shrimp || 0;
+        p.ing.mushroom -= chosenMode.cost.mushroom || 0;
+        p.ing.cheese -= chosenMode.cost.cheese || 0;
+        p.ing.broth -= chosenMode.cost.broth || 0;
+        p.spice -= chosenMode.cost.spice || 0;
 
         var paidBasic = [];
         var bi;
-        for (bi = 0; bi < chosenMode.cost.meat; bi++) paidBasic.push('meat');
-        for (bi = 0; bi < chosenMode.cost.shrimp; bi++) paidBasic.push('shrimp');
-        for (bi = 0; bi < chosenMode.cost.mushroom; bi++) paidBasic.push('mushroom');
+        for (bi = 0; bi < (chosenMode.cost.meat || 0); bi++) paidBasic.push('meat');
+        for (bi = 0; bi < (chosenMode.cost.shrimp || 0); bi++) paidBasic.push('shrimp');
+        for (bi = 0; bi < (chosenMode.cost.mushroom || 0); bi++) paidBasic.push('mushroom');
+        for (bi = 0; bi < (chosenMode.cost.cheese || 0); bi++) paidBasic.push('cheese');
+        for (bi = 0; bi < (chosenMode.cost.broth || 0); bi++) paidBasic.push('broth');
 
         var usedGears = {};
         var borrowedOpponentGear = false;
@@ -1606,7 +1651,9 @@
     if (!p.stamps[c.cuisine]) {
       score += 3.5;
       if (countStamps(p) === 2 && !p.threeStampsDone) {
-        score += 7.5; // Completing 3rd stamp yields +3★!
+        score += 7.5; // Completing 3rd suit yields +3★!
+      } else if (countStamps(p) === 3 && !p.fourStampsDone) {
+        score += 5.5; // Completing 4th suit yields +2★!
       }
     }
     if (!p.firstDishDone) score += 2.0;
@@ -1618,31 +1665,54 @@
     var p = state.players[pIdx];
     var c = CARD_BY_ID[cardId];
     var r = c.recipe;
-    var mMeat = Math.max(0, r.meat - (p.ing.meat + (extraIng.meat || 0)));
-    var mShr = Math.max(0, r.shrimp - (p.ing.shrimp + (extraIng.shrimp || 0)));
-    var mMush = Math.max(0, r.mushroom - (p.ing.mushroom + (extraIng.mushroom || 0)));
-    var basicDeficit = mMeat + mShr + mMush;
-    if (c.recipeTotal === 3 && p.gears.indexOf(5) !== -1 && basicDeficit > 0) {
-      basicDeficit = Math.max(0, basicDeficit - 1);
+    var brothHave = (p.ing.broth || 0) + (extraIng.broth || 0);
+    var basicDeficit = 0;
+
+    if (r.any3Distinct) {
+      var distinctOwned = 0;
+      for (var di = 0; di < BASE_INGS.length; di++) {
+        var dk = BASE_INGS[di];
+        if ((p.ing[dk] || 0) + (extraIng[dk] || 0) >= 1) distinctOwned++;
+      }
+      var targetSuits = (p.gears.indexOf(5) !== -1) ? 2 : 3;
+      basicDeficit = Math.max(0, targetSuits - Math.min(targetSuits, distinctOwned + brothHave));
+    } else {
+      var mMeat = Math.max(0, (r.meat || 0) - ((p.ing.meat || 0) + (extraIng.meat || 0)));
+      var mShr = Math.max(0, (r.shrimp || 0) - ((p.ing.shrimp || 0) + (extraIng.shrimp || 0)));
+      var mMush = Math.max(0, (r.mushroom || 0) - ((p.ing.mushroom || 0) + (extraIng.mushroom || 0)));
+      var mChs = Math.max(0, (r.cheese || 0) - ((p.ing.cheese || 0) + (extraIng.cheese || 0)));
+      basicDeficit = Math.max(0, (mMeat + mShr + mMush + mChs) - brothHave);
+      if (c.recipeTotal === 3 && p.gears.indexOf(5) !== -1 && (mMeat + mShr + mMush + mChs) > 0) {
+        basicDeficit = Math.max(0, (mMeat + mShr + mMush + mChs - 1) - brothHave);
+      }
     }
-    var spDeficit = Math.max(0, r.spice - (p.spice + (extraSpice || 0)));
+    var spDeficit = Math.max(0, (r.spice || 0) - (p.spice + (extraSpice || 0)));
     return basicDeficit + spDeficit;
   }
 
   function pickNeededIng(state, pIdx) {
     var p = state.players[pIdx];
     var pool = p.hand.concat(state.openMenu);
-    var demand = { meat: 0.2, shrimp: 0.2, mushroom: 0.2 };
+    var demand = { meat: 0.2, shrimp: 0.2, mushroom: 0.2, cheese: 0.2 };
     for (var i = 0; i < pool.length; i++) {
       var c = CARD_BY_ID[pool[i]];
       var w = scoreDishDesirability(state, pIdx, c.id) / (1 + missingForCard(state, pIdx, c.id, {}, 0));
-      if (p.ing.meat < c.recipe.meat) demand.meat += w * (c.recipe.meat - p.ing.meat);
-      if (p.ing.shrimp < c.recipe.shrimp) demand.shrimp += w * (c.recipe.shrimp - p.ing.shrimp);
-      if (p.ing.mushroom < c.recipe.mushroom) demand.mushroom += w * (c.recipe.mushroom - p.ing.mushroom);
+      if (c.recipe.any3Distinct) {
+        for (var bi = 0; bi < BASE_INGS.length; bi++) {
+          var bk = BASE_INGS[bi];
+          if ((p.ing[bk] || 0) === 0) demand[bk] += w * 1.1;
+        }
+      } else {
+        if ((p.ing.meat || 0) < (c.recipe.meat || 0)) demand.meat += w * (c.recipe.meat - p.ing.meat);
+        if ((p.ing.shrimp || 0) < (c.recipe.shrimp || 0)) demand.shrimp += w * (c.recipe.shrimp - p.ing.shrimp);
+        if ((p.ing.mushroom || 0) < (c.recipe.mushroom || 0)) demand.mushroom += w * (c.recipe.mushroom - p.ing.mushroom);
+        if ((p.ing.cheese || 0) < (c.recipe.cheese || 0)) demand.cheese += w * (c.recipe.cheese - p.ing.cheese);
+      }
     }
     var best = 'meat';
     if (demand.shrimp > demand[best]) best = 'shrimp';
     if (demand.mushroom > demand[best]) best = 'mushroom';
+    if (demand.cheese > demand[best]) best = 'cheese';
     return best;
   }
 
@@ -1711,20 +1781,15 @@
         // Slight penalty for giving opponent a free Bump draw unless seat is super juicy
         if (opp.seat === dest) sc -= 1.1;
 
-        var addIng = { meat: 0, shrimp: 0, mushroom: 0 };
+        var addIng = { meat: 0, shrimp: 0, mushroom: 0, cheese: 0, broth: 0 };
         var addSp = -cost;
         if (dest === 0) { addSp += 1; sc += 2.2; }
         if (dest === 1) { addIng.meat = 1; sc += 2.8; }
         if (dest === 2) { addIng.shrimp = 1; sc += 3.1; }
         if (dest === 3) { addIng.mushroom = 1; addSp += 1; sc += 3.0; }
         if (dest === 4) { sc += (p.ice === 0 ? 3.4 : 1.5); }
-        if (dest === 5) { addSp += 2; sc += 2.8 + (opp.gears.length > 0 ? 1.8 : 0); }
-        if (dest === 6) {
-          var want = pickNeededIng(state, actor);
-          addIng[want] = 1;
-          addSp += 1;
-          sc += 3.8;
-        }
+        if (dest === 5) { addIng.cheese = 1; sc += 2.9; }
+        if (dest === 6) { addSp += 2; sc += 3.0; }
         if (dest === 7) { sc += 2.0; }
 
         // Evaluate whether landing here unlocks cooking a high-value dish right now!
@@ -1772,7 +1837,13 @@
         var hId = p.hand[hi];
         var hCard = CARD_BY_ID[hId];
         var prp = hCard.prep;
-        var simIng = { meat: prp.meat, shrimp: prp.shrimp, mushroom: prp.mushroom };
+        var simIng = {
+          meat: prp.meat || 0,
+          shrimp: prp.shrimp || 0,
+          mushroom: prp.mushroom || 0,
+          cheese: prp.cheese || 0,
+          broth: prp.broth || 0
+        };
         if (prp.anyIng) simIng[pickNeededIng(state, actor)] += 1;
 
         // Remaining cook targets if we discard hId
@@ -1800,8 +1871,8 @@
           // If we don't plan to equip a top gear right now, prepping builds engine fast!
           var wantGear = p.gears.length < 2 && scoreGearPower(hId, p) >= 8.4 && state.round <= 4;
           if (!wantGear) {
-            var resourceVal = (prp.meat + prp.shrimp + prp.mushroom + (prp.anyIng ? 1.2 : 0)) * 2.2 +
-              prp.spice * 1.5 + prp.ice * 2.0 + prp.draw * 1.6;
+            var resourceVal = ((prp.meat || 0) + (prp.shrimp || 0) + (prp.mushroom || 0) + (prp.cheese || 0) + (prp.broth || 0) * 1.25 + (prp.anyIng ? 1.2 : 0)) * 2.2 +
+              (prp.spice || 0) * 1.5 + (prp.ice || 0) * 2.0 + (prp.draw || 0) * 1.6;
             if (resourceVal > bestPrepGain) {
               bestPrepGain = resourceVal;
               bestPrepCard = hId;
@@ -1989,7 +2060,7 @@
       var needIng = pickNeededIng(state, actor);
       var unlocksDish = false;
       var targets = p.hand.concat(state.openMenu);
-      var addOne = { meat: 0, shrimp: 0, mushroom: 0 };
+      var addOne = { meat: 0, shrimp: 0, mushroom: 0, cheese: 0, broth: 0 };
       addOne[needIng] = 1;
       for (var fi = 0; fi < targets.length; fi++) {
         if (!getCookOptionsForCard(state, actor, targets[fi]).canCook &&
@@ -2206,10 +2277,14 @@
     }
 
     function formatRecipeBadges(recipe) {
+      if (recipe.any3Distinct) {
+        return '<span class="ing-pill wild">' + t('Any 3 Diff Suits', '任3种异色材') + '</span>';
+      }
       var parts = [];
       if (recipe.meat > 0) parts.push('<span class="ing-pill meat">' + recipe.meat + '🥩</span>');
       if (recipe.shrimp > 0) parts.push('<span class="ing-pill shrimp">' + recipe.shrimp + '🦐</span>');
       if (recipe.mushroom > 0) parts.push('<span class="ing-pill mushroom">' + recipe.mushroom + '🍄</span>');
+      if (recipe.cheese > 0) parts.push('<span class="ing-pill cheese">' + recipe.cheese + '🧀</span>');
       if (recipe.spice > 0) parts.push('<span class="ing-pill spice">' + recipe.spice + '🧂</span>');
       return parts.join('');
     }
@@ -2488,16 +2563,18 @@
           '</div>' +
           '<div class="star-progress-track"><div class="star-progress-fill" style="width:' + pct + '%"></div></div>' +
           '<div class="pantry-strip">' +
-            '<span class="token-counter meat" title="Wagyu">🥩<b>' + p.ing.meat + '</b></span>' +
-            '<span class="token-counter shrimp" title="Lobster">🦐<b>' + p.ing.shrimp + '</b></span>' +
-            '<span class="token-counter mushroom" title="Truffle">🍄<b>' + p.ing.mushroom + '</b></span>' +
+            '<span class="token-counter meat" title="♥️ Wagyu">🥩<b>' + p.ing.meat + '</b></span>' +
+            '<span class="token-counter shrimp" title="♠️ Lobster">🦐<b>' + p.ing.shrimp + '</b></span>' +
+            '<span class="token-counter mushroom" title="♣️ Truffle">🍄<b>' + p.ing.mushroom + '</b></span>' +
+            '<span class="token-counter cheese" title="♦️ Cheese">🧀<b>' + p.ing.cheese + '</b></span>' +
+            (p.ing.broth > 0 ? '<span class="token-counter broth" title="J Wild Broth (subs any 1 ing)">🍲<b>' + p.ing.broth + '</b></span>' : '') +
             '<span class="token-counter spice" title="Spice">🧂<b>' + p.spice + '</b></span>' +
-            '<span class="token-counter ice ' + (p.ice > 0 ? 'has-ice' : '') + '" title="Rescue Ice (-2°)">🧊<b>' + p.ice + '/1</b></span>' +
+            '<span class="token-counter ice ' + (p.ice > 0 ? 'has-ice' : '') + '" title="🃏 Rescue Ice (-2°)">🃏<b>' + p.ice + '/1</b></span>' +
             (isTopRival ? '<span class="token-counter hand-cnt" title="Hand Cards">🂠<b>' + p.hand.length + '/2</b></span>' : '') +
           '</div>' +
           '<div class="stamps-and-milestone-row">' +
             '<div class="stamps-bar">' + stampsHtml + '</div>' +
-            '<span class="stamp-bonus-hint">' + countStamps(p) + '/3 ' + t('(+3★)', '(满3系+3★)') + '</span>' +
+            '<span class="stamp-bonus-hint">' + countStamps(p) + '/4 ' + t('(3=+3★ · 4=+2★)', '(3色+3★·4色+2★)') + '</span>' +
           '</div>' +
           '<div class="gears-list">' + gearsHtml + '</div>' +
         '</section>'
@@ -2698,11 +2775,12 @@
         var pr = state.prompt;
         if (pr.type === 'PICK_ANY_ING') {
           dockHtml = '<div class="action-dock highlight">' +
-            '<div class="dock-label">' + t('Pick +1 Ingredient:', '任选 1 份食材入盘：') + '</div>' +
+            '<div class="dock-label">' + t('Pick +1 Ingredient:', '任选 1 份四色食材：') + '</div>' +
             '<div class="dock-btn-row">' +
               '<button class="dock-btn meat" data-act="pick-any" data-ing="meat">+1 🥩 ' + t('Wagyu', '和牛') + '</button>' +
               '<button class="dock-btn shrimp" data-act="pick-any" data-ing="shrimp">+1 🦐 ' + t('Lobster', '龙虾') + '</button>' +
               '<button class="dock-btn mushroom" data-act="pick-any" data-ing="mushroom">+1 🍄 ' + t('Truffle', '松露') + '</button>' +
+              '<button class="dock-btn cheese" data-act="pick-any" data-ing="cheese">+1 🧀 ' + t('Cheese', '芝士') + '</button>' +
             '</div></div>';
         } else if (pr.type === 'PICK_KEPT_ING') {
           var kBtns = pr.options.map(function (k) {
@@ -2732,6 +2810,7 @@
             '<button class="dock-btn meat" data-act="restock-ing" data-ing="meat">+1🥩</button>' +
             '<button class="dock-btn shrimp" data-act="restock-ing" data-ing="shrimp">+1🦐</button>' +
             '<button class="dock-btn mushroom" data-act="restock-ing" data-ing="mushroom">+1🍄</button>' +
+            '<button class="dock-btn cheese" data-act="restock-ing" data-ing="cheese">+1🧀</button>' +
           '</div></div>';
       } else if (isHumanActing && state.phase === 'FOLLOW_REACTION') {
         dockHtml = '<div class="action-dock highlight">' +
@@ -2741,6 +2820,7 @@
             '<button class="dock-btn meat" data-act="follow-ing" data-ing="meat">+1🥩(1🧂)</button>' +
             '<button class="dock-btn shrimp" data-act="follow-ing" data-ing="shrimp">+1🦐(1🧂)</button>' +
             '<button class="dock-btn mushroom" data-act="follow-ing" data-ing="mushroom">+1🍄(1🧂)</button>' +
+            '<button class="dock-btn cheese" data-act="follow-ing" data-ing="cheese">+1🧀(1🧂)</button>' +
             '<button class="dock-btn subtle" data-act="follow-pass">' + t('Pass', '跳过') + '</button>' +
           '</div></div>';
       }
@@ -2783,8 +2863,9 @@
               '<b>' + (p0.dualGearDone ? '🔴✓ ' : '🔴○ ') + (p1.dualGearDone ? '🔵✓' : '🔵○') + '</b>' +
             '</div>' +
             '<div class="ms-row">' +
-              '<span>👑 ' + t('3 Cuisine Stamps (+3★)', '集满三系章 (+3★)') + '</span>' +
-              '<b>' + (p0.threeStampsDone ? '🔴✓ ' : '') + (p1.threeStampsDone ? '🔵✓' : (!p0.threeStampsDone ? t('3/4 Types', '集3种即得') : '')) + '</b>' +
+              '<span>👑 ' + t('3/4 Cuisine Suits (+3/+2★)', '翻亮3色+3★ · 4色再+2★') + '</span>' +
+              '<b>' + (p0.fourStampsDone ? '🔴4✓ ' : (p0.threeStampsDone ? '🔴3✓ ' : '')) +
+                      (p1.fourStampsDone ? '🔵4✓' : (p1.threeStampsDone ? '🔵3✓' : (!p0.threeStampsDone ? t('A/K Suits', '集3/4色得奖') : ''))) + '</b>' +
             '</div>' +
           '</div>' +
           '<div class="bistro-log-box">' +
@@ -2907,20 +2988,20 @@
               '</div>' +
               '<div class="rules-grid-4">' +
                 '<div class="rule-step-card"><b>1. ' + t('Clockwise Bistro Rondel', '顺时针八方吧台走位') + '</b><p>' +
-                  t('Move 1 or 2 seats clockwise for FREE (+1🧂 per extra step) to collect Wagyu 🥩, Lobster 🦐, Truffle 🍄, Spice 🧂, Ice 🧊, & Menu Cards. Landing on your rival triggers a Bump (rival draws 1 free card)!',
-                    '每回合先顺时针走 1~2 步免费（每多走1步付1🧂），领取对应档口的食材筹码与手牌。停在对手同格触发【挤位】（对手免费摸1张牌）！') +
+                  t('Move 1 or 2 seats clockwise for FREE (+1🧂 per extra step) to collect Wagyu 🥩, Lobster 🦐, Truffle 🍄, Cheese 🧀, Spice 🧂, Ice 🃏, & Menu Cards. Landing on your rival triggers a Jostle (rival draws 1 free card)!',
+                    '每回合先顺时针走 1~2 步免费（每多走1步付1🧂），领取对应档口的四色食材与菜牌。停在对手同格触发【挤位】（对手免费摸1张牌）！') +
                 '</p></div>' +
-                '<div class="rule-step-card"><b>2. ' + t('Multi-Use Cards (Hand ≤ 2)', '一卡三用闭环（手牌上限2）') + '</b><p>' +
-                  t('Every card works 3 ways: ① Discard in Step 2 for instant Prep tokens; ② Or Equip in Step 2 as permanent Kitchen Gear (empty slot free, 1🧂 to swap; your 1st time at 2 gear = +1★ & +1🧂!); ③ Still Cook in Step 3!',
-                    '每张名菜卡兼具三种用途：①第2步弃置换取备菜筹码；②或第2步免费装空位厨具（替旧付1🧂，每人首次满2件立得+1★与+1🧂，第3步照常可掌勺）；③凑齐配方开火冲星！') +
+                '<div class="rule-step-card"><b>2. ' + t('Multi-Use Cards + J Broth', '一卡三用 + J百搭高汤') + '</b><p>' +
+                  t('Every card works 3 ways: ① Discard in Step 2 for Prep ingredients (incl. 🍲 J Wild Broth that subs any 1 ingredient!); ② Equip in Step 2 as permanent Gear (1st time at 2 gear = +1★ & +1🧂!); ③ Cook in Step 3!',
+                    '每张名菜卡兼具三种用途：①第2步弃置换取备菜食材（含可顶替任1食材的🍲J百搭高汤）；②第2步装厨具（首满2件立得+1★与+1🧂）；③第3步开火掌勺！') +
                 '</p></div>' +
-                '<div class="rule-step-card"><b>3. ' + t('1° Start · Blackjack Wok Heat', '1°起锅 · 21点式添柴控温') + '</b><p>' +
-                  t('Every dish starts at 1° with a free Blazing Die (+1~6° → 0% first-roll bust!). Plate at 5°/6° for Golden ★ + 1/2🧂 Spice (+3★ at 5°–6° or +2★ at 7° on Seat ⑧!), hit exact 7° for Master Chef ★ + keep 1 ingredient, or bust at 8°+ (save with 🧊 Ice -2°)!',
-                    '统一 1° 起锅，首投免费猛火骰（1~6°）绝不爆锅！5°/6°拿黄金星并领1/2🧂回锅香料（⑧品鉴铃起锅5~6°额外+3★、7°额外+2★），恰好7°拿极品高星并留1份食材，8°+超温可用🧊救锅冰(-2°)或砂锅救回！') +
+                '<div class="rule-step-card"><b>3. ' + t('1° Start · Wok Heat Control', '1°起锅 · 掷骰升温与锁汁') + '</b><p>' +
+                  t('Every dish starts at 1° with a free High-Heat Die (+1~6° → 0% first-roll bust!). Plate at 5°/6° for Golden ★ + 1/2🧂 (+3★ at 5–6° or +2★ at 7° on Seat ⑧!), hit exact 7° for Peak ★ + keep 1 ingredient (incl. 🍲), or bust at 8°+ (save w/ 🃏 Ice -2°)!',
+                    '统一 1° 起锅，首投免费猛火骰（1~6°）绝不爆锅！5°/6°拿黄金星并领1/2🧂（⑧品鉴铃起锅5~6°额外+3★、7°额外+2★），恰好7°拿极品星并退回1张食材(含J)，8°+可用🃏救锅冰(-2°)救回！') +
                 '</p></div>' +
-                '<div class="rule-step-card"><b>4. ' + t('Follow & 18★ Equal Endgame', '回合外跟随与 18★ 平权终局') + '</b><p>' +
-                  t('If the active chef doesn’t cook, the other chef may pay 1🧂 to Follow (+1 Ingredient or Draw 1). Collect 3 distinct Cuisine Stamps (🔥💧🌿⚡) for +3★! Reaching 18★ triggers Equal-Turns Endgame!',
-                    '若主动方本回合未开火，另一人可付1🧂发动【跟随】（摸1牌或拿1食材）。集满3种不同流派章立即+3★！任一主厨达18★触发平权终局（P1触发则P2补完本轮）！') +
+                '<div class="rule-step-card"><b>4. ' + t('Follow & Four-Seas 18★ Finale', '回合外跟随与四海满汉终局') + '</b><p>' +
+                  t('If the active chef doesn’t cook, the rival may pay 1🧂 to Follow (+1 Ingredient or Draw 1). Flip 3 Cuisine Suits (♥️🔥/♠️💧/♣️🌿/♦️⚡) for +3★, and all 4 Suits for +2★ more! Reaching 18★ triggers Equal-Turn Endgame!',
+                    '若主动方本回合未开火，对手可付1🧂发动【跟随】（摸1牌或拿1份四色食材）。翻亮3色流派牌立得+3★，翻齐4色再得+2★！任一主厨达18★触发平权终局！') +
                 '</p></div>' +
               '</div>' +
               '<div class="modal-foot-bar">' +
