@@ -19,6 +19,7 @@
 - [2026 US Black Friday 4-Layer Cashback & Sales Tax Stacking Calculator](https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/): Separates pre-tax Rakuten cashback base from post-tax Amex/Chase Offer thresholds.
 - [2027 US Holiday E-Commerce & Amazon FBA Reverse Lead-Time Calendar Calculator](https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/): Date-verified 22 US shopping peaks for 2027 with live Ocean FBA (T-90d), Fast-Boat/Air (T-42d), Vine/PPC warmup & deal-lock deadlines.
 - [Small-Business Google Sheets + Apps Script Automation Studio](https://963239327.github.io/craftleaf-studio/tools/sheets-automation/): Interactive @OnlyCurrentDoc Apps Script generator for daily low-stock inventory email digests, multi-tab branch sales sync, bilingual Google Forms booking confirmations, and IRS Schedule C expense reimbursement pivots.
+- [Bilingual Job-Seeker & Freelancer Portfolio Site Generator ($0 GitHub Pages)](https://963239327.github.io/craftleaf-studio/tools/portfolio-builder/): Zero-build client-side portfolio & 1-page print resume studio with quantified impact lint checks, ?lang=en|zh routing, and public-repo PII leak protection.
 - [Self-Serve Bilingual Restaurant Menu (FDA Big-9) & Fair-Housing Landlord Flyer Vector PDF Studios](https://963239327.github.io/craftleaf-studio/services/): 100% local in-browser 300 DPI commercial print studios.
 
 ## Official Open-Source Developer & Browser Extensions (MIT)
@@ -39,6 +40,7 @@
 - [Star Chef Showdown (星厨对决) — Play Free vs. Sous-Chef AI | Bistro Tabletop Game](https://963239327.github.io/craftleaf-studio/play/): Play Star Chef Showdown (星厨对决) instantly in your browser! 8-Seat Bistro Rondel × Multi-Use Cards × Blackjack-Style 21° Wok Push-Your-Luck. Solo vs. Smart AI or 2P Local + Printable PnP Trilogy!
 - [2027 US Holiday E-Commerce & Amazon FBA Lead-Time Calendar Calculator | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/): Free interactive 2027 US retail & cross-border seller holiday marketing calendar. Calculate exact Ocean FBA (T-90d), Fast-Boat/Air (T-42d), Vine/PPC warmup, and 30-day deal-lock dates across all 22 verified 2027 US shopping peaks.
 - [Small-Business Google Sheets + Apps Script Generator (Low-Stock Alert, Tab Sync & Form Emailer) | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/tools/sheets-automation/): Free client-side Google Sheets Apps Script generator for small businesses. Customize @OnlyCurrentDoc low-stock inventory email alerts, multi-tab sales sync, bilingual Google Forms booking confirmations, and IRS Schedule C expense calculators.
+- [Free Bilingual Job-Seeker & Freelancer Portfolio Site Generator ($0 GitHub Pages) | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/tools/portfolio-builder/): 100% client-side bilingual (EN / 中文) personal portfolio website & 1-page print resume generator for software engineers, UX designers, students, and freelancers. Export zero-build HTML for free GitHub Pages hosting.
 - [北美餐馆双语菜单 FDA 生成器 · 餐饮奶茶超市英文社媒帖 & 房东合规招租海报自助工坊 | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/services/): 100% 浏览器纯本地即改即用、零等待零隐私上传：自助生成印刷级 300 DPI 北美中餐馆双语菜单（含 FDA 9大过敏原）、餐厅/奶茶店/亚洲超市地道美式英文社媒促销帖+台卡海报、以及公平住房合规双语招租海报 PDF。
 - [PasteShield — Reversible AI Prompt & Clipboard Secret Sanitizer for VS Code & Cursor](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/): 100% offline reversible secret sanitizer for VS Code & Cursor. Redact API keys, JWTs, DB URIs, Azure/AWS credentials & internal IPs into <OPENAI_KEY_1> placeholders before prompting ChatGPT or Claude, and restore AI code replies in 1 click.
 - [CleanPrint & AI-Chat to PDF Studio — Edge & Firefox Extension | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/): Purify web articles & AI chats (ChatGPT, Claude, Copilot, GitHub) into crisp, ink-saving vector PDFs. 100% local Manifest V3 extension for Microsoft Edge & Firefox.
@@ -186,7 +188,7 @@
 - `citizenshipPrep2025` ($7.00): https://stardustdemo.gumroad.com/l/us-citizenship-test-2025-chinese-prep
 - `bilingualAiPrompts` ($6.00): https://stardustdemo.gumroad.com/l/ai-prompt-pack-bilingual
 - `usPhoneBroadbandGuide` ($6.00): https://stardustdemo.gumroad.com/l/us-phone-broadband-guide
-- `techInterviewPrep` ($7.00): https://stardustdemo.gumroad.com/l/tech-interview-english-prep
+- `techInterviewPrep` ($7.00): https://stardustdemo.gumroad.com/l/tech-interview-english-prep?option=0jThBGWTTzPBgXwt1u3M6w==
 - `waHealthInsurance2027` ($7.00): https://stardustdemo.gumroad.com/l/sxpiu
 - `bilingualChineseRecipes` ($9.00): https://stardustdemo.gumroad.com/l/bilingual-chinese-recipes-us-grocery
 - `chineseGroceryCheatSheet` ($7.00): https://stardustdemo.gumroad.com/l/ingredient-cheat-sheet

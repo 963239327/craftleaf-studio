@@ -27,7 +27,8 @@
     'cleanprint-pro': '8I2tijAIf2opR98RlC6dSw==',
     'pasteshield-pro': 'bZpK_yrf74s1q7yszWnN-g==',
     'ingredient-cheat-sheet': '4-usHUBHQ7Cqt-BkTW_scQ==',
-    'us-apartment-lease-12-clauses-chinese-guide': 'bJDlNWRdHY0gZNlae6WJVw=='
+    'us-apartment-lease-12-clauses-chinese-guide': 'bJDlNWRdHY0gZNlae6WJVw==',
+    'tech-interview-english-prep': '8LJVcKitq6D6ZkRNZETBPQ=='
   };
 
   // Strictly private in-memory verification map — never exported, never serialized as proof.

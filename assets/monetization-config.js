@@ -146,7 +146,13 @@
     },
     "techInterviewPrep": {
       "priceUsd": "$7.00",
+      "portfolioPriceUsd": "$12.00",
+      "comboPriceUsd": "$15.00",
+      "gumroadProductId": "8LJVcKitq6D6ZkRNZETBPQ==",
       "gumroadPermalink": "tech-interview-english-prep",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/tech-interview-english-prep?option=0jThBGWTTzPBgXwt1u3M6w==",
+      "portfolioStudioCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/tech-interview-english-prep?option=qwuK00MyU4qC-MvlAZ6eTg==&wanted=true",
+      "portfolioComboCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/tech-interview-english-prep?option=TjBxKNCNjMa_JDx7TLCUGw==&wanted=true",
       "checkoutUrlZh": ""
     },
     "waHealthInsurance2027": {

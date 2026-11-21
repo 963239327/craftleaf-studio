@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Bilingual Job-Seeker &amp; Freelancer Portfolio Site Generator ($0 GitHub Pages) | CraftLeaf Studio</title>
+  <meta name="description" content="100% client-side bilingual (EN / 中文) personal portfolio website &amp; 1-page print resume generator for software engineers, UX designers, students, and freelancers. Export zero-build HTML for free GitHub Pages hosting." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/tools/portfolio-builder/" />
+  <meta property="og:title" content="Bilingual Job-Seeker &amp; Freelancer Portfolio Site Studio ($0 GitHub Pages)" />
+  <meta property="og:description" content="Generate a recruiter-ready single-page bilingual portfolio with quantified impact lint checks, ?lang=en|zh routing, and @media print resume CSS in 5 minutes." />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/tools/portfolio-builder/" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Bilingual Job-Seeker & Freelancer Portfolio Site Generator",
+    "url": "https://963239327.github.io/craftleaf-studio/tools/portfolio-builder/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <style>
+    :root { --bg:#0b1120; --card:#1e293b; --alt:#0f172a; --border:#334155; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --gold:#f59e0b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; background:radial-gradient(circle at 15% 0%,#1e3a8a 0%,var(--bg) 54%); color:var(--text); line-height:1.6; }
+    a { color:#7dd3fc; text-decoration:none; }
+    header.site-hdr { position:sticky; top:0; z-index:40; backdrop-filter:blur(12px); background:rgba(11,17,32,0.9); border-bottom:1px solid var(--border); }
+    .wrap { max-width:1220px; margin:0 auto; padding:0 20px; }
+    .nav { display:flex; justify-content:space-between; align-items:center; padding:13px 0; gap:12px; flex-wrap:wrap; }
+    .pill { display:inline-block; font-size:12px; font-weight:800; padding:4px 11px; border-radius:999px; background:rgba(16,185,129,0.18); color:#6ee7b7; border:1px solid rgba(52,211,153,0.45); }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 16px; border-radius:10px; font-weight:800; font-size:13.5px; cursor:pointer; border:1px solid transparent; text-decoration:none; font-family:inherit; }
+    .btn-gold { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#0f172a; }
+    .btn-green { background:linear-gradient(135deg,#10b981,#34d399); color:#052e16; }
+    .btn-sec { background:var(--card); color:var(--text); border-color:var(--border); }
+    .studio-grid { display:grid; grid-template-columns:0.92fr 1.18fr; gap:18px; align-items:start; margin-top:18px; }
+    @media (max-width:960px) { .studio-grid { grid-template-columns:1fr; } }
+    .panel { background:rgba(30,41,59,0.88); border:1px solid var(--border); border-radius:16px; padding:18px; }
+    label.fld { display:block; font-size:12px; font-weight:700; color:#cbd5e1; margin:9px 0 3px; }
+    input[type="text"], textarea, select { width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--alt); color:#fff; font-size:13px; font-family:inherit; }
+    textarea { min-height:58px; resize:vertical; }
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .row3 { display:grid; grid-template-columns:0.8fr 1.1fr 1.1fr; gap:8px; }
+    .lint-box { padding:11px 13px; border-radius:11px; font-size:12.5px; margin:12px 0; border:1px solid rgba(52,211,153,0.4); background:rgba(16,185,129,0.12); color:#d1fae5; }
+    .lint-box.warn { border-color:rgba(248,113,113,0.55); background:rgba(239,68,68,0.15); color:#fecaca; }
+    .unlock-bar { margin-top:14px; padding:14px; border-radius:12px; background:#090f1d; border:1px solid rgba(245,158,11,0.45); }
+    .disc { margin:26px 0 48px; padding:14px 16px; border-radius:10px; background:rgba(15,23,42,0.85); border-left:3px solid var(--gold); font-size:12.5px; color:var(--muted); }
+    html:not(.zh) [data-lang="zh"] { display:none !important; }
+    html.zh [data-lang="en"] { display:none !important; }
+    
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .pf-shell { max-width: 940px; margin: 0 auto; padding: 28px 22px 56px; border-radius: 16px; transition: background 0.2s, color 0.2s; }
+  .pf-shell[data-theme="clean"] { background: #ffffff; color: #0f172a; }
+  .pf-shell[data-theme="bento"] { background: #090e1a; color: #f8fafc; }
+  .pf-shell[data-theme="editorial"] { background: #faf8f5; color: #1c1917; font-family: Georgia, "Noto Serif SC", -apple-system, serif; }
+  .pf-topbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
+  .pf-status-pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: rgba(16,185,129,0.14); color: #059669; border: 1px solid rgba(16,185,129,0.35); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  .pf-shell[data-theme="bento"] .pf-status-pill { color: #6ee7b7; background: rgba(16,185,129,0.18); }
+  .pf-top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pf-btn-ghost { padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: transparent; color: inherit; font-size: 12px; font-weight: 700; cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  .pf-shell[data-theme="bento"] .pf-btn-ghost { border-color: #334155; color: #cbd5e1; }
+  .pf-name { margin: 0 0 6px; font-size: clamp(28px, 4vw, 40px); line-height: 1.15; font-weight: 900; letter-spacing: -0.02em; }
+  .pf-role { margin: 0 0 10px; font-size: 17px; font-weight: 700; color: #2563eb; }
+  .pf-shell[data-theme="bento"] .pf-role { color: #38bdf8; }
+  .pf-shell[data-theme="editorial"] .pf-role { color: #9a3412; }
+  .pf-summary { margin: 0 0 18px; font-size: 15px; max-width: 760px; opacity: 0.88; }
+  .pf-cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  .pf-btn-primary { display: inline-block; padding: 9px 16px; border-radius: 9px; background: #0f172a; color: #ffffff; font-weight: 700; font-size: 13px; text-decoration: none; }
+  .pf-shell[data-theme="bento"] .pf-btn-primary { background: #10b981; color: #052e16; }
+  .pf-shell[data-theme="editorial"] .pf-btn-primary { background: #7c2d12; color: #fff; }
+  .pf-btn-sec { display: inline-block; padding: 9px 14px; border-radius: 9px; border: 1px solid #cbd5e1; color: inherit; font-weight: 700; font-size: 13px; text-decoration: none; }
+  .pf-shell[data-theme="bento"] .pf-btn-sec { border-color: #334155; }
+  .pf-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  @media (max-width: 640px) { .pf-metrics { grid-template-columns: 1fr; } }
+  .pf-metric-card { padding: 14px 16px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; }
+  .pf-shell[data-theme="bento"] .pf-metric-card { background: #111827; border-color: #1f2937; }
+  .pf-shell[data-theme="editorial"] .pf-metric-card { background: #ffffff; border-color: #e7e5e4; }
+  .pf-metric-val { font-size: 24px; font-weight: 900; line-height: 1.15; color: #059669; }
+  .pf-shell[data-theme="bento"] .pf-metric-val { color: #34d399; }
+  .pf-shell[data-theme="editorial"] .pf-metric-val { color: #9a3412; }
+  .pf-metric-lbl { font-size: 12.5px; opacity: 0.82; margin-top: 3px; font-weight: 600; }
+  .pf-section { margin-top: 26px; }
+  .pf-sec-title { font-size: 15px; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1.5px solid rgba(148,163,184,0.3); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  .pf-proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .pf-proj-card { padding: 16px; border-radius: 13px; border: 1px solid #e2e8f0; background: #ffffff; display: flex; flex-direction: column; justify-content: space-between; }
+  .pf-shell[data-theme="bento"] .pf-proj-card { background: #131c31; border-color: #263554; }
+  .pf-shell[data-theme="editorial"] .pf-proj-card { background: #ffffff; border-color: #e7e5e4; }
+  .pf-proj-tag { display: inline-block; align-self: flex-start; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(37,99,235,0.1); color: #2563eb; margin-bottom: 8px; font-family: "SF Mono", Menlo, monospace; }
+  .pf-shell[data-theme="bento"] .pf-proj-tag { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+  .pf-proj-title { margin: 0 0 6px; font-size: 15.5px; line-height: 1.32; }
+  .pf-proj-impact { margin: 0 0 10px; font-size: 13.2px; opacity: 0.88; line-height: 1.48; }
+  .pf-proj-link { font-size: 12.5px; font-weight: 700; color: #2563eb; text-decoration: none; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+  .pf-shell[data-theme="bento"] .pf-proj-link { color: #34d399; }
+  .pf-exp-list { display: flex; flex-direction: column; gap: 12px; }
+  .pf-exp-row { padding: 12px 15px; border-radius: 11px; border: 1px solid rgba(148,163,184,0.28); }
+  .pf-exp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .pf-exp-period { font-size: 12px; font-weight: 700; opacity: 0.72; font-family: "SF Mono", Menlo, monospace; }
+  .pf-exp-detail { margin: 4px 0 0; font-size: 13.5px; opacity: 0.88; }
+  .pf-skill-chips { display: flex; gap: 7px; flex-wrap: wrap; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+  .pf-chip { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(148,163,184,0.38); }
+  .pf-footer { margin-top: 34px; padding-top: 14px; border-top: 1px solid rgba(148,163,184,0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; opacity: 0.75; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+  .pf-credit { color: inherit; text-decoration: underline; }
+  @media print {
+    body, .pf-shell { background: #ffffff !important; color: #000000 !important; padding: 0 !important; max-width: 100% !important; }
+    .no-print { display: none !important; }
+    .pf-metric-card, .pf-proj-card, .pf-exp-row { background: #ffffff !important; border-color: #cbd5e1 !important; break-inside: avoid; }
+    .pf-metrics { grid-template-columns: repeat(3, 1fr) !important; margin-bottom: 14px !important; }
+    .pf-section { margin-top: 14px !important; }
+  }
+
+  </style>
+</head>
+<body>
+  <header class="site-hdr">
+    <div class="wrap nav">
+      <a href="../../index.html" style="font-weight:800;font-size:16.5px;color:#fff;">🌿 CraftLeaf Studio</a>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13.5px;">
+        <a href="../../index.html"><span data-lang="en">🏠 All Free Tools</span><span data-lang="zh">🏠 免费工具大厅</span></a>
+        <a href="../invoice/index.html"><span data-lang="en">🧾 Invoice Studio</span><span data-lang="zh">🧾 英文发票工坊</span></a>
+        <a href="../../cn-guides/us-tech-job-behavioral-interview-star-english-prep.html"><span data-lang="en">💼 Tech Interview Guide</span><span data-lang="zh">💼 北美科技岗面试指南</span></a>
+        <a href="../../store/index.html" style="color:#fcd34d;font-weight:700;"><span data-lang="en">🛍️ Storefront</span><span data-lang="zh">🛍️ 数字书架</span></a>
+        <button type="button" class="btn btn-sec" style="padding:6px 12px;font-size:12.5px;" id="langToggleBtn">中文 / EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section style="padding:28px 0 6px;">
+      <span class="pill">
+        <span data-lang="en">🚀 100% Local Browser Studio · $0/mo GitHub Pages · Instant EN / 中文 + 1-Page Print CSS</span>
+        <span data-lang="zh">🚀 100% 浏览器纯本地生成 · GitHub Pages 永久 $0 托管 · 一键中英切换 + 单页简历打印</span>
+      </span>
+      <h1 style="font-size:clamp(24px,3.4vw,37px);margin:12px 0 8px;line-height:1.18;">
+        <span data-lang="en">Bilingual Job-Seeker &amp; Freelancer Portfolio Site Generator</span>
+        <span data-lang="zh">中英双语求职作品集 &amp; 自由职业接单主页自助生成器</span>
+      </h1>
+      <p style="color:var(--muted);max-width:900px;margin:0 0 16px;">
+        <span data-lang="en">Skip $150–$200 freelance web-setup fees and $16/mo website builders. Pick a role starter below, check your quantified impact &amp; public-privacy score in real time, and download a zero-build <strong>Single-Page Bilingual <code>index.html</code> 100% FREE</strong>—or unlock Pro Themes (Terminal Bento &amp; Editorial Ivory) + White-Label export!</span>
+        <span data-lang="zh">无需花 $120–$200 找外包代搭网站，也不用每年交建站平台月费！选择岗位预设填入项目量化成果，实时自检公开网页隐私安全（防误填手机号/门牌号），<strong>100% 免费一键导出极简双语单页 <code>index.html</code></strong>，5 分钟免费上线 <code>username.github.io</code>。</span>
+      </p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-gold" id="enPrimaryBuyBtn" data-lang="en" data-buy-event="portfolio-pro-primary" href="https://stardustdemo.gumroad.com/l/tech-interview-english-prep?option=qwuK00MyU4qC-MvlAZ6eTg==&amp;wanted=true" target="_blank" rel="noopener">
+          ✨ Unlock Pro Themes + White-Label + 3 GitHub Pages Templates ($12) →
+        </a>
+        <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 极简双语单页 HTML 免费一键导出！觉得好用欢迎微信赞赏支持</a>
+        <a class="btn btn-sec" href="../../previews/bilingual_portfolio_github_pages_sample_preview.pdf" target="_blank" rel="noopener">
+          <span data-lang="en">👁️ View 2-Page GitHub Pages Playbook Sample</span>
+          <span data-lang="zh">👁️ 查看 2 页免费建站与量化改写图解样稿 PDF</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="studio-grid">
+      <div class="panel">
+        <div class="row2">
+          <div>
+            <label class="fld"><span data-lang="en">1. Role Starter Preset</span><span data-lang="zh">1. 一键载入岗位示范模板</span></label>
+            <select id="presetSelect">
+              <option value="swe">💻 SWE / AI Systems Engineer</option>
+              <option value="ux">🎨 UX / Product Designer</option>
+              <option value="freelance">💼 Bilingual Freelancer / Consultant</option>
+            </select>
+          </div>
+          <div>
+            <label class="fld"><span data-lang="en">2. Visual Theme</span><span data-lang="zh">2. 网页视觉主题</span></label>
+            <select id="themeSelect">
+              <option value="clean">✨ Minimalist Recruiter Clean (FREE Export)</option>
+              <option value="bento">🌑 Midnight Terminal Bento (Preview Free · Pro Export)</option>
+              <option value="editorial">📜 Editorial Case-Study Ivory (Preview Free · Pro Export)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="lintStatusBox" class="lint-box"></div>
+
+        <div class="row2">
+          <div>
+            <label class="fld">Name (English)</label>
+            <input type="text" id="inpNameEn" />
+          </div>
+          <div>
+            <label class="fld">姓名 / 品牌名 (中文)</label>
+            <input type="text" id="inpNameZh" />
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label class="fld">Headline Role (English)</label>
+            <input type="text" id="inpRoleEn" />
+          </div>
+          <div>
+            <label class="fld">岗位头衔 (中文)</label>
+            <input type="text" id="inpRoleZh" />
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label class="fld">Availability &amp; Metro Badge (EN)</label>
+            <input type="text" id="inpBadgeEn" />
+          </div>
+          <div>
+            <label class="fld">求职/接单状态与城市标签 (ZH)</label>
+            <input type="text" id="inpBadgeZh" />
+          </div>
+        </div>
+
+        <label class="fld">Bio Summary (English)</label>
+        <textarea id="inpSumEn"></textarea>
+        <label class="fld">个人简介 (中文)</label>
+        <textarea id="inpSumZh"></textarea>
+
+        <div class="row2">
+          <div>
+            <label class="fld">Public Contact Email</label>
+            <input type="text" id="inpEmail" />
+          </div>
+          <div>
+            <label class="fld">GitHub / Portfolio Work URL</label>
+            <input type="text" id="inpGithub" />
+          </div>
+        </div>
+        <div class="row2">
+          <div>
+            <label class="fld">LinkedIn / Booking URL</label>
+            <input type="text" id="inpLinkedin" />
+          </div>
+          <div>
+            <label class="fld">Resume / Capabilities PDF Path</label>
+            <input type="text" id="inpResume" />
+          </div>
+        </div>
+
+        <label class="fld"><span data-lang="en">3 Quantified Hero Metrics (Value | EN Label | ZH Label)</span><span data-lang="zh">首屏 3 大核心量化指标（数值 | 英文说明 | 中文说明）</span></label>
+        <div class="row3" style="margin-bottom:6px;"><input type="text" id="m1Val" /><input type="text" id="m1En" /><input type="text" id="m1Zh" /></div>
+        <div class="row3" style="margin-bottom:6px;"><input type="text" id="m2Val" /><input type="text" id="m2En" /><input type="text" id="m2Zh" /></div>
+        <div class="row3"><input type="text" id="m3Val" /><input type="text" id="m3En" /><input type="text" id="m3Zh" /></div>
+
+        <label class="fld"><span data-lang="en">Featured Project #1 (Stack Tag, EN/ZH Title &amp; Quantified Impact)</span><span data-lang="zh">代表项目 #1（技术标签、中英标题与量化成果）</span></label>
+        <div class="row2" style="margin-bottom:6px;"><input type="text" id="p1Tag" placeholder="Tech Stack / Tag" /><input type="text" id="p1Link" placeholder="https://..." /></div>
+        <div class="row2" style="margin-bottom:6px;"><input type="text" id="p1TitleEn" /><input type="text" id="p1TitleZh" /></div>
+        <textarea id="p1ImpactEn" style="margin-bottom:6px;"></textarea>
+        <textarea id="p1ImpactZh"></textarea>
+
+        <label class="fld"><span data-lang="en">Featured Project #2</span><span data-lang="zh">代表项目 #2</span></label>
+        <div class="row2" style="margin-bottom:6px;"><input type="text" id="p2Tag" /><input type="text" id="p2Link" /></div>
+        <div class="row2" style="margin-bottom:6px;"><input type="text" id="p2TitleEn" /><input type="text" id="p2TitleZh" /></div>
+        <textarea id="p2ImpactEn" style="margin-bottom:6px;"></textarea>
+        <textarea id="p2ImpactZh"></textarea>
+
+        <label class="fld"><span data-lang="en">Key Experience / Service Scope Item</span><span data-lang="zh">核心履历 / 标准化服务条目</span></label>
+        <div class="row3" style="margin-bottom:6px;"><input type="text" id="exp1Period" /><input type="text" id="exp1OrgEn" /><input type="text" id="exp1OrgZh" /></div>
+        <div class="row2"><input type="text" id="exp1DetailEn" /><input type="text" id="exp1DetailZh" /></div>
+
+        <label class="fld"><span data-lang="en">Skills (Comma-Separated)</span><span data-lang="zh">核心技能标签（英文逗号分隔）</span></label>
+        <input type="text" id="inpSkills" />
+
+        <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;">
+          <button type="button" class="btn btn-green" id="dlFreeHtmlBtn">
+            <span data-lang="en">⬇️ Download Free Clean index.html</span>
+            <span data-lang="zh">⬇️ 免费下载极简双语单页 index.html</span>
+          </button>
+          <button type="button" class="btn btn-gold" id="dlProHtmlBtn">
+            <span data-lang="en">👑 Export Pro Theme + White-Label HTML</span>
+            <span data-lang="zh">👑 导出 Pro 主题无水印白标版 + 独立数据文件</span>
+          </button>
+        </div>
+        <p id="exportMsg" style="margin:9px 0 0;font-size:12.5px;color:#6ee7b7;min-height:18px;"></p>
+
+        <div class="unlock-bar" id="proUnlockBox">
+          <div style="font-size:13px;font-weight:800;color:#fcd34d;margin-bottom:6px;">
+            <span data-lang="en">🔑 Activate Gumroad License Key (Portfolio Pro $12 / $15 Bundle or All-Access $19)</span>
+            <span data-lang="zh">🔑 输入已购 Gumroad 许可证密钥（解锁 Terminal Bento / Editorial 高阶主题与去页脚白标导出）</span>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="text" id="licenseKeyInput" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" style="flex:1;min-width:210px;margin:0;" />
+            <button type="button" class="btn btn-gold" id="activateKeyBtn" style="padding:8px 14px;">
+              <span data-lang="en">Activate Pro</span>
+              <span data-lang="zh">验证激活</span>
+            </button>
+          </div>
+          <div id="licenseStatusMsg" style="font-size:12px;color:var(--muted);margin-top:6px;">
+            <span data-lang="en">100% local editing in RAM; Pro unlocks via one-time Gumroad License Key verification.</span>
+            <span data-lang="zh">所有简历项目文字 100% 在本地浏览器内存生成；Pro 白标与高阶主题通过一次性 Gumroad 密钥在线核验解锁。</span>
+          </div>
+          <div data-lang="en" style="margin-top:8px;font-size:12px;">
+            <a href="https://stardustdemo.gumroad.com/l/tech-interview-english-prep?option=TjBxKNCNjMa_JDx7TLCUGw==&amp;wanted=true" data-buy-event="portfolio-combo-link" target="_blank" rel="noopener">💡 Also preparing for interviews? Get the 2-in-1 Tech Interview STAR Prep + Portfolio Pro Bundle ($15, Save $4) →</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+          <strong style="font-size:14.5px;">
+            <span data-lang="en">👁️ Live Interactive Portfolio Preview (Click Switch Language or Print inside!)</span>
+            <span data-lang="zh">👁️ 实时可交互双语作品集预览（可直接点击内部中英切换或单页打印！）</span>
+          </strong>
+          <span id="proBadgePill" class="pill" style="font-size:11px;">FREE PREVIEW MODE</span>
+        </div>
+        <div id="livePreviewMount" class="pf-shell" style="box-shadow:0 24px 60px rgba(0,0,0,0.45);border:1px solid #334155;"></div>
+      </div>
+    </section>
+
+    <div class="disc">
+      <strong data-lang="en">⚖️ Privacy, IP &amp; Career Disclaimer:</strong>
+      <strong data-lang="zh">⚖️ 公开网页隐私与职场合规声明：</strong>
+      <span data-lang="en"> All portfolio generation runs 100% locally in your browser RAM (zero server uploads). Provided strictly for educational and career presentation purposes (<strong>Not Legal, Immigration, Tax, or Employment Advice</strong>). Never publish your home street address, personal phone number, SSN/visa receipt numbers, or confidential employer code/screenshots to a public GitHub repository.</span>
+      <span data-lang="zh"> 所有填写内容 100% 在您的浏览器本地内存中生成，绝不上传服务器。本工具仅供个人求职展示与网页搭建参考（<strong>不构成法律、移民签证或劳动雇佣建议</strong>）。请勿将私人手机号、家庭住址、签证单号或雇主内部涉密截图上传至公开仓库；在职人员从事外部接单前请自行核实雇主兼职合规政策。</span>
+    </div>
+  </main>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var PRESETS = {"swe": {"roleLabel": "SWE / AI Engineer", "nameEn": "Alex Lin", "nameZh": "林知行 (Alex Lin)", "roleEn": "Distributed Systems & Applied AI Software Engineer", "roleZh": "分布式系统与应用型 AI 软件工程师", "badgeEn": "Open to SWE / ML Infra Roles · Seattle, WA", "badgeZh": "求职方向：后端与 AI 基础设施工程师 · 西雅图", "summaryEn": "Backend & AI systems engineer building sub-second retrieval pipelines, privacy-first developer tooling, and resilient cloud services.", "summaryZh": "专注于毫秒级语义检索管线、隐私优先开发者工具链与高可用云原生微服务的软件工程师。", "email": "alex.lin.dev@example.com", "github": "https://github.com/example-alex", "linkedin": "https://www.linkedin.com/in/example-alex", "resumeUrl": "./Alex_Lin_Resume.pdf", "m1Val": "-43%", "m1En": "p95 RAG Query Latency", "m1Zh": "RAG 检索 p95 延迟降低", "m2Val": "1.2K+", "m2En": "Open-Source IDE Installs", "m2Zh": "开源插件自然安装量", "m3Val": "99.98%", "m3En": "Checkout API Uptime", "m3Zh": "核心接口可用性 SLA", "p1Tag": "TypeScript · MCP · Security", "p1TitleEn": "Zero-Latency Local Prompt Secret Vault", "p1TitleZh": "零延迟本地 AI 提示词双向脱敏引擎", "p1ImpactEn": "Adopted by 1,200+ developers; masks 10 credential classes in <0.8ms in RAM with 1-hotkey deterministic restore.", "p1ImpactZh": "累计 1,200+ 开发者安装；纯内存 <0.8ms 识别 10 类密钥并支持一键无损还原。", "p1Link": "https://github.com/example-alex/secret-vault", "p2Tag": "Go · pgvector · Redis", "p2TitleEn": "Hybrid Vector + BM25 Technical Search Engine", "p2TitleZh": "混合向量 + BM25 技术文档检索引擎", "p2ImpactEn": "Cut p95 search latency from 410ms to 232ms across 1.8M chunks while lifting top-3 recall by +19%.", "p2ImpactZh": "在 180 万切片规模下将 p95 延迟从 410ms 降至 232ms，Top-3 召回率提升 19%。", "p2Link": "https://github.com/example-alex/hybrid-search", "exp1Period": "2025 – Present", "exp1OrgEn": "CloudScale Systems · Software Engineer Intern", "exp1OrgZh": "CloudScale Systems · 后端研发实习生", "exp1DetailEn": "Shipped streaming gRPC telemetry ingestion at 18K events/sec and saved $1,400/mo in AWS transfer fees.", "exp1DetailZh": "交付 1.8 万事件/秒 gRPC 遥测接入服务，每月节省 $1,400 AWS 流量成本。", "skills": "Go, TypeScript, Python, PostgreSQL, Kubernetes, gRPC, React, AWS"}, "ux": {"roleLabel": "UX / Product Designer", "nameEn": "Chloe Wu", "nameZh": "吴清禾 (Chloe Wu)", "roleEn": "Product Designer & Quantitative UX Researcher", "roleZh": "B2B 产品体验设计师 & 定量用户研究", "badgeEn": "Product Design & Design Systems · Bellevue / Remote", "badgeZh": "聚焦 SaaS 工作流与无障碍设计系统 · 西雅图", "summaryEn": "Transforming complex healthcare scheduling, B2B analytics, and bilingual FinTech flows into WCAG 2.2 AA accessible interfaces.", "summaryZh": "擅长将复杂的医疗排班、企业级数据看板与双语金融开户流程转化为清晰且符合 WCAG AA 标准的界面。", "email": "chloe.wu.design@example.com", "github": "https://www.figma.com/@example-chloe", "linkedin": "https://www.linkedin.com/in/example-chloe", "resumeUrl": "./Chloe_Wu_UX_Resume.pdf", "m1Val": "+28%", "m1En": "Onboarding Activation Lift", "m1Zh": "新用户首周激活率提升", "m2Val": "42", "m2En": "WCAG AA Token Components", "m2Zh": "无障碍组件库沉淀数量", "m3Val": "-36%", "m3En": "Billing Support Tickets", "m3Zh": "账单疑问客服工单下降", "p1Tag": "UX Research · Prototyping · WCAG AA", "p1TitleEn": "Bilingual Clinic Self-Check-In Redesign", "p1TitleZh": "北美门诊多语言自助分诊登记体验重塑", "p1ImpactEn": "Reduced average patient intake time from 6m40s to 2m55s across 140 moderated usability sessions.", "p1ImpactZh": "经 140 人次可用性测试，将患者平均登记耗时由 6分40秒 缩短至 2分55秒。", "p1Link": "https://example.com/clinic-ux-case-study", "p2Tag": "Design Systems · Figma Variables", "p2TitleEn": "Multi-Platform Semantic Token Architecture", "p2TitleZh": "跨端 Figma Variables 与语义化令牌体系", "p2ImpactEn": "Cut design-to-engineering UI QA defects by 51% across 4 web and iOS product squads.", "p2ImpactZh": "覆盖 4 个 Web 与 iOS 产品小组，设计还原走查缺陷率下降 51%。", "p2Link": "https://example.com/design-tokens-case-study", "exp1Period": "2024 – Present", "exp1OrgEn": "Northstar HealthTech · Product Designer", "exp1OrgZh": "Northstar HealthTech · 产品体验设计师", "exp1DetailEn": "Lead designer for patient scheduling, itemized billing clarity, and mobile WCAG AA compliance.", "exp1DetailZh": "主导患者预约排班、账单透明化展示及移动端无障碍升级。", "skills": "Figma, Design Systems, WCAG 2.2 AA, Amplitude, SQL, Prototyping, HTML/CSS"}, "freelance": {"roleLabel": "Bilingual Freelancer / Consultant", "nameEn": "Mei Zhang Studio", "nameZh": "张梅 · 出海品牌本土化与增长顾问", "roleEn": "Bilingual Brand Localization & Shopify Conversion Consultant", "roleZh": "出海品牌美式英文定位 · 独立站转化优化顾问", "badgeEn": "Booking Fixed-Scope Sprints · 5-Day Async Turnaround", "badgeZh": "开放固定报价项目预约 · 5 个工作日纯异步交付", "summaryEn": "Helping hardware makers, indie SaaS founders, and specialty consumer brands launch high-converting American-English storefronts and lifecycle emails.", "summaryZh": "助力跨境硬件团队、独立开发者与消费品牌打造地道美式英文独立站、众筹页面与邮件转化矩阵。", "email": "hello@meizhang-studio.example.com", "github": "https://example.com/client-case-studies", "linkedin": "https://calendly.com/example-mei", "resumeUrl": "./Mei_Zhang_Services_Menu.pdf", "m1Val": "$1.4M+", "m1En": "Client Crowdfunding Raised", "m1Zh": "累计助力客户众筹金额", "m2Val": "34", "m2En": "US Storefronts Launched", "m2Zh": "完成北美本土化品牌数", "m3Val": "+24%", "m3En": "Avg Checkout CVR Lift", "m3Zh": "独立站平均结账转化提升", "p1Tag": "Positioning · Kickstarter · Email", "p1TitleEn": "Smart Espresso Grinder — $420K Launch Messaging", "p1TitleZh": "精品智能磨豆机 $42 万美金众筹全案文案", "p1ImpactEn": "100% funded in 14 minutes; achieved 4.8% cold-traffic pre-launch email capture rate.", "p1ImpactZh": "上线 14 分钟达成众筹目标，预热期冷流量邮箱订阅率达 4.8%。", "p1Link": "https://example.com/espresso-case", "p2Tag": "DevTools SaaS · Pricing Page", "p2TitleEn": "Developer CLI Pricing & Onboarding Copy Overhaul", "p2TitleZh": "开发者工具 SaaS 定价页与快速上手文档重构", "p2ImpactEn": "Lifted self-serve Pro upgrades by +24% within 30 days of deployment.", "p2ImpactZh": "新版上线 30 天内自助 Pro 付费升级率提升 24%。", "p2Link": "https://example.com/devtools-case", "exp1Period": "Fixed Scope · $850", "exp1OrgEn": "Homepage + Hero Product Page Native English Rewrite", "exp1OrgZh": "标准服务包：独立站首页 + 核心单品页美式转化重写", "exp1DetailEn": "Delivered asynchronously in 5 business days with wireframe hierarchy notes and 3 headline variants.", "exp1DetailZh": "5 个工作日异步交付，附首屏视觉动线建议与 3 组主标题测试方案。", "skills": "Brand Positioning, Shopify Copy, Kickstarter Campaigns, Klaviyo Lifecycle, EN/中文 Localization"}};
+    var ENGINE_SOURCE = "(function () {\n  'use strict';\n\n  function el(tag, cls, text) {\n    var node = document.createElement(tag);\n    if (cls) node.className = cls;\n    if (text !== undefined && text !== null) node.textContent = String(text);\n    return node;\n  }\n\n  function safeUrl(raw) {\n    var s = String(raw || '').trim();\n    if (!s) return '#';\n    if (/^(https?:\\/\\/|mailto:|\\.\\/|\\.\\.\\/|\\/|#)/i.test(s)) return s;\n    return 'https://' + s;\n  }\n\n  function resolveInitialLang(defaultLang) {\n    try {\n      var q = new URLSearchParams(window.location.search || '');\n      var ql = (q.get('lang') || '').toLowerCase();\n      if (ql === 'zh' || ql === 'en') return ql;\n    } catch (_e) {}\n    return defaultLang === 'zh' ? 'zh' : 'en';\n  }\n\n  function renderPortfolio(rootEl, data, lang, whiteLabel) {\n    while (rootEl.firstChild) rootEl.removeChild(rootEl.firstChild);\n    var isZh = lang === 'zh';\n    var p = (data && data.profile) || {};\n    var theme = (data && data.theme) || 'clean';\n    rootEl.setAttribute('data-theme', theme);\n\n    var topBar = el('div', 'pf-topbar no-print');\n    var badge = el('span', 'pf-status-pill', isZh ? (p.badgeZh || p.badgeEn || '') : (p.badgeEn || p.badgeZh || ''));\n    var actions = el('div', 'pf-top-actions');\n    var langBtn = el('button', 'pf-btn-ghost', isZh ? 'Switch to English' : '\u5207\u6362\u4e2d\u6587\u89c6\u56fe');\n    langBtn.type = 'button';\n    langBtn.addEventListener('click', function () {\n      renderPortfolio(rootEl, data, isZh ? 'en' : 'zh', whiteLabel);\n    });\n    var printBtn = el('button', 'pf-btn-ghost', isZh ? '\ud83d\udda8\ufe0f \u6253\u5370\u5355\u9875\u7b80\u5386\u7248' : '\ud83d\udda8\ufe0f Print 1-Page Resume');\n    printBtn.type = 'button';\n    printBtn.addEventListener('click', function () {\n      if (typeof window.print === 'function') window.print();\n    });\n    actions.appendChild(langBtn);\n    actions.appendChild(printBtn);\n    topBar.appendChild(badge);\n    topBar.appendChild(actions);\n    rootEl.appendChild(topBar);\n\n    var hero = el('header', 'pf-hero');\n    var h1 = el('h1', 'pf-name', isZh ? (p.nameZh || p.nameEn || '') : (p.nameEn || p.nameZh || ''));\n    var role = el('p', 'pf-role', isZh ? (p.roleZh || p.roleEn || '') : (p.roleEn || p.roleZh || ''));\n    var sum = el('p', 'pf-summary', isZh ? (p.summaryZh || p.summaryEn || '') : (p.summaryEn || p.summaryZh || ''));\n    hero.appendChild(h1);\n    hero.appendChild(role);\n    hero.appendChild(sum);\n\n    var ctaRow = el('div', 'pf-cta-row');\n    if (p.email) {\n      var mailA = el('a', 'pf-btn-primary', isZh ? ('\u2709\ufe0f \u8054\u7cfb\u90ae\u7bb1 \u00b7 ' + p.email) : ('\u2709\ufe0f Email \u00b7 ' + p.email));\n      mailA.href = p.email.indexOf('mailto:') === 0 ? p.email : ('mailto:' + p.email);\n      ctaRow.appendChild(mailA);\n    }\n    if (p.github) {\n      var ghA = el('a', 'pf-btn-sec', isZh ? '\ud83d\udd17 \u4ee3\u7801 / \u4f5c\u54c1\u4e3b\u9875' : '\ud83d\udd17 GitHub / Work');\n      ghA.href = safeUrl(p.github);\n      ghA.target = '_blank';\n      ghA.rel = 'noopener noreferrer';\n      ctaRow.appendChild(ghA);\n    }\n    if (p.linkedin) {\n      var liA = el('a', 'pf-btn-sec', 'LinkedIn / Booking');\n      liA.href = safeUrl(p.linkedin);\n      liA.target = '_blank';\n      liA.rel = 'noopener noreferrer';\n      ctaRow.appendChild(liA);\n    }\n    if (p.resumeUrl) {\n      var cvA = el('a', 'pf-btn-sec', isZh ? '\ud83d\udcc4 \u4e0b\u8f7d PDF \u7b80\u5386' : '\ud83d\udcc4 Resume / Deck PDF');\n      cvA.href = safeUrl(p.resumeUrl);\n      cvA.target = '_blank';\n      cvA.rel = 'noopener noreferrer';\n      ctaRow.appendChild(cvA);\n    }\n    hero.appendChild(ctaRow);\n    rootEl.appendChild(hero);\n\n    var metrics = (data && data.metrics) || [];\n    if (metrics.length) {\n      var mGrid = el('section', 'pf-metrics');\n      for (var m = 0; m < metrics.length; m++) {\n        var mc = el('div', 'pf-metric-card');\n        mc.appendChild(el('div', 'pf-metric-val', metrics[m].value || ''));\n        mc.appendChild(el('div', 'pf-metric-lbl', isZh ? (metrics[m].labelZh || metrics[m].labelEn || '') : (metrics[m].labelEn || metrics[m].labelZh || '')));\n        mGrid.appendChild(mc);\n      }\n      rootEl.appendChild(mGrid);\n    }\n\n    var projects = (data && data.projects) || [];\n    if (projects.length) {\n      var pSec = el('section', 'pf-section');\n      pSec.appendChild(el('h2', 'pf-sec-title', isZh ? '\u6838\u5fc3\u4ee3\u8868\u9879\u76ee\u4e0e\u91cf\u5316\u6210\u679c' : 'Selected Projects & Quantified Impact'));\n      var pGrid = el('div', 'pf-proj-grid');\n      for (var i = 0; i < projects.length; i++) {\n        var pr = projects[i];\n        var card = el('article', 'pf-proj-card');\n        if (pr.tag) card.appendChild(el('span', 'pf-proj-tag', pr.tag));\n        card.appendChild(el('h3', 'pf-proj-title', isZh ? (pr.titleZh || pr.titleEn || '') : (pr.titleEn || pr.titleZh || '')));\n        card.appendChild(el('p', 'pf-proj-impact', isZh ? (pr.impactZh || pr.impactEn || '') : (pr.impactEn || pr.impactZh || '')));\n        if (pr.link) {\n          var pLink = el('a', 'pf-proj-link no-print', isZh ? '\u67e5\u770b\u8be6\u60c5 / \u6e90\u7801 \u2192' : 'View Live / Repo \u2192');\n          pLink.href = safeUrl(pr.link);\n          pLink.target = '_blank';\n          pLink.rel = 'noopener noreferrer';\n          card.appendChild(pLink);\n        }\n        pGrid.appendChild(card);\n      }\n      pSec.appendChild(pGrid);\n      rootEl.appendChild(pSec);\n    }\n\n    var exp = (data && data.experience) || [];\n    if (exp.length) {\n      var eSec = el('section', 'pf-section');\n      eSec.appendChild(el('h2', 'pf-sec-title', isZh ? '\u7ecf\u5386\u3001\u5b66\u5386\u4e0e\u670d\u52a1\u6807\u51c6' : 'Experience, Education & Scope'));\n      var eList = el('div', 'pf-exp-list');\n      for (var j = 0; j < exp.length; j++) {\n        var row = el('div', 'pf-exp-row');\n        var head = el('div', 'pf-exp-head');\n        head.appendChild(el('strong', 'pf-exp-org', isZh ? (exp[j].orgZh || exp[j].orgEn || '') : (exp[j].orgEn || exp[j].orgZh || '')));\n        head.appendChild(el('span', 'pf-exp-period', exp[j].period || ''));\n        row.appendChild(head);\n        row.appendChild(el('p', 'pf-exp-detail', isZh ? (exp[j].detailZh || exp[j].detailEn || '') : (exp[j].detailEn || exp[j].detailZh || '')));\n        eList.appendChild(row);\n      }\n      eSec.appendChild(eList);\n      rootEl.appendChild(eSec);\n    }\n\n    var skills = (data && data.skills) || [];\n    if (skills.length) {\n      var sSec = el('section', 'pf-section');\n      sSec.appendChild(el('h2', 'pf-sec-title', isZh ? '\u6838\u5fc3\u6280\u672f\u6808\u4e0e\u4e13\u4e1a\u6280\u80fd' : 'Core Skills & Stack'));\n      var chips = el('div', 'pf-skill-chips');\n      for (var k = 0; k < skills.length; k++) {\n        if (skills[k]) chips.appendChild(el('span', 'pf-chip', skills[k]));\n      }\n      sSec.appendChild(chips);\n      rootEl.appendChild(sSec);\n    }\n\n    var ftr = el('footer', 'pf-footer');\n    var yearStr = String(new Date().getFullYear());\n    var copyTxt = '\u00a9 ' + yearStr + ' ' + (isZh ? (p.nameZh || p.nameEn || '') : (p.nameEn || p.nameZh || ''));\n    ftr.appendChild(el('span', '', copyTxt));\n    if (!whiteLabel) {\n      var credit = el('a', 'pf-credit no-print', 'Built with CraftLeaf Portfolio Studio ($0 GitHub Pages)');\n      credit.href = 'https://963239327.github.io/craftleaf-studio/tools/portfolio-builder/';\n      credit.target = '_blank';\n      credit.rel = 'noopener noreferrer';\n      ftr.appendChild(credit);\n    }\n    rootEl.appendChild(ftr);\n  }\n\n  window.CraftLeafPortfolioEngine = {\n    renderPortfolio: renderPortfolio,\n    resolveInitialLang: resolveInitialLang\n  };\n\n  var mount = document.getElementById('portfolioApp');\n  if (mount && window.PORTFOLIO_DATA) {\n    renderPortfolio(mount, window.PORTFOLIO_DATA, resolveInitialLang(window.PORTFOLIO_DATA.defaultLang), true);\n  }\n})();\n";
+    var THEME_CSS = "\n  * { box-sizing: border-box; }\n  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, \"Inter\", \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }\n  .pf-shell { max-width: 940px; margin: 0 auto; padding: 28px 22px 56px; border-radius: 16px; transition: background 0.2s, color 0.2s; }\n  .pf-shell[data-theme=\"clean\"] { background: #ffffff; color: #0f172a; }\n  .pf-shell[data-theme=\"bento\"] { background: #090e1a; color: #f8fafc; }\n  .pf-shell[data-theme=\"editorial\"] { background: #faf8f5; color: #1c1917; font-family: Georgia, \"Noto Serif SC\", -apple-system, serif; }\n  .pf-topbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }\n  .pf-status-pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: rgba(16,185,129,0.14); color: #059669; border: 1px solid rgba(16,185,129,0.35); font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", sans-serif; }\n  .pf-shell[data-theme=\"bento\"] .pf-status-pill { color: #6ee7b7; background: rgba(16,185,129,0.18); }\n  .pf-top-actions { display: flex; gap: 8px; flex-wrap: wrap; }\n  .pf-btn-ghost { padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: transparent; color: inherit; font-size: 12px; font-weight: 700; cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", sans-serif; }\n  .pf-shell[data-theme=\"bento\"] .pf-btn-ghost { border-color: #334155; color: #cbd5e1; }\n  .pf-name { margin: 0 0 6px; font-size: clamp(28px, 4vw, 40px); line-height: 1.15; font-weight: 900; letter-spacing: -0.02em; }\n  .pf-role { margin: 0 0 10px; font-size: 17px; font-weight: 700; color: #2563eb; }\n  .pf-shell[data-theme=\"bento\"] .pf-role { color: #38bdf8; }\n  .pf-shell[data-theme=\"editorial\"] .pf-role { color: #9a3412; }\n  .pf-summary { margin: 0 0 18px; font-size: 15px; max-width: 760px; opacity: 0.88; }\n  .pf-cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", sans-serif; }\n  .pf-btn-primary { display: inline-block; padding: 9px 16px; border-radius: 9px; background: #0f172a; color: #ffffff; font-weight: 700; font-size: 13px; text-decoration: none; }\n  .pf-shell[data-theme=\"bento\"] .pf-btn-primary { background: #10b981; color: #052e16; }\n  .pf-shell[data-theme=\"editorial\"] .pf-btn-primary { background: #7c2d12; color: #fff; }\n  .pf-btn-sec { display: inline-block; padding: 9px 14px; border-radius: 9px; border: 1px solid #cbd5e1; color: inherit; font-weight: 700; font-size: 13px; text-decoration: none; }\n  .pf-shell[data-theme=\"bento\"] .pf-btn-sec { border-color: #334155; }\n  .pf-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", sans-serif; }\n  @media (max-width: 640px) { .pf-metrics { grid-template-columns: 1fr; } }\n  .pf-metric-card { padding: 14px 16px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; }\n  .pf-shell[data-theme=\"bento\"] .pf-metric-card { background: #111827; border-color: #1f2937; }\n  .pf-shell[data-theme=\"editorial\"] .pf-metric-card { background: #ffffff; border-color: #e7e5e4; }\n  .pf-metric-val { font-size: 24px; font-weight: 900; line-height: 1.15; color: #059669; }\n  .pf-shell[data-theme=\"bento\"] .pf-metric-val { color: #34d399; }\n  .pf-shell[data-theme=\"editorial\"] .pf-metric-val { color: #9a3412; }\n  .pf-metric-lbl { font-size: 12.5px; opacity: 0.82; margin-top: 3px; font-weight: 600; }\n  .pf-section { margin-top: 26px; }\n  .pf-sec-title { font-size: 15px; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 12px; padding-bottom: 6px; border-bottom: 1.5px solid rgba(148,163,184,0.3); font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", sans-serif; }\n  .pf-proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }\n  .pf-proj-card { padding: 16px; border-radius: 13px; border: 1px solid #e2e8f0; background: #ffffff; display: flex; flex-direction: column; justify-content: space-between; }\n  .pf-shell[data-theme=\"bento\"] .pf-proj-card { background: #131c31; border-color: #263554; }\n  .pf-shell[data-theme=\"editorial\"] .pf-proj-card { background: #ffffff; border-color: #e7e5e4; }\n  .pf-proj-tag { display: inline-block; align-self: flex-start; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(37,99,235,0.1); color: #2563eb; margin-bottom: 8px; font-family: \"SF Mono\", Menlo, monospace; }\n  .pf-shell[data-theme=\"bento\"] .pf-proj-tag { background: rgba(56,189,248,0.15); color: #7dd3fc; }\n  .pf-proj-title { margin: 0 0 6px; font-size: 15.5px; line-height: 1.32; }\n  .pf-proj-impact { margin: 0 0 10px; font-size: 13.2px; opacity: 0.88; line-height: 1.48; }\n  .pf-proj-link { font-size: 12.5px; font-weight: 700; color: #2563eb; text-decoration: none; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }\n  .pf-shell[data-theme=\"bento\"] .pf-proj-link { color: #34d399; }\n  .pf-exp-list { display: flex; flex-direction: column; gap: 12px; }\n  .pf-exp-row { padding: 12px 15px; border-radius: 11px; border: 1px solid rgba(148,163,184,0.28); }\n  .pf-exp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }\n  .pf-exp-period { font-size: 12px; font-weight: 700; opacity: 0.72; font-family: \"SF Mono\", Menlo, monospace; }\n  .pf-exp-detail { margin: 4px 0 0; font-size: 13.5px; opacity: 0.88; }\n  .pf-skill-chips { display: flex; gap: 7px; flex-wrap: wrap; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }\n  .pf-chip { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(148,163,184,0.38); }\n  .pf-footer { margin-top: 34px; padding-top: 14px; border-top: 1px solid rgba(148,163,184,0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; opacity: 0.75; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }\n  .pf-credit { color: inherit; text-decoration: underline; }\n  @media print {\n    body, .pf-shell { background: #ffffff !important; color: #000000 !important; padding: 0 !important; max-width: 100% !important; }\n    .no-print { display: none !important; }\n    .pf-metric-card, .pf-proj-card, .pf-exp-row { background: #ffffff !important; border-color: #cbd5e1 !important; break-inside: avoid; }\n    .pf-metrics { grid-template-columns: repeat(3, 1fr) !important; margin-bottom: 14px !important; }\n    .pf-section { margin-top: 14px !important; }\n  }\n";
+
+    // Mount shared portfolio engine in current window
+    (new Function(ENGINE_SOURCE))();
+
+    var FIELD_IDS = [
+      ['inpNameEn', 'nameEn'], ['inpNameZh', 'nameZh'],
+      ['inpRoleEn', 'roleEn'], ['inpRoleZh', 'roleZh'],
+      ['inpBadgeEn', 'badgeEn'], ['inpBadgeZh', 'badgeZh'],
+      ['inpSumEn', 'summaryEn'], ['inpSumZh', 'summaryZh'],
+      ['inpEmail', 'email'], ['inpGithub', 'github'],
+      ['inpLinkedin', 'linkedin'], ['inpResume', 'resumeUrl'],
+      ['m1Val', 'm1Val'], ['m1En', 'm1En'], ['m1Zh', 'm1Zh'],
+      ['m2Val', 'm2Val'], ['m2En', 'm2En'], ['m2Zh', 'm2Zh'],
+      ['m3Val', 'm3Val'], ['m3En', 'm3En'], ['m3Zh', 'm3Zh'],
+      ['p1Tag', 'p1Tag'], ['p1Link', 'p1Link'],
+      ['p1TitleEn', 'p1TitleEn'], ['p1TitleZh', 'p1TitleZh'],
+      ['p1ImpactEn', 'p1ImpactEn'], ['p1ImpactZh', 'p1ImpactZh'],
+      ['p2Tag', 'p2Tag'], ['p2Link', 'p2Link'],
+      ['p2TitleEn', 'p2TitleEn'], ['p2TitleZh', 'p2TitleZh'],
+      ['p2ImpactEn', 'p2ImpactEn'], ['p2ImpactZh', 'p2ImpactZh'],
+      ['exp1Period', 'exp1Period'], ['exp1OrgEn', 'exp1OrgEn'], ['exp1OrgZh', 'exp1OrgZh'],
+      ['exp1DetailEn', 'exp1DetailEn'], ['exp1DetailZh', 'exp1DetailZh'],
+      ['inpSkills', 'skills']
+    ];
+
+    function byId(id) { return document.getElementById(id); }
+
+    function isProUnlocked() {
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.isUnlocked === 'function') {
+        return Boolean(window.CraftLeafSDK.isUnlocked('techInterviewPrep') || window.CraftLeafSDK.isUnlocked('allAccessPass'));
+      }
+      return false;
+    }
+
+    function loadPreset(key) {
+      var p = PRESETS[key] || PRESETS.swe;
+      for (var i = 0; i < FIELD_IDS.length; i++) {
+        var node = byId(FIELD_IDS[i][0]);
+        if (node) node.value = p[FIELD_IDS[i][1]] || '';
+      }
+      refreshPreviewAndLint();
+    }
+
+    function collectData(overrideTheme) {
+      var skillsRaw = (byId('inpSkills').value || '').split(',');
+      var skillsClean = [];
+      for (var i = 0; i < skillsRaw.length; i++) {
+        var s = skillsRaw[i].trim();
+        if (s) skillsClean.push(s);
+      }
+      var uiZh = document.documentElement.classList.contains('zh');
+      return {
+        defaultLang: uiZh ? 'zh' : 'en',
+        theme: overrideTheme || byId('themeSelect').value || 'clean',
+        profile: {
+          nameEn: byId('inpNameEn').value.trim(),
+          nameZh: byId('inpNameZh').value.trim(),
+          roleEn: byId('inpRoleEn').value.trim(),
+          roleZh: byId('inpRoleZh').value.trim(),
+          badgeEn: byId('inpBadgeEn').value.trim(),
+          badgeZh: byId('inpBadgeZh').value.trim(),
+          summaryEn: byId('inpSumEn').value.trim(),
+          summaryZh: byId('inpSumZh').value.trim(),
+          email: byId('inpEmail').value.trim(),
+          github: byId('inpGithub').value.trim(),
+          linkedin: byId('inpLinkedin').value.trim(),
+          resumeUrl: byId('inpResume').value.trim()
+        },
+        metrics: [
+          { value: byId('m1Val').value.trim(), labelEn: byId('m1En').value.trim(), labelZh: byId('m1Zh').value.trim() },
+          { value: byId('m2Val').value.trim(), labelEn: byId('m2En').value.trim(), labelZh: byId('m2Zh').value.trim() },
+          { value: byId('m3Val').value.trim(), labelEn: byId('m3En').value.trim(), labelZh: byId('m3Zh').value.trim() }
+        ],
+        projects: [
+          {
+            tag: byId('p1Tag').value.trim(),
+            titleEn: byId('p1TitleEn').value.trim(),
+            titleZh: byId('p1TitleZh').value.trim(),
+            impactEn: byId('p1ImpactEn').value.trim(),
+            impactZh: byId('p1ImpactZh').value.trim(),
+            link: byId('p1Link').value.trim()
+          },
+          {
+            tag: byId('p2Tag').value.trim(),
+            titleEn: byId('p2TitleEn').value.trim(),
+            titleZh: byId('p2TitleZh').value.trim(),
+            impactEn: byId('p2ImpactEn').value.trim(),
+            impactZh: byId('p2ImpactZh').value.trim(),
+            link: byId('p2Link').value.trim()
+          }
+        ],
+        experience: [
+          {
+            period: byId('exp1Period').value.trim(),
+            orgEn: byId('exp1OrgEn').value.trim(),
+            orgZh: byId('exp1OrgZh').value.trim(),
+            detailEn: byId('exp1DetailEn').value.trim(),
+            detailZh: byId('exp1DetailZh').value.trim()
+          }
+        ],
+        skills: skillsClean
+      };
+    }
+
+    function auditPortfolioHygiene(data) {
+      var blob = JSON.stringify(data);
+      var warnings = [];
+      if (/\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b/.test(blob)) {
+        warnings.push('Detected US phone number pattern — remove personal phone numbers before public GitHub Pages hosting.');
+      }
+      if (/\b\d{3}-\d{2}-\d{4}\b/.test(blob)) {
+        warnings.push('Detected SSN-like pattern — NEVER publish sensitive ID numbers!');
+      }
+      if (/\b\d+\s+[A-Za-z]+\s+(Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Apt)\b/i.test(blob)) {
+        warnings.push('Detected street address — publish only Metro/City (e.g., Seattle, WA) on public portfolios.');
+      }
+      var metricHits = 0;
+      for (var i = 0; i < data.projects.length; i++) {
+        if (/[0-9]+(%|x|ms|s|K|M|\+|\$)/i.test(data.projects[i].impactEn || '')) metricHits++;
+      }
+      return { warnings: warnings, quantifiedProjects: metricHits, totalProjects: data.projects.length };
+    }
+
+    function refreshPreviewAndLint() {
+      var data = collectData();
+      var unlocked = isProUnlocked();
+      var mount = byId('livePreviewMount');
+      var uiZh = document.documentElement.classList.contains('zh');
+      window.CraftLeafPortfolioEngine.renderPortfolio(mount, data, uiZh ? 'zh' : 'en', unlocked);
+
+      var pill = byId('proBadgePill');
+      pill.textContent = unlocked
+        ? (uiZh ? '👑 PRO 已解锁 · 白标与高阶主题可用' : '👑 PRO UNLOCKED · WHITE-LABEL ACTIVE')
+        : (uiZh ? '免费实时预览模式' : 'FREE PREVIEW MODE');
+
+      var lint = auditPortfolioHygiene(data);
+      var lbox = byId('lintStatusBox');
+      if (lint.warnings.length > 0) {
+        lbox.className = 'lint-box warn';
+        lbox.textContent = '⚠️ Privacy Guardrail Alert: ' + lint.warnings.join(' ');
+      } else {
+        lbox.className = 'lint-box';
+        lbox.textContent = uiZh
+          ? ('✅ 招聘扫读与隐私自检通过：' + lint.quantifiedProjects + '/' + lint.totalProjects + ' 个代表项目含明确量化数字，且未检出私人手机号/门牌号泄露。')
+          : ('✅ Recruiter & Privacy Lint Passed: ' + lint.quantifiedProjects + '/' + lint.totalProjects + ' projects include quantified impact metrics, and 0 phone/street-address leaks detected.');
+      }
+    }
+
+    function buildStandaloneHtml(data, whiteLabel) {
+      var bg = data.theme === 'bento' ? '#090e1a' : (data.theme === 'editorial' ? '#faf8f5' : '#ffffff');
+      var safeTitle = (data.profile.nameEn || 'Portfolio').replace(/[<>&"]/g, '');
+      var jsonPayload = JSON.stringify(data, null, 2).replace(/<\//g, '<\\/');
+      var wlFlag = whiteLabel ? 'true' : 'false';
+      return [
+        '<!DOCTYPE html>',
+        '<html lang="en">',
+        '<head>',
+        '  <meta charset="UTF-8" />',
+        '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+        '  <title>' + safeTitle + ' — Portfolio</title>',
+        '  <style>body { background: ' + bg + '; }' + THEME_CSS + '</style>',
+        '</head>',
+        '<body>',
+        '  <main id="portfolioApp" class="pf-shell"></main>',
+        '  <script>window.PORTFOLIO_DATA = ' + jsonPayload + ';<' + '/script>',
+        '  <script>' + ENGINE_SOURCE + '\nwindow.CraftLeafPortfolioEngine.renderPortfolio(document.getElementById("portfolioApp"), window.PORTFOLIO_DATA, window.CraftLeafPortfolioEngine.resolveInitialLang(window.PORTFOLIO_DATA.defaultLang), ' + wlFlag + ');<' + '/script>',
+        '</body>',
+        '</html>'
+      ].join('\n');
+    }
+
+    function triggerDownload(filename, content, mime) {
+      var blob = new Blob([content], { type: mime || 'text/html;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    byId('dlFreeHtmlBtn').addEventListener('click', function () {
+      var data = collectData('clean');
+      var outHtml = buildStandaloneHtml(data, isProUnlocked());
+      triggerDownload('index.html', outHtml, 'text/html;charset=utf-8');
+      var uiZh = document.documentElement.classList.contains('zh');
+      byId('exportMsg').textContent = uiZh
+        ? '✅ 已导出 index.html（Minimalist Clean 主题）！直接上传至 username.github.io 仓库即可免费上线。'
+        : '✅ Downloaded index.html (Minimalist Clean theme)! Upload to your username.github.io repo to go live free.';
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.showValueMomentPrompt === 'function') {
+        window.CraftLeafSDK.showValueMomentPrompt('techInterviewPrep', {
+          en: 'Portfolio HTML exported! Preparing for interviews too? Unlock Pro Themes + Tech Interview STAR Prep.',
+          zh: '双语个人主页 HTML 已导出！祝求职与接单顺利～'
+        });
+      }
+    });
+
+    byId('dlProHtmlBtn').addEventListener('click', function () {
+      var uiZh = document.documentElement.classList.contains('zh');
+      if (!isProUnlocked()) {
+        byId('exportMsg').textContent = uiZh
+          ? '🔒 请在下方输入已购 Gumroad 许可证密钥解锁 Terminal Bento / Editorial 主题与无水印白标导出（免费极简版可直接点左侧绿色按钮导出）。'
+          : '🔒 Enter your Gumroad License Key below ($12 Portfolio Pro / $15 Bundle / $19 All-Access) to export Bento/Editorial themes & white-label HTML.';
+        byId('licenseKeyInput').focus();
+        return;
+      }
+      var data = collectData();
+      triggerDownload('index.html', buildStandaloneHtml(data, true), 'text/html;charset=utf-8');
+      triggerDownload('portfolio-data.js', 'window.PORTFOLIO_DATA = ' + JSON.stringify(data, null, 2) + ';\n', 'application/javascript;charset=utf-8');
+      byId('exportMsg').textContent = uiZh
+        ? '👑 已导出无品牌白标版 index.html 与独立配置文件 portfolio-data.js！'
+        : '👑 Exported white-label Pro index.html + standalone portfolio-data.js!';
+    });
+
+    byId('activateKeyBtn').addEventListener('click', async function () {
+      var rawKey = (byId('licenseKeyInput').value || '').trim();
+      var msg = byId('licenseStatusMsg');
+      var uiZh = document.documentElement.classList.contains('zh');
+      if (!rawKey) {
+        msg.textContent = uiZh ? '请输入 Gumroad 许可证密钥。' : 'Please paste your Gumroad License Key.';
+        return;
+      }
+      msg.textContent = uiZh ? '正在通过 Gumroad 官方接口核验密钥...' : 'Verifying license key with Gumroad...';
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.verifyLicense === 'function') {
+        var res = await window.CraftLeafSDK.verifyLicense('techInterviewPrep', rawKey);
+        if (res && res.valid) {
+          msg.textContent = uiZh ? '✅ 激活成功！已解锁全部 3 套主题与去页脚白标导出。' : '✅ Pro License Verified! All 3 themes & white-label export unlocked.';
+          refreshPreviewAndLint();
+        } else if (res && res.reason === 'network_error') {
+          msg.textContent = uiZh ? '⚠️ 网络连接异常，请联网完成一次性 Gumroad 密钥核验。' : '⚠️ Network error — connect briefly to complete Gumroad license verification.';
+        } else {
+          msg.textContent = uiZh ? '❌ 密钥无效或已退款，请核对 Gumroad 收据邮件中的 License Key。' : '❌ Invalid or refunded Gumroad License Key.';
+        }
+      }
+    });
+
+    window.addEventListener('craftleaf:license-updated', function () {
+      refreshPreviewAndLint();
+    });
+
+    byId('presetSelect').addEventListener('change', function () {
+      var v = byId('presetSelect').value;
+      if (v === 'swe') byId('themeSelect').value = 'bento';
+      else if (v === 'ux') byId('themeSelect').value = 'editorial';
+      else byId('themeSelect').value = 'clean';
+      loadPreset(v);
+    });
+
+    byId('themeSelect').addEventListener('change', refreshPreviewAndLint);
+    for (var fi = 0; fi < FIELD_IDS.length; fi++) {
+      var inp = byId(FIELD_IDS[fi][0]);
+      if (inp) inp.addEventListener('input', refreshPreviewAndLint);
+    }
+
+    byId('langToggleBtn').addEventListener('click', function () {
+      document.documentElement.classList.toggle('zh');
+      refreshPreviewAndLint();
+    });
+
+    if ((navigator.language || '').toLowerCase().indexOf('zh') === 0) {
+      document.documentElement.classList.add('zh');
+    }
+    byId('themeSelect').value = 'bento';
+    loadPreset('swe');
+  })();
+  </script>
+</body>
+</html>
