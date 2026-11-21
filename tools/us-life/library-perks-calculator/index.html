@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大西雅图 (KCLS + 西雅图 SPL) 公立图书馆免费资源省钱计算器 &amp; 双卡互惠避坑规划器 | CraftLeaf Studio</title>
+  <meta name="description" content="100%浏览器本地计算：输入西雅图/Bellevue/Redmond居住城市，一键生成KCLS与SPL免费双卡互惠办卡路线，解锁O'Reilly五万本技术书、LinkedIn Learning (seattlepl绕开故障)、每周$5免费打印、NYT通行证与博物馆免费门票，每年立省$1,800+！" />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/tools/us-life/library-perks-calculator/" />
+  <meta property="og:title" content="Greater Seattle (KCLS + SPL) Public Library Free Perks &amp; Reciprocal Card Calculator" />
+  <meta property="og:description" content="Calculate how much you save with free KCLS + Seattle Public Library reciprocal cards ($5/wk printing, O'Reilly 50K tech books, LinkedIn Learning seattlepl fix, NYT, Museum Passes)." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/tools/us-life/library-perks-calculator/" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Greater Seattle (KCLS + SPL) Public Library Perks & Reciprocal Card Calculator",
+    "url": "https://963239327.github.io/craftleaf-studio/tools/us-life/library-perks-calculator/",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <style>
+    :root { --bg:#0b1120; --card:#1e293b; --alt:#0f172a; --border:#334155; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --gold:#f59e0b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; background:radial-gradient(circle at 18% 0%,#064e3b 0%,var(--bg) 54%); color:var(--text); line-height:1.62; }
+    a { color:#67e8f9; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    header { position:sticky; top:0; z-index:40; backdrop-filter:blur(12px); background:rgba(11,17,32,0.9); border-bottom:1px solid var(--border); }
+    .wrap { max-width:1160px; margin:0 auto; padding:0 20px; }
+    .nav { display:flex; justify-content:space-between; align-items:center; padding:13px 0; gap:12px; flex-wrap:wrap; }
+    .pill { display:inline-block; font-size:12px; font-weight:800; padding:4px 11px; border-radius:999px; background:rgba(16,185,129,0.18); color:#6ee7b7; border:1px solid rgba(52,211,153,0.45); }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 17px; border-radius:10px; font-weight:800; font-size:13.5px; cursor:pointer; border:1px solid transparent; text-decoration:none !important; font-family:inherit; }
+    .btn-gold { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#0f172a; }
+    .btn-green { background:linear-gradient(135deg,#10b981,#34d399); color:#052e16; }
+    .btn-sec { background:var(--card); color:var(--text); border-color:var(--border); }
+    .grid2 { display:grid; grid-template-columns:1fr 1.15fr; gap:18px; margin-top:18px; align-items:start; }
+    @media (max-width:920px) { .grid2 { grid-template-columns:1fr; } }
+    .panel { background:rgba(30,41,59,0.88); border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:18px; }
+    label.fld { display:block; font-size:12.5px; font-weight:700; color:#cbd5e1; margin:10px 0 5px; }
+    select, input[type="number"] { width:100%; padding:9px 11px; border-radius:9px; border:1px solid var(--border); background:var(--alt); color:#fff; font-size:13.5px; }
+    .chk-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+    @media (max-width:600px) { .chk-grid { grid-template-columns:1fr; } }
+    .chk-item { display:flex; align-items:flex-start; gap:8px; padding:9px 10px; border-radius:10px; background:var(--alt); border:1px solid var(--border); font-size:12.5px; cursor:pointer; }
+    .stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+    .stat-card { background:var(--alt); border:1px solid var(--border); border-radius:12px; padding:12px 14px; }
+    .stat-val { font-size:24px; font-weight:900; color:#34d399; }
+    .alert-banner { padding:12px 14px; border-radius:11px; background:rgba(245,158,11,0.14); border:1px solid rgba(245,158,11,0.45); color:#fef3c7; font-size:13px; margin-bottom:14px; }
+    .tbl-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:14px; background:rgba(15,23,42,0.8); }
+    table { width:100%; border-collapse:collapse; font-size:13px; min-width:780px; }
+    th { background:#090f1d; color:#fcd34d; text-align:left; padding:10px 12px; font-size:12px; border-bottom:1px solid var(--border); }
+    td { padding:10px 12px; border-bottom:1px solid rgba(51,65,85,0.6); vertical-align:top; }
+    .disc { margin:24px 0 44px; padding:14px 16px; border-radius:10px; background:rgba(15,23,42,0.85); border-left:3px solid var(--gold); font-size:12.5px; color:var(--muted); }
+    html:not(.zh) [data-lang="zh"] { display:none !important; }
+    html.zh [data-lang="en"] { display:none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="../../../index.html" style="font-weight:800;font-size:16.5px;color:#fff;">🌿 CraftLeaf Studio</a>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13.5px;">
+        <a href="../index.html"><span data-lang="en">🧰 US-Life Tools</span><span data-lang="zh">🧰 北美生活工具箱</span></a>
+        <a href="../wa-road-test-trainer/index.html"><span data-lang="en">🚗 WA Road Test</span><span data-lang="zh">🚗 华州路考口令</span></a>
+        <a href="../offer-tax-calculator/index.html"><span data-lang="en">💰 Offer Tax Calc</span><span data-lang="zh">💰 税后薪资对比</span></a>
+        <a href="../../../store/index.html" style="color:#fcd34d;font-weight:700;"><span data-lang="en">🛍️ Storefront</span><span data-lang="zh">🛍️ 数字书架</span></a>
+        <button type="button" class="btn btn-sec" style="padding:6px 12px;font-size:12.5px;" id="langToggleBtn">EN / 中文</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section style="padding:28px 0 8px;">
+      <span class="pill">
+        <span data-lang="en">📚 100% Local Calculator · Verified 2026 KCLS + Seattle Public Library Reciprocal Perks</span>
+        <span data-lang="zh">📚 100% 浏览器纯本地测算 · 2026 实地核验大西雅图 KCLS + SPL 双卡互惠免费羊毛库</span>
+      </span>
+      <h1 style="font-size:clamp(23px,3.4vw,36px);margin:12px 0 8px;line-height:1.2;">
+        <span data-lang="en">Greater Seattle (KCLS + SPL) Public Library Annual Savings &amp; Dual-Card Planner</span>
+        <span data-lang="zh">大西雅图（KCLS + 西雅图 SPL）公立图书馆免费资源省钱计算器 &amp; 双卡避坑规划器</span>
+      </h1>
+      <p style="color:var(--muted);max-width:900px;margin:0 0 16px;">
+        <span data-lang="en">Live or work in Bellevue, Redmond, Kirkland, or Seattle? Check which <strong>$0 reciprocal library cards</strong> you qualify for, bypass KCLS's 2026 LinkedIn Learning outage via SPL (<code>seattlepl</code>), unlock 50,000 O'Reilly tech books, $5/week free printing, 72-hour NYT passes, and free Museum Passes!</span>
+        <span data-lang="zh">住在 Bellevue / Redmond / Kirkland 或西雅图市内？选择所在区域即可查出您能<strong>免费同时申领的互惠借书卡组合</strong>，一键绕开 KCLS 领英课程故障（改走 SPL <code>seattlepl</code>）、解锁 O'Reilly 五万本计算机原版书、每周 $5 免费打印与水族馆/MoPOP 免费门票！</span>
+      </p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-gold" id="enPrimaryBuyBtn" data-lang="en" data-buy-event="kcls-library-primary" href="https://stardustdemo.gumroad.com/l/us-settling-in-and-first-car-chinese-playbook?option=uc1kZ0iNIG7-tQ2saXN4Ow==&amp;wanted=true" target="_blank" rel="noopener">
+          📘 Get 5-Page Printable KCLS + SPL Playbook PDF + Matrix CSV ($5) →
+        </a>
+        <button type="button" class="btn btn-green" id="dlChecklistBtn">
+          <span data-lang="en">⬇️ Free Download: Custom Dual-Card Setup Checklist (.txt)</span>
+          <span data-lang="zh">⬇️ 免费导出：专属双卡办理与避坑核对单 (.txt)</span>
+        </button>
+        <a class="btn btn-sec" href="../../../previews/kcls_spl_library_perks_sample_preview.pdf" target="_blank" rel="noopener">
+          <span data-lang="en">👁️ View 2-Page Sample PDF</span>
+          <span data-lang="zh">👁️ 查看 2 页高清样稿 PDF</span>
+        </a>
+        <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 专属办卡与避坑清单可免费一键导出！觉得实用欢迎微信赞赏支持</a>
+      </div>
+      <div data-lang="en" style="margin-top:8px;font-size:12.5px;">
+        <a href="https://stardustdemo.gumroad.com/l/us-settling-in-and-first-car-chinese-playbook?option=MSvPe5dGl98phEfyBBFoUQ==&amp;wanted=true" data-buy-event="kcls-settling-combo" target="_blank" rel="noopener">🔑 Also settling in or buying your first car? Get the 2-in-1 US Settling-In + First Car OTD &amp; Library Bundle ($10, Save $2) →</a>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="panel">
+        <h3 style="margin:0 0 6px;">
+          <span data-lang="en">1. Where Do You Live, Work, or Attend School?</span>
+          <span data-lang="zh">1. 选择您居住、上班或上学的区域</span>
+        </h3>
+        <label class="fld" for="zoneSelect">
+          <span data-lang="en">Metro / County Eligibility Zone</span>
+          <span data-lang="zh">所属城市与互惠办卡区</span>
+        </label>
+        <select id="zoneSelect">
+          <option value="eastside">🌲 Bellevue / Redmond / Kirkland / Issaquah / Renton / Bothell (KCLS Home + Free SPL)</option>
+          <option value="seattle">🏙️ Seattle Proper 981xx (SPL Home + Free KCLS Reciprocal)</option>
+          <option value="snoisle">🌊 Lynnwood / Edmonds / Everett / Mill Creek (Sno-Isle + Free SPL &amp; KCLS)</option>
+          <option value="hunts">🏡 Hunts Point / Yarrow Point (Check Paid/Work-Address Rules)</option>
+        </select>
+
+        <div class="row2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;">
+          <div>
+            <label class="fld" for="booksPerMo">
+              <span data-lang="en">Audiobooks / eBooks per Month</span>
+              <span data-lang="zh">每月听书 / 看电子书本数</span>
+            </label>
+            <input type="number" id="booksPerMo" value="3" min="0" max="30" />
+          </div>
+          <div>
+            <label class="fld" for="museumsPerYr">
+              <span data-lang="en">Museum Family Outings / Year</span>
+              <span data-lang="zh">每年逛西雅图博物馆次数</span>
+            </label>
+            <input type="number" id="museumsPerYr" value="4" min="0" max="24" />
+          </div>
+        </div>
+
+        <label class="fld" for="printPagesWk">
+          <span data-lang="en">B&amp;W Pages Printed per Month (KCLS gives 33 free pages/week!)</span>
+          <span data-lang="zh">每月打印黑白页数（KCLS 每周送 $5 = 33 页免费额度！）</span>
+        </label>
+        <input type="number" id="printPagesWk" value="25" min="0" max="150" />
+
+        <label class="fld">
+          <span data-lang="en">2. Check Free Subscriptions You'll Use</span>
+          <span data-lang="zh">2. 勾选您用得到的免费会员平替权益</span>
+        </label>
+        <div class="chk-grid">
+          <label class="chk-item"><input type="checkbox" id="chkOreilly" checked /> <span><strong>O'Reilly 50K Tech Books</strong> ($499/yr · SPL)</span></label>
+          <label class="chk-item"><input type="checkbox" id="chkLinkedin" checked /> <span><strong>LinkedIn Learning</strong> ($240/yr · SPL <code>seattlepl</code>)</span></label>
+          <label class="chk-item"><input type="checkbox" id="chkLanguage" checked /> <span><strong>Rosetta Stone + Mango</strong> ($179/yr · KCLS)</span></label>
+          <label class="chk-item"><input type="checkbox" id="chkNews" checked /> <span><strong>NYT 72h + WSJ + Seattle Times</strong> ($300/yr)</span></label>
+          <label class="chk-item"><input type="checkbox" id="chkVideo" checked /> <span><strong>Hoopla (10/mo) + Kanopy</strong> ($204/yr)</span></label>
+          <label class="chk-item"><input type="checkbox" id="chkConsumer" checked /> <span><strong>Consumer Reports Car Ratings</strong> ($59/yr)</span></label>
+        </div>
+        <p id="dlFeedback" style="margin:12px 0 0;font-size:12.5px;color:#6ee7b7;min-height:18px;"></p>
+      </div>
+
+      <div>
+        <div class="panel">
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-val" id="totalSavedVal">$0</div>
+              <div style="font-size:12px;color:var(--muted);"><span data-lang="en">Est. Annual Cash Saved</span><span data-lang="zh">预计每年立省订阅开销</span></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="cardsCountVal">2+</div>
+              <div style="font-size:12px;color:var(--muted);"><span data-lang="en">Free Cards Eligible</span><span data-lang="zh">可 $0 免费申领卡数</span></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="libbyHoldsVal">20+</div>
+              <div style="font-size:12px;color:var(--muted);"><span data-lang="en">Combined Libby Holds</span><span data-lang="zh">叠加 Libby 预约槽位</span></div>
+            </div>
+          </div>
+
+          <div id="zonePlanBanner" class="alert-banner"></div>
+
+          <h3 style="margin:0 0 8px;font-size:15.5px;">
+            <span data-lang="en">⚡ 2026 Live Workarounds &amp; High-Value Routing</span>
+            <span data-lang="zh">⚡ 2026 实时避坑路由（哪项福利该刷哪张卡？）</span>
+          </h3>
+          <ul id="routingList" style="margin:0;padding-left:18px;font-size:13px;color:#e2e8f0;display:flex;flex-direction:column;gap:6px;"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 style="margin:0 0 10px;font-size:19px;">
+        <span data-lang="en">📊 Verified 2026 KCLS vs. Seattle Public Library (SPL) 12-Perk Comparison Table</span>
+        <span data-lang="zh">📊 2026 实测核对：KCLS（东区/金县）vs. SPL（西雅图市馆）12 大免费资源对照表</span>
+      </h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><span data-lang="en">Benefit / App</span><span data-lang="zh">免费资源项目</span></th>
+              <th><span data-lang="en">KCLS (Eastside / King County)</span><span data-lang="zh">KCLS 东区/金县额度</span></th>
+              <th><span data-lang="en">SPL (Seattle + Reciprocal)</span><span data-lang="zh">SPL 西雅图市馆额度</span></th>
+              <th><span data-lang="en">2026 Insider Tip / Pitfall</span><span data-lang="zh">2026 实操避坑提示</span></th>
+            </tr>
+          </thead>
+          <tbody id="matrixTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="disc">
+      <strong data-lang="en">⚖️ Independent Educational Disclaimer:</strong>
+      <strong data-lang="zh">⚖️ 独立编写与政策时效声明：</strong>
+      <span data-lang="en"> Calculations run 100% locally in your browser (zero data uploaded). Provided for educational consumer reference only (<strong>Not Legal, Financial, Tax, or Official Municipal Policy Advice</strong>). CraftLeaf Studio is not affiliated with KCLS or The Seattle Public Library; verify current database availability and reciprocal rules on <code>kcls.org</code> and <code>spl.org</code>.</span>
+      <span data-lang="zh"> 所有计算 100% 在浏览器本地完成，零数据上传。本页面仅供居民生活省钱与学习参考（<strong>不构成官方政策承诺、法律或财务建议</strong>）。CraftLeaf Studio 与金县图书馆系统（KCLS）及西雅图公立图书馆（SPL）无官方隶属关系；数据库维护状态与借阅规则请以 <code>kcls.org</code> 与 <code>spl.org</code> 最新公告为准。</span>
+    </div>
+  </main>
+
+  <script src="../../../assets/monetization-config.js"></script>
+  <script src="../../../assets/monetization-sdk.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var MATRIX = [{"id": "libby", "category_en": "eBooks, Audiobooks & Magazines", "category_zh": "电子书 · 有声书 · 英文原版杂志", "name_en": "Libby (by OverDrive) + SPL Peak Picks", "name_zh": "Libby 双馆叠加借阅 + SPL Peak Picks 免排队畅销书", "kcls_en": "Top-3 global digital catalog; 20 checkouts + 10 holds; unlimited magazines (The Economist, Wired, New Yorker)", "kcls_zh": "全美前三超大馆藏；同时借 20 本 + 预约 10 本；经济学人/纽约客等杂志不限额", "spl_en": "Separate hold pool + Peak Picks instant 7/14-day bestsellers (zero hold queue)", "spl_zh": "独立预约池 + Peak Picks 热门新书免排队即借（最快省一半排队时间）", "best_card": "Stack BOTH KCLS + SPL inside Libby", "retail_usd_yr": 180, "trap_en": "Add BOTH cards in Libby before placing holds—Libby auto-picks the shorter queue.", "trap_zh": "先在 Libby 里同时绑好 KCLS 与 SPL 两张卡，搜书时会自动提示哪边排队更短！"}, {"id": "oreilly", "category_en": "Tech, Coding & Interview Books", "category_zh": "转码刷题 · 系统设计 · AI 技术原版书", "name_en": "O'Reilly for Public Libraries (~50,000 Tech Titles)", "name_zh": "O'Reilly 动物书全库（近 5 万本计算机/AI/商业书 + 7千视频）", "kcls_en": "Not included in KCLS standard catalog", "kcls_zh": "KCLS 暂未采购完整 O'Reilly 动物书数据库", "spl_en": "100% FREE full web access via spl.org (DDIA, System Design, Python/Go/ML, 7,000+ videos)", "spl_zh": "SPL 网页端全免费直通！含 DDIA、系统设计、大模型与大厂面试原版书（立省 $499/年）", "best_card": "SPL Card (Free Reciprocal for Eastside!)", "retail_usd_yr": 499, "trap_en": "Website-only (not O'Reilly mobile app); launch via spl.org/online-resources/online-learning.", "trap_zh": "仅限浏览器网页端阅读（不支持手机 App 直接登录），须从 SPL 官网入口跳转。"}, {"id": "linkedin", "category_en": "Career, PM, Design & Tech Courses", "category_zh": "职场技能 · 编程 · 设计与商业视频课", "name_en": "LinkedIn Learning (16,000+ Certificate Courses)", "name_zh": "LinkedIn Learning 领英全库视频课（1.6 万门多语种课程）", "kcls_en": "2026 Status Alert: KCLS portal currently notes 'Access to LinkedIn may be unavailable'", "kcls_zh": "2026 实测预警：KCLS 官网当前提示 LinkedIn Learning 接口维护暂不可用", "spl_en": "LIVE & ACTIVE via SPL! Works on web & mobile app using Library ID: seattlepl", "spl_zh": "SPL 实测完全正常可用！手机 App 选择图书馆卡登录并填 Library ID: seattlepl 即可", "best_card": "SPL Card (Library ID: seattlepl)", "retail_usd_yr": 240, "trap_en": "Never link your personal LinkedIn profile—log in strictly via Library Card + PIN + ID `seattlepl`.", "trap_zh": "东区居民办一张免费 SPL 互惠卡即可完美绕开 KCLS 故障；登录认准 Library ID: seattlepl。"}, {"id": "language", "category_en": "English ESL & Foreign Languages", "category_zh": "英语听说强化 · 第二外语沉浸学习", "name_en": "Rosetta Stone Library Solution + Mango Languages", "name_zh": "Rosetta Stone 罗塞塔石碑 (30语种) + Mango 口语对话 (70+语种)", "kcls_en": "BOTH Rosetta Stone (30 languages + mobile app) AND Mango Languages (70+ languages)", "kcls_zh": "同时提供 Rosetta Stone（30语种支持手机端）与 Mango Languages（含地道美语发音跟读）", "spl_en": "Mango Languages (70+ languages including ESL for Mandarin speakers)", "spl_zh": "提供 Mango Languages 全部口语课程（含针对中文母语者的美式生活英语）", "best_card": "KCLS Card (for Rosetta Stone) + Either for Mango", "retail_usd_yr": 179, "trap_en": "Rosetta Stone locks 1 language per email; create account through KCLS web link BEFORE opening app.", "trap_zh": "Rosetta Stone 必须先从 KCLS 网页端链接注册账号再进手机 App，且每个邮箱只能绑定 1 门语言。"}, {"id": "hoopla", "category_en": "Zero-Wait Movies, Audiobooks & Comics", "category_zh": "零排队电影 · 美剧 · 动漫绘本与有声书", "name_en": "Hoopla Digital (Instant Borrow, No Hold Lines)", "name_zh": "Hoopla 免排队即时借阅（电影/音乐/美漫/有声书）", "kcls_en": "10 instant checkouts/month per card (zero waiting lists; resets 1st of month)", "kcls_zh": "每张卡每月 10 次免排队秒借额度（无需等位，每月 1 号重置，支持电视投屏）", "spl_en": "Not offered by SPL (Seattle residents should grab a free KCLS reciprocal card!)", "spl_zh": "SPL 未开通 Hoopla（住西雅图市内的读者务必办一张免费 KCLS 互惠卡解锁）", "best_card": "KCLS Card (10 instant borrows/mo)", "retail_usd_yr": 144, "trap_en": "Monthly quota resets at midnight on the 1st; unused borrows do not roll over.", "trap_zh": "每月 10 次额度月底清零不累计，热门书在 Libby 排长队时先搜 Hoopla 往往能直接秒看！"}, {"id": "kanopy", "category_en": "Arthouse Cinema, Great Courses & Kids", "category_zh": "高分电影 · 大师公开课 · 儿童英语动画", "name_en": "Kanopy + Kanopy Kids (Criterion, A24, PBS)", "name_zh": "Kanopy 电影流媒体（标准收藏 Criterion / A24 / 大师课 / 儿童无限看）", "kcls_en": "Included (Criterion Collection, The Great Courses, PBS + unlimited Kanopy Kids!)", "kcls_zh": "免费畅看 Criterion 艺术电影、The Great Courses 大学名师课；Kanopy Kids 儿童区不扣额度！", "spl_en": "Included with monthly ticket allowance + Kanopy Kids unlimited", "spl_zh": "同样支持每月观影点券 + 儿童英语原版分级动画片无限畅看（Roku/Apple TV 可装）", "best_card": "Stack BOTH KCLS + SPL for 2x monthly tickets", "retail_usd_yr": 120, "trap_en": "Switch into Kanopy Kids mode first so children's PBS/storybook videos consume 0 tickets.", "trap_zh": "给娃看英语绘本动画前先点进 Kanopy Kids 专区，不消耗大人每月的观影额度！"}, {"id": "news", "category_en": "Major US News & Financial Press", "category_zh": "主流英文报刊与财经深度报道", "name_en": "New York Times (72h Remote Passes), WSJ & Seattle Times", "name_zh": "《纽约时报》72小时远程通行证、《华尔街日报》与《西雅图时报》", "kcls_en": "Unlimited repeatable 72-hour NYT remote codes + Wall Street Journal + PressReader", "kcls_zh": "无限次领取 72 小时 NYT 远程阅读码 +《华尔街日报》WSJ + 全球多语种报刊", "spl_en": "72-hour NYT passes + Seattle Times full archive + regional business journals", "spl_zh": "NYT 远程通行证 +《西雅图时报》完整数字版（了解本地学区、治安与市政必备）", "best_card": "Either KCLS or SPL (bookmark redemption link)", "retail_usd_yr": 300, "trap_en": "Never enter a credit card on NYTimes.com—just re-click the library 72-hour code link when expired.", "trap_zh": "在 NYT 官网切勿绑定个人信用卡（防高价自动续费陷阱），到期重要点一次图书馆兑换链接即可续 72 小时。"}, {"id": "consumer_reports", "category_en": "Car, Appliance & Baby Gear Ratings", "category_zh": "买二手车 · 床垫家电 · 母婴安全评测", "name_en": "Consumer Reports Online (Full Lab Ratings)", "name_zh": "Consumer Reports《消费者报告》权威实验室评测库", "kcls_en": "Full remote access to used-car reliability history, crash scores & appliance rankings", "kcls_zh": "远程免费查历年二手车故障率黑名单、安全座椅碰撞分与家电可靠性排名", "spl_en": "Full remote access via SPL Online Resources -> Consumer Research", "spl_zh": "SPL 同样提供完整远程查阅权限，买第一辆车签 OTD 报价前必查！", "best_card": "Either KCLS or SPL", "retail_usd_yr": 59, "trap_en": "Check model-year reliability scores BEFORE visiting any dealership or buying a mattress.", "trap_zh": "买二手车前先查对应年份车型的 Reliability 历史故障点，轻松避开变速箱/烧机油大坑。"}, {"id": "museum_pass", "category_en": "Free Seattle & Eastside Museum Tickets", "category_zh": "西雅图与东区热门博物馆免费家庭门票", "name_en": "SPL & KCLS Museum Pass (MoPOP, Aquarium, Zoo, Flight)", "name_zh": "博物馆免费门票预约（流行文化馆 MoPOP / 水族馆 / 动物园 / 飞行馆 / 儿童馆）", "kcls_en": "Free digital passes to KidsQuest Bellevue, Museum of Flight, Burke, SAM, Wing Luke & more", "kcls_zh": "免费约 Bellevue KidsQuest 儿童馆、飞行博物馆、西雅图美术馆、华州历史馆等（单次省 $40–$120）", "spl_en": "1 pass/month per card; new passes drop daily right after 12:00 PM noon (incl. Aquarium & MoPOP!)", "spl_zh": "每张卡每月可约 1 次；每天中午 12:00 准点放新票（含西雅图水族馆、MoPOP、林地公园动物园）", "best_card": "Hold BOTH KCLS + SPL = 2 separate monthly pass pools!", "retail_usd_yr": 240, "trap_en": "Set a 12:00 PM alarm for SPL drops, and ALWAYS bring matching Photo ID + pass PDF to the venue.", "trap_zh": "热门馆（水族馆/MoPOP）定好中午 12:00 闹钟抢票；入场必须出示与借书卡同名的带照证件 Photo ID！"}, {"id": "printing", "category_en": "Free Weekly Printing, Copying & Scanning", "category_zh": "每周免费黑白/彩色打印 · 扫描与传真", "name_en": "Weekly Library Print Allowance ($5.00/wk on KCLS)", "name_zh": "每周免费打印额度（KCLS 每周送 $5.00 = 33页黑白或 10页彩打）", "kcls_en": "$5.00 FREE weekly print/copy credit ($0.15 B&W = 33 pages/wk; $0.50 Color = 10 pages/wk) + free fax/scan", "kcls_zh": "每张卡每周自动送 $5.00 免费额度（黑白 $0.15/页可打 33 页，彩打 $0.50/页可打 10 页）+ 免费扫描发邮箱/免费传真", "spl_en": "Free in-branch printing for passes/documents + high-speed flatbed/ADF scan to USB or email", "spl_zh": "支持分馆免费文件与门票打印 + 高速双面扫描直发个人邮箱或 U 盘", "best_card": "KCLS Card ($260/yr print value — great for I-94, W-2, return labels & PnP games!)", "retail_usd_yr": 156, "trap_en": "Always preview page count before releasing job; unused weekly $5 credit resets weekly.", "trap_zh": "打退货单、I-94、租约或桌游图纸再也不用买打印机墨盒！上传前先预览页数避免超额。"}, {"id": "tutoring", "category_en": "Live Tutoring, Resume Review & USCIS Prep", "category_zh": "真人在线辅导 · 英文简历批改 · 入籍备考", "name_en": "Brainfuse HelpNow / JobNow & Citizenship Corner", "name_zh": "Brainfuse 每日真人学业辅导 (1pm–11pm) · 英文简历审阅与入籍题库", "kcls_en": "Daily live K-12/college tutoring (1pm–11pm), writing lab, adult ESL & US resume coaching", "kcls_zh": "每天下午 1 点至晚 11 点免费真人在线答疑、英语作文批改、美式简历润色与入籍辅导", "spl_en": "Adult tutoring, Talk Time ESL conversation circles & seasonal free Tax-Aide clinics", "spl_zh": "免费 Talk Time 英语口语角（练胆量认识邻居神器）及报税季免费公益报税点", "best_card": "KCLS for 1pm–11pm Brainfuse + Both for ESL Talk Time", "retail_usd_yr": 120, "trap_en": "Strip your street address & phone number before uploading resumes to any 3rd-party review portal.", "trap_zh": "上传简历批改前建议隐去详细门牌号与私人手机号，保护个人隐私。"}, {"id": "spaces", "category_en": "Study Rooms, Makerspaces & WA Parks", "category_zh": "免费静音玻璃自习室 · 3D打印创客空间 · 州立公园卡", "name_en": "Reservable Glass Study Rooms & Check-Out Gear", "name_zh": "免费预约独立讨论室（Bellevue/Redmond/Seattle Central）与州立公园通行证借阅", "kcls_en": "Online study room booking, Bellevue Makerspace (3D printers/laser/sewing) & Discover Pass checkouts", "kcls_zh": "网页免费订独立静音房（刷题面试绝佳）、Bellevue 创客空间设备及华州公园 Discover Pass 借阅", "spl_en": "Iconic Central Library & neighborhood study rooms, Wi-Fi hotspots & community tech labs", "spl_zh": "西雅图中央图书馆及社区分馆独立学习室、免费高速 Wi-Fi 与公共电脑", "best_card": "Both KCLS & SPL (reserve study rooms 1–7 days ahead)", "retail_usd_yr": 90, "trap_en": "Hold reservations expire if you arrive >15 minutes late; cancel online if plans change.", "trap_zh": "玻璃静音室迟到超过 15 分钟会自动释放给现场读者；临时不去记得在线点取消。"}];
+
+    function byId(id) { return document.getElementById(id); }
+    function isZh() { return document.documentElement.classList.contains('zh'); }
+
+    function clearChildren(node) {
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+    }
+
+    function computePlan() {
+      var zone = byId('zoneSelect').value;
+      var booksMo = Math.max(0, Number(byId('booksPerMo').value) || 0);
+      var museumsYr = Math.max(0, Number(byId('museumsPerYr').value) || 0);
+      var printMo = Math.max(0, Number(byId('printPagesWk').value) || 0);
+
+      var saved = 0;
+      saved += Math.min(booksMo, 20) * 14 * 12 * 0.35; // realistic audiobook/ebook replacement
+      saved += Math.min(museumsYr, 24) * 60;          // avg 2-ticket Seattle museum outing
+      saved += Math.min(printMo, 132) * 0.15 * 12;    // KCLS $0.15/page B&W retail replacement
+
+      if (byId('chkOreilly').checked) saved += 499;
+      if (byId('chkLinkedin').checked) saved += 240;
+      if (byId('chkLanguage').checked) saved += 179;
+      if (byId('chkNews').checked) saved += 300;
+      if (byId('chkVideo').checked) saved += 204;
+      if (byId('chkConsumer').checked) saved += 59;
+
+      var totalRounded = Math.round(saved);
+      byId('totalSavedVal').textContent = '$' + totalRounded.toLocaleString() + '/yr';
+
+      var zh = isZh();
+      var cardsText = '3';
+      var holdsText = '20–30';
+      var bannerText = '';
+
+      if (zone === 'eastside') {
+        cardsText = '3 ($0)';
+        holdsText = '25+';
+        bannerText = zh
+          ? '🌲 东区/金县双卡方案：1) 主办 KCLS 卡（享每周 $5 免费打印 + Hoopla 10次/月 + Rosetta Stone）；2) 凭金县居住/上班资格 $0 免费申领西雅图 SPL 互惠卡（解锁 O\'Reilly 5万本技术书 + 绕开 KCLS LinkedIn Learning 维护故障）+ 可选 Sno-Isle 第三卡！'
+          : '🌲 Eastside King County Dual-Card Plan: 1) Get KCLS as primary ($5/wk printing + Hoopla 10/mo + Rosetta Stone); 2) Claim your $0 reciprocal Seattle Public Library (SPL) card to unlock O\'Reilly 50K tech books & LinkedIn Learning (`seattlepl`) + optional Sno-Isle 3rd card!';
+      } else if (zone === 'seattle') {
+        cardsText = '3 ($0)';
+        holdsText = '25+';
+        bannerText = zh
+          ? '🏙️ 西雅图市内双卡方案：1) 主办 SPL 卡（直通 O\'Reilly 5万本技术书 + LinkedIn Learning `seattlepl` + Peak Picks 免排队新书）；2) $0 免费加办 KCLS 互惠卡（补齐 Hoopla 每月10次秒借、Rosetta Stone 与 KCLS 每周 $5 免费打印）！'
+          : '🏙️ Seattle Resident Dual-Card Plan: 1) Get SPL primary (O\'Reilly 50K books + LinkedIn Learning `seattlepl` + Peak Picks); 2) Add a $0 reciprocal KCLS card to unlock Hoopla (10/mo), Rosetta Stone & KCLS $5/wk free branch printing!';
+      } else if (zone === 'snoisle') {
+        cardsText = '3 ($0)';
+        holdsText = '30+';
+        bannerText = zh
+          ? '🌊 Snohomish 北区三卡方案：先办 Sno-Isle 主卡，再凭互惠协议 $0 免费加办 KCLS 与西雅图 SPL 借书卡——三馆同时挂进 Libby App，畅销书排队速度提升一倍以上！'
+          : '🌊 Sno-Isle Triple-Card Plan: Start with Sno-Isle, then add $0 reciprocal KCLS and SPL cards—link all 3 inside Libby for maximum audiobook availability + SPL O\'Reilly & KCLS printing!';
+      } else {
+        cardsText = 'Check Work/School';
+        holdsText = '10+';
+        bannerText = zh
+          ? '🏡 Hunts Point / Yarrow Point 特别提醒：这两个小镇未加入 KCLS 税区，但只要您在西雅图、Bellevue、Redmond 等金县其他城市上班、上学或有房产，依然可免费申领 SPL / KCLS 卡！'
+          : '🏡 Hunts Point / Yarrow Point Note: These two towns are excluded from residential KCLS tax districts, BUT if you work, attend school, or own property in Seattle/Bellevue/Redmond, you still qualify free!';
+      }
+
+      byId('cardsCountVal').textContent = cardsText;
+      byId('libbyHoldsVal').textContent = holdsText;
+      byId('zonePlanBanner').textContent = bannerText;
+
+      var rList = byId('routingList');
+      clearChildren(rList);
+      var tips = zh ? [
+        '🎓 LinkedIn Learning 2026 避坑：KCLS 官网当前提示接口维护不可用，请直接用 SPL 互惠卡登录（App 填 Library ID: seattlepl）。',
+        '💻 O\'Reilly 5 万本计算机动物书：仅 SPL 提供免费网页直通（spl.org -> Online Learning），省下 $499/年会员费。',
+        '🎟️ 博物馆免费票双池抢票：SPL 每天中午 12:00 准时放新票（含水族馆/MoPOP）；入场必须带与借书卡同名的带照证件 Photo ID。',
+        '🗣️ Rosetta Stone 激活顺序：必须先点 KCLS 网页专属入口注册并选定唯一语种，再去手机 App 登录。',
+        '🖨️ 每周 $5 免费打印：KCLS 每周自动送 33 页黑白（或 10 页彩打）额度，打 I-94、税表、退货单与桌游图纸完全零成本。'
+      ] : [
+        '🎓 2026 LinkedIn Learning Fix: KCLS currently shows an outage notice—sign in with your free reciprocal SPL card using Library ID: seattlepl.',
+        '💻 O\'Reilly 50K Tech Books ($499/yr): Exclusive to SPL web portal (spl.org/online-resources/online-learning).',
+        '🎟️ 12:00 PM Museum Pass Drops: SPL releases new passes daily after 12:00 PM noon; always bring matching Photo ID to the venue.',
+        '🗣️ Rosetta Stone Activation: Register via KCLS web link FIRST (locks 1 language per email) before signing into the mobile app.',
+        '🖨️ $5.00/Week Free Printing: Every KCLS card includes 33 B&W or 10 Color pages/week free + free scan-to-email.'
+      ];
+      for (var i = 0; i < tips.length; i++) {
+        var li = document.createElement('li');
+        li.textContent = tips[i];
+        rList.appendChild(li);
+      }
+
+      return { totalRounded: totalRounded, bannerText: bannerText, tips: tips };
+    }
+
+    function renderMatrixTable() {
+      var tbody = byId('matrixTableBody');
+      clearChildren(tbody);
+      var zh = isZh();
+      for (var i = 0; i < MATRIX.length; i++) {
+        var r = MATRIX[i];
+        var tr = document.createElement('tr');
+
+        var tdName = document.createElement('td');
+        var st = document.createElement('strong');
+        st.style.color = '#6ee7b7';
+        st.textContent = zh ? r.name_zh : r.name_en;
+        var catDiv = document.createElement('div');
+        catDiv.style.fontSize = '11.5px';
+        catDiv.style.color = '#94a3b8';
+        catDiv.textContent = (zh ? r.category_zh : r.category_en) + ' · ~$' + r.retail_usd_yr + '/yr';
+        tdName.appendChild(st);
+        tdName.appendChild(catDiv);
+
+        var tdKcls = document.createElement('td');
+        tdKcls.textContent = zh ? r.kcls_zh : r.kcls_en;
+
+        var tdSpl = document.createElement('td');
+        tdSpl.textContent = zh ? r.spl_zh : r.spl_en;
+
+        var tdTrap = document.createElement('td');
+        tdTrap.style.color = '#fde68a';
+        tdTrap.textContent = zh ? r.trap_zh : r.trap_en;
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdKcls);
+        tr.appendChild(tdSpl);
+        tr.appendChild(tdTrap);
+        tbody.appendChild(tr);
+      }
+    }
+
+    function refreshAll() {
+      computePlan();
+      renderMatrixTable();
+    }
+
+    byId('dlChecklistBtn').addEventListener('click', function () {
+      var res = computePlan();
+      var zh = isZh();
+      var lines = [
+        zh ? '=== 大西雅图 (KCLS + SPL) 免费双卡办理与羊毛核对清单 ===' : '=== Greater Seattle (KCLS + SPL) Dual-Card Setup Checklist ===',
+        (zh ? '预计年度节省订阅与门票总额：$' : 'Estimated Annual Household Savings: $') + res.totalRounded + '/yr',
+        '',
+        res.bannerText,
+        '',
+        zh ? '【首周 5 步打勾清单】' : '[First-Weekend 5-Step Action List]',
+        zh ? '[ ] 1. 在 kcls.org 与 spl.org 在线申领双馆电子借书卡号' : '[ ] 1. Apply online at kcls.org and spl.org for both cards',
+        zh ? '[ ] 2. 路过分馆时带 Photo ID + 电子租约/水电单升级为永久 All-Access 实体卡' : '[ ] 2. Verify Photo ID + digital lease/bill in-branch for permanent All-Access status',
+        zh ? '[ ] 3. 手机安装 Libby App，依次绑定 KCLS 与 SPL 两张卡（自动优选短排队）' : '[ ] 3. Add both KCLS + SPL cards inside the Libby mobile app',
+        zh ? '[ ] 4. 登录 LinkedIn Learning 选择图书馆登录并填 Library ID: seattlepl' : '[ ] 4. Sign into LinkedIn Learning with SPL card using Library ID: seattlepl',
+        zh ? '[ ] 5. 收藏 NYT 72小时通行证兑换链接与 SPL 每日中午 12:00 博物馆放票页' : '[ ] 5. Bookmark NYT 72h pass link & 12:00 PM noon SPL Museum Pass page',
+        '',
+        zh ? '【2026 必避坑点】' : '[2026 Key Guardrails]'
+      ];
+      for (var i = 0; i < res.tips.length; i++) {
+        lines.push('- ' + res.tips[i]);
+      }
+      lines.push('');
+      lines.push('Generated locally via https://963239327.github.io/craftleaf-studio/tools/us-life/library-perks-calculator/');
+
+      var blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'KCLS_SPL_Dual_Card_Setup_Checklist.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      byId('dlFeedback').textContent = zh
+        ? '✅ 已生成并下载《KCLS_SPL_Dual_Card_Setup_Checklist.txt》！'
+        : '✅ Downloaded KCLS_SPL_Dual_Card_Setup_Checklist.txt!';
+
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.showValueMomentPrompt === 'function') {
+        window.CraftLeafSDK.showValueMomentPrompt('settlingCarGuide', {
+          en: 'Checklist exported! Want the 5-page printable KCLS + SPL Playbook PDF + 12-Perk Matrix CSV ($5)?',
+          zh: '办卡核对单已导出！刚落地西雅图需要办证买车避坑？欢迎体验全站免费工具或赞赏支持。'
+        });
+      }
+    });
+
+    var controls = ['zoneSelect', 'booksPerMo', 'museumsPerYr', 'printPagesWk', 'chkOreilly', 'chkLinkedin', 'chkLanguage', 'chkNews', 'chkVideo', 'chkConsumer'];
+    for (var ci = 0; ci < controls.length; ci++) {
+      var el = byId(controls[ci]);
+      if (el) {
+        el.addEventListener('change', computePlan);
+        el.addEventListener('input', computePlan);
+      }
+    }
+
+    byId('langToggleBtn').addEventListener('click', function () {
+      document.documentElement.classList.toggle('zh');
+      refreshAll();
+    });
+
+    var params = new URLSearchParams(window.location ? window.location.search : '');
+    var qLang = (params.get('lang') || '').toLowerCase();
+    if (qLang === 'en') {
+      document.documentElement.classList.remove('zh');
+    } else if (qLang === 'zh' || (navigator.language || '').toLowerCase().indexOf('zh') === 0) {
+      document.documentElement.classList.add('zh');
+    } else {
+      document.documentElement.classList.remove('zh');
+    }
+    refreshAll();
+  })();
+  </script>
+</body>
+</html>

@@ -212,7 +212,12 @@
     },
     "settlingCarGuide": {
       "priceUsd": "$7.00",
+      "libraryPriceUsd": "$5.00",
+      "comboPriceUsd": "$10.00",
       "gumroadPermalink": "us-settling-in-and-first-car-chinese-playbook",
+      "checkoutUrlEn": "https://stardustdemo.gumroad.com/l/us-settling-in-and-first-car-chinese-playbook?option=ENLdrK0Wkiutjx1t2KZ_pg==",
+      "libraryGuideCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/us-settling-in-and-first-car-chinese-playbook?option=uc1kZ0iNIG7-tQ2saXN4Ow==&wanted=true",
+      "settlingLibraryComboCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/us-settling-in-and-first-car-chinese-playbook?option=MSvPe5dGl98phEfyBBFoUQ==&wanted=true",
       "checkoutUrlZh": ""
     },
     "newcomerMasterBundle": {
