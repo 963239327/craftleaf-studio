@@ -117,8 +117,11 @@
     },
     "freelancerOsKit": {
       "priceUsd": "$9.99",
+      "comboPriceUsd": "$14.99",
       "freeLiteUrl": "https://stardustdemo.gumroad.com/l/solofounder-starter-kit",
-      "fullPackUrlEn": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro",
+      "fullPackUrlEn": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=j9mmgh1FJABtqx9OMvv6dw==",
+      "sheetsPackCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=N6i8OAr7_j6-KIB5uHW1RQ==&wanted=true",
+      "sheetsComboCheckoutUrlEn": "https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=MuZAmBpJW7PCvDfVW3qJWA==&wanted=true",
       "fullPackUrlZh": ""
     },
     "tabletopCreatorKit": {

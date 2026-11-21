@@ -18,6 +18,7 @@
 - [US Credit Card Statement Closing Date vs. Due Date & <9% FICO Simulator](https://963239327.github.io/craftleaf-studio/tools/us-life/credit-score-simulator/): Calculates exact pre-statement payment day & amount for newcomers starting from $500 secured cards.
 - [2026 US Black Friday 4-Layer Cashback & Sales Tax Stacking Calculator](https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/): Separates pre-tax Rakuten cashback base from post-tax Amex/Chase Offer thresholds.
 - [2027 US Holiday E-Commerce & Amazon FBA Reverse Lead-Time Calendar Calculator](https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/): Date-verified 22 US shopping peaks for 2027 with live Ocean FBA (T-90d), Fast-Boat/Air (T-42d), Vine/PPC warmup & deal-lock deadlines.
+- [Small-Business Google Sheets + Apps Script Automation Studio](https://963239327.github.io/craftleaf-studio/tools/sheets-automation/): Interactive @OnlyCurrentDoc Apps Script generator for daily low-stock inventory email digests, multi-tab branch sales sync, bilingual Google Forms booking confirmations, and IRS Schedule C expense reimbursement pivots.
 - [Self-Serve Bilingual Restaurant Menu (FDA Big-9) & Fair-Housing Landlord Flyer Vector PDF Studios](https://963239327.github.io/craftleaf-studio/services/): 100% local in-browser 300 DPI commercial print studios.
 
 ## Official Open-Source Developer & Browser Extensions (MIT)

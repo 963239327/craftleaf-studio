@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Small-Business Google Sheets + Apps Script Generator (Low-Stock Alert, Tab Sync &amp; Form Emailer) | CraftLeaf Studio</title>
+  <meta name="description" content="Free client-side Google Sheets Apps Script generator for small businesses. Customize @OnlyCurrentDoc low-stock inventory email alerts, multi-tab sales sync, bilingual Google Forms booking confirmations, and IRS Schedule C expense calculators." />
+  <link rel="canonical" href="https://963239327.github.io/craftleaf-studio/tools/sheets-automation/" />
+  <meta property="og:title" content="Small-Business Google Sheets + Apps Script Automation Studio" />
+  <meta property="og:description" content="Generate clean @OnlyCurrentDoc Google Apps Script (.gs) + matching CSV templates with zero monthly Zapier fees. Free Low-Stock Reorder Digest generator in browser." />
+  <meta property="og:url" content="https://963239327.github.io/craftleaf-studio/tools/sheets-automation/" />
+  <meta property="og:image" content="https://963239327.github.io/craftleaf-studio/assets/og-card-1200x630.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Small-Business Google Sheets + Apps Script Automation Generator",
+    "url": "https://963239327.github.io/craftleaf-studio/tools/sheets-automation/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <style>
+    :root { --bg:#0b1120; --card:#1e293b; --alt:#0f172a; --border:#334155; --text:#f8fafc; --muted:#94a3b8; --accent:#10b981; --gold:#f59e0b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; background:radial-gradient(circle at 16% 0%,#064e3b 0%,var(--bg) 52%); color:var(--text); line-height:1.6; }
+    a { color:#6ee7b7; text-decoration:none; }
+    header { position:sticky; top:0; z-index:40; backdrop-filter:blur(12px); background:rgba(11,17,32,0.9); border-bottom:1px solid var(--border); }
+    .wrap { max-width:1180px; margin:0 auto; padding:0 20px; }
+    .nav { display:flex; justify-content:space-between; align-items:center; padding:13px 0; gap:12px; flex-wrap:wrap; }
+    .pill { display:inline-block; font-size:12px; font-weight:800; padding:4px 11px; border-radius:999px; background:rgba(16,185,129,0.18); color:#6ee7b7; border:1px solid rgba(52,211,153,0.45); }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 18px; border-radius:10px; font-weight:800; font-size:13.5px; cursor:pointer; border:1px solid transparent; text-decoration:none; font-family:inherit; }
+    .btn-gold { background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#0f172a; }
+    .btn-green { background:linear-gradient(135deg,#10b981,#34d399); color:#052e16; }
+    .btn-sec { background:var(--card); color:var(--text); border-color:var(--border); }
+    .wf-tabs { display:grid; grid-template-columns:repeat(auto-fit,minmax(235px,1fr)); gap:10px; margin:20px 0 16px; }
+    .wtab { text-align:left; background:rgba(30,41,59,0.8); border:1.5px solid var(--border); color:var(--text); border-radius:13px; padding:12px 14px; cursor:pointer; font-family:inherit; }
+    .wtab.active { border-color:#34d399; background:linear-gradient(145deg,rgba(16,185,129,0.2),rgba(15,23,42,0.95)); }
+    .wtab small { display:block; font-size:11.5px; color:var(--muted); margin-top:3px; }
+    .tag-free { font-size:10.5px; font-weight:800; padding:2px 7px; border-radius:99px; background:rgba(16,185,129,0.25); color:#6ee7b7; }
+    .tag-pack { font-size:10.5px; font-weight:800; padding:2px 7px; border-radius:99px; background:rgba(245,158,11,0.22); color:#fcd34d; }
+    .studio-grid { display:grid; grid-template-columns:0.95fr 1.25fr; gap:18px; align-items:start; }
+    @media (max-width:900px) { .studio-grid { grid-template-columns:1fr; } }
+    .panel { background:rgba(30,41,59,0.86); border:1px solid var(--border); border-radius:16px; padding:18px; }
+    label.fld { display:block; font-size:12px; font-weight:700; color:#cbd5e1; margin:10px 0 4px; }
+    input[type="text"], input[type="number"], select { width:100%; padding:9px 11px; border-radius:9px; border:1px solid var(--border); background:var(--alt); color:#fff; font-size:13.5px; font-family:inherit; }
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    pre.codebox { margin:12px 0 0; padding:14px; border-radius:12px; background:#090e1a; border:1px solid #334155; color:#e2e8f0; font-family:"SF Mono",Menlo,Consolas,monospace; font-size:12px; line-height:1.48; overflow-x:auto; max-height:460px; white-space:pre; }
+    .disc { margin:26px 0 48px; padding:14px 16px; border-radius:10px; background:rgba(15,23,42,0.85); border-left:3px solid var(--gold); font-size:12.5px; color:var(--muted); }
+    html:not(.zh) [data-lang="zh"] { display:none !important; }
+    html.zh [data-lang="en"] { display:none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="../../index.html" style="font-weight:800;font-size:16.5px;color:#fff;">🌿 CraftLeaf Studio</a>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13.5px;">
+        <a href="../../index.html"><span data-lang="en">🏠 All Free Tools</span><span data-lang="zh">🏠 免费工具大厅</span></a>
+        <a href="../../templates/index.html"><span data-lang="en">💼 Solo-Founder OS</span><span data-lang="zh">💼 一人公司财务管家</span></a>
+        <a href="../../services/index.html"><span data-lang="en">🏪 Menu &amp; Poster PDF</span><span data-lang="zh">🏪 双语菜单与招租工坊</span></a>
+        <a href="../../store/index.html" style="color:#fcd34d;font-weight:700;"><span data-lang="en">🛍️ Storefront</span><span data-lang="zh">🛍️ 数字书架</span></a>
+        <button type="button" class="btn btn-sec" style="padding:6px 12px;font-size:12.5px;" id="langToggleBtn">中文 / EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section style="padding:30px 0 8px;">
+      <span class="pill">
+        <span data-lang="en">⚡ 100% Local Browser Generator · @OnlyCurrentDoc Safe · $0/mo Zapier Alternative</span>
+        <span data-lang="zh">⚡ 100% 浏览器纯本地生成 · @OnlyCurrentDoc 单表安全隔离 · 零月费替代 Zapier</span>
+      </span>
+      <h1 style="font-size:clamp(24px,3.5vw,38px);margin:12px 0 8px;line-height:1.18;">
+        <span data-lang="en">Small-Business Google Sheets + Apps Script Automation Studio</span>
+        <span data-lang="zh">小商家 Google Sheets + Apps Script 表格自动化脚本生成器</span>
+      </h1>
+      <p style="color:var(--muted);max-width:880px;margin:0 0 18px;">
+        <span data-lang="en">Customize your exact sheet tab names, column letters, and notification email below. Generate and download the complete <strong>Low-Stock Inventory Reorder Digest (.gs + .csv)</strong> 100% free, or grab the complete 4-Workflow Pack with Multi-Tab Sync, Bilingual Google Form Confirmations &amp; Schedule C Expense Pivot.</span>
+        <span data-lang="zh">在下方自定义您的工作表名称、列字母与接收邮箱，即可<strong>免费生成并下载完整版【库存低水位防刷屏邮件预警脚本 (.gs) + 中文 CSV 模板】</strong>；同时支持预览多门店自动汇总、预约表单双语确认信与员工报销报税核算套件。</span>
+      </p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-gold" data-lang="en" data-buy-event="sheets-pack-primary" href="https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=N6i8OAr7_j6-KIB5uHW1RQ==&amp;wanted=true" target="_blank" rel="noopener">
+          📦 Get All 4 .GS Scripts + 8 EN/ZH CSVs + OAuth Setup PDF ($9.99) →
+        </a>
+        <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 库存预警脚本免费即拷即用！觉得省心欢迎微信赞赏支持</a>
+        <a class="btn btn-sec" href="../../previews/smallbiz_sheets_apps_script_sample_preview.pdf" target="_blank" rel="noopener">
+          <span data-lang="en">👁️ View 2-Page Setup PDF Sample</span>
+          <span data-lang="zh">👁️ 查看 2 页中文安装图解样稿 PDF</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="wf-tabs" role="tablist">
+      <button type="button" class="wtab active" id="tabBtn_lowstock" data-wf="lowstock">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>📦 #02 Low-Stock Alert</strong><span class="tag-free">100% FREE</span>
+        </div>
+        <small><span data-lang="en">Full .gs + .csv export · Daily anti-spam stamp</span><span data-lang="zh">完整源码免费复制 · 每日防重复轰炸邮件</span></small>
+      </button>
+      <button type="button" class="wtab" id="tabBtn_aggregator" data-wf="aggregator">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>🔄 #01 Multi-Tab Sync</strong><span class="tag-pack">4-PACK</span>
+        </div>
+        <small><span data-lang="en">Merge Store_* tabs into Master_Summary</span><span data-lang="zh">多门店/多月份分表一键合并总表</span></small>
+      </button>
+      <button type="button" class="wtab" id="tabBtn_booking" data-wf="booking">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>✉️ #03 Booking Responder</strong><span class="tag-pack">4-PACK</span>
+        </div>
+        <small><span data-lang="en">EN + 中文 Google Forms confirmation email</span><span data-lang="zh">预约/订餐表单提交秒发中英确认信</span></small>
+      </button>
+      <button type="button" class="wtab" id="tabBtn_expenses" data-wf="expenses">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>🧾 #04 Expense &amp; Tax Calc</strong><span class="tag-pack">4-PACK</span>
+        </div>
+        <small><span data-lang="en">$0.70/mi mileage + &gt;$75 receipt check</span><span data-lang="zh">报销自动算数 + 漏传小票拦截 + 报税汇总</span></small>
+      </button>
+    </section>
+
+    <section class="studio-grid">
+      <div class="panel">
+        <h2 style="margin:0 0 6px;font-size:17px;">
+          <span data-lang="en">⚙️ Customize Sheet Columns &amp; Parameters</span>
+          <span data-lang="zh">⚙️ 自定义您的表格名称与列号</span>
+        </h2>
+        <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted);">
+          <span data-lang="en">Zero data leaves your browser. Column letters (A–Z) convert automatically to 0-based Apps Script indices.</span>
+          <span data-lang="zh">纯浏览器本地换算，零数据上传。直接选 A–K 列字母，自动生成零基数组下标。</span>
+        </p>
+
+        <label class="fld"><span data-lang="en">Business / Store Name</span><span data-lang="zh">门店或品牌名称（显示在邮件标题）</span></label>
+        <input type="text" id="inpStoreName" value="Bellevue Boba &amp; Kitchen" />
+
+        <div class="row2">
+          <div>
+            <label class="fld"><span data-lang="en">Target Sheet Tab Name</span><span data-lang="zh">目标工作表标签名 (Tab)</span></label>
+            <input type="text" id="inpTabName" value="Inventory" />
+          </div>
+          <div>
+            <label class="fld"><span data-lang="en">Time Zone</span><span data-lang="zh">所在时区 (Time Zone)</span></label>
+            <select id="inpTz">
+              <option value="America/Los_Angeles">America/Los_Angeles (PT)</option>
+              <option value="America/New_York">America/New_York (ET)</option>
+              <option value="America/Chicago">America/Chicago (CT)</option>
+              <option value="America/Denver">America/Denver (MT)</option>
+              <option value="Asia/Shanghai">Asia/Shanghai (CST)</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="fld"><span data-lang="en">Owner / Reply-To Email</span><span data-lang="zh">接收提醒或回复邮箱</span></label>
+        <input type="text" id="inpEmail" value="owner@yourshop.com" />
+
+        <div id="lowstockFields">
+          <div class="row2">
+            <div>
+              <label class="fld"><span data-lang="en">SKU Column</span><span data-lang="zh">SKU 编码列</span></label>
+              <select id="colSku"><option value="0" selected>Column A</option><option value="1">Column B</option><option value="2">Column C</option></select>
+            </div>
+            <div>
+              <label class="fld"><span data-lang="en">Item Name Column</span><span data-lang="zh">物料名称列</span></label>
+              <select id="colItem"><option value="0">Column A</option><option value="1" selected>Column B</option><option value="2">Column C</option></select>
+            </div>
+          </div>
+          <div class="row2">
+            <div>
+              <label class="fld"><span data-lang="en">Current Qty Column</span><span data-lang="zh">当前库存数量列</span></label>
+              <select id="colQty"><option value="1">Column B</option><option value="2" selected>Column C</option><option value="3">Column D</option><option value="4">Column E</option></select>
+            </div>
+            <div>
+              <label class="fld"><span data-lang="en">Reorder Threshold Column</span><span data-lang="zh">安全补货阈值列</span></label>
+              <select id="colThresh"><option value="2">Column C</option><option value="3" selected>Column D</option><option value="4">Column E</option></select>
+            </div>
+          </div>
+          <div class="row2">
+            <div>
+              <label class="fld"><span data-lang="en">Supplier Column</span><span data-lang="zh">供应商信息列</span></label>
+              <select id="colSupp"><option value="3">Column D</option><option value="4" selected>Column E</option><option value="5">Column F</option></select>
+            </div>
+            <div>
+              <label class="fld"><span data-lang="en">Last-Alerted Stamp Column</span><span data-lang="zh">防重复预警日期戳列</span></label>
+              <select id="colStamp"><option value="4">Column E</option><option value="5" selected>Column F</option><option value="6">Column G</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div id="extraFields" style="display:none;">
+          <div class="row2">
+            <div>
+              <label class="fld"><span data-lang="en">Branch Tab Prefix / Lang</span><span data-lang="zh">分表前缀 / 邮件语言</span></label>
+              <input type="text" id="inpPrefixOrLang" value="Store_" />
+            </div>
+            <div>
+              <label class="fld"><span data-lang="en">IRS Mileage Rate ($/mi)</span><span data-lang="zh">里程补贴费率 ($/英里)</span></label>
+              <input type="number" id="inpMileage" value="0.70" step="0.01" min="0" max="5" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;">
+          <button type="button" class="btn btn-green" id="copyCodeBtn">
+            <span data-lang="en">📋 Copy .GS Script</span>
+            <span data-lang="zh">📋 一键复制 .GS 脚本</span>
+          </button>
+          <button type="button" class="btn btn-sec" id="dlCsvBtn">
+            <span data-lang="en">📊 Download Matching Starter .CSV</span>
+            <span data-lang="zh">📊 下载配套中文/英文 .CSV 表头模板</span>
+          </button>
+        </div>
+        <p id="statusHint" style="margin:10px 0 0;font-size:12px;color:#6ee7b7;min-height:18px;"></p>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div>
+            <strong id="codeTitle" style="font-size:15px;">02_Low_Stock_Inventory_Email_Alert.gs</strong>
+            <div style="font-size:12px;color:var(--muted);">
+              <span data-lang="en">Paste into Google Sheets → Extensions → Apps Script → Save &amp; Run once</span>
+              <span data-lang="zh">打开 Google 表格 → 扩展程序 → Apps Script → 粘贴保存并运行一次授权</span>
+            </div>
+          </div>
+          <span class="pill" id="modeBadge">FREE FULL EXPORT</span>
+        </div>
+        <pre class="codebox" id="codeOutput"></pre>
+      </div>
+    </section>
+
+    <div class="disc">
+      <span data-lang="en"><strong>Disclaimer:</strong> Provided strictly for small-business spreadsheet automation and educational reference only (Not Legal, Tax, Accounting, or Financial Advice). Always test scripts on a duplicate sheet first and consult a qualified CPA regarding IRS Schedule C deductions and mileage rules. CraftLeaf Studio is not affiliated with Google LLC.</span>
+      <span data-lang="zh"><strong>免责声明：</strong>本脚本生成器与配套模板仅供小微商家日常表格提效与记账参考，不构成任何税务、会计、法律或财务建议（Not Legal, Tax, Accounting, or Financial Advice）。正式启用前请先在副本表格测试，报税抵扣请以持牌 CPA 意见为准。</span>
+    </div>
+  </main>
+
+  <script src="../../assets/monetization-config.js"></script>
+  <script src="../../assets/monetization-sdk.js"></script>
+  <script>
+  (function() {
+    var activeWf = "lowstock";
+    var WF_DEFAULTS = {
+      lowstock:   { tab: "Inventory", file: "02_Low_Stock_Inventory_Email_Alert.gs", free: true },
+      aggregator: { tab: "Master_Summary", file: "01_Auto_Master_Tab_Aggregator.gs", free: false },
+      booking:    { tab: "Bookings", file: "03_Booking_Form_Bilingual_Confirmation.gs", free: false },
+      expenses:   { tab: "Expenses", file: "04_Expense_Reimbursement_ScheduleC_Calc.gs", free: false }
+    };
+
+    function isZh() {
+      return document.documentElement.classList.contains("zh");
+    }
+    function escJsSingle(s) {
+      return String(s || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/\r?\n/g, " ");
+    }
+
+    function buildLowStockScript() {
+      var store = escJsSingle(document.getElementById("inpStoreName").value || "My Shop");
+      var tab = escJsSingle(document.getElementById("inpTabName").value || "Inventory");
+      var email = escJsSingle(document.getElementById("inpEmail").value || "owner@example.com");
+      var tz = escJsSingle(document.getElementById("inpTz").value || "America/Los_Angeles");
+      var cSku = parseInt(document.getElementById("colSku").value, 10) || 0;
+      var cItem = parseInt(document.getElementById("colItem").value, 10) || 1;
+      var cQty = parseInt(document.getElementById("colQty").value, 10) || 2;
+      var cTh = parseInt(document.getElementById("colThresh").value, 10) || 3;
+      var cSup = parseInt(document.getElementById("colSupp").value, 10) || 4;
+      var cSt = parseInt(document.getElementById("colStamp").value, 10) || 5;
+      var maxCol = Math.max(cSku, cItem, cQty, cTh, cSup, cSt) + 1;
+
+      return [
+        "/**",
+        " * @OnlyCurrentDoc",
+        " * Generated by CraftLeaf Studio — Small-Business Google Sheets Automation Studio",
+        " * Workflow #02: Idempotent Low-Stock Inventory Email Alert (Zero Duplicate Hourly Spam)",
+        " */",
+        "var CONFIG_INVENTORY = {",
+        "  TAB_NAME: '" + tab + "',",
+        "  OWNER_EMAIL: '" + email + "',",
+        "  STORE_NAME: '" + store + "',",
+        "  COL_SKU: " + cSku + ",",
+        "  COL_ITEM: " + cItem + ",",
+        "  COL_QTY: " + cQty + ",",
+        "  COL_THRESHOLD: " + cTh + ",",
+        "  COL_SUPPLIER: " + cSup + ",",
+        "  COL_LAST_ALERTED: " + cSt + ",",
+        "  TOTAL_COLS: " + maxCol + ",",
+        "  TIMEZONE: '" + tz + "'",
+        "};",
+        "",
+        "function checkLowStockAndAlert() {",
+        "  var lock = LockService.getDocumentLock();",
+        "  if (!lock.tryLock(10000)) return;",
+        "  try {",
+        "    var ss = SpreadsheetApp.getActiveSpreadsheet();",
+        "    var sh = ss.getSheetByName(CONFIG_INVENTORY.TAB_NAME);",
+        "    if (!sh || sh.getLastRow() < 2) return;",
+        "    var todayIso = Utilities.formatDate(new Date(), CONFIG_INVENTORY.TIMEZONE, 'yyyy-MM-dd');",
+        "    var range = sh.getRange(2, 1, sh.getLastRow() - 1, CONFIG_INVENTORY.TOTAL_COLS);",
+        "    var data = range.getValues();",
+        "    var low = [], stampRows = [];",
+        "    for (var i = 0; i < data.length; i++) {",
+        "      var r = data[i];",
+        "      var item = String(r[CONFIG_INVENTORY.COL_ITEM] || '').trim();",
+        "      if (!item) continue;",
+        "      var qty = Number(r[CONFIG_INVENTORY.COL_QTY]);",
+        "      var th = Number(r[CONFIG_INVENTORY.COL_THRESHOLD]);",
+        "      var last = String(r[CONFIG_INVENTORY.COL_LAST_ALERTED] || '').trim();",
+        "      if (!isNaN(qty) && !isNaN(th) && qty <= th && last !== todayIso) {",
+        "        low.push('[' + (r[CONFIG_INVENTORY.COL_SKU] || ('Row ' + (i + 2))) + '] ' + item + ' — Qty: ' + qty + ' (Reorder <= ' + th + ') | Supplier: ' + (r[CONFIG_INVENTORY.COL_SUPPLIER] || '-'));",
+        "        stampRows.push(i);",
+        "      }",
+        "    }",
+        "    if (!low.length || MailApp.getRemainingDailyQuota() < 1) return;",
+        "    MailApp.sendEmail({",
+        "      to: CONFIG_INVENTORY.OWNER_EMAIL,",
+        "      subject: '⚠️ [' + CONFIG_INVENTORY.STORE_NAME + '] ' + low.length + ' SKU(s) Low Stock (' + todayIso + ')',",
+        "      body: low.join('\\n') + '\\n\\nSheet: ' + ss.getUrl()",
+        "    });",
+        "    for (var k = 0; k < stampRows.length; k++) {",
+        "      data[stampRows[k]][CONFIG_INVENTORY.COL_LAST_ALERTED] = todayIso;",
+        "    }",
+        "    range.setValues(data);",
+        "  } finally {",
+        "    lock.releaseLock();",
+        "  }",
+        "}",
+        "",
+        "function installLowStockMorningTrigger() {",
+        "  ScriptApp.getProjectTriggers().forEach(function(t) {",
+        "    if (t.getHandlerFunction() === 'checkLowStockAndAlert') ScriptApp.deleteTrigger(t);",
+        "  });",
+        "  ScriptApp.newTrigger('checkLowStockAndAlert').timeBased().everyDays(1).atHour(8).create();",
+        "}"
+      ].join("\n");
+    }
+
+    function buildPackPreviewScript(wf) {
+      var store = escJsSingle(document.getElementById("inpStoreName").value || "My Shop");
+      var tab = escJsSingle(document.getElementById("inpTabName").value || "Master_Summary");
+      var email = escJsSingle(document.getElementById("inpEmail").value || "owner@example.com");
+      var tz = escJsSingle(document.getElementById("inpTz").value || "America/Los_Angeles");
+      var pref = escJsSingle(document.getElementById("inpPrefixOrLang").value || "Store_");
+      var rate = parseFloat(document.getElementById("inpMileage").value) || 0.70;
+
+      if (wf === "aggregator") {
+        return [
+          "/** @OnlyCurrentDoc — Workflow #01 Preview (Full Ready-to-Run Module in 4-Workflow Pack) */",
+          "var CONFIG_AGGREGATOR = {",
+          "  MASTER_TAB_NAME: '" + tab + "',",
+          "  SOURCE_PREFIX:   '" + pref + "',",
+          "  HEADER_ROWS:     1,",
+          "  DATA_COLUMNS:    6,",
+          "  TIMEZONE:        '" + tz + "'",
+          "};",
+          "",
+          "// Included in full pack (01_Auto_Master_Tab_Aggregator.gs):",
+          "//  • onOpen() custom menu ('⚡ CraftLeaf Sheet Sync')",
+          "//  • LockService.getDocumentLock() concurrency guard",
+          "//  • Automatic 'Source_Tab' origin column + blank-row filtering",
+          "//  • installDailySyncTrigger() 6:00 AM daily refresh"
+        ].join("\n");
+      }
+      if (wf === "booking") {
+        return [
+          "/** @OnlyCurrentDoc — Workflow #03 Preview (Full Ready-to-Run Module in 4-Workflow Pack) */",
+          "var CONFIG_BOOKING = {",
+          "  TAB_NAME:       '" + tab + "',",
+          "  BUSINESS_NAME:  '" + store + "',",
+          "  REPLY_TO_EMAIL: '" + email + "',",
+          "  LANGUAGE_MODE:  'BILINGUAL', // EN + 中文 confirmation template",
+          "  TIMEZONE:       '" + tz + "'",
+          "};",
+          "",
+          "// Included in full pack (03_Booking_Form_Bilingual_Confirmation.gs):",
+          "//  • Live onFormSubmit(e) + manual sendPendingBookingConfirmations() batch sender",
+          "//  • Crash-proof email syntax validator ('INVALID_EMAIL' flag without halting queue)",
+          "//  • MailApp.getRemainingDailyQuota() check + idempotent 'SENT yyyy-MM-dd HH:mm' stamp"
+        ].join("\n");
+      }
+      return [
+        "/** @OnlyCurrentDoc — Workflow #04 Preview (Full Ready-to-Run Module in 4-Workflow Pack) */",
+        "var CONFIG_EXPENSES = {",
+        "  EXPENSES_TAB:              '" + tab + "',",
+        "  SUMMARY_TAB:               'Tax_Category_Summary',",
+        "  MILEAGE_RATE_USD:          " + rate.toFixed(2) + ",",
+        "  RECEIPT_REQUIRED_OVER_USD: 75.00",
+        "};",
+        "",
+        "// Included in full pack (04_Expense_Reimbursement_ScheduleC_Calc.gs):",
+        "//  • Per-row Net_Reimbursable_USD = Subtotal + Tax + (Miles * $" + rate.toFixed(2) + ")",
+        "//  • Automatic MISSING_RECEIPT_OVER_75 audit flag on Column K",
+        "//  • Auto-generated IRS Schedule C Category Pivot (Approved vs Pending USD)"
+      ].join("\n");
+    }
+
+    function renderCode() {
+      var meta = WF_DEFAULTS[activeWf];
+      document.getElementById("codeTitle").textContent = meta.file;
+      var badge = document.getElementById("modeBadge");
+      badge.textContent = meta.free
+        ? (isZh() ? "免费完整导出" : "FREE FULL EXPORT")
+        : (isZh() ? "配置预览 · 含于全套包" : "CONFIG PREVIEW · IN 4-PACK");
+      document.getElementById("lowstockFields").style.display = meta.free ? "block" : "none";
+      document.getElementById("extraFields").style.display = meta.free ? "none" : "block";
+      document.getElementById("codeOutput").textContent = meta.free
+        ? buildLowStockScript()
+        : buildPackPreviewScript(activeWf);
+    }
+
+    function setLang(lang) {
+      if (lang === "zh") {
+        document.documentElement.classList.add("zh");
+        document.documentElement.setAttribute("lang", "zh-CN");
+      } else {
+        document.documentElement.classList.remove("zh");
+        document.documentElement.setAttribute("lang", "en");
+      }
+      try { localStorage.setItem("craftleaf_lang", lang); } catch (e) {}
+      renderCode();
+    }
+
+    function selectWorkflow(wf) {
+      activeWf = wf;
+      var keys = ["lowstock", "aggregator", "booking", "expenses"];
+      for (var i = 0; i < keys.length; i++) {
+        var btn = document.getElementById("tabBtn_" + keys[i]);
+        if (keys[i] === wf) btn.classList.add("active");
+        else btn.classList.remove("active");
+      }
+      document.getElementById("inpTabName").value = WF_DEFAULTS[wf].tab;
+      if (wf === "aggregator") document.getElementById("inpPrefixOrLang").value = "Store_";
+      if (wf === "booking") document.getElementById("inpPrefixOrLang").value = "BILINGUAL";
+      document.getElementById("statusHint").textContent = "";
+      renderCode();
+    }
+
+    function copyCurrentCode() {
+      var txt = document.getElementById("codeOutput").textContent || "";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt);
+      }
+      document.getElementById("statusHint").textContent = isZh()
+        ? "✅ 已复制到剪贴板！打开 Google Sheets → 扩展程序 → Apps Script 粘贴即可。"
+        : "✅ Copied! Open Google Sheets → Extensions → Apps Script and paste.";
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.showValueMomentPrompt === "function") {
+        window.CraftLeafSDK.showValueMomentPrompt({
+          productKey: "freelancerOsKit",
+          lang: isZh() ? "zh" : "en",
+          messageEn: "Copied Apps Script! Want all 4 small-biz modules + 8 CSV sheets & OAuth PDF?",
+          messageZh: "脚本已复制！如果帮您省下了外包费用，欢迎微信赞赏支持独立开发。"
+        });
+      }
+    }
+
+    function downloadStarterCsv() {
+      var zh = isZh();
+      var csvMap = {
+        lowstock: zh
+          ? "\uFEFF商品编码_SKU,物料名称_Item,当前库存_Qty,安全补货线_Threshold,供应商邮箱_Supplier,最近预警日期_LastAlerted\r\nTEA-01,高山乌龙茶叶(5磅),3,5,supplier@example.com,\r\nCUP-16,16oz定制冷饮杯(1000只),2,3,packaging@example.com,\r\n"
+          : "\uFEFFSKU,Item_Name,Current_Qty,Reorder_Threshold,Supplier_Contact,Last_Alerted_Date\r\nTEA-01,Roasted Oolong Tea (5lb),3,5,supplier@example.com,\r\nCUP-16,16oz Cold Cups (1000ct),2,3,packaging@example.com,\r\n",
+        aggregator: "\uFEFFDate,Order_ID,Category,Item,Qty,Net_Sales_USD\r\n2027-01-05,BEL-1001,Beverages,Oolong Milk Tea,4,26.00\r\n",
+        booking: "\uFEFFTimestamp,Customer_Name,Customer_Email,Service_or_Order,Booking_Date_Time,Customer_Notes,Confirmation_Status\r\n2027-01-10 14:20,Emily Zhang,emily@example.com,10-Box Catering,2027-01-14 11:45 AM,No peanuts,\r\n",
+        expenses: "\uFEFFDate,Staff_Name,Vendor,Schedule_C_Category,Subtotal_USD,Sales_Tax_USD,Business_Miles,Receipt_Link,Approval_Status,Net_Reimbursable_USD,Audit_Flag\r\n2027-01-08,Alex Lin,Restaurant Depot,Supplies (Line 22),148.00,15.10,14,https://drive.google.com/file/d/sample,Approved,,\r\n"
+      };
+      var blob = new Blob([csvMap[activeWf]], { type: "text/csv;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "CraftLeaf_" + WF_DEFAULTS[activeWf].tab + "_Starter.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      document.getElementById("statusHint").textContent = zh
+        ? "✅ 已下载 UTF-8 防乱码 CSV 模板！可在 Google Sheets 文件 → 导入 中直接使用。"
+        : "✅ Starter CSV downloaded! Import via Google Sheets → File → Import.";
+    }
+
+    ["tabBtn_lowstock", "tabBtn_aggregator", "tabBtn_booking", "tabBtn_expenses"].forEach(function(id) {
+      var b = document.getElementById(id);
+      b.addEventListener("click", function() {
+        selectWorkflow(b.getAttribute("data-wf"));
+      });
+    });
+    ["inpStoreName", "inpTabName", "inpEmail", "inpTz", "colSku", "colItem", "colQty", "colThresh", "colSupp", "colStamp", "inpPrefixOrLang", "inpMileage"].forEach(function(id) {
+      var el = document.getElementById(id);
+      el.addEventListener("input", renderCode);
+      el.addEventListener("change", renderCode);
+    });
+    document.getElementById("copyCodeBtn").addEventListener("click", copyCurrentCode);
+    document.getElementById("dlCsvBtn").addEventListener("click", downloadStarterCsv);
+    document.getElementById("langToggleBtn").addEventListener("click", function() {
+      setLang(isZh() ? "en" : "zh");
+    });
+
+    var params = new URLSearchParams(window.location.search || "");
+    var initLang = params.get("lang");
+    if (!initLang) {
+      try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
+    }
+    setLang(initLang === "zh" ? "zh" : "en");
+  })();
+  </script>
+</body>
+</html>

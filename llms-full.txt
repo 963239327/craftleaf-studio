@@ -18,6 +18,7 @@
 - [US Credit Card Statement Closing Date vs. Due Date & <9% FICO Simulator](https://963239327.github.io/craftleaf-studio/tools/us-life/credit-score-simulator/): Calculates exact pre-statement payment day & amount for newcomers starting from $500 secured cards.
 - [2026 US Black Friday 4-Layer Cashback & Sales Tax Stacking Calculator](https://963239327.github.io/craftleaf-studio/tools/us-life/black-friday-calculator/): Separates pre-tax Rakuten cashback base from post-tax Amex/Chase Offer thresholds.
 - [2027 US Holiday E-Commerce & Amazon FBA Reverse Lead-Time Calendar Calculator](https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/): Date-verified 22 US shopping peaks for 2027 with live Ocean FBA (T-90d), Fast-Boat/Air (T-42d), Vine/PPC warmup & deal-lock deadlines.
+- [Small-Business Google Sheets + Apps Script Automation Studio](https://963239327.github.io/craftleaf-studio/tools/sheets-automation/): Interactive @OnlyCurrentDoc Apps Script generator for daily low-stock inventory email digests, multi-tab branch sales sync, bilingual Google Forms booking confirmations, and IRS Schedule C expense reimbursement pivots.
 - [Self-Serve Bilingual Restaurant Menu (FDA Big-9) & Fair-Housing Landlord Flyer Vector PDF Studios](https://963239327.github.io/craftleaf-studio/services/): 100% local in-browser 300 DPI commercial print studios.
 
 ## Official Open-Source Developer & Browser Extensions (MIT)
@@ -37,6 +38,7 @@
 - [CardSheet & Flashcard Print Layout Studio — A4 & US Letter Duplex Card Sheet Maker](https://963239327.github.io/craftleaf-studio/cardsheet/): 100% private browser studio to lay out Poker playing cards (63.5x88.9mm), vocabulary flashcards, business cards, stickers, 3D paper standees & tuckboxes onto A4 and US Letter PDF/PNG sheets with shared straight-cut guillotine marks and millimeter duplex offset calibration.
 - [Star Chef Showdown (星厨对决) — Play Free vs. Sous-Chef AI | Bistro Tabletop Game](https://963239327.github.io/craftleaf-studio/play/): Play Star Chef Showdown (星厨对决) instantly in your browser! 8-Seat Bistro Rondel × Multi-Use Cards × Blackjack-Style 21° Wok Push-Your-Luck. Solo vs. Smart AI or 2P Local + Printable PnP Trilogy!
 - [2027 US Holiday E-Commerce & Amazon FBA Lead-Time Calendar Calculator | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/tools/holiday-marketing-calendar/): Free interactive 2027 US retail & cross-border seller holiday marketing calendar. Calculate exact Ocean FBA (T-90d), Fast-Boat/Air (T-42d), Vine/PPC warmup, and 30-day deal-lock dates across all 22 verified 2027 US shopping peaks.
+- [Small-Business Google Sheets + Apps Script Generator (Low-Stock Alert, Tab Sync & Form Emailer) | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/tools/sheets-automation/): Free client-side Google Sheets Apps Script generator for small businesses. Customize @OnlyCurrentDoc low-stock inventory email alerts, multi-tab sales sync, bilingual Google Forms booking confirmations, and IRS Schedule C expense calculators.
 - [北美餐馆双语菜单 FDA 过敏原生成器 & 房东双语合规招租海报自助工坊 | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/services/): 100% 浏览器纯本地即改即打、零等待零隐私上传：自助生成印刷级 300 DPI 北美中餐馆地道美式英文菜单（含 FDA 9大过敏原图标）与公平住房法合规双语招租海报 PDF。
 - [PasteShield — Reversible AI Prompt & Clipboard Secret Sanitizer for VS Code & Cursor](https://963239327.github.io/craftleaf-studio/extensions/pasteshield/): 100% offline reversible secret sanitizer for VS Code & Cursor. Redact API keys, JWTs, DB URIs, Azure/AWS credentials & internal IPs into <OPENAI_KEY_1> placeholders before prompting ChatGPT or Claude, and restore AI code replies in 1 click.
 - [CleanPrint & AI-Chat to PDF Studio — Edge & Firefox Extension | CraftLeaf Studio](https://963239327.github.io/craftleaf-studio/extensions/cleanprint/): Purify web articles & AI chats (ChatGPT, Claude, Copilot, GitHub) into crisp, ink-saving vector PDFs. 100% local Manifest V3 extension for Microsoft Edge & Firefox.
@@ -179,7 +181,7 @@
 - `pnpTrilogyBundle` ($7.99): https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy
 - `pnpPokerQuartet` ($8.99): https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy?option=IcGCvNC7LFH_0moT4RUlkQ==
 - `pnpCompleteAnthology` ($13.99): https://stardustdemo.gumroad.com/l/pocket-tabletop-trilogy?option=qiH0_D58nuVgnd4SC3q3lQ==
-- `freelancerOsKit` ($9.99): https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro
+- `freelancerOsKit` ($9.99): https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=j9mmgh1FJABtqx9OMvv6dw==
 - `tabletopCreatorKit` ($12.99): https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit
 - `citizenshipPrep2025` ($7.00): https://stardustdemo.gumroad.com/l/us-citizenship-test-2025-chinese-prep
 - `bilingualAiPrompts` ($6.00): https://stardustdemo.gumroad.com/l/ai-prompt-pack-bilingual
