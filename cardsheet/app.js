@@ -818,8 +818,23 @@
     // Update PnP Cross-sell pricing & URLs from CRAFTLEAF_MONETIZATION
     var cfg = (window.CraftLeafSDK && CraftLeafSDK.getConfig()) || {};
     var pnp = (cfg.products && cfg.products.pnpTrilogyBundle) || {};
+    var creatorKit = (cfg.products && cfg.products.tabletopCreatorKit) || {};
     var proCfg = (cfg.products && cfg.products[PRODUCT_ID]) || {};
     var allCfg = (cfg.products && cfg.products.allAccessPass) || {};
+
+    // #70 & #41/#42/#46: Show English 3-card preflight worked example & $12.99 Creator Kit CTA strictly in EN mode
+    if ($('preflightWorkedSection')) {
+      $('preflightWorkedSection').style.display = state.lang === 'zh' ? 'none' : '';
+    }
+    if ($('creatorKitPreflightLink')) {
+      var kitUrl = state.lang === 'zh' ? '' : String(creatorKit.gumroadUrl || creatorKit.itchUrl || '').trim();
+      if (kitUrl) {
+        $('creatorKitPreflightLink').href = kitUrl;
+        $('creatorKitPreflightLink').style.display = '';
+      } else {
+        $('creatorKitPreflightLink').style.display = 'none';
+      }
+    }
 
     if ($('pnpBundleLink')) {
       var pnpHref = state.lang === 'zh'
@@ -1182,6 +1197,23 @@
       updateImageCounters();
       renderAll();
     });
+
+    // #70: Interactive 1/8" (37.5px) printer drift toggle on the 3-card worked preflight example
+    if ($('togglePreflightDriftBtn')) {
+      var pfDriftOn = false;
+      $('togglePreflightDriftBtn').addEventListener('click', function () {
+        pfDriftOn = !pfDriftOn;
+        var cutOffset = pfDriftOn ? '75' : '37.5';
+        var rects = document.querySelectorAll('.pf-cut-rect');
+        for (var r = 0; r < rects.length; r++) {
+          rects[r].setAttribute('x', cutOffset);
+          rects[r].setAttribute('y', cutOffset);
+        }
+        $('togglePreflightDriftBtn').textContent = pfDriftOn
+          ? '⇄ Simulate 1/8" Blade Drift: +37.5 px ON'
+          : '⇄ Simulate 1/8" Blade Drift: OFF';
+      });
+    }
 
     // Workspace Mode Tabs
     $('tabCardsBtn').addEventListener('click', function () {

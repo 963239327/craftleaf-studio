@@ -385,6 +385,108 @@
         <!-- Populated dynamically via CraftLeafSDK.renderAffiliateBar(el, 'print-craft', lang) -->
         <div id="affiliateSupplyMount"></div>
 
+        <!-- Pre-Upload Poker Deck Print Preflight (825×1125 PNG) — 3-Card Worked Example (#70, EN Page) -->
+        <div id="preflightWorkedSection" class="preflight-showcase">
+          <div class="preflight-head">
+            <div>
+              <span class="pnp-badge" style="background:#dbeafe;color:#1d4ed8;">🔍 MOVING FROM HOME-PRINT SHEETS TO PRINT-ON-DEMAND?</span>
+              <h3 class="pnp-cross-title">Pre-Upload Poker Deck Print Preflight (825 × 1125 px PNG) — 3-Card Worked Example</h3>
+              <p class="pnp-cross-desc">
+                A 9-up home sheet can look fine even when one source PNG is exported at trim size without bleed or a card title sits too close to the blade.
+                Inside our <strong>$12.99 Tabletop PnP Creator Kit</strong>, <code>Poker_Deck_Print_Preflight_Checker.html</code> inspects an entire folder locally in browser RAM (zero art upload, zero OCR) for <a href="https://www.thegamecrafter.com/make/products/PokerDeck" target="_blank" rel="noopener">The Game Crafter's Poker Deck</a> (<code>825 × 1125 px</code> @ 300 DPI) and exports a deck-wide list of filenames to fix:
+              </p>
+            </div>
+            <button type="button" id="togglePreflightDriftBtn" class="btn" style="white-space:nowrap;font-size:12px;">⇄ Simulate 1/8" Blade Drift: OFF</button>
+          </div>
+
+          <div class="preflight-3grid">
+            <!-- Example Card 1: Correct 825x1125 Full-Bleed Export -->
+            <div class="pf-card pf-ok">
+              <div class="pf-card-top">
+                <code>01_sunspire_beacon_ok.png</code>
+                <span class="pf-pill pf-pill-ok">PASS · 825×1125</span>
+              </div>
+              <svg class="pf-svg" viewBox="0 0 825 1125" aria-label="Correct 825 by 1125 pixel full-bleed Poker card">
+                <rect x="0" y="0" width="825" height="1125" fill="#111827" />
+                <rect x="96" y="92" width="633" height="941" rx="24" fill="#1e293b" stroke="#f59e0b" stroke-width="6" />
+                <circle cx="138" cy="136" r="28" fill="#f59e0b" />
+                <text x="138" y="148" text-anchor="middle" fill="#0f172a" font-size="34" font-weight="800">3</text>
+                <text x="182" y="148" fill="#f8fafc" font-size="38" font-weight="800">SUNSPIRE BEACON</text>
+                <rect x="128" y="205" width="569" height="420" rx="16" fill="#0f172a" stroke="#f59e0b" stroke-width="4" />
+                <circle cx="412.5" cy="415" r="92" fill="none" stroke="#f59e0b" stroke-width="6" />
+                <polygon points="412.5,315 442,385 512.5,415 442,445 412.5,515 383,445 312.5,415 383,385" fill="#f59e0b" />
+                <text x="132" y="695" fill="#fbbf24" font-size="28" font-weight="800">RELIC · FULL BLEED OK</text>
+                <text x="132" y="758" fill="#e2e8f0" font-size="26">100% opaque 38 px bleed;</text>
+                <text x="132" y="798" fill="#e2e8f0" font-size="26">title safely inside 75 px</text>
+                <text x="132" y="838" fill="#e2e8f0" font-size="26">blue dotted Safe Zone.</text>
+                <rect class="pf-cut-rect" x="37.5" y="37.5" width="750" height="1050" rx="37.5" fill="none" stroke="#ef4444" stroke-width="7" />
+                <rect x="75" y="75" width="675" height="975" rx="18" fill="none" stroke="#38bdf8" stroke-width="6" stroke-dasharray="18 12" />
+              </svg>
+              <p class="pf-caption"><strong>1. Correct Card:</strong> Exact <code>825×1125 px</code> with opaque outer bleed and title well inside the <code>75 px</code> Safe Zone — stays clean even under <code>1/8"</code> cut drift.</p>
+            </div>
+
+            <!-- Example Card 2: Wrong-Size 750x1050 Trim-Only Export -->
+            <div class="pf-card pf-err">
+              <div class="pf-card-top">
+                <code>02_iron_bastion_750x1050.png</code>
+                <span class="pf-pill pf-pill-err">ERROR · WRONG SIZE</span>
+              </div>
+              <svg class="pf-svg" viewBox="0 0 825 1125" aria-label="Wrong 750 by 1050 pixel card missing bleed">
+                <defs>
+                  <pattern id="pfMissingBleedHatch" width="28" height="28" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+                    <rect width="28" height="28" fill="#450a0a" />
+                    <line x1="0" y1="0" x2="0" y2="28" stroke="#f43f5e" stroke-width="10" />
+                  </pattern>
+                </defs>
+                <rect x="0" y="0" width="825" height="1125" fill="url(#pfMissingBleedHatch)" />
+                <rect x="37.5" y="37.5" width="750" height="1050" fill="#1e1b4b" />
+                <rect x="96" y="92" width="633" height="941" rx="24" fill="#312e81" stroke="#60a5fa" stroke-width="6" />
+                <text x="132" y="148" fill="#f8fafc" font-size="38" font-weight="800">IRON BASTION</text>
+                <rect x="115" y="455" width="595" height="150" rx="16" fill="#9f1239" />
+                <text x="412.5" y="520" text-anchor="middle" fill="#ffffff" font-size="34" font-weight="800">750 × 1050 px EXPORT</text>
+                <text x="412.5" y="568" text-anchor="middle" fill="#ffe4e6" font-size="26" font-weight="700">Missing 1/8" (37.5 px) Bleed!</text>
+                <rect x="37.5" y="37.5" width="750" height="1050" rx="37.5" fill="none" stroke="#ef4444" stroke-width="7" />
+                <rect x="75" y="75" width="675" height="975" rx="18" fill="none" stroke="#38bdf8" stroke-width="6" stroke-dasharray="18 12" />
+              </svg>
+              <p class="pf-caption"><strong>2. Wrong-Size Export (Automated Error):</strong> Exported at <code>2.5"×3.5"</code> trim size without bleed (or transparent outer corners, flagged as <strong>Warning</strong>).</p>
+            </div>
+
+            <!-- Example Card 3: Near-Cut Title Outside 75px Safe Zone -->
+            <div class="pf-card pf-flag">
+              <div class="pf-card-top">
+                <code>03_rift_chronicle_near_cut.png</code>
+                <span class="pf-pill pf-pill-flag">NEAR-CUT TITLE</span>
+              </div>
+              <svg class="pf-svg" viewBox="0 0 825 1125" aria-label="825 by 1125 pixel card with title outside safe zone near cut line">
+                <rect x="0" y="0" width="825" height="1125" fill="#271122" />
+                <rect x="96" y="92" width="633" height="941" rx="24" fill="#4a1d3a" stroke="#fb7185" stroke-width="6" />
+                <circle cx="138" cy="58" r="24" fill="#fb7185" />
+                <text x="138" y="69" text-anchor="middle" fill="#0f172a" font-size="30" font-weight="800">2</text>
+                <text x="176" y="70" fill="#ffffff" font-size="38" font-weight="800">RIFT CHRONICLE</text>
+                <rect x="128" y="205" width="569" height="420" rx="16" fill="#0f172a" stroke="#fb7185" stroke-width="4" />
+                <polygon points="412.5,315 442,385 512.5,415 442,445 412.5,515 383,445 312.5,415 383,385" fill="#fb7185" />
+                <text x="132" y="695" fill="#fda4af" font-size="28" font-weight="800">TITLE AT Y=42 PX (DANGER)</text>
+                <text x="132" y="758" fill="#e2e8f0" font-size="26">Passes 825×1125 size, but</text>
+                <text x="132" y="798" fill="#e2e8f0" font-size="26">title sits outside 75 px Safe</text>
+                <text x="132" y="838" fill="#e2e8f0" font-size="26">Zone — toggle Drift above!</text>
+                <rect class="pf-cut-rect" x="37.5" y="37.5" width="750" height="1050" rx="37.5" fill="none" stroke="#ef4444" stroke-width="7" />
+                <rect x="75" y="75" width="675" height="975" rx="18" fill="none" stroke="#38bdf8" stroke-width="6" stroke-dasharray="18 12" />
+              </svg>
+              <p class="pf-caption"><strong>3. Near-Cut Title (Visual Guide Catch):</strong> Valid <code>825×1125 px</code> dimensions, but you spot the high title against the blue Safe Zone &amp; add it to your fix list.</p>
+            </div>
+          </div>
+
+          <div class="preflight-foot">
+            <span class="preflight-note">
+              <strong>Human judgment stays in the loop:</strong> Wrong dimensions are <strong>Errors</strong> and transparent outer bleed edges are <strong>Warnings</strong>; the designer (not OCR) judges near-cut text and still completes The Game Crafter's required per-card proof after upload.
+            </span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="../previews/poker_deck_preflight_sample_preview.pdf" target="_blank" rel="noopener" class="btn">👁️ Free 1-Page Visual Guide PDF</a>
+              <a id="creatorKitPreflightLink" data-buy-event="cardsheet-creator-kit-preflight" href="https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit" target="_blank" rel="noopener" class="btn btn-primary">🛠️ Get Full Deck Checker in Creator Kit ($12.99)</a>
+            </div>
+          </div>
+        </div>
+
         <!-- Original 2-Player Print & Play Board Games Cross-Sell Showcase -->
         <div class="pnp-cross-sell">
           <div class="pnp-cross-info">
