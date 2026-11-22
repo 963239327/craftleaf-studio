@@ -13,6 +13,7 @@
       appTitle: 'CardSheet & Flashcard Studio',
       appSub: '100% Local Browser Card Layout · Guillotine Crop Marks · Duplex Calibration',
       tabCards: 'Card & Flashcard Sheets',
+      tabDelta: 'Playtest Deck Delta',
       tab3d: '3D Standees & Tuckbox',
       portalLink: '← All Studio Tools',
       unlockBtn: '🔓 Unlock Pro ($9)',
@@ -79,6 +80,13 @@
       btnResetOffset: 'Zero (0.0 mm)',
       duplexTip: '💡 Hold a test print against a window: if the back shifts left by 1.2mm, set +1.2mm X above for sub-millimeter alignment!',
       sec3dMode: '3D Tabletop Paper Craft Generator',
+      secDelta: 'Playtest Revision Delta (Pull List + Duplex Replacements)',
+      deltaIntro: 'Compare Last Printed vs. Next revision locally by stable card ID, front/back PNGs, and copy counts — pull stale backs or extra copies and print ONLY what changed.',
+      btnDeltaSample: '🧪 Lantern & Map Demo',
+      btnDeltaAmbig: '⚠️ Test Ambiguous IDs',
+      lblDeltaLast: 'Last Printed Manifest (id,name,front,back,copies):',
+      lblDeltaNext: 'Next Revision Manifest (id,name,front,back,copies):',
+      btnDownloadPullTxt: '📋 Download Sleeve Pull List (.txt)',
       subStandee: '🧍 Folded Paper Standees',
       subTuckbox: '📦 Parametric Deck Tuckbox',
       lblStandeeSize: 'Standee Base & Height Preset',
@@ -107,11 +115,11 @@
       modalTitle: 'Unlock CardSheet Studio Pro — Lifetime License',
       modalSubtitle: 'One-time $9.00 purchase (or Studio All-Access Pass). 100% local privacy, zero subscriptions.',
       modalFeat1: 'Unlimited Multi-Page Batch Deck Export (CSV / TSV / JSON / 54+ card decks auto-paginated)',
-      modalFeat2: 'Duplex Back-Page Mirroring + 0.1mm Printer Offset Calibration (±X / ±Y mm)',
+      modalFeat2: 'Duplex Back-Page Mirroring + 0.1mm Offset Calibration & Playtest Deck Delta Reprinter',
       modalFeat3: '3D Folded A-Frame Paper Standees & Custom Parametric Deck Tuckbox SVG/PDF Export',
       btnBuyPro: 'Buy CardSheet Pro Key ($9.00)',
       btnBuyAllAccess: 'Get Studio All-Access Pass ($19)',
-      lblHaveKey: 'Already have a CARDPRO or STUDIOALL license key?',
+      lblHaveKey: 'Already have a Gumroad License Key?',
       btnActivateKey: 'Activate Pro',
       btnPrintFree1Sheet: 'Or Print Free Single Front Sheet (Page 1 Only)',
       keySuccess: '✅ License verified! All Pro batch, duplex calibration & 3D features are permanently unlocked.',
@@ -122,6 +130,7 @@
       appTitle: 'CardSheet 卡牌与闪卡拼版工坊',
       appSub: '100% 浏览器纯本地排版 · 共线直刀裁切线 · 双面打印毫米级纠偏',
       tabCards: '卡牌 / 单词闪卡拼版',
+      tabDelta: '测试版增量换牌',
       tab3d: '3D 折纸立牌与卡盒刀版',
       portalLink: '← 返回工坊全部工具',
       unlockBtn: '🔓 解锁专业版 (¥29.9)',
@@ -188,6 +197,13 @@
       btnResetOffset: '归零 (0.0 mm)',
       duplexTip: '💡 校准秘诀：先打 1 张测试页对着窗户透光观察，若背面偏左 1.2mm，只需将上方 X 设为 +1.2mm 即可零误差对齐！',
       sec3dMode: '3D 折纸桌游立牌与参数化卡盒生成器',
+      secDelta: '桌游原型版本对比（抽牌清单 + 双面增量补印页）',
+      deltaIntro: '基于稳定卡牌 ID、正背面 PNG 字节指纹与张数对比上一印次与新版——精准列出需从牌套抽出的旧卡并仅排印变更卡面。',
+      btnDeltaSample: '🧪 载入提灯与地图示例',
+      btnDeltaAmbig: '⚠️ 测试重号/缺号拦截',
+      lblDeltaLast: '上一印次清单 (id,name,front,back,copies)：',
+      lblDeltaNext: '新版卡表清单 (id,name,front,back,copies)：',
+      btnDownloadPullTxt: '📋 下载抽牌更换核对单 (.txt)',
       subStandee: '🧍 折叠三角桌游立牌',
       subTuckbox: '📦 参数化卡盒展开刀版',
       lblStandeeSize: '立牌底座与高度规格',
@@ -216,11 +232,11 @@
       modalTitle: '解锁 CardSheet Studio Pro 专业版（一次买断永久可用）',
       modalSubtitle: '仅需 $9.00 / ¥29.9 一次性激活码买断（或工坊全通证），零订阅，100% 本地隐私运行。',
       modalFeat1: '无限页数批量套版导出（支持 CSV / TSV / JSON 与 54+ 张全套桌游卡组自动分页）',
-      modalFeat2: '双面打印自动镜像 + 0.1mm 精度家用打印机进纸偏移校准 (±X / ±Y mm)',
+      modalFeat2: '双面打印自动镜像 + 0.1mm 偏移校准 & 原型测牌增量换牌补印工坊',
       modalFeat3: '3D 折纸桌游立牌（背面自动倒置对齐）与自定义牌厚参数化卡盒 SVG/PDF 刀版导出',
       btnBuyPro: '获取 CardSheet Pro 激活码 ($9 / ¥29.9)',
       btnBuyAllAccess: '获取工坊全产品通证 ($19 / ¥69)',
-      lblHaveKey: '已购买 CARDPRO 或 STUDIOALL 激活码？在此输入立即解锁：',
+      lblHaveKey: '已获取 Gumroad License Key 许可证密钥？在此粘贴立即解锁：',
       btnActivateKey: '立即激活专业版',
       btnPrintFree1Sheet: '先免费打印单页正面（仅导出第 1 页正面）',
       keySuccess: '✅ 激活码校验通过！批量多页、双面毫米校准与 3D 立牌卡盒导出已永久解锁。',
@@ -265,6 +281,11 @@
     tuckThickness: 0.31,
     tuckTitle: 'RELIC DUEL',
     tuckSubtitle: '54 Cards · 63.5×88.9mm PnP Edition',
+    deltaLastText: CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.lastPrintedCsv,
+    deltaNextText: CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.nextCsv,
+    deltaLastImages: {},
+    deltaNextImages: {},
+    deltaStrictFiles: false,
     zoom: 0.72,
     freeSinglePageOverride: false
   };
@@ -380,6 +401,8 @@
     if ($('tuckGsmSelect')) $('tuckGsmSelect').value = String(state.tuckThickness);
     if ($('tuckTitleInput')) $('tuckTitleInput').value = state.tuckTitle;
     if ($('tuckSubInput')) $('tuckSubInput').value = state.tuckSubtitle;
+    if ($('deltaLastTextarea')) $('deltaLastTextarea').value = state.deltaLastText;
+    if ($('deltaNextTextarea')) $('deltaNextTextarea').value = state.deltaNextText;
     if ($('zoomSelect')) $('zoomSelect').value = String(state.zoom);
 
     // Segmented buttons active states
@@ -390,6 +413,7 @@
     setSegActive('inputModeTextBtn', state.inputMode === 'text');
     setSegActive('inputModeImgBtn', state.inputMode === 'image');
     setSegActive('tabCardsBtn', state.workspaceTab === 'cards');
+    setSegActive('tabDeltaBtn', state.workspaceTab === 'delta');
     setSegActive('tab3dBtn', state.workspaceTab === '3d-studio');
     setSegActive('subStandeeBtn', state.sub3dMode === 'standee');
     setSegActive('subTuckboxBtn', state.sub3dMode === 'tuckbox');
@@ -397,6 +421,7 @@
     if ($('textDesignerPane')) $('textDesignerPane').style.display = state.inputMode === 'text' ? 'block' : 'none';
     if ($('imageDropPane')) $('imageDropPane').style.display = state.inputMode === 'image' ? 'block' : 'none';
     if ($('cardsSidebarSections')) $('cardsSidebarSections').style.display = state.workspaceTab === 'cards' ? 'contents' : 'none';
+    if ($('deltaSidebarSection')) $('deltaSidebarSection').style.display = state.workspaceTab === 'delta' ? 'block' : 'none';
     if ($('studio3dSidebarSection')) $('studio3dSidebarSection').style.display = state.workspaceTab === '3d-studio' ? 'block' : 'none';
     if ($('standeeControlsPane')) $('standeeControlsPane').style.display = state.sub3dMode === 'standee' ? 'block' : 'none';
     if ($('tuckboxControlsPane')) $('tuckboxControlsPane').style.display = state.sub3dMode === 'tuckbox' ? 'block' : 'none';
@@ -872,10 +897,206 @@
     }
   }
 
+  function clearDom(el) {
+    while (el && el.firstChild) el.removeChild(el.firstChild);
+  }
+
+  function renderDeltaStage() {
+    var stage = $('sheetStageScroll');
+    if (!stage) return;
+
+    var delta = CardSheetCore.comparePlaytestDecks(state.deltaLastText, state.deltaNextText, {
+      lastImageMap: Object.keys(state.deltaLastImages).length ? state.deltaLastImages : null,
+      nextImageMap: Object.keys(state.deltaNextImages).length ? state.deltaNextImages : null,
+      strictFiles: state.deltaStrictFiles
+    });
+    state._lastDelta = delta;
+
+    var summaryBanner = $('deltaSummaryBanner');
+    var errBox = $('deltaErrorBox');
+    var pullBox = $('deltaPullListBox');
+    clearDom(summaryBanner);
+    clearDom(errBox);
+    clearDom(pullBox);
+
+    if (delta.status !== 'READY') {
+      if (summaryBanner) {
+        var bSpan = document.createElement('span');
+        bSpan.textContent = state.lang === 'zh'
+          ? ('⚠️ 发现 ' + delta.errors.length + ' 处卡牌 ID 缺失或冲突（拒绝猜测匹配）')
+          : ('⚠️ ' + delta.errors.length + ' Ambiguous / Missing Card ID Error(s) — Comparison Paused');
+        summaryBanner.appendChild(bSpan);
+      }
+      if (errBox) {
+        errBox.style.display = 'block';
+        delta.errors.forEach(function (er) {
+          var p = document.createElement('div');
+          p.style.marginBottom = '4px';
+          p.textContent = '• ' + er.message;
+          errBox.appendChild(p);
+        });
+      }
+      if (pullBox) {
+        var waitNote = document.createElement('div');
+        waitNote.style.color = '#64748b';
+        waitNote.textContent = state.lang === 'zh'
+          ? '修复上方缺失或重复的卡牌 ID 后，将自动生成物理抽牌清单与双面补印排版。'
+          : 'Fix the duplicate or missing IDs above to unlock the physical pull list & duplex replacement sheet.';
+        pullBox.appendChild(waitNote);
+      }
+      clearDom(stage);
+      var stageErr = document.createElement('div');
+      stageErr.className = 'delta-print-banner';
+      stageErr.style.borderColor = '#f87171';
+      stageErr.textContent = state.lang === 'zh'
+        ? '⚠️ 检测到重复或空白卡牌 ID：为防止抽错实体牌套中的卡牌，系统已暂停生成补印页，请在左侧修正唯一 ID。'
+        : '⚠️ Ambiguous Card IDs Detected: CardSheet refuses to guess which physical cards match when IDs are blank or duplicated. Fix the manifest IDs on the left to generate your replacement sheet.';
+      stage.appendChild(stageErr);
+      state._lastPages = [];
+      return;
+    }
+
+    if (errBox) errBox.style.display = 'none';
+    if (summaryBanner) {
+      var s1 = document.createElement('span');
+      s1.textContent = state.lang === 'zh'
+        ? ('🧤 需从牌套抽出: ' + delta.totalToPull + ' 张 · 保留不动: ' + delta.totalKeepInSleeves + ' 张')
+        : ('🧤 Pull from sleeves: ' + delta.totalToPull + ' · Keep untouched: ' + delta.totalKeepInSleeves);
+      var s2 = document.createElement('span');
+      s2.textContent = state.lang === 'zh'
+        ? ('🖨️ 仅需双面补印: ' + delta.totalToPrint + ' 张（省去重裁 ' + delta.copiesSavedVsFullReprint + ' 张！）')
+        : ('🖨️ Print ONLY: ' + delta.totalToPrint + ' duplex pair(s) (saves cutting ' + delta.copiesSavedVsFullReprint + '!)');
+      summaryBanner.appendChild(s1);
+      summaryBanner.appendChild(s2);
+    }
+
+    if (pullBox) {
+      var pHead = document.createElement('strong');
+      pHead.textContent = state.lang === 'zh'
+        ? ('第一步 · 从旧版牌套抽出的卡牌 (' + delta.totalToPull + ' 张)：')
+        : ('Step 1 — Physical Cards to Pull from Sleeves (' + delta.totalToPull + '):');
+      pullBox.appendChild(pHead);
+
+      if (!delta.pullList.length) {
+        var nonePull = document.createElement('div');
+        nonePull.style.color = '#059669';
+        nonePull.textContent = state.lang === 'zh' ? '✓ 无需抽出任何旧牌（仅新增或无变动）！' : '✓ Pull 0 cards — all existing sleeved cards stay valid!';
+        pullBox.appendChild(nonePull);
+      } else {
+        delta.pullList.forEach(function (item) {
+          var row = document.createElement('div');
+          row.className = 'delta-pull-item';
+          var top = document.createElement('strong');
+          top.textContent = 'PULL ' + item.pullCount + '× [' + item.displayId + '] ' + item.name;
+          var sub = document.createElement('div');
+          sub.style.color = '#475569';
+          sub.style.fontSize = '11px';
+          sub.textContent = item.detail;
+          row.appendChild(top);
+          row.appendChild(sub);
+          pullBox.appendChild(row);
+        });
+      }
+    }
+
+    // Render Step 2: Mirrored Duplex Replacement Sheet containing ONLY delta.printCards!
+    var grid = CardSheetCore.computeSheetGrid({
+      paperId: state.paperId,
+      orientation: state.orientation,
+      presetId: state.presetId,
+      customWMm: state.customWMm,
+      customHMm: state.customHMm,
+      rotateCards: state.rotateCards,
+      bleedMm: state.bleedMm,
+      gapMm: state.gapMm,
+      safeMarginMm: state.safeMarginMm
+    });
+    updateDynamicPrintPageRule(grid.paperId, grid.orientation);
+    state._lastGrid = grid;
+
+    if (!delta.printCards.length) {
+      clearDom(stage);
+      var zeroPrint = document.createElement('div');
+      zeroPrint.className = 'delta-print-banner';
+      zeroPrint.textContent = state.lang === 'zh'
+        ? ('✅ 零补印需求：完成左侧抽牌 (' + delta.totalToPull + ' 张) 后，牌套内剩余卡牌已 100% 匹配新版（顺序调整不触发重印）！')
+        : ('✅ Zero Cards to Print: Pull ' + delta.totalToPull + ' card(s) per Step 1 and print NONE — all remaining sleeved cards already match the Next revision!');
+      stage.appendChild(zeroPrint);
+      state._lastPages = [];
+      return;
+    }
+
+    var savedBackStyle = state.backStyle;
+    state.backStyle = 'def';
+    var savedIncludeBacks = state.includeBacks;
+    state.includeBacks = true;
+
+    var pages = CardSheetCore.computePaginatedSheets(delta.printCards, grid, {
+      includeBacks: true,
+      flipEdge: state.flipEdge,
+      pageOrder: state.pageOrder,
+      offsetXMm: state.offsetXMm,
+      offsetYMm: state.offsetYMm
+    });
+    state._lastPages = pages;
+
+    var pxPerMmScreen = 3.779527559;
+    var scaledWrapperH = Math.round(grid.paperHMm * pxPerMmScreen * state.zoom);
+    var scaledWrapperW = Math.round(grid.paperWMm * pxPerMmScreen * state.zoom);
+    var proUnlocked = isProUnlocked();
+
+    var html = [];
+    html.push(
+      '<div class="delta-print-banner no-print">' +
+        '<strong>' + (state.lang === 'zh' ? '第二步 · 双面镜像增量补印排版：' : 'Step 2 — Duplex Replacement & Addition Sheet:') + '</strong> ' +
+        (state.lang === 'zh'
+          ? ('共排入 <strong>' + delta.totalToPrint + ' 张</strong>变更/新增正反配对卡（已自动跳过 ' + delta.copiesSavedVsFullReprint + ' 张未变卡牌；背面即使单独改动也会整对重印）。')
+          : ('Contains ONLY <strong>' + delta.totalToPrint + ' matched front/back replacement &amp; addition pair(s)</strong> (skipping ' + delta.copiesSavedVsFullReprint + ' unchanged sleeved copies; back-only changes automatically reprint matched pairs).')) +
+      '</div>'
+    );
+
+    for (var pIdx = 0; pIdx < pages.length; pIdx++) {
+      var page = pages[pIdx];
+      var sideLabel = page.side === 'front'
+        ? (state.lang === 'zh' ? '增量正面 (Delta Front)' : 'DELTA REPLACEMENTS · FRONT')
+        : (state.lang === 'zh' ? '镜像背面 (Mirrored Delta Back)' : 'MIRRORED DELTA BACK');
+      var lockBadge = !proUnlocked ? ' <span class="pro-pill-mini">PRO EXPORT</span>' : '';
+
+      html.push('<div class="sheet-wrapper" style="min-height:' + (scaledWrapperH + 30) + 'px;min-width:' + scaledWrapperW + 'px;">');
+      html.push(
+        '<div class="sheet-caption">' +
+          '<span>' + (state.lang === 'zh' ? ('补印页 ' + (pIdx + 1) + ' / ' + pages.length) : ('Delta Page ' + (pIdx + 1) + ' of ' + pages.length + ' (Sheet #' + page.sheetNumber + ')')) + '</span>' +
+          '<span class="side-badge ' + page.side + '">' + sideLabel + '</span>' +
+          lockBadge +
+        '</div>'
+      );
+      html.push('<div class="print-sheet" data-page-index="' + pIdx + '" style="width:' + grid.paperWMm + 'mm;height:' + grid.paperHMm + 'mm;transform:scale(' + state.zoom + ');">');
+      for (var s = 0; s < page.slots.length; s++) {
+        var slot = page.slots[s];
+        var rotCss = slot.rotateDeg ? ('transform:rotate(' + slot.rotateDeg + 'deg);') : '';
+        html.push(
+          '<div class="card-cell" style="left:' + slot.cellXMm + 'mm;top:' + slot.cellYMm + 'mm;width:' + grid.cellWMm + 'mm;height:' + grid.cellHMm + 'mm;' + rotCss + '">' +
+            '<div class="card-trim-box" style="left:' + grid.bleedMm + 'mm;top:' + grid.bleedMm + 'mm;width:' + grid.cardWMm + 'mm;height:' + grid.cardHMm + 'mm;">' +
+              buildCardInnerHtml(slot.card, page.side, grid) +
+            '</div>' +
+          '</div>'
+        );
+      }
+      html.push(buildSheetGuidesSvg(page, grid));
+      html.push('</div></div>');
+    }
+
+    stage.innerHTML = html.join('');
+    state.backStyle = savedBackStyle;
+    state.includeBacks = savedIncludeBacks;
+  }
+
   function renderAll() {
     applyI18nToDom();
     if (state.workspaceTab === '3d-studio') {
       render3dStudioStage();
+    } else if (state.workspaceTab === 'delta') {
+      renderDeltaStage();
     } else {
       renderCardSheetsStage();
     }
@@ -883,7 +1104,7 @@
 
   function requiresProForCurrentExport() {
     if (isProUnlocked()) return false;
-    if (state.workspaceTab === '3d-studio') return true;
+    if (state.workspaceTab === '3d-studio' || state.workspaceTab === 'delta') return true;
     var pages = state._lastPages || [];
     if (state.includeBacks) return true;
     if (pages.length > 1) return true;
@@ -909,6 +1130,10 @@
   }
 
   function triggerVectorPrint(forceSingleFrontOnly) {
+    if (state.workspaceTab === 'delta' && state._lastDelta && state._lastDelta.status !== 'READY') {
+      alert(state.lang === 'zh' ? '请先修复左侧卡牌清单中的重复或缺失 ID。' : 'Please fix ambiguous or missing card IDs in the manifest before printing.');
+      return;
+    }
     if (!forceSingleFrontOnly && requiresProForCurrentExport()) {
       openProModal(true);
       return;
@@ -1221,11 +1446,139 @@
       syncFormInputsFromState();
       renderAll();
     });
+    if ($('tabDeltaBtn')) {
+      $('tabDeltaBtn').addEventListener('click', function () {
+        state.workspaceTab = 'delta';
+        syncFormInputsFromState();
+        renderAll();
+      });
+    }
     $('tab3dBtn').addEventListener('click', function () {
       state.workspaceTab = '3d-studio';
       syncFormInputsFromState();
       renderAll();
     });
+
+    function loadDeltaPngMap(fileList, mapKey, noteId) {
+      var files = Array.prototype.slice.call(fileList || []).filter(function (f) {
+        return f && f.name && f.type.indexOf('image/') === 0;
+      });
+      if (!files.length) return;
+      Promise.all(files.map(function (file) {
+        return file.arrayBuffer().then(function (buf) {
+          var fp = CardSheetCore.fingerprintBytesHex(new Uint8Array(buf));
+          return new Promise(function (resolve) {
+            var rd = new FileReader();
+            rd.onload = function (ev) {
+              var im = new Image();
+              im.onload = function () {
+                resolve({ key: file.name.toLowerCase(), name: file.name, fingerprint: fp, dataUrl: ev.target.result, imgEl: im });
+              };
+              im.onerror = function () {
+                resolve({ key: file.name.toLowerCase(), name: file.name, fingerprint: fp, dataUrl: ev.target.result, imgEl: null });
+              };
+              im.src = ev.target.result;
+            };
+            rd.readAsDataURL(file);
+          });
+        });
+      })).then(function (items) {
+        var map = {};
+        items.forEach(function (it) { map[it.key] = it; });
+        state[mapKey] = map;
+        state.deltaStrictFiles = true;
+        if ($(noteId)) $(noteId).textContent = '✓ Hashed ' + items.length + ' local image file(s) in RAM';
+        renderAll();
+      });
+    }
+
+    if ($('deltaLoadSampleBtn')) {
+      $('deltaLoadSampleBtn').addEventListener('click', function () {
+        state.deltaLastText = CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.lastPrintedCsv;
+        state.deltaNextText = CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.nextCsv;
+        state.deltaLastImages = {};
+        state.deltaNextImages = {};
+        state.deltaStrictFiles = false;
+        if ($('deltaLastPngNote')) $('deltaLastPngNote').textContent = '';
+        if ($('deltaNextPngNote')) $('deltaNextPngNote').textContent = '';
+        syncFormInputsFromState();
+        renderAll();
+      });
+    }
+    if ($('deltaTestAmbigBtn')) {
+      $('deltaTestAmbigBtn').addEventListener('click', function () {
+        state.deltaLastText = CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.lastPrintedCsv;
+        state.deltaNextText = CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.ambiguousNextCsv;
+        state.deltaStrictFiles = false;
+        syncFormInputsFromState();
+        renderAll();
+      });
+    }
+    if ($('deltaLastTextarea')) {
+      $('deltaLastTextarea').addEventListener('input', function (e) {
+        state.deltaLastText = e.target.value;
+        renderAll();
+      });
+    }
+    if ($('deltaNextTextarea')) {
+      $('deltaNextTextarea').addEventListener('input', function (e) {
+        state.deltaNextText = e.target.value;
+        renderAll();
+      });
+    }
+    if ($('btnDeltaLastCsv') && $('deltaLastCsvInput')) {
+      $('btnDeltaLastCsv').addEventListener('click', function () { $('deltaLastCsvInput').click(); });
+      $('deltaLastCsvInput').addEventListener('change', function (e) {
+        var f = e.target.files && e.target.files[0];
+        if (!f) return;
+        var rd = new FileReader();
+        rd.onload = function (ev) { state.deltaLastText = String(ev.target.result || ''); syncFormInputsFromState(); renderAll(); };
+        rd.readAsText(f);
+        e.target.value = '';
+      });
+    }
+    if ($('btnDeltaNextCsv') && $('deltaNextCsvInput')) {
+      $('btnDeltaNextCsv').addEventListener('click', function () { $('deltaNextCsvInput').click(); });
+      $('deltaNextCsvInput').addEventListener('change', function (e) {
+        var f = e.target.files && e.target.files[0];
+        if (!f) return;
+        var rd = new FileReader();
+        rd.onload = function (ev) { state.deltaNextText = String(ev.target.result || ''); syncFormInputsFromState(); renderAll(); };
+        rd.readAsText(f);
+        e.target.value = '';
+      });
+    }
+    if ($('btnDeltaLastPng') && $('deltaLastPngInput')) {
+      $('btnDeltaLastPng').addEventListener('click', function () { $('deltaLastPngInput').click(); });
+      $('deltaLastPngInput').addEventListener('change', function (e) { loadDeltaPngMap(e.target.files, 'deltaLastImages', 'deltaLastPngNote'); e.target.value = ''; });
+    }
+    if ($('btnDeltaNextPng') && $('deltaNextPngInput')) {
+      $('btnDeltaNextPng').addEventListener('click', function () { $('deltaNextPngInput').click(); });
+      $('deltaNextPngInput').addEventListener('change', function (e) { loadDeltaPngMap(e.target.files, 'deltaNextImages', 'deltaNextPngNote'); e.target.value = ''; });
+    }
+    if ($('downloadPullListBtn')) {
+      $('downloadPullListBtn').addEventListener('click', function () {
+        if (!state._lastDelta || state._lastDelta.status !== 'READY') {
+          alert(state.lang === 'zh' ? '请先修复重复或缺失的卡牌 ID。' : 'Please fix duplicate or missing card IDs first.');
+          return;
+        }
+        var isSample = (state.deltaLastText === CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.lastPrintedCsv && state.deltaNextText === CardSheetCore.SAMPLE_PLAYTEST_REVISIONS.nextCsv);
+        if (!isSample && !isProUnlocked()) {
+          openProModal(false);
+          return;
+        }
+        var txt = CardSheetCore.exportPullListTxt(state._lastDelta);
+        var blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'playtest-sleeve-pull-list.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 800);
+      });
+    }
     $('subStandeeBtn').addEventListener('click', function () {
       state.sub3dMode = 'standee';
       syncFormInputsFromState();

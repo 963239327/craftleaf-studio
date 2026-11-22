@@ -314,6 +314,7 @@
       'sticker': { presetId: 'square-50', sampleDeck: 'stickers' },
       'square-50': { presetId: 'square-50', sampleDeck: 'stickers' },
       'duplex': { presetId: 'poker', sampleDeck: 'pnp', enableDuplexPreview: true },
+      'delta': { presetId: 'poker', sampleDeck: 'pnp', workspaceTab: 'delta', enableDuplexPreview: true },
       'standee': { presetId: 'poker', sampleDeck: 'dnd', workspaceTab: '3d-studio', sub3dMode: 'standee' },
       'tuckbox': { presetId: 'poker', sampleDeck: 'pnp', workspaceTab: '3d-studio', sub3dMode: 'tuckbox' }
     };
@@ -1114,6 +1115,643 @@
     return svg.join('');
   }
 
+  // =========================================================================
+  // Playtest Deck Revision Comparator & Duplex Delta Reprinter (#72)
+  // Compares Last Printed vs Next deck by stable card ID, front/back PNG/content
+  // fingerprints, and physical copy counts — flagging missing/duplicate IDs.
+  // =========================================================================
+  var CRC32_TABLE = (function () {
+    var tbl = new Array(256);
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) {
+        c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+      }
+      tbl[n] = c >>> 0;
+    }
+    return tbl;
+  })();
+
+  function padHex8(u32) {
+    var h = (u32 >>> 0).toString(16);
+    while (h.length < 8) h = '0' + h;
+    return h;
+  }
+
+  /**
+   * Exact byte-level fingerprint (IEEE CRC32 + Adler32 + byte length) for local PNG/art comparison.
+   */
+  function fingerprintBytesHex(inputBytes) {
+    var bytes = inputBytes instanceof Uint8Array ? inputBytes : new Uint8Array(inputBytes || []);
+    var crc = 0xffffffff;
+    var s1 = 1;
+    var s2 = 0;
+    for (var i = 0; i < bytes.length; i++) {
+      var b = bytes[i] & 0xff;
+      crc = CRC32_TABLE[(crc ^ b) & 0xff] ^ (crc >>> 8);
+      s1 = (s1 + b) % 65521;
+      s2 = (s2 + s1) % 65521;
+    }
+    var crcFinal = (crc ^ 0xffffffff) >>> 0;
+    var adlerFinal = ((s2 << 16) | s1) >>> 0;
+    return padHex8(crcFinal) + '-' + padHex8(adlerFinal) + '-' + bytes.length;
+  }
+
+  function fingerprintStringHex(str) {
+    var s = String(str == null ? '' : str);
+    var utf8 = [];
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      if (c < 0x80) utf8.push(c);
+      else if (c < 0x800) utf8.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
+      else utf8.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+    }
+    return fingerprintBytesHex(new Uint8Array(utf8));
+  }
+
+  function normalizeStableCardId(rawId) {
+    return String(rawId == null ? '' : rawId).trim().toLowerCase();
+  }
+
+  function normalizeAssetLookupKey(fileName) {
+    var base = String(fileName == null ? '' : fileName).trim().replace(/^.*[/\\]/, '');
+    return base.toLowerCase();
+  }
+
+  var SAMPLE_PLAYTEST_REVISIONS = {
+    lastPrintedCsv: [
+      'id,name,front,back,copies,tag,icon',
+      'lantern,Wayfinder Lantern,"Reveal top 2 tiles; place 1.",Tier I Light · Day Back,2,Relic · 1,🏮',
+      'map,Surveyor Map,"Move up to 2 spaces ignoring bog.",Expedition Standard Back,3,Gear · 1,🗺️',
+      'compass,Astral Compass,"orient: Peek 1 hazard deck card.",Expedition Standard Back,2,Tool · 1,🧭',
+      'flare,Sunflare Vial,"Deal 2 DMG to adjacent shade.",Alchemical Standard Back,1,Consumable · 1,🧪',
+      'anchor,Rusted Anchor,"Prevent forced push this round.",Expedition Standard Back,1,Heavy · 2,⚓'
+    ].join('\n'),
+    nextCsv: [
+      'id,name,front,back,copies,tag,icon',
+      'compass,Astral Compass,"orient: Peek 1 hazard deck card.",Expedition Standard Back,2,Tool · 1,🧭',
+      'lantern,Wayfinder Lantern,"Reveal top 2 tiles; place 1.",Tier II Cursed · Eclipse Back (CHANGED!),2,Relic · 1,🏮',
+      'map,Surveyor Map,"Move up to 2 spaces ignoring bog.",Expedition Standard Back,1,Gear · 1,🗺️',
+      'flare,Sunflare Vial,"Deal 3 DMG + Reveal 1 shade. (BUFFED)",Alchemical Standard Back,2,Consumable · 1,🧪',
+      'grapnel,Skyhook Grapnel,"Leap across 1 chasm space.",Expedition Standard Back,1,New Gear · 2,🪝'
+    ].join('\n'),
+    ambiguousNextCsv: [
+      'id,name,front,back,copies,tag,icon',
+      'lantern,Wayfinder Lantern v2A,"Reveal top 2 tiles.",Tier II Eclipse Back,1,Relic,🏮',
+      'lantern,Wayfinder Lantern v2B,"Reveal top 3 tiles.",Tier II Eclipse Back,1,Relic,🏮',
+      ',Mystery Unnamed Slip,"Gain 1 coin.",Expedition Standard Back,1,Draft,❓'
+    ].join('\n')
+  };
+
+  /**
+   * Parses a revision manifest (CSV / TSV / Pipe / JSON / Array of objects) with strict ID & copy checks.
+   * Never guesses missing IDs from row index or card name, and never merges duplicate IDs.
+   */
+  function parseRevisionManifest(rawInput, opts) {
+    opts = opts || {};
+    var deckLabel = String(opts.deckLabel || 'deck');
+    var imageMap = opts.imageMap || null;
+    var strictFiles = Boolean(opts.strictFiles);
+    var errors = [];
+    var rawRecords = [];
+
+    if (Array.isArray(rawInput)) {
+      for (var a = 0; a < rawInput.length; a++) {
+        var o = rawInput[a] || {};
+        rawRecords.push({
+          rowNumber: a + 1,
+          id: o.id !== undefined ? o.id : o.cardId,
+          name: o.name || o.title || o.front || '',
+          front: o.front || '',
+          back: o.back || '',
+          frontFile: o.frontFile || o.front_file || '',
+          backFile: o.backFile || o.back_file || '',
+          frontHash: o.frontHash || o.front_hash || '',
+          backHash: o.backHash || o.back_hash || '',
+          frontImg: o.frontImg || null,
+          backImg: o.backImg || null,
+          frontImgEl: o.frontImgEl || null,
+          backImgEl: o.backImgEl || null,
+          copiesRaw: o.copies !== undefined ? o.copies : 1,
+          tag: o.tag || '',
+          icon: o.icon || ''
+        });
+      }
+    } else {
+      var trimmed = String(rawInput == null ? '' : rawInput).trim();
+      if (!trimmed) {
+        return { ok: true, records: [], byId: {}, order: [], errors: [] };
+      }
+      if (trimmed[0] === '[' || trimmed[0] === '{') {
+        try {
+          var parsedJson = JSON.parse(trimmed);
+          var arr = Array.isArray(parsedJson) ? parsedJson : (parsedJson && Array.isArray(parsedJson.cards) ? parsedJson.cards : null);
+          if (!arr) {
+            return {
+              ok: false,
+              records: [],
+              byId: {},
+              order: [],
+              errors: [{ code: 'INVALID_MANIFEST', deck: deckLabel, rowNumber: 1, message: deckLabel + ': JSON manifest must be an array or { cards: [...] }.' }]
+            };
+          }
+          return parseRevisionManifest(arr, opts);
+        } catch (_je) {
+          return {
+            ok: false,
+            records: [],
+            byId: {},
+            order: [],
+            errors: [{ code: 'INVALID_JSON', deck: deckLabel, rowNumber: 1, message: deckLabel + ': Invalid JSON syntax.' }]
+          };
+        }
+      }
+
+      var nonCommentLines = trimmed.split(/\r?\n/).filter(function (l) {
+        var t = l.trim();
+        return t.length > 0 && t[0] !== '#';
+      });
+      if (!nonCommentLines.length) {
+        return { ok: true, records: [], byId: {}, order: [], errors: [] };
+      }
+      var first = nonCommentLines[0];
+      var delim = first.indexOf('|') !== -1 ? '|' : (first.indexOf('\t') !== -1 ? '\t' : ',');
+      var rows = delim === '|'
+        ? nonCommentLines.map(function (ln) { return ln.split('|').map(function (c) { return c.trim(); }); })
+        : parseDelimitedRows(nonCommentLines.join('\n'), delim);
+
+      var hdrTokens = rows[0].map(function (h) { return String(h || '').toLowerCase().replace(/[^a-z0-9]/g, ''); });
+      var hasHeader = hdrTokens.indexOf('id') !== -1 || hdrTokens.indexOf('cardid') !== -1 || hdrTokens.indexOf('copies') !== -1 || hdrTokens.indexOf('frontfile') !== -1;
+
+      if (!hasHeader) {
+        errors.push({
+          code: 'MISSING_ID_COLUMN',
+          deck: deckLabel,
+          rowNumber: 1,
+          message: deckLabel + ': Manifest header must include a stable "id" (or "card_id") column so card identities are never guessed.'
+        });
+        return { ok: false, records: [], byId: {}, order: [], errors: errors };
+      }
+
+      function findCol(names) {
+        for (var n = 0; n < names.length; n++) {
+          var p = hdrTokens.indexOf(names[n]);
+          if (p !== -1) return p;
+        }
+        return -1;
+      }
+
+      var cId = findCol(['id', 'cardid', 'slug', 'uid']);
+      var cName = findCol(['name', 'title', 'cardname']);
+      var cFront = findCol(['front', 'fronttext', 'face', 'effect']);
+      var cBack = findCol(['back', 'backtext', 'reverse']);
+      var cFrontFile = findCol(['frontfile', 'frontpng', 'frontimage', 'frontart']);
+      var cBackFile = findCol(['backfile', 'backpng', 'backimage', 'backart']);
+      var cFrontHash = findCol(['fronthash', 'frontsha', 'frontcrc']);
+      var cBackHash = findCol(['backhash', 'backsha', 'backcrc']);
+      var cCopies = findCol(['copies', 'qty', 'count', 'quantity']);
+      var cTag = findCol(['tag', 'type', 'category']);
+      var cIcon = findCol(['icon', 'emoji']);
+
+      if (cId === -1) {
+        errors.push({
+          code: 'MISSING_ID_COLUMN',
+          deck: deckLabel,
+          rowNumber: 1,
+          message: deckLabel + ': Missing required "id" column in header.'
+        });
+        return { ok: false, records: [], byId: {}, order: [], errors: errors };
+      }
+
+      for (var r = 1; r < rows.length; r++) {
+        var cells = rows[r];
+        rawRecords.push({
+          rowNumber: r + 1,
+          id: cells[cId] !== undefined ? cells[cId] : '',
+          name: cName >= 0 ? (cells[cName] || '') : '',
+          front: cFront >= 0 ? (cells[cFront] || '') : '',
+          back: cBack >= 0 ? (cells[cBack] || '') : '',
+          frontFile: cFrontFile >= 0 ? (cells[cFrontFile] || '') : '',
+          backFile: cBackFile >= 0 ? (cells[cBackFile] || '') : '',
+          frontHash: cFrontHash >= 0 ? (cells[cFrontHash] || '') : '',
+          backHash: cBackHash >= 0 ? (cells[cBackHash] || '') : '',
+          copiesRaw: cCopies >= 0 && cells[cCopies] !== '' && cells[cCopies] !== undefined ? cells[cCopies] : '1',
+          tag: cTag >= 0 ? (cells[cTag] || '') : '',
+          icon: cIcon >= 0 ? (cells[cIcon] || '') : ''
+        });
+      }
+    }
+
+    var byId = {};
+    var firstSeenRow = {};
+    var order = [];
+    var normalizedList = [];
+
+    for (var i = 0; i < rawRecords.length; i++) {
+      var rec = rawRecords[i];
+      var rawIdStr = String(rec.id == null ? '' : rec.id).trim();
+      var normId = normalizeStableCardId(rawIdStr);
+      if (!normId) {
+        errors.push({
+          code: 'MISSING_CARD_ID',
+          deck: deckLabel,
+          rowNumber: rec.rowNumber,
+          message: deckLabel + ' row ' + rec.rowNumber + ': Missing card ID (refusing to guess physical card match).'
+        });
+        continue;
+      }
+
+      if (byId[normId]) {
+        errors.push({
+          code: 'DUPLICATE_CARD_ID',
+          deck: deckLabel,
+          id: normId,
+          rowNumbers: [firstSeenRow[normId], rec.rowNumber],
+          message: deckLabel + ': Duplicate card ID "' + rawIdStr + '" on rows ' + firstSeenRow[normId] + ' and ' + rec.rowNumber + '.'
+        });
+        continue;
+      }
+
+      var copiesStr = String(rec.copiesRaw == null ? '1' : rec.copiesRaw).trim();
+      var copiesNum = Number(copiesStr);
+      if (copiesStr === '' || isNaN(copiesNum) || copiesNum < 0 || Math.floor(copiesNum) !== copiesNum || copiesNum > 200) {
+        errors.push({
+          code: 'INVALID_COPY_COUNT',
+          deck: deckLabel,
+          id: normId,
+          rowNumber: rec.rowNumber,
+          message: deckLabel + ' "' + rawIdStr + '" (row ' + rec.rowNumber + '): Invalid copy count "' + copiesStr + '".'
+        });
+        continue;
+      }
+
+      var fAsset = null;
+      var bAsset = null;
+      if (rec.frontFile && imageMap) {
+        fAsset = imageMap[normalizeAssetLookupKey(rec.frontFile)] || null;
+        if (!fAsset && strictFiles) {
+          errors.push({
+            code: 'MISSING_IMAGE_FILE',
+            deck: deckLabel,
+            id: normId,
+            fileName: rec.frontFile,
+            message: deckLabel + ' "' + rawIdStr + '": Front PNG "' + rec.frontFile + '" was not found in loaded folder.'
+          });
+        }
+      }
+      if (rec.backFile && imageMap) {
+        bAsset = imageMap[normalizeAssetLookupKey(rec.backFile)] || null;
+        if (!bAsset && strictFiles) {
+          errors.push({
+            code: 'MISSING_IMAGE_FILE',
+            deck: deckLabel,
+            id: normId,
+            fileName: rec.backFile,
+            message: deckLabel + ' "' + rawIdStr + '": Back PNG "' + rec.backFile + '" was not found in loaded folder.'
+          });
+        }
+      }
+
+      var frontSig = rec.frontHash
+        ? ('hash:' + String(rec.frontHash).trim())
+        : (fAsset && fAsset.fingerprint
+          ? ('img:' + fAsset.fingerprint)
+          : ('txt:' + fingerprintStringHex((rec.name || '') + '||' + (rec.front || '') + '||' + (rec.frontFile || '') + '||' + (rec.tag || '') + '||' + (rec.icon || ''))));
+
+      var backSig = rec.backHash
+        ? ('hash:' + String(rec.backHash).trim())
+        : (bAsset && bAsset.fingerprint
+          ? ('img:' + bAsset.fingerprint)
+          : ('txt:' + fingerprintStringHex((rec.back || '') + '||' + (rec.backFile || ''))));
+
+      var cleanRec = {
+        id: normId,
+        displayId: rawIdStr,
+        name: String(rec.name || rec.front || rawIdStr).trim(),
+        front: String(rec.front || rec.name || rawIdStr).trim(),
+        back: String(rec.back || '').trim(),
+        frontFile: String(rec.frontFile || '').trim(),
+        backFile: String(rec.backFile || '').trim(),
+        frontSig: frontSig,
+        backSig: backSig,
+        frontImg: (fAsset && fAsset.dataUrl) || rec.frontImg || null,
+        backImg: (bAsset && bAsset.dataUrl) || rec.backImg || null,
+        frontImgEl: (fAsset && fAsset.imgEl) || rec.frontImgEl || null,
+        backImgEl: (bAsset && bAsset.imgEl) || rec.backImgEl || null,
+        copies: copiesNum,
+        tag: String(rec.tag || '').trim(),
+        icon: String(rec.icon || '').trim(),
+        rowNumber: rec.rowNumber
+      };
+
+      byId[normId] = cleanRec;
+      firstSeenRow[normId] = rec.rowNumber;
+      order.push(normId);
+      normalizedList.push(cleanRec);
+    }
+
+    return {
+      ok: errors.length === 0,
+      records: normalizedList,
+      byId: byId,
+      order: order,
+      errors: errors
+    };
+  }
+
+  /**
+   * Compares Last Printed and Next deck revisions:
+   * - Back-only change on 2 copies (Lantern): pull 2 old copies + print 2 matched front/back pairs.
+   * - Copy reduction 3 -> 1 with no art change (Map): pull 2 copies + print 0.
+   * - Row reorder with no art/copy change: pull 0 + print 0.
+   * - Duplicate or missing IDs: status = 'AMBIGUOUS_IDS', refuses to guess.
+   */
+  function comparePlaytestDecks(lastPrintedInput, nextInput, opts) {
+    opts = opts || {};
+    var lastParsed = parseRevisionManifest(lastPrintedInput, {
+      deckLabel: 'Last Printed',
+      imageMap: opts.lastImageMap || null,
+      strictFiles: Boolean(opts.strictFiles)
+    });
+    var nextParsed = parseRevisionManifest(nextInput, {
+      deckLabel: 'Next Revision',
+      imageMap: opts.nextImageMap || null,
+      strictFiles: Boolean(opts.strictFiles)
+    });
+
+    var allErrors = lastParsed.errors.concat(nextParsed.errors);
+    if (allErrors.length > 0) {
+      return {
+        status: 'AMBIGUOUS_IDS',
+        canPrint: false,
+        errors: allErrors,
+        pullList: [],
+        printItems: [],
+        printCards: [],
+        unchangedItems: [],
+        totalOldCopies: 0,
+        totalNewCopies: 0,
+        totalToPull: 0,
+        totalKeepInSleeves: 0,
+        totalToPrint: 0
+      };
+    }
+
+    var seenIds = {};
+    var unionIds = [];
+    var i;
+    for (i = 0; i < nextParsed.order.length; i++) {
+      if (!seenIds[nextParsed.order[i]]) {
+        seenIds[nextParsed.order[i]] = true;
+        unionIds.push(nextParsed.order[i]);
+      }
+    }
+    for (i = 0; i < lastParsed.order.length; i++) {
+      if (!seenIds[lastParsed.order[i]]) {
+        seenIds[lastParsed.order[i]] = true;
+        unionIds.push(lastParsed.order[i]);
+      }
+    }
+
+    var pullList = [];
+    var printItems = [];
+    var printCards = [];
+    var unchangedItems = [];
+    var totalOldCopies = 0;
+    var totalNewCopies = 0;
+    var totalToPull = 0;
+    var totalKeepInSleeves = 0;
+    var totalToPrint = 0;
+
+    for (var u = 0; u < unionIds.length; u++) {
+      var cid = unionIds[u];
+      var oldC = lastParsed.byId[cid] || null;
+      var newC = nextParsed.byId[cid] || null;
+      var oldQty = oldC ? oldC.copies : 0;
+      var newQty = newC ? newC.copies : 0;
+      totalOldCopies += oldQty;
+      totalNewCopies += newQty;
+
+      if (oldQty === 0 && newQty === 0) continue;
+
+      // Case 1: Removed completely
+      if (oldQty > 0 && newQty === 0) {
+        pullList.push({
+          id: cid,
+          displayId: oldC.displayId,
+          name: oldC.name,
+          oldCopies: oldQty,
+          newCopies: 0,
+          pullCount: oldQty,
+          keepInSleeves: 0,
+          printCount: 0,
+          reason: 'CARD_REMOVED',
+          detail: 'Removed in Next revision — pull all ' + oldQty + ' physical copy/copies from sleeves.'
+        });
+        totalToPull += oldQty;
+        continue;
+      }
+
+      // Case 2: Brand-new card
+      if (oldQty === 0 && newQty > 0) {
+        printItems.push({
+          id: cid,
+          displayId: newC.displayId,
+          name: newC.name,
+          oldCopies: 0,
+          newCopies: newQty,
+          pullCount: 0,
+          printCount: newQty,
+          reason: 'NEW_CARD',
+          detail: 'New card — print ' + newQty + ' matched front/back pair(s).'
+        });
+        for (var nq = 0; nq < newQty; nq++) {
+          printCards.push({
+            id: cid + '-copy-' + (nq + 1),
+            cardId: newC.displayId,
+            index: printCards.length,
+            front: newC.front || newC.name,
+            back: newC.back,
+            tag: (newC.tag ? newC.tag + ' · ' : '') + '[' + newC.displayId + ' NEW]',
+            icon: newC.icon,
+            frontImg: newC.frontImg,
+            backImg: newC.backImg,
+            frontImgEl: newC.frontImgEl,
+            backImgEl: newC.backImgEl,
+            deltaReason: 'NEW_CARD'
+          });
+        }
+        totalToPrint += newQty;
+        continue;
+      }
+
+      // Case 3: Present in both Last Printed and Next
+      var frontChanged = oldC.frontSig !== newC.frontSig;
+      var backChanged = oldC.backSig !== newC.backSig;
+
+      if (frontChanged || backChanged) {
+        var changeReason = (frontChanged && backChanged)
+          ? 'BOTH_SIDES_CHANGED'
+          : (backChanged ? 'BACK_ONLY_CHANGED' : 'FRONT_CHANGED');
+        var reasonHuman = changeReason === 'BACK_ONLY_CHANGED'
+          ? 'Back changed (front unchanged) — pull all ' + oldQty + ' sleeved copy/copies & print ' + newQty + ' matched front/back pair(s).'
+          : (changeReason === 'FRONT_CHANGED'
+            ? 'Front changed — pull all ' + oldQty + ' old copy/copies & print ' + newQty + ' matched front/back pair(s).'
+            : 'Both front & back changed — pull all ' + oldQty + ' old copy/copies & print ' + newQty + ' matched front/back pair(s).');
+
+        pullList.push({
+          id: cid,
+          displayId: newC.displayId,
+          name: newC.name,
+          oldCopies: oldQty,
+          newCopies: newQty,
+          pullCount: oldQty,
+          keepInSleeves: 0,
+          printCount: newQty,
+          reason: changeReason,
+          detail: reasonHuman
+        });
+        printItems.push({
+          id: cid,
+          displayId: newC.displayId,
+          name: newC.name,
+          oldCopies: oldQty,
+          newCopies: newQty,
+          pullCount: oldQty,
+          printCount: newQty,
+          reason: changeReason,
+          detail: reasonHuman
+        });
+        for (var cq = 0; cq < newQty; cq++) {
+          printCards.push({
+            id: cid + '-copy-' + (cq + 1),
+            cardId: newC.displayId,
+            index: printCards.length,
+            front: newC.front || newC.name,
+            back: newC.back,
+            tag: (newC.tag ? newC.tag + ' · ' : '') + '[' + newC.displayId + ']',
+            icon: newC.icon,
+            frontImg: newC.frontImg,
+            backImg: newC.backImg,
+            frontImgEl: newC.frontImgEl,
+            backImgEl: newC.backImgEl,
+            deltaReason: changeReason
+          });
+        }
+        totalToPull += oldQty;
+        totalToPrint += newQty;
+      } else {
+        // Neither front nor back changed! Check physical copy delta:
+        if (newQty < oldQty) {
+          var pullDiff = oldQty - newQty;
+          pullList.push({
+            id: cid,
+            displayId: newC.displayId,
+            name: newC.name,
+            oldCopies: oldQty,
+            newCopies: newQty,
+            pullCount: pullDiff,
+            keepInSleeves: newQty,
+            printCount: 0,
+            reason: 'COPIES_REDUCED',
+            detail: 'Copies reduced ' + oldQty + ' → ' + newQty + ' (no art change) — pull ' + pullDiff + ', keep ' + newQty + ' in sleeves, print NONE.'
+          });
+          totalToPull += pullDiff;
+          totalKeepInSleeves += newQty;
+        } else if (newQty > oldQty) {
+          var addDiff = newQty - oldQty;
+          printItems.push({
+            id: cid,
+            displayId: newC.displayId,
+            name: newC.name,
+            oldCopies: oldQty,
+            newCopies: newQty,
+            pullCount: 0,
+            printCount: addDiff,
+            reason: 'COPIES_ADDED',
+            detail: 'Copies increased ' + oldQty + ' → ' + newQty + ' (no art change) — keep ' + oldQty + ' in sleeves, print ' + addDiff + ' extra pair(s).'
+          });
+          for (var aq = 0; aq < addDiff; aq++) {
+            printCards.push({
+              id: cid + '-add-' + (aq + 1),
+              cardId: newC.displayId,
+              index: printCards.length,
+              front: newC.front || newC.name,
+              back: newC.back,
+              tag: (newC.tag ? newC.tag + ' · ' : '') + '[' + newC.displayId + ' +' + addDiff + ']',
+              icon: newC.icon,
+              frontImg: newC.frontImg,
+              backImg: newC.backImg,
+              frontImgEl: newC.frontImgEl,
+              backImgEl: newC.backImgEl,
+              deltaReason: 'COPIES_ADDED'
+            });
+          }
+          totalKeepInSleeves += oldQty;
+          totalToPrint += addDiff;
+        } else {
+          unchangedItems.push({
+            id: cid,
+            displayId: newC.displayId,
+            name: newC.name,
+            copies: newQty
+          });
+          totalKeepInSleeves += newQty;
+        }
+      }
+    }
+
+    return {
+      status: 'READY',
+      canPrint: printCards.length > 0,
+      errors: [],
+      pullList: pullList,
+      printItems: printItems,
+      printCards: printCards,
+      unchangedItems: unchangedItems,
+      totalOldCopies: totalOldCopies,
+      totalNewCopies: totalNewCopies,
+      totalToPull: totalToPull,
+      totalKeepInSleeves: totalKeepInSleeves,
+      totalToPrint: totalToPrint,
+      copiesSavedVsFullReprint: Math.max(0, totalNewCopies - totalToPrint)
+    };
+  }
+
+  function exportPullListTxt(delta) {
+    if (!delta || delta.status !== 'READY') {
+      throw new Error('Cannot export pull list while manifest has ambiguous or missing IDs.');
+    }
+    var lines = [
+      '=== CRAFTLEAF PLAYTEST SLEEVE PULL & REPLACEMENT CHECKLIST ===',
+      'Last Printed Copies: ' + delta.totalOldCopies + '  |  Next Deck Copies: ' + delta.totalNewCopies,
+      'Physical Cards to PULL from Sleeves: ' + delta.totalToPull,
+      'Untouched Cards Kept in Sleeves: ' + delta.totalKeepInSleeves,
+      'Matched Front/Back Pairs to PRINT: ' + delta.totalToPrint + ' (Saved cutting ' + delta.copiesSavedVsFullReprint + ' unchanged cards!)',
+      '',
+      'STEP 1 — PULL THESE PHYSICAL CARDS FROM YOUR SLEEVED DECK:'
+    ];
+    if (!delta.pullList.length) {
+      lines.push('  (None — keep all existing sleeved cards!)');
+    } else {
+      for (var i = 0; i < delta.pullList.length; i++) {
+        var p = delta.pullList[i];
+        lines.push('  [ ] PULL ' + p.pullCount + 'x  [' + p.displayId + '] ' + p.name + '  —  ' + p.detail);
+      }
+    }
+    lines.push('');
+    lines.push('STEP 2 — PRINT & SLEEVE THESE REPLACEMENT / NEW DUPLEX PAIRS:');
+    if (!delta.printItems.length) {
+      lines.push('  (None — zero cards need reprinting!)');
+    } else {
+      for (var j = 0; j < delta.printItems.length; j++) {
+        var pr = delta.printItems[j];
+        lines.push('  [ ] PRINT ' + pr.printCount + 'x  [' + pr.displayId + '] ' + pr.name + '  (' + pr.reason + ')');
+      }
+    }
+    return lines.join('\r\n');
+  }
+
   root.CardSheetCore = {
     MM_PER_INCH: MM_PER_INCH,
     DPI_EXPORT: DPI_EXPORT,
@@ -1130,7 +1768,13 @@
     computePaginatedSheets: computePaginatedSheets,
     computeStandeeLayout: computeStandeeLayout,
     computeTuckboxGeometry: computeTuckboxGeometry,
-    renderTuckboxSvg: renderTuckboxSvg
+    renderTuckboxSvg: renderTuckboxSvg,
+    fingerprintBytesHex: fingerprintBytesHex,
+    fingerprintStringHex: fingerprintStringHex,
+    SAMPLE_PLAYTEST_REVISIONS: SAMPLE_PLAYTEST_REVISIONS,
+    parseRevisionManifest: parseRevisionManifest,
+    comparePlaytestDecks: comparePlaytestDecks,
+    exportPullListTxt: exportPullListTxt
   };
 
   if (typeof module !== 'undefined' && module.exports) {

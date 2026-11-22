@@ -232,6 +232,7 @@
             <button type="button" id="crmTabClients" class="crm-tab active" data-i18n="tabClients">Clients</button>
             <button type="button" id="crmTabCatalog" class="crm-tab" data-i18n="tabCatalog">Item Catalog</button>
             <button type="button" id="crmTabLedger" class="crm-tab" data-i18n="tabLedger">Invoice Ledger</button>
+            <button type="button" id="crmTabStatement" class="crm-tab" data-i18n="tabStatement">Open Statement</button>
           </div>
 
           <div id="crmActionsClients" style="display:flex;gap:8px;">
@@ -242,7 +243,48 @@
           </div>
           <div id="crmActionsLedger" style="display:none;gap:8px;flex-wrap:wrap;">
             <button type="button" id="saveLedgerBtn" class="btn btn-xs btn-pro" data-i18n="btnSaveLedger">+ Save Invoice to Ledger</button>
+            <button type="button" id="importLedgerCsvBtn" class="btn btn-xs" data-i18n="btnImportLedgerCsv">📂 Import Ledger CSV</button>
+            <input type="file" id="ledgerCsvFileInput" accept=".csv,text/csv" hidden />
             <button type="button" id="exportCsvBtn" class="btn btn-xs btn-emerald" data-i18n="btnExportCsv">⬇ Export Ledger CSV</button>
+          </div>
+
+          <div id="crmStatementPane" class="stmt-pane" style="display:none;">
+            <div class="stmt-demo-bar">
+              <span class="stmt-demo-note" data-i18n="stmtIntro">One client + one currency summary of unpaid balances (not a new invoice).</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" id="loadStmtDemoBtn" class="btn btn-xs" data-i18n="btnStmtDemo">🧪 Load $170 Demo</button>
+                <button type="button" id="toggleStmtDupDemoBtn" class="btn btn-xs" data-i18n="btnStmtDupDemo">⚠️ Test Duplicate ID</button>
+              </div>
+            </div>
+
+            <div class="form-grid-3" style="margin-top:8px;">
+              <div class="field">
+                <label for="stmtClientSelect" data-i18n="lblStmtClient">Client</label>
+                <select id="stmtClientSelect" class="select"></select>
+              </div>
+              <div class="field">
+                <label for="stmtCurrencySelect" data-i18n="lblStmtCurrency">Currency</label>
+                <select id="stmtCurrencySelect" class="select"></select>
+              </div>
+              <div class="field">
+                <label for="stmtDateInput" data-i18n="lblStmtDate">Statement Date</label>
+                <input type="date" id="stmtDateInput" class="input" />
+              </div>
+            </div>
+
+            <div id="stmtExcludedBanner" class="stmt-excluded-banner"></div>
+            <div id="stmtConflictBox" class="stmt-conflict-box" style="display:none;"></div>
+
+            <label class="stmt-confirm-row">
+              <input type="checkbox" id="stmtConfirmBalancesChk" />
+              <span data-i18n="chkStmtConfirm">I confirm all payments received through the Statement Date are recorded on these open invoices.</span>
+            </label>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              <button type="button" id="printStmtPdfBtn" class="btn btn-xs btn-pro" data-i18n="btnPrintStmt">🖨️ Print Statement PDF</button>
+              <button type="button" id="exportStmtCsvBtn" class="btn btn-xs btn-emerald" data-i18n="btnExportStmtCsv">⬇ Statement CSV</button>
+              <button type="button" id="backToInvoiceViewBtn" class="btn btn-xs" data-i18n="btnBackToInvoice">↩ Single Invoice View</button>
+            </div>
           </div>
 
           <div id="crmSavedList" class="crm-saved-list"></div>
@@ -300,7 +342,7 @@
           <li data-i18n="perk2">Local Client &amp; Service Item CRM Book (IndexedDB + localStorage) for 1-click repeat billing</li>
           <li data-i18n="perk3">Custom Brand Logo upload + custom corporate Accent Color themes</li>
           <li data-i18n="perk4">Scannable Vector SVG Payment QR Code embedded directly on your invoice</li>
-          <li data-i18n="perk5">1-click Tax-Season CSV Export of your saved Invoice Ledger (also unlocked by All-Access Gumroad Key)</li>
+          <li data-i18n="perk5">1-click Open-Item Client Statement PDF/CSV (one client + currency, excludes settled/quotes, flags duplicate IDs) &amp; Tax-Season CSV Export</li>
         </ul>
       </div>
 

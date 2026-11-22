@@ -286,6 +286,32 @@
       </ol>
     </section>
 
+    <section class="section-card" data-lang="en" style="border-color:#c4b5fd;background:linear-gradient(135deg,#ffffff 0%,#faf5ff 100%);">
+      <div class="badge" style="background:#ede9fe;color:#6d28d9;">🔄 INCLUDED IN CARDSHEET PRO ($9 ONCE)</div>
+      <h2>Iterating a Sleeved Playtest Deck? Reprint Only Changed Fronts &amp; Backs</h2>
+      <p style="margin:0 0 12px;color:#334155;font-size:14.5px;">
+        Between playtests, cutting a whole new 54-card deck wastes cardstock — and front-only diff tools miss changed card backs or reduced copy counts.
+        CardSheet's local <strong>Playtest Deck Delta</strong> compares your <em>Last Printed</em> and <em>Next</em> versions by stable card ID, front/back PNG bytes, and physical copy counts:
+      </p>
+      <div style="overflow-x:auto;margin-bottom:14px;">
+        <table>
+          <thead>
+            <tr><th>Card ID</th><th>Last Printed → Next Revision</th><th>Step 1: Sleeve Pull List</th><th>Step 2: Duplex Replacement Sheet</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>lantern</code> · Wayfinder Lantern</td><td>2 → 2 copies · <strong>Back PNG changed</strong> (front same)</td><td><strong>Pull both (2) old copies</strong></td><td><strong>Print 2 matched front/back pairs</strong></td></tr>
+            <tr><td><code>map</code> · Surveyor Map</td><td>3 → 1 copies · No art change</td><td><strong>Pull 2 copies</strong> (keep 1 in sleeve)</td><td><strong>Print NONE (0)</strong></td></tr>
+            <tr><td><code>compass</code> · Astral Compass</td><td>2 → 2 copies · Row reordered only</td><td>Pull 0 (keep 2)</td><td>Print NONE (0)</td></tr>
+            <tr><td><code>flare</code> · Sunflare Vial</td><td>1 → 2 copies · Front buffed</td><td><strong>Pull 1 old copy</strong></td><td><strong>Print 2 matched front/back pairs</strong></td></tr>
+            <tr><td>Duplicate / Blank ID</td><td>Ambiguous manifest row</td><td colspan="2">Paused automatically — flags duplicate/missing IDs instead of guessing</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="../index.html?preset=delta">🔄 Try Live Playtest Delta Demo →</a>
+        <a class="btn" href="../../previews/playtest_deck_delta_sample_preview.pdf">📄 1-Page Visual Quickstart PDF →</a>
+      </div>
+    </section>
     <section class="section-card">
       <h2 data-lang="en">Frequently Asked Questions</h2>
       <h2 data-lang="zh">常见问题解答 (FAQ)</h2>
@@ -334,10 +360,15 @@
           var pnp = (cfg.products && cfg.products.pnpTrilogyBundle) || {};
           var btn = document.getElementById('pnpBuyBtn');
           if (btn) {
-            btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
-            btn.textContent = lang === 'zh'
-              ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
-              : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+            if (lang === 'zh' && !pnp.mianbaoduoUrl) {
+              btn.style.display = 'none';
+            } else {
+              btn.style.display = '';
+              btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
+              btn.textContent = lang === 'zh'
+                ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
+                : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+            }
           }
         }
       }

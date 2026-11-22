@@ -266,6 +266,495 @@
     return cur.symbol + parts.join('.');
   }
 
+  function parseNumericAmount(raw) {
+    if (typeof raw === 'number') return isFinite(raw) ? raw : 0;
+    var cleaned = String(raw == null ? '' : raw).replace(/[^0-9.\-]/g, '');
+    var n = parseFloat(cleaned);
+    return isFinite(n) ? n : 0;
+  }
+
+  function minorScaleForCurrency(currencyCode) {
+    var cur = CURRENCIES[String(currencyCode || 'USD').toUpperCase()] || CURRENCIES.USD;
+    return cur.decimals === 0 ? 1 : Math.pow(10, cur.decimals);
+  }
+
+  function toMinorUnits(amount, currencyCode) {
+    var scale = minorScaleForCurrency(currencyCode);
+    return Math.round(parseNumericAmount(amount) * scale);
+  }
+
+  function fromMinorUnits(minor, currencyCode) {
+    var scale = minorScaleForCurrency(currencyCode);
+    return minor / scale;
+  }
+
+  function normalizeClientKey(name) {
+    return String(name == null ? '' : name).trim().replace(/\s+/g, ' ').toLowerCase();
+  }
+
+  function normalizeInvoiceKey(invNo) {
+    return String(invNo == null ? '' : invNo).trim().replace(/\s+/g, ' ').toUpperCase();
+  }
+
+  function parseCsvRowsRfc4180(text) {
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+    var s = String(text == null ? '' : text).replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    for (var i = 0; i < s.length; i++) {
+      var ch = s[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (i + 1 < s.length && s[i + 1] === '"') {
+            field += '"';
+            i++;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          field += ch;
+        }
+      } else if (ch === '"' && field.length === 0) {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(field.trim());
+        field = '';
+      } else if (ch === '\n') {
+        row.push(field.trim());
+        if (row.some(function (c) { return c.length > 0; })) rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += ch;
+      }
+    }
+    if (field.length > 0 || row.length > 0) {
+      row.push(field.trim());
+      if (row.some(function (c) { return c.length > 0; })) rows.push(row);
+    }
+    return rows;
+  }
+
+  function parseLedgerCsv(csvText) {
+    var rows = parseCsvRowsRfc4180(csvText);
+    if (rows.length < 2) return [];
+    var headers = rows[0].map(function (h) {
+      return String(h || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    });
+    function idxOf(candidates) {
+      for (var i = 0; i < candidates.length; i++) {
+        var pos = headers.indexOf(candidates[i]);
+        if (pos !== -1) return pos;
+      }
+      return -1;
+    }
+    var colInv = idxOf(['invoicenumber', 'invoiceno', 'document', 'docnumber', 'invnumber']);
+    var colType = idxOf(['type', 'doctype', 'documenttype']);
+    var colStatus = idxOf(['status', 'state']);
+    var colIssue = idxOf(['issuedate', 'date']);
+    var colDue = idxOf(['duedate', 'due']);
+    var colClient = idxOf(['client', 'clientname', 'billto', 'customer']);
+    var colCur = idxOf(['currency', 'curr']);
+    var colTotal = idxOf(['total', 'invoicetotal', 'amount']);
+    var colPaid = idxOf(['amountpaid', 'paid', 'depositpaid']);
+    var colBal = idxOf(['balancedue', 'remaining', 'balance']);
+
+    var entries = [];
+    for (var r = 1; r < rows.length; r++) {
+      var cells = rows[r];
+      var clientName = colClient >= 0 ? (cells[colClient] || '') : '';
+      var invNo = colInv >= 0 ? (cells[colInv] || '') : '';
+      if (!clientName && !invNo) continue;
+      var cur = String((colCur >= 0 ? cells[colCur] : 'USD') || 'USD').trim().toUpperCase();
+      var totalVal = colTotal >= 0 ? parseNumericAmount(cells[colTotal]) : 0;
+      var paidVal = colPaid >= 0 ? parseNumericAmount(cells[colPaid]) : 0;
+      var balVal = colBal >= 0 ? parseNumericAmount(cells[colBal]) : Math.max(0, roundMoney(totalVal - paidVal));
+      entries.push({
+        id: 'csv_row_' + r,
+        invNumber: invNo,
+        docType: String((colType >= 0 ? cells[colType] : 'invoice') || 'invoice').trim().toLowerCase(),
+        status: String((colStatus >= 0 ? cells[colStatus] : 'SENT') || 'SENT').trim().toUpperCase(),
+        issueDate: colIssue >= 0 ? (cells[colIssue] || '') : '',
+        dueDate: colDue >= 0 ? (cells[colDue] || '') : '',
+        clientName: clientName,
+        currency: CURRENCIES[cur] ? cur : cur,
+        total: totalVal,
+        amountPaid: paidVal,
+        balanceDue: balVal
+      });
+    }
+    return entries;
+  }
+
+  function listStatementClients(entries) {
+    var map = {};
+    var order = [];
+    var list = Array.isArray(entries) ? entries : [];
+    for (var i = 0; i < list.length; i++) {
+      var e = list[i] || {};
+      var rawName = String(e.clientName || '').trim();
+      if (!rawName) continue;
+      var cKey = normalizeClientKey(rawName);
+      var cur = String(e.currency || 'USD').trim().toUpperCase();
+      if (!map[cKey]) {
+        map[cKey] = {
+          clientKey: cKey,
+          clientName: rawName,
+          clientDetails: (e.snapshot && e.snapshot.clientDetails) || e.clientDetails || '',
+          currencies: []
+        };
+        order.push(cKey);
+      } else if (!map[cKey].clientDetails && ((e.snapshot && e.snapshot.clientDetails) || e.clientDetails)) {
+        map[cKey].clientDetails = (e.snapshot && e.snapshot.clientDetails) || e.clientDetails || '';
+      }
+      if (map[cKey].currencies.indexOf(cur) === -1) {
+        map[cKey].currencies.push(cur);
+      }
+    }
+    return order.map(function (k) { return map[k]; });
+  }
+
+  /**
+   * Worked $170.00 Open-Item Client Statement fixture (#71):
+   * - INV-2026-104 ($200.00 total, $80.00 paid) -> $120.00 remaining
+   * - INV-2026-109 ($50.00 total, $0.00 paid) -> $50.00 remaining
+   * - INV-2026-098 ($300.00 PAID settled bill) -> excluded
+   * - QUO-2026-012 ($600.00 quote/estimate) -> excluded
+   * - INV-2026-110 ($450.00 Nordic Cloud Systems GmbH) -> excluded (other client)
+   */
+  var SAMPLE_STATEMENT_LEDGER = [
+    {
+      id: 'demo_104',
+      invNumber: 'INV-2026-104',
+      docType: 'invoice',
+      status: 'SENT',
+      issueDate: '2026-10-18',
+      dueDate: '2026-11-01',
+      clientName: 'Acme Product Labs Inc.',
+      clientDetails: 'billing@acmelabs.example\n548 Market St, Suite 4100\nSan Francisco, CA 94104',
+      currency: 'USD',
+      total: 200.00,
+      amountPaid: 80.00,
+      balanceDue: 120.00
+    },
+    {
+      id: 'demo_109',
+      invNumber: 'INV-2026-109',
+      docType: 'invoice',
+      status: 'SENT',
+      issueDate: '2026-11-05',
+      dueDate: '2026-11-19',
+      clientName: 'Acme Product Labs Inc.',
+      clientDetails: 'billing@acmelabs.example\n548 Market St, Suite 4100\nSan Francisco, CA 94104',
+      currency: 'USD',
+      total: 50.00,
+      amountPaid: 0.00,
+      balanceDue: 50.00
+    },
+    {
+      id: 'demo_098_paid',
+      invNumber: 'INV-2026-098',
+      docType: 'invoice',
+      status: 'PAID',
+      issueDate: '2026-09-20',
+      dueDate: '2026-10-04',
+      clientName: 'Acme Product Labs Inc.',
+      currency: 'USD',
+      total: 300.00,
+      amountPaid: 300.00,
+      balanceDue: 0.00
+    },
+    {
+      id: 'demo_quo_012',
+      invNumber: 'QUO-2026-012',
+      docType: 'quote',
+      status: 'OPEN',
+      issueDate: '2026-11-10',
+      dueDate: '2026-12-10',
+      clientName: 'Acme Product Labs Inc.',
+      currency: 'USD',
+      total: 600.00,
+      amountPaid: 0.00,
+      balanceDue: 600.00
+    },
+    {
+      id: 'demo_other_client',
+      invNumber: 'INV-2026-110',
+      docType: 'invoice',
+      status: 'SENT',
+      issueDate: '2026-11-08',
+      dueDate: '2026-11-22',
+      clientName: 'Nordic Cloud Systems GmbH',
+      currency: 'USD',
+      total: 450.00,
+      amountPaid: 0.00,
+      balanceDue: 450.00
+    }
+  ];
+
+  var SAMPLE_STATEMENT_DUPLICATE_ROW = {
+    id: 'demo_104_stale_draft',
+    invNumber: 'INV-2026-104',
+    docType: 'invoice',
+    status: 'SENT',
+    issueDate: '2026-10-18',
+    dueDate: '2026-11-01',
+    clientName: 'Acme Product Labs Inc.',
+    currency: 'USD',
+    total: 200.00,
+    amountPaid: 0.00,
+    balanceDue: 200.00
+  };
+
+  /**
+   * Pure deterministic Open-Item Client Statement engine (#71).
+   * - Strictly 1 client + 1 currency (zero cross-client or cross-currency leakage).
+   * - Excludes quotes/estimates and settled bills (never mixes settled payments with open debt).
+   * - Halts on duplicate saved versions of the same invoice number unless explicitly resolved by buyer.
+   */
+  function computeOpenItemStatement(entries, opts) {
+    opts = opts || {};
+    var targetClientKey = normalizeClientKey(opts.clientName);
+    var targetCurrency = String(opts.currency || 'USD').trim().toUpperCase();
+    var statementDate = String(opts.statementDate || '').trim();
+    var resolvedDuplicates = opts.resolvedDuplicates || {};
+    var confirmed = Boolean(opts.confirmedBalancesCurrent);
+
+    var excludedCounts = {
+      otherClients: 0,
+      otherCurrencies: 0,
+      quotes: 0,
+      settled: 0,
+      overpaid: 0,
+      resolvedDuplicates: 0
+    };
+    var missingNumberRows = [];
+    var groupsByInvKey = {};
+    var invKeyOrder = [];
+    var canonicalClientName = String(opts.clientName || '').trim();
+    var canonicalClientDetails = '';
+
+    var list = Array.isArray(entries) ? entries : [];
+    for (var i = 0; i < list.length; i++) {
+      var raw = list[i] || {};
+      var rowId = String(raw.id || ('row_' + i));
+      var cKey = normalizeClientKey(raw.clientName);
+      if (!targetClientKey || cKey !== targetClientKey) {
+        excludedCounts.otherClients++;
+        continue;
+      }
+      if (!canonicalClientName && raw.clientName) {
+        canonicalClientName = String(raw.clientName).trim();
+      }
+      if (!canonicalClientDetails && ((raw.snapshot && raw.snapshot.clientDetails) || raw.clientDetails)) {
+        canonicalClientDetails = (raw.snapshot && raw.snapshot.clientDetails) || raw.clientDetails || '';
+      }
+
+      var rowCur = String(raw.currency || 'USD').trim().toUpperCase();
+      if (rowCur !== targetCurrency) {
+        excludedCounts.otherCurrencies++;
+        continue;
+      }
+
+      var dType = String(raw.docType || 'invoice').trim().toLowerCase();
+      if (dType === 'quote' || dType === 'estimate' || dType === 'quotation') {
+        excludedCounts.quotes++;
+        continue;
+      }
+
+      var invKey = normalizeInvoiceKey(raw.invNumber);
+      var normalizedRow = {
+        id: rowId,
+        invKey: invKey,
+        invNumber: String(raw.invNumber || '').trim(),
+        docType: dType,
+        status: String(raw.status || 'SENT').trim().toUpperCase(),
+        issueDate: String(raw.issueDate || '').trim(),
+        dueDate: String(raw.dueDate || '').trim(),
+        totalMinor: toMinorUnits(raw.total, targetCurrency),
+        paidMinor: toMinorUnits(raw.amountPaid, targetCurrency)
+      };
+
+      if (!invKey) {
+        missingNumberRows.push(normalizedRow);
+        continue;
+      }
+      if (!groupsByInvKey[invKey]) {
+        groupsByInvKey[invKey] = [];
+        invKeyOrder.push(invKey);
+      }
+      groupsByInvKey[invKey].push(normalizedRow);
+    }
+
+    var duplicateConflicts = [];
+    var deduplicatedRows = [];
+    for (var g = 0; g < invKeyOrder.length; g++) {
+      var k = invKeyOrder[g];
+      var candidates = groupsByInvKey[k];
+      if (candidates.length === 1) {
+        deduplicatedRows.push(candidates[0]);
+      } else {
+        var chosenId = resolvedDuplicates[k];
+        var matched = null;
+        if (chosenId) {
+          for (var c = 0; c < candidates.length; c++) {
+            if (candidates[c].id === chosenId) {
+              matched = candidates[c];
+              break;
+            }
+          }
+        }
+        if (matched) {
+          excludedCounts.resolvedDuplicates += (candidates.length - 1);
+          deduplicatedRows.push(matched);
+        } else {
+          duplicateConflicts.push({
+            invKey: k,
+            invNumber: candidates[0].invNumber,
+            candidates: candidates.map(function (cand) {
+              var remMinor = Math.max(0, cand.totalMinor - cand.paidMinor);
+              return {
+                id: cand.id,
+                invNumber: cand.invNumber,
+                status: cand.status,
+                issueDate: cand.issueDate,
+                dueDate: cand.dueDate,
+                total: fromMinorUnits(cand.totalMinor, targetCurrency),
+                amountPaid: fromMinorUnits(cand.paidMinor, targetCurrency),
+                remainingBalance: cand.status === 'PAID' || cand.docType === 'receipt' ? 0 : fromMinorUnits(remMinor, targetCurrency)
+              };
+            })
+          });
+        }
+      }
+    }
+
+    var openItems = [];
+    var overpaymentWarnings = [];
+    var totalOutstandingMinor = 0;
+
+    for (var j = 0; j < deduplicatedRows.length; j++) {
+      var item = deduplicatedRows[j];
+      if (item.paidMinor > item.totalMinor) {
+        excludedCounts.overpaid++;
+        overpaymentWarnings.push({
+          invNumber: item.invNumber,
+          total: fromMinorUnits(item.totalMinor, targetCurrency),
+          amountPaid: fromMinorUnits(item.paidMinor, targetCurrency)
+        });
+        continue;
+      }
+      if (item.status === 'PAID' || item.docType === 'receipt') {
+        excludedCounts.settled++;
+        continue;
+      }
+      var rem = item.totalMinor - item.paidMinor;
+      if (rem <= 0) {
+        excludedCounts.settled++;
+        continue;
+      }
+      var isOverdue = Boolean(statementDate && item.dueDate && item.dueDate < statementDate);
+      openItems.push({
+        id: item.id,
+        invNumber: item.invNumber,
+        issueDate: item.issueDate,
+        dueDate: item.dueDate,
+        totalMinor: item.totalMinor,
+        paidMinor: item.paidMinor,
+        remainingMinor: rem,
+        total: fromMinorUnits(item.totalMinor, targetCurrency),
+        amountPaid: fromMinorUnits(item.paidMinor, targetCurrency),
+        remainingBalance: fromMinorUnits(rem, targetCurrency),
+        isOverdue: isOverdue
+      });
+      totalOutstandingMinor += rem;
+    }
+
+    openItems.sort(function (a, b) {
+      var da = a.dueDate || '9999-99-99';
+      var db = b.dueDate || '9999-99-99';
+      if (da !== db) return da < db ? -1 : 1;
+      var ia = a.issueDate || '';
+      var ib = b.issueDate || '';
+      if (ia !== ib) return ia < ib ? -1 : 1;
+      return a.invNumber < b.invNumber ? -1 : (a.invNumber > b.invNumber ? 1 : 0);
+    });
+
+    var hasStructuralBlocker = missingNumberRows.length > 0 || duplicateConflicts.length > 0;
+    var status = 'READY';
+    if (missingNumberRows.length > 0) {
+      status = 'MISSING_INVOICE_NUMBER';
+    } else if (duplicateConflicts.length > 0) {
+      status = 'DUPLICATE_INVOICE_CONFLICT';
+    } else if (!confirmed) {
+      status = 'CONFIRMATION_REQUIRED';
+    }
+
+    var effectiveTotalMinor = hasStructuralBlocker ? 0 : totalOutstandingMinor;
+    var effectiveTotal = fromMinorUnits(effectiveTotalMinor, targetCurrency);
+
+    return {
+      status: status,
+      canExport: status === 'READY',
+      confirmedBalancesCurrent: confirmed,
+      clientName: canonicalClientName,
+      clientDetails: canonicalClientDetails,
+      currency: targetCurrency,
+      statementDate: statementDate,
+      openItems: hasStructuralBlocker ? [] : openItems,
+      totalOutstandingMinor: effectiveTotalMinor,
+      totalOutstanding: effectiveTotal,
+      formattedTotalOutstanding: formatMoney(effectiveTotal, targetCurrency),
+      excludedCounts: excludedCounts,
+      duplicateConflicts: duplicateConflicts,
+      missingNumberRows: missingNumberRows,
+      overpaymentWarnings: overpaymentWarnings
+    };
+  }
+
+  function exportStatementCsvString(stmt) {
+    if (!stmt || stmt.status === 'DUPLICATE_INVOICE_CONFLICT' || stmt.status === 'MISSING_INVOICE_NUMBER') {
+      throw new Error('Cannot export statement while duplicate or missing invoice numbers are unresolved.');
+    }
+    function csvSafeCell(v) {
+      var s = String(v == null ? '' : v);
+      if (/^[=+\-@]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    var lines = [
+      'StatementDate,Client,Currency,InvoiceNumber,IssueDate,DueDate,InvoiceTotal,AmountPaid,RemainingBalance,Overdue'
+    ];
+    for (var i = 0; i < stmt.openItems.length; i++) {
+      var r = stmt.openItems[i];
+      lines.push([
+        stmt.statementDate,
+        stmt.clientName,
+        stmt.currency,
+        r.invNumber,
+        r.issueDate,
+        r.dueDate,
+        r.total.toFixed(CURRENCIES[stmt.currency] && CURRENCIES[stmt.currency].decimals === 0 ? 0 : 2),
+        r.amountPaid.toFixed(CURRENCIES[stmt.currency] && CURRENCIES[stmt.currency].decimals === 0 ? 0 : 2),
+        r.remainingBalance.toFixed(CURRENCIES[stmt.currency] && CURRENCIES[stmt.currency].decimals === 0 ? 0 : 2),
+        r.isOverdue ? 'YES' : 'NO'
+      ].map(csvSafeCell).join(','));
+    }
+    lines.push([
+      stmt.statementDate,
+      stmt.clientName,
+      stmt.currency,
+      'TOTAL_OUTSTANDING',
+      '',
+      '',
+      '',
+      '',
+      stmt.totalOutstanding.toFixed(CURRENCIES[stmt.currency] && CURRENCIES[stmt.currency].decimals === 0 ? 0 : 2),
+      ''
+    ].map(csvSafeCell).join(','));
+    return lines.join('\r\n');
+  }
+
   // =========================================================================
   // Pure-JS ISO/IEC 18004 Scannable QR Code Matrix & Vector SVG Generator
   // Supports Versions 1–6 (ECC Level L, Byte Mode, up to 134 UTF-8 bytes)
@@ -574,10 +1063,22 @@
       tabClients: 'Clients',
       tabCatalog: 'Item Catalog',
       tabLedger: 'Invoice Ledger',
+      tabStatement: 'Open Statement',
       btnSaveClient: '+ Save Current Client',
       btnSaveItem: '+ Save First Line Item',
       btnSaveLedger: '+ Save Invoice to Ledger',
+      btnImportLedgerCsv: '📂 Import Ledger CSV',
       btnExportCsv: '⬇ Export Ledger CSV',
+      stmtIntro: 'One client + one currency summary of unpaid balances (not a new invoice).',
+      btnStmtDemo: '🧪 Load $170 Demo',
+      btnStmtDupDemo: '⚠️ Test Duplicate ID',
+      lblStmtClient: 'Client',
+      lblStmtCurrency: 'Currency',
+      lblStmtDate: 'Statement Date',
+      chkStmtConfirm: 'I confirm all payments received through the Statement Date are recorded on these open invoices.',
+      btnPrintStmt: '🖨️ Print Statement PDF',
+      btnExportStmtCsv: '⬇ Statement CSV',
+      btnBackToInvoice: '↩ Single Invoice View',
       tipText: 'Get paid faster with zero monthly SaaS fees? Support independent offline software:',
       tipCta: '☕ Support CraftLeaf Studio',
       guidesFooterTitle: 'Free Industry Invoice & Receipt Templates:',
@@ -587,7 +1088,7 @@
       perk2: 'Local Client & Service Item CRM Book (IndexedDB + localStorage) for 1-click repeat billing',
       perk3: 'Custom Brand Logo upload + custom corporate Accent Color themes',
       perk4: 'Scannable Vector SVG Payment QR Code embedded directly on your invoice',
-      perk5: '1-click Tax-Season CSV Export of your saved Invoice Ledger (also unlocked by All-Access Gumroad Key)',
+      perk5: 'Open-Item Repeat-Client Statement PDF/CSV (excludes settled/quotes, flags duplicate IDs) & Tax CSV Export',
       buyKeyBtn: 'Get Instant Pro Key ($9.00) →',
       allAccessLink: 'Or unlock all CraftLeaf tools with All-Access Pass ($19)',
       verifyBtn: 'Activate',
@@ -645,10 +1146,22 @@
       tabClients: '常用客户簿',
       tabCatalog: '常用服务价目',
       tabLedger: '历史账单台账',
+      tabStatement: '未结对账单',
       btnSaveClient: '+ 保存当前客户',
       btnSaveItem: '+ 保存首行服务项',
       btnSaveLedger: '+ 归档当前账单至台账',
+      btnImportLedgerCsv: '📂 导入台账 CSV',
       btnExportCsv: '⬇ 导出台账 CSV (Excel)',
+      stmtIntro: '按单一客户 + 单一币种汇总未结清发票余额（对账摘要，非新开发票）。',
+      btnStmtDemo: '🧪 载入 $170 示例',
+      btnStmtDupDemo: '⚠️ 测试重号拦截',
+      lblStmtClient: '选择客户',
+      lblStmtCurrency: '结算币种',
+      lblStmtDate: '对账截止日',
+      chkStmtConfirm: '我已确认截至对账日收到的款项均已登记，以上各笔待付尾款准确无误。',
+      btnPrintStmt: '🖨️ 打印/导出对账单 PDF',
+      btnExportStmtCsv: '⬇ 导出对账 CSV',
+      btnBackToInvoice: '↩ 返回单张发票视图',
       tipText: '省下了每月 $15 的海外 SaaS 账单软件月费？欢迎支持纯本地独立工具：',
       tipCta: '☕ 赞助支持青叶工坊',
       guidesFooterTitle: '出海自由职业者与独立开发者常用发票模板指南：',
@@ -658,7 +1171,7 @@
       perk2: '解锁本地 IndexedDB 常用客户簿、服务价目表与历史发票归档管理',
       perk3: '支持上传工作室专属高清 Logo 与自定义品牌主题色',
       perk4: '票面自动生成高清矢量可扫描二维码（附带 Stripe / PayPal 快捷付款引导）',
-      perk5: '一键导出 UTF-8 Excel 兼容 CSV 营收台账（同时支持 $19 全站通票 Gumroad 密钥）',
+      perk5: '一键生成单客户未结账单对账单 (Open-Item Statement PDF/CSV，自动剔除已结清/报价单并拦截重复单号) 与年度 CSV 导出',
       buyKeyBtn: '立即获取 Pro 激活码 ($9.00) →',
       allAccessLink: '或入手 $19 工坊全系效率工具通票',
       verifyBtn: '立即激活',
@@ -752,6 +1265,14 @@
     resolveTemplateKey: resolveTemplateKey,
     calculateTotals: calculateTotals,
     formatMoney: formatMoney,
+    toMinorUnits: toMinorUnits,
+    fromMinorUnits: fromMinorUnits,
+    parseLedgerCsv: parseLedgerCsv,
+    listStatementClients: listStatementClients,
+    computeOpenItemStatement: computeOpenItemStatement,
+    exportStatementCsvString: exportStatementCsvString,
+    SAMPLE_STATEMENT_LEDGER: SAMPLE_STATEMENT_LEDGER,
+    SAMPLE_STATEMENT_DUPLICATE_ROW: SAMPLE_STATEMENT_DUPLICATE_ROW,
     generateQRSvg: generateQRSvg
   };
 
@@ -855,6 +1376,16 @@
     templateKey: 'freelance',
     paper: 'a4',
     crmTab: 'clients',
+    previewMode: 'invoice',
+    stmt: {
+      useDemo: true,
+      includeDupDemo: false,
+      clientName: 'Acme Product Labs Inc.',
+      currency: 'USD',
+      statementDate: todayIso,
+      resolvedDuplicates: {},
+      confirmedBalancesCurrent: false
+    },
     doc: {
       docType: 'invoice',
       docLang: 'en',
@@ -1024,7 +1555,279 @@
       .replace(/"/g, '&quot;');
   }
 
+  function getActiveStatementEntries() {
+    if (!state.stmt.useDemo && crmData.ledger.length > 0) {
+      return crmData.ledger;
+    }
+    var base = SAMPLE_STATEMENT_LEDGER.slice();
+    if (state.stmt.includeDupDemo) {
+      base.push(SAMPLE_STATEMENT_DUPLICATE_ROW);
+    }
+    return base;
+  }
+
+  function renderStatementPaperDom(paperEl) {
+    var unlocked = isPro();
+    var d = state.doc;
+    var effectiveAccent = unlocked ? (d.accentColor || '#1e3a8a') : '#1e3a8a';
+    paperEl.style.setProperty('--inv-accent', effectiveAccent);
+    paperEl.classList.toggle('paper-letter', state.paper === 'letter');
+    while (paperEl.firstChild) paperEl.removeChild(paperEl.firstChild);
+
+    var stmt = computeOpenItemStatement(getActiveStatementEntries(), {
+      clientName: state.stmt.clientName,
+      currency: state.stmt.currency,
+      statementDate: state.stmt.statementDate || todayIso,
+      resolvedDuplicates: state.stmt.resolvedDuplicates,
+      confirmedBalancesCurrent: state.stmt.confirmedBalancesCurrent
+    });
+
+    var isZh = d.docLang === 'zh';
+    var isBi = d.docLang === 'bilingual';
+    var headingText = isBi ? 'STATEMENT OF OPEN INVOICES / 未结账单对账单' : (isZh ? '客户未结账单对账单' : 'STATEMENT OF OPEN INVOICES');
+    var noticeText = isBi
+      ? 'Summary of open & partially paid invoices only (NOT a new invoice). Settled bills and estimates are omitted. / 仅汇总当前未结清发票尾款（非新开发票），已结清账单与报价单已自动剔除。'
+      : (isZh
+        ? '本单据为未结清账单余额对账摘要（非新开发票），请按下方原发票编号核对付款；已结清账单与报价单不在此列。'
+        : 'Open-Item Account Summary (NOT a new invoice) — Please remit referencing the original invoice numbers below. Settled bills and estimates are omitted.');
+
+    var topWrap = document.createElement('div');
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'inv-header';
+    var brandBox = document.createElement('div');
+    brandBox.className = 'inv-brand-box';
+    if (unlocked && d.logoDataUrl) {
+      var logoImg = document.createElement('img');
+      logoImg.className = 'inv-logo-img';
+      logoImg.src = d.logoDataUrl;
+      logoImg.alt = 'Brand Logo';
+      logoImg.style.maxHeight = '54px';
+      brandBox.appendChild(logoImg);
+    }
+    var senderH2 = document.createElement('h2');
+    senderH2.className = 'inv-sender-name';
+    senderH2.textContent = d.senderName || 'Northstar Independent Studio';
+    brandBox.appendChild(senderH2);
+    var senderPre = document.createElement('div');
+    senderPre.className = 'inv-preline';
+    senderPre.textContent = d.senderDetails || '';
+    brandBox.appendChild(senderPre);
+
+    var metaBox = document.createElement('div');
+    metaBox.className = 'inv-doc-meta';
+    var badge = document.createElement('div');
+    badge.className = 'inv-doc-badge';
+    badge.style.fontSize = '21px';
+    badge.textContent = headingText;
+    metaBox.appendChild(badge);
+
+    var metaGrid = document.createElement('div');
+    metaGrid.className = 'inv-meta-grid';
+    function addMetaPair(lbl, val) {
+      var s1 = document.createElement('span');
+      s1.className = 'inv-meta-label';
+      s1.textContent = lbl;
+      var s2 = document.createElement('span');
+      s2.className = 'inv-meta-val';
+      s2.textContent = val;
+      metaGrid.appendChild(s1);
+      metaGrid.appendChild(s2);
+    }
+    addMetaPair(isZh ? '对账日期:' : 'Statement Date:', stmt.statementDate || todayIso);
+    addMetaPair(isZh ? '结算币种:' : 'Currency:', stmt.currency);
+    addMetaPair(isZh ? '未结笔数:' : 'Open Invoices:', String(stmt.openItems.length));
+    addMetaPair(isZh ? '数据来源:' : 'Source:', state.stmt.useDemo ? 'Worked Example ($170 Demo)' : 'Local Studio Ledger');
+    metaBox.appendChild(metaGrid);
+
+    header.appendChild(brandBox);
+    header.appendChild(metaBox);
+    topWrap.appendChild(header);
+
+    var noticeDiv = document.createElement('div');
+    noticeDiv.className = 'inv-stmt-notice';
+    noticeDiv.textContent = noticeText;
+    topWrap.appendChild(noticeDiv);
+
+    // Parties & Total Outstanding Box
+    var parties = document.createElement('div');
+    parties.className = 'inv-parties';
+    var clientCol = document.createElement('div');
+    var kicker1 = document.createElement('div');
+    kicker1.className = 'inv-section-kicker';
+    kicker1.textContent = isZh ? '对账客户 (Statement For)' : 'Statement For (Single Client)';
+    var cNameEl = document.createElement('div');
+    cNameEl.className = 'inv-client-name';
+    cNameEl.textContent = stmt.clientName || 'Select a Client';
+    var cDetEl = document.createElement('div');
+    cDetEl.className = 'inv-preline';
+    cDetEl.textContent = stmt.clientDetails || '';
+    clientCol.appendChild(kicker1);
+    clientCol.appendChild(cNameEl);
+    clientCol.appendChild(cDetEl);
+
+    var sumHighlight = document.createElement('div');
+    sumHighlight.className = 'inv-summary-highlight';
+    var kicker2 = document.createElement('div');
+    kicker2.className = 'inv-section-kicker';
+    kicker2.style.marginBottom = '2px';
+    kicker2.textContent = isZh ? '当前未结总额' : 'Total Outstanding';
+    var hiAmt = document.createElement('div');
+    hiAmt.className = 'inv-highlight-amt';
+    hiAmt.textContent = (stmt.status === 'DUPLICATE_INVOICE_CONFLICT' || stmt.status === 'MISSING_INVOICE_NUMBER')
+      ? (isZh ? '⚠️ 需先消除重号' : '⚠️ Resolve Conflict')
+      : stmt.formattedTotalOutstanding;
+    var hiSub = document.createElement('div');
+    hiSub.style.fontSize = '11.5px';
+    hiSub.style.color = '#64748b';
+    hiSub.style.marginTop = '2px';
+    hiSub.textContent = stmt.confirmedBalancesCurrent
+      ? (isZh ? '✓ 已确认截至对账日收款已入账' : '✓ Balances confirmed current by sender')
+      : (isZh ? '待勾选确认收款余额后方可打印导出' : 'Pending sender balance confirmation checkbox');
+    sumHighlight.appendChild(kicker2);
+    sumHighlight.appendChild(hiAmt);
+    sumHighlight.appendChild(hiSub);
+
+    parties.appendChild(clientCol);
+    parties.appendChild(sumHighlight);
+    topWrap.appendChild(parties);
+
+    // Table or Conflict Alert
+    if (stmt.status === 'DUPLICATE_INVOICE_CONFLICT' || stmt.status === 'MISSING_INVOICE_NUMBER') {
+      var warnBox = document.createElement('div');
+      warnBox.className = 'stmt-conflict-box';
+      warnBox.textContent = stmt.status === 'MISSING_INVOICE_NUMBER'
+        ? 'Action required: One or more invoices for this client have a blank Invoice #. Assign unique invoice numbers before issuing a statement.'
+        : 'Action required: Multiple saved versions exist for Invoice ' + stmt.duplicateConflicts.map(function (d) { return d.invNumber; }).join(', ') + '. Resolve which version is current in the left panel so no invoice is counted twice.';
+      topWrap.appendChild(warnBox);
+    } else {
+      var tbl = document.createElement('table');
+      tbl.className = 'inv-table';
+      var thead = document.createElement('thead');
+      var hr = document.createElement('tr');
+      var cols = isZh
+        ? [['原发票编号', ''], ['开票日期', ''], ['到期日', ''], ['发票总额', 'num'], ['已付金额', 'num'], ['待付尾款', 'num']]
+        : [['Invoice #', ''], ['Issue Date', ''], ['Due Date', ''], ['Invoice Total', 'num'], ['Paid to Date', 'num'], ['Remaining Balance', 'num']];
+      for (var hc = 0; hc < cols.length; hc++) {
+        var th = document.createElement('th');
+        th.textContent = cols[hc][0];
+        if (cols[hc][1]) th.className = cols[hc][1];
+        hr.appendChild(th);
+      }
+      thead.appendChild(hr);
+      tbl.appendChild(thead);
+
+      var tbody = document.createElement('tbody');
+      if (stmt.openItems.length === 0) {
+        var emptyTr = document.createElement('tr');
+        var emptyTd = document.createElement('td');
+        emptyTd.colSpan = 6;
+        emptyTd.style.textAlign = 'center';
+        emptyTd.style.color = '#64748b';
+        emptyTd.textContent = isZh ? '当前客户在该币种下无未结清账单（余额 $0.00）。' : 'No unpaid invoices for this client and currency ($0.00 outstanding).';
+        emptyTr.appendChild(emptyTd);
+        tbody.appendChild(emptyTr);
+      } else {
+        for (var rIdx = 0; rIdx < stmt.openItems.length; rIdx++) {
+          var rowItem = stmt.openItems[rIdx];
+          var tr = document.createElement('tr');
+
+          var tdInv = document.createElement('td');
+          var stInv = document.createElement('strong');
+          stInv.textContent = rowItem.invNumber;
+          tdInv.appendChild(stInv);
+          if (rowItem.isOverdue) {
+            var ov = document.createElement('span');
+            ov.className = 'inv-overdue-pill';
+            ov.textContent = isZh ? '逾期' : 'Past Due';
+            tdInv.appendChild(ov);
+          }
+
+          var tdIssue = document.createElement('td');
+          tdIssue.textContent = rowItem.issueDate || '—';
+
+          var tdDue = document.createElement('td');
+          tdDue.textContent = rowItem.dueDate || '—';
+
+          var tdTot = document.createElement('td');
+          tdTot.className = 'num';
+          tdTot.textContent = formatMoney(rowItem.total, stmt.currency);
+
+          var tdPaid = document.createElement('td');
+          tdPaid.className = 'num';
+          tdPaid.textContent = formatMoney(rowItem.amountPaid, stmt.currency);
+
+          var tdRem = document.createElement('td');
+          tdRem.className = 'num';
+          var stRem = document.createElement('strong');
+          stRem.textContent = formatMoney(rowItem.remainingBalance, stmt.currency);
+          tdRem.appendChild(stRem);
+
+          tr.appendChild(tdInv);
+          tr.appendChild(tdIssue);
+          tr.appendChild(tdDue);
+          tr.appendChild(tdTot);
+          tr.appendChild(tdPaid);
+          tr.appendChild(tdRem);
+          tbody.appendChild(tr);
+        }
+      }
+      tbl.appendChild(tbody);
+      topWrap.appendChild(tbl);
+
+      var totWrap = document.createElement('div');
+      totWrap.className = 'inv-totals-wrap';
+      var totBox = document.createElement('div');
+      totBox.className = 'inv-totals-box';
+      var totRow = document.createElement('div');
+      totRow.className = 'inv-tot-row grand';
+      var lblSpan = document.createElement('span');
+      lblSpan.textContent = isZh ? '未结清应付合计' : 'Total Outstanding';
+      var valSpan = document.createElement('span');
+      valSpan.textContent = stmt.formattedTotalOutstanding;
+      totRow.appendChild(lblSpan);
+      totRow.appendChild(valSpan);
+      totBox.appendChild(totRow);
+      totWrap.appendChild(totBox);
+      topWrap.appendChild(totWrap);
+    }
+
+    var botWrap = document.createElement('div');
+    var botGrid = document.createElement('div');
+    botGrid.className = 'inv-bottom-grid';
+    var notesCol = document.createElement('div');
+    notesCol.className = 'inv-notes-col';
+    if (d.paymentInfo) {
+      var pk = document.createElement('div');
+      pk.className = 'inv-section-kicker';
+      pk.textContent = isZh ? '收款账户与汇款说明' : 'Remittance & Payment Instructions';
+      var pp = document.createElement('div');
+      pp.className = 'inv-preline';
+      pp.style.marginBottom = '10px';
+      pp.textContent = d.paymentInfo;
+      notesCol.appendChild(pk);
+      notesCol.appendChild(pp);
+    }
+    botGrid.appendChild(notesCol);
+    botWrap.appendChild(botGrid);
+
+    if (!unlocked || !d.hideFooter) {
+      var ftr = document.createElement('div');
+      ftr.className = 'inv-footer-brand';
+      ftr.textContent = (DOC_LABELS[d.docLang] || DOC_LABELS.en).freeFooter;
+      botWrap.appendChild(ftr);
+    }
+
+    paperEl.appendChild(topWrap);
+    paperEl.appendChild(botWrap);
+  }
+
   function updateInvoicePreview() {
+    if (state.previewMode === 'statement') {
+      renderStatementPaperDom($('invoicePaper'));
+      return;
+    }
     var unlocked = isPro();
     var d = state.doc;
     var labels = DOC_LABELS[d.docLang] || DOC_LABELS.en;
@@ -1145,6 +1948,109 @@
     saveDraft();
   }
 
+  function syncStatementControls() {
+    var entries = getActiveStatementEntries();
+    var clients = listStatementClients(entries);
+    var clientSel = $('stmtClientSelect');
+    var curSel = $('stmtCurrencySelect');
+    if (!clientSel || !curSel) return;
+
+    while (clientSel.firstChild) clientSel.removeChild(clientSel.firstChild);
+    if (!clients.length) {
+      var emptyOpt = document.createElement('option');
+      emptyOpt.value = '';
+      emptyOpt.textContent = state.lang === 'zh' ? '暂无台账客户' : 'No clients in ledger';
+      clientSel.appendChild(emptyOpt);
+    } else {
+      var foundClient = null;
+      for (var i = 0; i < clients.length; i++) {
+        if (normalizeClientKey(clients[i].clientName) === normalizeClientKey(state.stmt.clientName)) {
+          foundClient = clients[i];
+          break;
+        }
+      }
+      if (!foundClient) {
+        foundClient = clients[0];
+        state.stmt.clientName = foundClient.clientName;
+      }
+      for (var c = 0; c < clients.length; c++) {
+        var opt = document.createElement('option');
+        opt.value = clients[c].clientName;
+        opt.textContent = clients[c].clientName;
+        if (normalizeClientKey(clients[c].clientName) === foundClient.clientKey) opt.selected = true;
+        clientSel.appendChild(opt);
+      }
+
+      while (curSel.firstChild) curSel.removeChild(curSel.firstChild);
+      var availCurs = foundClient.currencies.length ? foundClient.currencies : ['USD'];
+      if (availCurs.indexOf(state.stmt.currency) === -1) {
+        state.stmt.currency = availCurs[0];
+      }
+      for (var k = 0; k < availCurs.length; k++) {
+        var cOpt = document.createElement('option');
+        cOpt.value = availCurs[k];
+        cOpt.textContent = (CURRENCIES[availCurs[k]] && CURRENCIES[availCurs[k]].label) || availCurs[k];
+        if (availCurs[k] === state.stmt.currency) cOpt.selected = true;
+        curSel.appendChild(cOpt);
+      }
+    }
+
+    if ($('stmtDateInput')) $('stmtDateInput').value = state.stmt.statementDate || todayIso;
+    if ($('stmtConfirmBalancesChk')) $('stmtConfirmBalancesChk').checked = !!state.stmt.confirmedBalancesCurrent;
+
+    var stmt = computeOpenItemStatement(entries, {
+      clientName: state.stmt.clientName,
+      currency: state.stmt.currency,
+      statementDate: state.stmt.statementDate || todayIso,
+      resolvedDuplicates: state.stmt.resolvedDuplicates,
+      confirmedBalancesCurrent: state.stmt.confirmedBalancesCurrent
+    });
+
+    var exclEl = $('stmtExcludedBanner');
+    if (exclEl) {
+      var ex = stmt.excludedCounts;
+      exclEl.textContent = state.lang === 'zh'
+        ? ('自动隔离与过滤：已结清 ' + ex.settled + ' 笔 · 报价单 ' + ex.quotes + ' 笔 · 其他客户 ' + ex.otherClients + ' 笔' + (state.stmt.useDemo ? '（当前展示 $170 演示数据）' : '（本地台账）'))
+        : ('Auto-excluded: ' + ex.settled + ' settled · ' + ex.quotes + ' quote(s) · ' + ex.otherClients + ' other-client bill(s)' + (state.stmt.useDemo ? ' ($170 worked demo active)' : ' (your local ledger)'));
+    }
+
+    var confBox = $('stmtConflictBox');
+    if (confBox) {
+      while (confBox.firstChild) confBox.removeChild(confBox.firstChild);
+      if (stmt.duplicateConflicts.length > 0) {
+        confBox.style.display = 'block';
+        var title = document.createElement('strong');
+        title.textContent = state.lang === 'zh'
+          ? '⚠️ 检测到重复发票编号（必须由您指定保留哪一版，禁止重复累加）：'
+          : '⚠️ Duplicate saved versions detected (pick 1 authoritative record so it is never counted twice):';
+        confBox.appendChild(title);
+
+        stmt.duplicateConflicts.forEach(function (dup) {
+          dup.candidates.forEach(function (cand) {
+            var optRow = document.createElement('div');
+            optRow.className = 'stmt-conflict-option';
+            var desc = document.createElement('span');
+            desc.textContent = cand.invNumber + ' · ' + cand.status + ' · Paid ' + formatMoney(cand.amountPaid, stmt.currency) + ' / Rem ' + formatMoney(cand.remainingBalance, stmt.currency);
+            var pickBtn = document.createElement('button');
+            pickBtn.type = 'button';
+            pickBtn.className = 'btn btn-xs btn-primary';
+            pickBtn.textContent = state.lang === 'zh' ? '以此版为准' : 'Use This Version';
+            pickBtn.addEventListener('click', function () {
+              state.stmt.resolvedDuplicates[dup.invKey] = cand.id;
+              syncStatementControls();
+              updateInvoicePreview();
+            });
+            optRow.appendChild(desc);
+            optRow.appendChild(pickBtn);
+            confBox.appendChild(optRow);
+          });
+        });
+      } else {
+        confBox.style.display = 'none';
+      }
+    }
+  }
+
   function renderCrmPanel() {
     var listEl = $('crmSavedList');
     listEl.innerHTML = '';
@@ -1153,10 +2059,23 @@
     $('crmTabClients').classList.toggle('active', state.crmTab === 'clients');
     $('crmTabCatalog').classList.toggle('active', state.crmTab === 'catalog');
     $('crmTabLedger').classList.toggle('active', state.crmTab === 'ledger');
+    if ($('crmTabStatement')) $('crmTabStatement').classList.toggle('active', state.crmTab === 'statement');
 
     $('crmActionsClients').style.display = state.crmTab === 'clients' ? 'flex' : 'none';
     $('crmActionsCatalog').style.display = state.crmTab === 'catalog' ? 'flex' : 'none';
     $('crmActionsLedger').style.display = state.crmTab === 'ledger' ? 'flex' : 'none';
+    if ($('crmStatementPane')) $('crmStatementPane').style.display = state.crmTab === 'statement' ? 'block' : 'none';
+    listEl.style.display = state.crmTab === 'statement' ? 'none' : 'flex';
+
+    if (state.crmTab === 'statement') {
+      if (!state.stmt.useDemo && !crmData.ledger.length) {
+        state.stmt.useDemo = true;
+      } else if (unlocked && crmData.ledger.length > 0 && state.stmt.useDemo === undefined) {
+        state.stmt.useDemo = false;
+      }
+      syncStatementControls();
+      return;
+    }
 
     if (state.crmTab === 'clients') {
       crmData.clients.forEach(function (c, idx) {
@@ -1275,8 +2194,20 @@
           renderCrmPanel();
         });
 
+        var delLedgerB = document.createElement('button');
+        delLedgerB.type = 'button';
+        delLedgerB.className = 'icon-del-btn';
+        delLedgerB.textContent = '×';
+        delLedgerB.addEventListener('click', function () {
+          if (!isPro()) { openUnlockModal(); return; }
+          crmData.ledger.splice(idx, 1);
+          persistCrm();
+          renderCrmPanel();
+        });
+
         btns.appendChild(loadB);
         btns.appendChild(statusB);
+        btns.appendChild(delLedgerB);
         row.appendChild(btns);
         listEl.appendChild(row);
       });
@@ -1423,7 +2354,76 @@
     document.body.classList.add('print-invoice-only');
   }
 
+  function triggerStatementPrint() {
+    if (!state.stmt.useDemo && !isPro()) {
+      openUnlockModal();
+      return;
+    }
+    var stmt = computeOpenItemStatement(getActiveStatementEntries(), {
+      clientName: state.stmt.clientName,
+      currency: state.stmt.currency,
+      statementDate: state.stmt.statementDate || todayIso,
+      resolvedDuplicates: state.stmt.resolvedDuplicates,
+      confirmedBalancesCurrent: state.stmt.confirmedBalancesCurrent
+    });
+    if (stmt.status === 'DUPLICATE_INVOICE_CONFLICT' || stmt.status === 'MISSING_INVOICE_NUMBER') {
+      alert(state.lang === 'zh'
+        ? '存在重复或缺失的发票编号，请先在左侧面板选择保留版本后再打印对账单。'
+        : 'Please resolve duplicate or missing invoice numbers in the Open Statement panel before printing.');
+      return;
+    }
+    if (!stmt.confirmedBalancesCurrent) {
+      alert(state.lang === 'zh'
+        ? '请先勾选“我已确认截至对账日收到的款项均已登记”，再打印或导出未结对账单。'
+        : 'Please check the confirmation box verifying all payments through the Statement Date are recorded before printing.');
+      return;
+    }
+    if (!isPro()) {
+      openUnlockModal();
+      return;
+    }
+    prepareVectorPrint();
+    window.print();
+  }
+
+  function exportOpenStatementCsvAction() {
+    if (!isPro()) {
+      openUnlockModal();
+      return;
+    }
+    var stmt = computeOpenItemStatement(getActiveStatementEntries(), {
+      clientName: state.stmt.clientName,
+      currency: state.stmt.currency,
+      statementDate: state.stmt.statementDate || todayIso,
+      resolvedDuplicates: state.stmt.resolvedDuplicates,
+      confirmedBalancesCurrent: state.stmt.confirmedBalancesCurrent
+    });
+    if (stmt.status === 'DUPLICATE_INVOICE_CONFLICT' || stmt.status === 'MISSING_INVOICE_NUMBER') {
+      alert(state.lang === 'zh' ? '请先消除重复发票编号冲突。' : 'Please resolve duplicate invoice numbers first.');
+      return;
+    }
+    if (!stmt.confirmedBalancesCurrent) {
+      alert(state.lang === 'zh' ? '请先勾选余额确认框。' : 'Please confirm balances are current first.');
+      return;
+    }
+    var csvOut = exportStatementCsvString(stmt);
+    var blob = new Blob(['\uFEFF' + csvOut], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    var safeSlug = String(stmt.clientName || 'client').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'client';
+    a.download = 'open-item-statement-' + safeSlug + '-' + stmt.currency.toLowerCase() + '-' + (stmt.statementDate || todayIso) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
   function triggerVectorPrint() {
+    if (state.previewMode === 'statement') {
+      triggerStatementPrint();
+      return;
+    }
     prepareVectorPrint();
     window.print();
     if (typeof window !== 'undefined' && window.CraftLeafSDK && window.CraftLeafSDK.showValueMomentPrompt && !isPro()) {
@@ -1442,11 +2442,15 @@
 
   function init() {
     var hasUrlTemplate = false;
+    var startInStatementMode = false;
     try {
       var params = new URLSearchParams(window.location.search || '');
       if (params.get('template')) {
         state.templateKey = resolveTemplateKey(params.get('template'));
         hasUrlTemplate = true;
+      }
+      if (params.get('mode') === 'statement') {
+        startInStatementMode = true;
       }
       var savedLang = localStorage.getItem('craftleaf_lang');
       if (params.get('lang') === 'zh' || params.get('lang') === 'en') {
@@ -1594,9 +2598,110 @@
     bindField('qrCaptionInput', 'qrCaption', false);
 
     // CRM Tabs & Actions
-    $('crmTabClients').addEventListener('click', function () { state.crmTab = 'clients'; renderCrmPanel(); });
-    $('crmTabCatalog').addEventListener('click', function () { state.crmTab = 'catalog'; renderCrmPanel(); });
-    $('crmTabLedger').addEventListener('click', function () { state.crmTab = 'ledger'; renderCrmPanel(); });
+    $('crmTabClients').addEventListener('click', function () { state.crmTab = 'clients'; state.previewMode = 'invoice'; renderCrmPanel(); updateInvoicePreview(); });
+    $('crmTabCatalog').addEventListener('click', function () { state.crmTab = 'catalog'; state.previewMode = 'invoice'; renderCrmPanel(); updateInvoicePreview(); });
+    $('crmTabLedger').addEventListener('click', function () { state.crmTab = 'ledger'; state.previewMode = 'invoice'; renderCrmPanel(); updateInvoicePreview(); });
+    if ($('crmTabStatement')) {
+      $('crmTabStatement').addEventListener('click', function () {
+        state.crmTab = 'statement';
+        state.previewMode = 'statement';
+        if (isPro() && crmData.ledger.length > 0) {
+          state.stmt.useDemo = false;
+        }
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+
+    if ($('loadStmtDemoBtn')) {
+      $('loadStmtDemoBtn').addEventListener('click', function () {
+        state.stmt.useDemo = true;
+        state.stmt.includeDupDemo = false;
+        state.stmt.resolvedDuplicates = {};
+        state.stmt.clientName = 'Acme Product Labs Inc.';
+        state.stmt.currency = 'USD';
+        state.previewMode = 'statement';
+        syncStatementControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('toggleStmtDupDemoBtn')) {
+      $('toggleStmtDupDemoBtn').addEventListener('click', function () {
+        state.stmt.useDemo = true;
+        state.stmt.includeDupDemo = !state.stmt.includeDupDemo;
+        state.stmt.resolvedDuplicates = {};
+        state.stmt.clientName = 'Acme Product Labs Inc.';
+        state.stmt.currency = 'USD';
+        state.previewMode = 'statement';
+        syncStatementControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('stmtClientSelect')) {
+      $('stmtClientSelect').addEventListener('change', function (e) {
+        state.stmt.clientName = e.target.value;
+        state.stmt.confirmedBalancesCurrent = false;
+        syncStatementControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('stmtCurrencySelect')) {
+      $('stmtCurrencySelect').addEventListener('change', function (e) {
+        state.stmt.currency = e.target.value;
+        state.stmt.confirmedBalancesCurrent = false;
+        syncStatementControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('stmtDateInput')) {
+      $('stmtDateInput').addEventListener('input', function (e) {
+        state.stmt.statementDate = e.target.value || todayIso;
+        syncStatementControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('stmtConfirmBalancesChk')) {
+      $('stmtConfirmBalancesChk').addEventListener('change', function (e) {
+        state.stmt.confirmedBalancesCurrent = !!e.target.checked;
+        updateInvoicePreview();
+      });
+    }
+    if ($('printStmtPdfBtn')) $('printStmtPdfBtn').addEventListener('click', triggerStatementPrint);
+    if ($('exportStmtCsvBtn')) $('exportStmtCsvBtn').addEventListener('click', exportOpenStatementCsvAction);
+    if ($('backToInvoiceViewBtn')) {
+      $('backToInvoiceViewBtn').addEventListener('click', function () {
+        state.previewMode = 'invoice';
+        state.crmTab = 'ledger';
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+
+    if ($('importLedgerCsvBtn') && $('ledgerCsvFileInput')) {
+      $('importLedgerCsvBtn').addEventListener('click', function () {
+        if (!isPro()) { openUnlockModal(); return; }
+        $('ledgerCsvFileInput').click();
+      });
+      $('ledgerCsvFileInput').addEventListener('change', function (e) {
+        if (!e.target.files || !e.target.files[0]) return;
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          var imported = parseLedgerCsv(String(ev.target.result || ''));
+          if (imported.length > 0) {
+            crmData.ledger = imported.concat(crmData.ledger);
+            persistCrm();
+            state.stmt.useDemo = false;
+            state.stmt.resolvedDuplicates = {};
+            state.crmTab = 'statement';
+            state.previewMode = 'statement';
+            renderCrmPanel();
+            updateInvoicePreview();
+          }
+          e.target.value = '';
+        };
+        reader.readAsText(e.target.files[0]);
+      });
+    }
 
     $('saveClientBtn').addEventListener('click', function () {
       if (!isPro()) { openUnlockModal(); return; }
@@ -1701,7 +2806,13 @@
     syncInputsFromDoc();
     applyLanguage();
     loadCrm(function () {
+      if (startInStatementMode) {
+        state.crmTab = 'statement';
+        state.previewMode = 'statement';
+        state.stmt.useDemo = !(isPro() && crmData.ledger.length > 0);
+      }
       renderCrmPanel();
+      updateInvoicePreview();
     });
   }
 

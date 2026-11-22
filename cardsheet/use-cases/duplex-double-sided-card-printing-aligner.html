@@ -334,10 +334,15 @@
           var pnp = (cfg.products && cfg.products.pnpTrilogyBundle) || {};
           var btn = document.getElementById('pnpBuyBtn');
           if (btn) {
-            btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
-            btn.textContent = lang === 'zh'
-              ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
-              : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+            if (lang === 'zh' && !pnp.mianbaoduoUrl) {
+              btn.style.display = 'none';
+            } else {
+              btn.style.display = '';
+              btn.href = (lang === 'zh' ? pnp.mianbaoduoUrl : pnp.gumroadUrl) || '../../play/index.html';
+              btn.textContent = lang === 'zh'
+                ? ('📦 获取三部曲完整打印包 (' + (pnp.priceCny || '¥19.9') + ')')
+                : ('📦 Get PnP Trilogy Bundle (' + (pnp.priceUsd || '$7.99') + ')');
+            }
           }
         }
       }
