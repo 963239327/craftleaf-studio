@@ -92,7 +92,7 @@
       <div class="tab-row">
         <button type="button" class="tab-btn active" id="tabMenuBtn" onclick="switchStudioTab('menu')">🍜 1. 中餐馆双语菜单 + FDA 过敏原 PDF 工坊 ($29)</button>
         <button type="button" class="tab-btn" id="tabSocialBtn" onclick="switchStudioTab('social')">📣 2. 餐厅/奶茶/超市 美式英文社媒帖 + 促销海报工坊 ($29 通用密钥)</button>
-        <button type="button" class="tab-btn" id="tabRentalBtn" onclick="switchStudioTab('rental')">🏡 3. 房东公平住房合规双语招租海报 + Zillow 工坊 ($19)</button>
+        <button type="button" class="tab-btn" id="tabRentalBtn" onclick="switchStudioTab('rental')">🏡 3. 房东双语招租海报 + 退租押金扣款证据附录工坊 ($19)</button>
       </div>
     </section>
 
@@ -163,45 +163,100 @@
       </div>
     </section>
 
-    <!-- ==================== STUDIO 2: FAIR-HOUSING BILINGUAL LANDLORD FLYER ==================== -->
+    <!-- ==================== STUDIO 2: FAIR-HOUSING BILINGUAL LANDLORD FLYER + MOVE-OUT DEPOSIT EVIDENCE APPENDIX ==================== -->
     <section id="studioRentalSection" class="studio-grid" style="display:none;">
       <div class="panel no-print">
-        <h3 style="margin:0 0 8px;font-size:16.5px;">🏡 房东双语招租海报 + 公平住房法实时合规自检</h3>
-        <div id="fhScannerBox" class="fh-warn fh-ok">✅ 公平住房措辞自检通过：仅描述房屋客观硬件与统一财务筛选标准，未检测到偏好/家庭状况敏感词。</div>
-
-        <label class="fld">房源双语主标题 / Listing Headline</label>
-        <input id="rTitle" type="text" value="Sun-Drenched 2BR/2BA Modern Condo · 东区轻轨旁采光两房两卫整租" oninput="renderRentalSheet()" />
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div>
-            <label class="fld">城市街区 &amp; 核心参数 / City &amp; Specs</label>
-            <input id="rSpecs" type="text" value="Bellevue / Redmond, WA · 2 Bed · 2 Bath · 1,060 sqft" oninput="renderRentalSheet()" />
-          </div>
-          <div>
-            <label class="fld">月租、押金与起租日 / Rent &amp; Available Date</label>
-            <input id="rRent" type="text" value="$2,850/mo · 1-Mo Deposit · Available Dec 1" oninput="renderRentalSheet()" />
-          </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <button type="button" class="tab-btn active" id="subRentalFlyerBtn" style="padding:8px 13px;font-size:13px;" onclick="switchRentalMode('flyer')">📢 A. 公平住房双语招租海报 + Zillow</button>
+          <button type="button" class="tab-btn" id="subRentalDepositBtn" style="padding:8px 13px;font-size:13px;" onclick="switchRentalMode('deposit')">📎 B. 退租押金扣款前后对比图 + 收据附录 (Move-Out Appendix)</button>
         </div>
-        <label class="fld">房屋硬件亮点（中英双语要点，每行一条）</label>
-        <textarea id="rBullets" rows="5" oninput="renderRentalSheet()">In-unit full-size washer/dryer & central A/C · 室内独立洗烘套装与中央冷暖空调
+
+        <div id="rentalFlyerEditor">
+          <h3 style="margin:0 0 8px;font-size:16.5px;">🏡 房东双语招租海报 + 公平住房法实时合规自检</h3>
+          <div id="fhScannerBox" class="fh-warn fh-ok">✅ 公平住房措辞自检通过：仅描述房屋客观硬件与统一财务筛选标准，未检测到偏好/家庭状况敏感词。</div>
+
+          <label class="fld">房源双语主标题 / Listing Headline</label>
+          <input id="rTitle" type="text" value="Sun-Drenched 2BR/2BA Modern Condo · 东区轻轨旁采光两房两卫整租" oninput="renderRentalSheet()" />
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label class="fld">城市街区 &amp; 核心参数 / City &amp; Specs</label>
+              <input id="rSpecs" type="text" value="Bellevue / Redmond, WA · 2 Bed · 2 Bath · 1,060 sqft" oninput="renderRentalSheet()" />
+            </div>
+            <div>
+              <label class="fld">月租、押金与起租日 / Rent &amp; Available Date</label>
+              <input id="rRent" type="text" value="$2,850/mo · 1-Mo Deposit · Available Dec 1" oninput="renderRentalSheet()" />
+            </div>
+          </div>
+          <label class="fld">房屋硬件亮点（中英双语要点，每行一条）</label>
+          <textarea id="rBullets" rows="5" oninput="renderRentalSheet()">In-unit full-size washer/dryer & central A/C · 室内独立洗烘套装与中央冷暖空调
 1 covered garage parking spot w/ Level-2 EV charger · 含地下车库固定车位（支持电车快充）
 8-min walk to Light Rail, grocery & parks · 步行 8 分钟直达轻轨站、超市与社区公园
 Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处理，室内禁烟</textarea>
-        <label class="fld">统一客观申请标准 &amp; 看房联系方式 / Uniform Screening Criteria &amp; Contact</label>
-        <input id="rContact" type="text" value="Uniform Criteria: Verifiable income ≥ 3× rent, 700+ credit & background check · Text/WeChat: (425) 555-0142" oninput="renderRentalSheet()" />
-        <label class="fld">导入 1–4 张房源实拍图（100% 本地浏览器读取，绝不上传服务器）</label>
-        <input id="rPhotosInput" type="file" accept="image/*" multiple onchange="loadLocalPropertyPhotos(this)" />
+          <label class="fld">统一客观申请标准 &amp; 看房联系方式 / Uniform Screening Criteria &amp; Contact</label>
+          <input id="rContact" type="text" value="Uniform Criteria: Verifiable income ≥ 3× rent, 700+ credit & background check · Text/WeChat: (425) 555-0142" oninput="renderRentalSheet()" />
+          <label class="fld">导入 1–4 张房源实拍图（100% 本地浏览器读取，绝不上传服务器）</label>
+          <input id="rPhotosInput" type="file" accept="image/*" multiple onchange="loadLocalPropertyPhotos(this)" />
 
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button type="button" class="btn btn-green" onclick="exportRentalPdf()">🖨️ 导出无水印双语招租海报 PDF</button>
-          <button type="button" class="btn-sec" onclick="copyZillowListingCopy()">📋 一键复制 Zillow / Facebook 纯英文招租文案</button>
-          <a class="btn-sec" id="ctaLandlordKit" href="../cn-guides/us-apartment-lease-security-deposit-early-termination-clauses.html">📖 免费阅读租约避坑指南</a>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-green" onclick="exportRentalPdf()">🖨️ 导出无水印双语招租海报 PDF</button>
+            <button type="button" class="btn-sec" onclick="copyZillowListingCopy()">📋 一键复制 Zillow / Facebook 纯英文招租文案</button>
+            <a class="btn-sec" id="ctaLandlordKit" href="../cn-guides/us-apartment-lease-security-deposit-early-termination-clauses.html">📖 免费阅读租约避坑指南</a>
+          </div>
         </div>
+
+        <div id="rentalDepositEditor" style="display:none;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+            <h3 style="margin:0;font-size:16.2px;">📎 Move-Out Deposit Deduction Photo &amp; Receipt Appendix Organizer</h3>
+            <a class="btn-sec" href="../previews/moveout_deposit_appendix_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12px;padding:5px 10px;">📄 1-Page Sample Appendix PDF</a>
+          </div>
+
+          <div style="background:#090f1d;border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#cbd5e1;line-height:1.48;">
+            <strong>Walkthrough Checklist vs. Post-Move-Out Evidence Appendix:</strong>
+            The existing 28-shot Lease Checklist records room condition <em>during</em> walkthroughs. This local organizer pairs files <em>already taken</em> after move-out so each repair/cleaning deduction shows its exact <strong>Before-Work Photo + After-Work Photo + Receipt / Separate Invoice PDF</strong>, lists separate PDFs to enclose, and marks any missing item as <code>NOT SUPPLIED</code> rather than silently leaving it out (100% local RAM — zero files sent anywhere).
+          </div>
+
+          <div id="depAuditBox" class="fh-warn fh-ok"></div>
+
+          <div style="display:grid;grid-template-columns:1.2fr 0.85fr 0.95fr;gap:8px;">
+            <div>
+              <label class="fld">Unit / Property Label</label>
+              <input id="dUnit" type="text" value="Unit 204 · 1420 Elm St (Fictional Sample)" oninput="renderDepositSheet()" />
+            </div>
+            <div>
+              <label class="fld">Move-Out Date</label>
+              <input id="dDate" type="text" value="2026-11-15" oninput="renderDepositSheet()" />
+            </div>
+            <div>
+              <label class="fld">Itemized Statement Ref</label>
+              <input id="dRef" type="text" value="STMT-2026-204" oninput="renderDepositSheet()" />
+            </div>
+          </div>
+
+          <label class="fld">Deduction Charges (`Charge_ID | Description | Amount_$ | Before_Filename | After_Filename | Receipt_Img_Filename | Separate_PDF_Filename`)</label>
+          <textarea id="dCharges" rows="5" style="font-family:Menlo,Consolas,monospace;font-size:12px;" oninput="renderDepositSheet()">CHG-01 | Deep Oven & Range Hood Degreasing (Beyond Ordinary Wear) | 140.00 | 01_oven_before_baked_grease.png | 02_oven_after_cleaned.png | 03_sparkle_cleaning_receipt_140.png |
+CHG-02 | Bedroom North Wall Torn TV-Anchor Drywall Patch & Primer | 95.00 | 04_drywall_before_damage.png | | | Handyman_Invoice_2026_1118.pdf</textarea>
+
+          <label class="fld">Attach Local Before/After/Receipt Images by Filename (100% Local RAM — Original Files Untouched)</label>
+          <input id="dLocalFilesInput" type="file" accept="image/*" multiple onchange="loadLocalDepositFiles(this)" />
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-green" onclick="exportDepositAppendixPdf()">🖨️ 导出无水印证据附录 PDF (Print Appendix)</button>
+            <button type="button" class="btn-sec" onclick="exportDepositCsv()">📊 导出证据索引表 (.CSV)</button>
+          </div>
+
+          <div style="margin-top:10px;padding:9px 11px;border-radius:9px;background:#090f1d;border:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Optional anonymous preview feedback (no charge, no email/files):</span>
+            <button type="button" class="btn-sec" style="padding:5px 10px;font-size:11.5px;" onclick="submitIdea77Vote()">👍 I would buy the $19 landlord edition for this appendix</button>
+            <span id="val77Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+
         <div id="rentalExportMsg" style="font-size:12.5px;color:#6ee7b7;margin-top:6px;"></div>
 
         <div class="unlock-bar">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
-            <strong id="rentalLockTitle" style="color:#fcd34d;font-size:13.5px;">🔒 解锁无水印招租海报 PDF 无限次导出 ($19 一次买断 · 附赠 17 页租约验房包)</strong>
-            <a class="btn" id="buyRentalStudioBtn" href="https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?option=t8XKOlskRq76_g5d3h7ODA==&wanted=true" target="_blank" rel="noopener" style="padding:6px 12px;font-size:12.5px;">💳 获取自助招租工坊密钥 ($19) →</a>
+            <strong id="rentalLockTitle" style="color:#fcd34d;font-size:13.5px;">🔒 解锁无水印招租海报 + 退租扣款证据附录双工坊 ($19 一次买断 · 含离线版 HTML + 17页租约验房包)</strong>
+            <a class="btn" id="buyRentalStudioBtn" href="https://stardustdemo.gumroad.com/l/us-apartment-lease-12-clauses-chinese-guide?option=t8XKOlskRq76_g5d3h7ODA==&wanted=true" target="_blank" rel="noopener" style="padding:6px 12px;font-size:12.5px;">💳 获取房东双工坊密钥 ($19) →</a>
           </div>
           <div style="display:flex;gap:8px;">
             <input id="rentalLicenseInput" type="text" placeholder="粘贴 Gumroad 订单回执中的 License Key（或 $19 All-Access 通票密钥）" style="margin:0;flex:1;" />
@@ -231,6 +286,26 @@ Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处
           </div>
           <div class="menu-ftr">
             <strong>Equal Housing Opportunity · 公平住房声明：</strong> We welcome all qualified applicants and apply uniform, objective income, credit, and rental-history criteria in accordance with federal, state, and local Fair Housing laws.
+          </div>
+        </div>
+
+        <div class="print-sheet" id="depositPrintSheet" style="display:none;">
+          <div class="wm-overlay" id="depositWatermark">PREVIEW · UNLOCK LANDLORD STUDIO ($19)<br/>免费核对编号证据附录 · 激活同一 $19 密钥去除水印打印 PDF</div>
+          <div style="border-bottom:2px solid #0f172a;padding-bottom:10px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+            <div>
+              <div style="font-size:10.5px;font-weight:800;color:#1e40af;text-transform:uppercase;letter-spacing:0.7px;">ATTACHMENT APPENDIX TO ITEMIZED MOVE-OUT STATEMENT</div>
+              <h2 id="pvDepUnit" style="margin:3px 0;font-size:19px;color:#0f172a;"></h2>
+              <div id="pvDepMeta" style="font-size:12px;color:#475569;"></div>
+            </div>
+            <div style="text-align:right;background:#f1f5f9;border:1px solid #cbd5e1;padding:7px 11px;border-radius:8px;">
+              <div style="font-size:10px;font-weight:700;color:#475569;">TOTAL DOCUMENTED</div>
+              <div id="pvDepTotal" style="font-size:16px;font-weight:900;color:#0f172a;"></div>
+            </div>
+          </div>
+          <div id="pvDepEnclosures" style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:9px 11px;font-size:11.8px;color:#1e3a8a;margin-bottom:11px;"></div>
+          <div id="pvDepExhibits"></div>
+          <div class="menu-ftr">
+            <strong>Informational Organizer Notice (Not Legal, Tax, Medical, or Financial Advice):</strong> Not a government form and not affiliated with any court, rent board, or government agency. Does not determine allowable deductions (e.g., CA Civil Code §1950.5(g)–(h) / Berkeley Rent Board rules / WA RCW 59.18.280), certify evidence, or replace the itemized statement or original records.
           </div>
         </div>
       </div>
@@ -450,6 +525,9 @@ Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处
       }
     };
     var rentalPhotos = [];
+    var depositBlobByFilename = {};
+    var latestDepositCompiled = null;
+    var rentalSubMode = 'flyer';
     var socialPhotoDataUrl = '';
     var activeTab = 'menu';
 
@@ -628,8 +706,347 @@ Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处
       var unlocked = isRentalPro();
       document.getElementById('rentalWatermark').style.display = unlocked ? 'none' : 'flex';
       document.getElementById('rentalLockTitle').textContent = unlocked
-        ? '✅ 已解锁无水印招租海报 PDF 工坊 Pro！可直接导出印刷级海报'
-        : '🔒 解锁无水印招租海报 PDF 无限次导出 ($19 一次买断 · 附赠 17 页租约验房包)';
+        ? '✅ 已解锁无水印房东招租海报 + 退租押金证据附录双工坊 Pro！可直接导出印刷级 PDF'
+        : '🔒 解锁无水印招租海报 + 退租扣款证据附录双工坊 ($19 一次买断 · 含离线版 HTML + 17页租约验房包)';
+    }
+
+    
+var DepositAppendixCore = (function () {
+  var NOT_SUPPLIED = 'NOT SUPPLIED';
+
+  function parseUsdToCents(raw) {
+    var cleaned = String(raw === null || raw === undefined ? '' : raw).replace(/[$,\s]/g, '');
+    if (!cleaned || !/^\d+(\.\d{1,2})?$/.test(cleaned)) return null;
+    var parts = cleaned.split('.');
+    var whole = parseInt(parts[0], 10);
+    var frac = parts.length > 1 ? parseInt((parts[1] + '00').slice(0, 2), 10) : 0;
+    if (!isFinite(whole) || !isFinite(frac)) return null;
+    return whole * 100 + frac;
+  }
+
+  function formatCentsUsd(cents) {
+    if (cents === null || cents === undefined || !isFinite(cents)) return 'INVALID AMOUNT';
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  function cleanFileList(val) {
+    if (Array.isArray(val)) {
+      return val.map(function (x) { return String(x || '').trim(); }).filter(Boolean);
+    }
+    return String(val || '')
+      .split(/[;,]/)
+      .map(function (x) { return x.trim(); })
+      .filter(Boolean);
+  }
+
+  function compileDepositAppendix(meta, rawCharges) {
+    var seenIds = {};
+    var charges = [];
+    var enclosures = [];
+    var seenEnclosures = {};
+    var totalCents = 0;
+    var completeCount = 0;
+    var missingMaterialCount = 0;
+    var blockerErrors = [];
+
+    var list = Array.isArray(rawCharges) ? rawCharges : [];
+    for (var i = 0; i < list.length; i++) {
+      var row = list[i] || {};
+      var cid = String(row.chargeId || '').trim().toUpperCase();
+      var desc = String(row.description || '').trim();
+      var cents = parseUsdToCents(row.amountUsd);
+      var beforeFiles = cleanFileList(row.beforePhotos);
+      var afterFiles = cleanFileList(row.afterPhotos);
+      var receiptImages = cleanFileList(row.receiptImages);
+      var pdfRef = String(row.invoicePdfRef || '').trim();
+
+      var rowBlockers = [];
+      if (!cid) {
+        rowBlockers.push('MISSING_CHARGE_ID');
+      } else if (seenIds[cid]) {
+        rowBlockers.push('DUPLICATE_CHARGE_ID:' + cid);
+      } else {
+        seenIds[cid] = true;
+      }
+
+      if (!desc) {
+        rowBlockers.push('MISSING_DESCRIPTION');
+      }
+      if (cents === null || cents <= 0) {
+        rowBlockers.push('INVALID_CHARGE_AMOUNT');
+      } else {
+        totalCents += cents;
+      }
+
+      var missingSlots = [];
+      if (beforeFiles.length === 0) missingSlots.push('Before-Work Photo');
+      if (afterFiles.length === 0) missingSlots.push('After-Work Photo');
+      if (receiptImages.length === 0 && !pdfRef) missingSlots.push('Receipt / Invoice Document');
+
+      if (pdfRef && !seenEnclosures[pdfRef]) {
+        seenEnclosures[pdfRef] = true;
+        enclosures.push({
+          pdfFilename: pdfRef,
+          chargeId: cid || ('LINE-' + (i + 1)),
+          description: desc || 'Unnamed deduction'
+        });
+      }
+
+      var status = 'COMPLETE';
+      if (rowBlockers.length > 0) {
+        status = 'BLOCKED_INPUT_ERROR';
+        for (var b = 0; b < rowBlockers.length; b++) {
+          blockerErrors.push((cid || ('Line ' + (i + 1))) + ': ' + rowBlockers[b]);
+        }
+      } else if (missingSlots.length > 0) {
+        status = 'MISSING_MATERIAL';
+        missingMaterialCount++;
+      } else {
+        completeCount++;
+      }
+
+      charges.push({
+        exhibitNumber: 'Exhibit A-' + (i + 1),
+        chargeId: cid || NOT_SUPPLIED,
+        description: desc || NOT_SUPPLIED,
+        amountCents: cents,
+        amountFormatted: formatCentsUsd(cents),
+        beforeDisplay: beforeFiles.length > 0 ? beforeFiles.join(', ') : NOT_SUPPLIED,
+        afterDisplay: afterFiles.length > 0 ? afterFiles.join(', ') : NOT_SUPPLIED,
+        receiptDisplay: receiptImages.length > 0
+          ? ('Attached Image: ' + receiptImages.join(', ') + (pdfRef ? (' + Separate PDF: ' + pdfRef) : ''))
+          : (pdfRef ? ('Separate Original PDF To Enclose: ' + pdfRef) : NOT_SUPPLIED),
+        beforeSupplied: beforeFiles.length > 0,
+        afterSupplied: afterFiles.length > 0,
+        receiptSupplied: (receiptImages.length > 0 || Boolean(pdfRef)),
+        pdfEnclosureRef: pdfRef,
+        missingSlots: missingSlots,
+        rowBlockers: rowBlockers,
+        status: status
+      });
+    }
+
+    return {
+      unitLabel: String((meta && meta.unitLabel) || '').trim() || NOT_SUPPLIED,
+      moveOutDate: String((meta && meta.moveOutDate) || '').trim() || NOT_SUPPLIED,
+      statementRef: String((meta && meta.statementRef) || '').trim() || NOT_SUPPLIED,
+      charges: charges,
+      enclosuresToAttach: enclosures,
+      totalDocumentedCents: blockerErrors.length > 0 ? null : totalCents,
+      totalDocumentedFormatted: blockerErrors.length > 0 ? 'FIX INPUT ERRORS' : formatCentsUsd(totalCents),
+      completeCount: completeCount,
+      missingMaterialCount: missingMaterialCount,
+      blockerErrors: blockerErrors,
+      hasBlockers: blockerErrors.length > 0
+    };
+  }
+
+  return {
+    NOT_SUPPLIED: NOT_SUPPLIED,
+    parseUsdToCents: parseUsdToCents,
+    formatCentsUsd: formatCentsUsd,
+    compileDepositAppendix: compileDepositAppendix
+  };
+})();
+
+
+    function switchRentalMode(mode) {
+      rentalSubMode = mode === 'deposit' ? 'deposit' : 'flyer';
+      document.getElementById('rentalFlyerEditor').style.display = rentalSubMode === 'flyer' ? '' : 'none';
+      document.getElementById('rentalDepositEditor').style.display = rentalSubMode === 'deposit' ? '' : 'none';
+      document.getElementById('rentalPrintSheet').style.display = rentalSubMode === 'flyer' ? '' : 'none';
+      document.getElementById('depositPrintSheet').style.display = rentalSubMode === 'deposit' ? '' : 'none';
+      document.getElementById('subRentalFlyerBtn').classList.toggle('active', rentalSubMode === 'flyer');
+      document.getElementById('subRentalDepositBtn').classList.toggle('active', rentalSubMode === 'deposit');
+      if (rentalSubMode === 'deposit') renderDepositSheet();
+      else renderRentalSheet();
+    }
+
+    function parseDepositPipeLines(raw) {
+      var lines = String(raw || '').split(/\r?\n/);
+      var out = [];
+      for (var i = 0; i < lines.length; i++) {
+        var ln = lines[i].trim();
+        if (!ln || ln.charAt(0) === '#') continue;
+        var p = ln.split('|').map(function (s) { return s.trim(); });
+        out.push({
+          chargeId: p[0] || '',
+          description: p[1] || '',
+          amountUsd: p[2] || '',
+          beforePhotos: p[3] || '',
+          afterPhotos: p[4] || '',
+          receiptImages: p[5] || '',
+          invoicePdfRef: p[6] || ''
+        });
+      }
+      return out;
+    }
+
+    function loadLocalDepositFiles(inp) {
+      var files = Array.prototype.slice.call((inp && inp.files) || []);
+      if (!files.length) return;
+      var rem = files.length;
+      files.forEach(function (f) {
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          depositBlobByFilename[f.name] = ev.target.result;
+          rem -= 1;
+          if (rem <= 0) renderDepositSheet();
+        };
+        reader.readAsDataURL(f);
+      });
+    }
+
+    function appendDepositSlot(parent, titleTxt, valTxt, supplied) {
+      var box = document.createElement('div');
+      box.style.cssText = supplied
+        ? 'border:1px solid #cbd5e1;border-radius:8px;padding:7px 8px;background:#f8fafc;font-size:11px;color:#0f172a;'
+        : 'border:1px solid #f87171;border-radius:8px;padding:7px 8px;background:#fef2f2;font-size:11px;color:#991b1b;';
+      var st = document.createElement('strong');
+      st.style.display = 'block';
+      st.textContent = titleTxt;
+      box.appendChild(st);
+      var sp = document.createElement('div');
+      sp.style.marginTop = '3px';
+      sp.style.wordBreak = 'break-word';
+      sp.textContent = supplied ? valTxt : ('⚠️ ' + DepositAppendixCore.NOT_SUPPLIED);
+      box.appendChild(sp);
+      if (supplied) {
+        var fname = valTxt.replace(/^Attached Image:\s*/i, '').split(',')[0].split('+')[0].trim();
+        if (depositBlobByFilename[fname]) {
+          var im = document.createElement('img');
+          im.src = depositBlobByFilename[fname];
+          im.alt = titleTxt;
+          im.style.cssText = 'width:100%;height:88px;object-fit:cover;border-radius:6px;margin-top:5px;border:1px solid #cbd5e1;';
+          box.appendChild(im);
+        }
+      }
+      parent.appendChild(box);
+    }
+
+    function renderDepositSheet() {
+      var meta = {
+        unitLabel: document.getElementById('dUnit').value,
+        moveOutDate: document.getElementById('dDate').value,
+        statementRef: document.getElementById('dRef').value
+      };
+      var comp = DepositAppendixCore.compileDepositAppendix(meta, parseDepositPipeLines(document.getElementById('dCharges').value));
+      latestDepositCompiled = comp;
+
+      document.getElementById('pvDepUnit').textContent = comp.unitLabel;
+      document.getElementById('pvDepMeta').textContent =
+        'Move-Out Date: ' + comp.moveOutDate + ' · Statement Ref: ' + comp.statementRef + ' · Exhibits: ' + comp.charges.length;
+      document.getElementById('pvDepTotal').textContent = comp.totalDocumentedFormatted;
+
+      var enclEl = document.getElementById('pvDepEnclosures');
+      clearChildren(enclEl);
+      var eb = document.createElement('strong');
+      eb.textContent = '📎 Separate Original PDFs to Enclose with Packet: ';
+      enclEl.appendChild(eb);
+      var es = document.createElement('span');
+      es.textContent = comp.enclosuresToAttach.length
+        ? comp.enclosuresToAttach.map(function (e, idx) { return '[' + (idx + 1) + '] ' + e.pdfFilename + ' (for ' + e.chargeId + ')'; }).join('  ·  ')
+        : 'None referenced (all receipts attached inline or marked NOT SUPPLIED).';
+      enclEl.appendChild(es);
+
+      var exWrap = document.getElementById('pvDepExhibits');
+      clearChildren(exWrap);
+      for (var i = 0; i < comp.charges.length; i++) {
+        var c = comp.charges[i];
+        var card = document.createElement('div');
+        card.style.cssText = 'border:1.5px solid #cbd5e1;border-radius:10px;padding:10px 12px;margin-bottom:10px;background:#ffffff;break-inside:avoid;';
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800;font-size:13px;color:#0f172a;';
+        var lSpan = document.createElement('span');
+        lSpan.textContent = c.exhibitNumber + ' (' + c.chargeId + ') — ' + c.description;
+        var rSpan = document.createElement('span');
+        rSpan.style.color = c.status === 'COMPLETE' ? '#047857' : '#b91c1c';
+        rSpan.textContent = c.amountFormatted + ' · [' + (c.status === 'COMPLETE' ? 'COMPLETE' : (c.status === 'MISSING_MATERIAL' ? 'MISSING MATERIAL' : 'INPUT ERROR')) + ']';
+        hdr.appendChild(lSpan);
+        hdr.appendChild(rSpan);
+        card.appendChild(hdr);
+
+        var sGrid = document.createElement('div');
+        sGrid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;';
+        appendDepositSlot(sGrid, '1. Before-Work Photo', c.beforeDisplay, c.beforeSupplied);
+        appendDepositSlot(sGrid, '2. After-Work Photo', c.afterDisplay, c.afterSupplied);
+        appendDepositSlot(sGrid, '3. Receipt / Invoice PDF', c.receiptDisplay, c.receiptSupplied);
+        card.appendChild(sGrid);
+        exWrap.appendChild(card);
+      }
+
+      var auditEl = document.getElementById('depAuditBox');
+      if (comp.hasBlockers) {
+        auditEl.className = 'fh-warn fh-bad';
+        auditEl.textContent = '⛔ Input blocker(s): ' + comp.blockerErrors.join(' | ');
+      } else if (comp.missingMaterialCount > 0) {
+        auditEl.className = 'fh-warn fh-bad';
+        auditEl.textContent = '⚠️ ' + comp.missingMaterialCount + ' charge(s) have missing files explicitly marked "NOT SUPPLIED" on the appendix (' + comp.completeCount + ' complete).';
+      } else {
+        auditEl.className = 'fh-warn fh-ok';
+        auditEl.textContent = '✅ All ' + comp.completeCount + ' deduction line(s) paired with Before photo, After photo & Receipt/PDF.';
+      }
+
+      var unlocked = isRentalPro();
+      document.getElementById('depositWatermark').style.display = unlocked ? 'none' : 'flex';
+    }
+
+    function exportDepositAppendixPdf() {
+      if (!isRentalPro()) {
+        document.getElementById('rentalLicenseInput').focus();
+        document.getElementById('rentalExportMsg').textContent = '请先在下方输入 $19 房东双工坊密钥（或 $19 全站通票密钥）去除预览水印后打印证据附录 PDF！';
+        return;
+      }
+      if (latestDepositCompiled && latestDepositCompiled.hasBlockers) {
+        document.getElementById('rentalExportMsg').textContent = '请先修正扣款编号重复或金额格式错误后再打印 PDF！';
+        return;
+      }
+      switchStudioTab('rental');
+      switchRentalMode('deposit');
+      window.print();
+    }
+
+    function exportDepositCsv() {
+      if (!latestDepositCompiled) renderDepositSheet();
+      var rows = [['Exhibit','Charge_ID','Description','Amount_USD','Before_Photo','After_Photo','Receipt_or_PDF_Ref','Status']];
+      for (var i = 0; i < latestDepositCompiled.charges.length; i++) {
+        var c = latestDepositCompiled.charges[i];
+        rows.push([
+          c.exhibitNumber, c.chargeId,
+          '"' + String(c.description || '').replace(/"/g, '""') + '"',
+          c.amountFormatted,
+          '"' + String(c.beforeDisplay || '').replace(/"/g, '""') + '"',
+          '"' + String(c.afterDisplay || '').replace(/"/g, '""') + '"',
+          '"' + String(c.receiptDisplay || '').replace(/"/g, '""') + '"',
+          c.status
+        ]);
+      }
+      var csv = '\uFEFF' + rows.map(function (r) { return r.join(','); }).join('\r\n');
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'MoveOut_Deposit_Evidence_Appendix_Index.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      document.getElementById('rentalExportMsg').textContent = '✓ 已导出证据索引表 (.CSV)！';
+    }
+
+    function submitIdea77Vote() {
+      var msgEl = document.getElementById('val77Msg');
+      try {
+        if (typeof sessionStorage !== 'undefined' && sessionStorage && sessionStorage.getItem('craftleaf_val77_voted')) {
+          msgEl.textContent = 'Recorded once for this preview session — thank you!';
+          return;
+        }
+        if (typeof sessionStorage !== 'undefined' && sessionStorage) {
+          sessionStorage.setItem('craftleaf_val77_voted', 'buy19');
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+        window.CraftLeafSDK.trackEvent('idea77-buy-19', 'Idea 77 Move-Out Deposit Appendix $19 Intent');
+      }
+      msgEl.textContent = 'Thank you — anonymous response recorded for this preview session.';
     }
 
     function loadSocialPreset() {
@@ -910,6 +1327,7 @@ Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处
         renderMenuSheet();
         renderSocialStudio();
         renderRentalSheet();
+        renderDepositSheet();
       } else {
         msgEl.textContent = res && res.reason === 'network_error'
           ? '网络连接失败，请检查网络后重试。'
@@ -970,6 +1388,7 @@ Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处
       renderMenuSheet();
       renderSocialStudio();
       renderRentalSheet();
+      renderDepositSheet();
     });
 
     window.addEventListener('DOMContentLoaded', function () {
@@ -983,12 +1402,18 @@ Water, sewer & trash included in rent; no smoking · 租金包水费与垃圾处
       }
       var params = new URLSearchParams(window.location.search || '');
       var initTab = params.get('tab');
+      var initMode = params.get('mode');
       if (initTab === 'social' || initTab === 'rental' || initTab === 'menu') {
         switchStudioTab(initTab);
+      }
+      if (initMode === 'deposit') {
+        switchStudioTab('rental');
+        switchRentalMode('deposit');
       }
       renderMenuSheet();
       renderSocialStudio();
       renderRentalSheet();
+      renderDepositSheet();
     });
   </script>
 </body>

@@ -228,6 +228,84 @@
       </div>
     </section>
 
+    <section id="shrinkflationGuardSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🧈 NEW IN PACK · MACRO-FREE .XLSX + LOCAL HTML · SUPPLIER SHRINKFLATION GUARD</span>
+            <span data-lang="zh">🧈 新增免宏工作簿 (.XLSX + 本地计算器) · 供应商缩水/暗涨菜品成本红线核查</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Flag Menu Items Crossing Your Food-Cost Target When a Supplier Changes Price or Pack Size</span>
+            <span data-lang="zh">供应商改包装克重或调价时，一键揪出突破食材成本率红线的菜品</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Bakery &amp; Café Check: Unsalted butter stays <strong>$8.00</strong> per pack while shrinking from <strong>1,000 g → 800 g</strong> (+25.0% per gram). Across 10 portions using 250 g, butter rises from <strong>20.0¢ → 25.0¢ (+5.0¢/serving)</strong>, pushing the croissant over its 28.0% target while the butter-free item stays unchanged (+0.0¢). Included as macro-free <code>05_Supplier_Shrinkflation_Menu_Cost_Guard.xlsx</code> (LibreOffice / Excel / Sheets) + offline HTML in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战核查示例：无盐黄油整包进价维持 <strong>8.00</strong> 不变，但净含量从 <strong>1,000 g 缩水至 800 g</strong>（每克隐形涨价 +25.0%）。一锅出品 10 份耗用 250 g 黄油的可颂，单份黄油成本从 <strong>20.0 美分涨至 25.0 美分（+5.0 美分/份）</strong>，突破 28.0% 食材成本率红线；不含黄油的美式咖啡变动为 0。直接在下方修改数值免费试算！</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/supplier_menu_cost_guard_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Cost Guard PDF Sample</span>
+          <span data-lang="zh">📄 查看 1 页核查表图解样稿 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Supplier Pack Change (`ID | Name | Unit | Old_$ | Old_Size | New_$ | New_Size`)</span>
+            <span data-lang="zh">1. 供应商包装进价变动（`编码 | 名称 | 单位 | 原价 | 原净重 | 新价 | 新净重`）</span>
+          </label>
+          <textarea id="sgPacksInput" rows="3" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;">BUTTER-UNS | Unsalted Butter | g | 8.00 | 1000 | 8.00 | 800
+ESPRESSO-BEAN | House Espresso | g | 15.00 | 1000 | 15.00 | 1000</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Recipes (`ID | Item | Ing_ID | Unit | Batch_Qty | Sellable_Yield | Other_Cost | Menu_$ | Target_%`)</span>
+            <span data-lang="zh">2. 菜单配方（`编号 | 菜品 | 原料编码 | 单位 | 每锅用量 | 可售份数 | 其他配料费 | 售价 | 红线%`）</span>
+          </label>
+          <textarea id="sgRecipesInput" rows="4" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;">RCP-01 | Brown-Butter Almond Croissant | BUTTER-UNS | g | 250 | 10 | 10.50 | 4.50 | 28
+RCP-02 | Iced House Americano (Butter-Free) | ESPRESSO-BEAN | g | 180 | 10 | 1.50 | 4.00 | 25
+RCP-03 | Cardamom Brioche Bun | BUTTER-UNS | g | 200 | 8 | 5.60 | 4.25 | 28</textarea>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">📊 Live Per-Serving Impact &amp; Target Flags</span>
+              <span data-lang="zh">📊 单份食材成本变动与红线预警结果</span>
+            </strong>
+            <span id="sgSummaryBadge" style="font-size:12px;font-weight:800;color:#fcd34d;"></span>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Item</th>
+                <th style="padding:6px;">Old → New / Srv</th>
+                <th style="padding:6px;">Δ (¢)</th>
+                <th style="padding:6px;">Food Cost %</th>
+                <th style="padding:6px;">Target</th>
+                <th style="padding:6px;">Flag</th>
+              </tr>
+            </thead>
+            <tbody id="sgResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Ingredient cost is NOT net profit (excludes labor, rent, packaging &amp; POS fees) and does not set menu prices for you.</span>
+            <span data-lang="zh"><em>边界说明：</em>食材成本率不等于纯利润（未含人工、房租、包材与刷卡手续费），仅标记超红线菜品供店长复核，不自动替您定价。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Quick anonymous feedback (no checkout, no email):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val76BuyBtn">👍 I would buy the $9.99 pack for this worksheet</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val76KeepBtn">↔️ I would keep my current method</button>
+            </div>
+            <span id="val76Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="disc">
       <span data-lang="en"><strong>Disclaimer:</strong> Provided strictly for small-business spreadsheet automation and educational reference only (Not Legal, Tax, Accounting, or Financial Advice). Always test scripts on a duplicate sheet first and consult a qualified CPA regarding IRS Schedule C deductions and mileage rules. CraftLeaf Studio is not affiliated with Google LLC.</span>
       <span data-lang="zh"><strong>免责声明：</strong>本脚本生成器与配套模板仅供小微商家日常表格提效与记账参考，不构成任何税务、会计、法律或财务建议（Not Legal, Tax, Accounting, or Financial Advice）。正式启用前请先在副本表格测试，报税抵扣请以持牌 CPA 意见为准。</span>
@@ -490,12 +568,297 @@
       setLang(isZh() ? "en" : "zh");
     });
 
+    
+var SupplierCostGuard = (function () {
+  function normUnit(u) {
+    return String(u || '').trim().toLowerCase();
+  }
+
+  function evaluateSupplierCostImpact(packs, recipeLines) {
+    var packMap = {};
+    var packResults = [];
+    for (var i = 0; i < (packs || []).length; i++) {
+      var p = packs[i] || {};
+      var id = String(p.id || '').trim().toUpperCase();
+      if (!id) continue;
+      var name = String(p.name || id).trim();
+      var unit = normUnit(p.unit);
+      var oldPrice = Number(p.oldPackPrice);
+      var oldSize = Number(p.oldPackSize);
+      var newPrice = Number(p.newPackPrice);
+      var newSize = Number(p.newPackSize);
+      var valid = (
+        unit.length > 0 &&
+        isFinite(oldPrice) && oldPrice >= 0 &&
+        isFinite(oldSize) && oldSize > 0 &&
+        isFinite(newPrice) && newPrice >= 0 &&
+        isFinite(newSize) && newSize > 0
+      );
+      var oldUnitCost = valid ? (oldPrice / oldSize) : null;
+      var newUnitCost = valid ? (newPrice / newSize) : null;
+      var status = 'INVALID_PACK_INPUT';
+      if (valid) {
+        if (Math.abs(newPrice - oldPrice) < 1e-9 && newSize < oldSize) {
+          status = 'SHRINKFLATION_DETECTED';
+        } else if (newUnitCost > oldUnitCost + 1e-12) {
+          status = 'UNIT_COST_UP';
+        } else if (newUnitCost < oldUnitCost - 1e-12) {
+          status = 'UNIT_COST_DOWN';
+        } else {
+          status = 'UNCHANGED';
+        }
+      }
+      var rec = {
+        id: id,
+        name: name,
+        unit: unit,
+        oldPackPrice: oldPrice,
+        oldPackSize: oldSize,
+        newPackPrice: newPrice,
+        newPackSize: newSize,
+        oldUnitCost: oldUnitCost,
+        newUnitCost: newUnitCost,
+        unitChangePct: (valid && oldUnitCost > 0) ? ((newUnitCost - oldUnitCost) / oldUnitCost) * 100 : 0,
+        status: status,
+        duplicateId: Boolean(packMap[id])
+      };
+      if (rec.duplicateId) {
+        rec.status = 'DUPLICATE_INGREDIENT_ID';
+        packMap[id].status = 'DUPLICATE_INGREDIENT_ID';
+      } else {
+        packMap[id] = rec;
+      }
+      packResults.push(rec);
+    }
+
+    // Group recipe lines by Recipe_ID so multi-ingredient recipes aggregate cleanly
+    var recipeOrder = [];
+    var grouped = {};
+    for (var j = 0; j < (recipeLines || []).length; j++) {
+      var r = recipeLines[j] || {};
+      var rid = String(r.recipeId || '').trim().toUpperCase() || ('ROW-' + (j + 1));
+      if (!grouped[rid]) {
+        grouped[rid] = {
+          recipeId: rid,
+          menuItem: String(r.menuItem || rid).trim(),
+          yieldPortions: Number(r.yieldPortions),
+          otherBatchCost: Number(r.otherBatchCost || 0),
+          menuPrice: Number(r.menuPrice),
+          targetFoodCostPct: Number(r.targetFoodCostPct),
+          lines: []
+        };
+        recipeOrder.push(rid);
+      }
+      grouped[rid].lines.push({
+        ingredientId: String(r.ingredientId || '').trim().toUpperCase(),
+        recipeUnit: normUnit(r.recipeUnit),
+        batchQty: Number(r.batchQty)
+      });
+    }
+
+    var itemResults = [];
+    var newlyCrossedCount = 0;
+    var blockedCount = 0;
+
+    for (var k = 0; k < recipeOrder.length; k++) {
+      var g = grouped[recipeOrder[k]];
+      var yld = g.yieldPortions;
+      var otherB = g.otherBatchCost;
+      var mPrice = g.menuPrice;
+      var tgtPct = g.targetFoodCostPct;
+
+      if (
+        !isFinite(yld) || yld <= 0 ||
+        !isFinite(otherB) || otherB < 0 ||
+        !isFinite(mPrice) || mPrice <= 0 ||
+        !isFinite(tgtPct) || tgtPct <= 0 || tgtPct >= 100
+      ) {
+        blockedCount++;
+        itemResults.push({
+          recipeId: g.recipeId,
+          menuItem: g.menuItem,
+          status: 'INVALID_RECIPE_INPUT',
+          errorReason: 'Yield & menu price must be > 0, other cost >= 0, target % between 0 and 100.',
+          oldCostPerServing: null,
+          newCostPerServing: null,
+          deltaCentsPerServing: null,
+          oldFoodCostPct: null,
+          newFoodCostPct: null,
+          targetFoodCostPct: tgtPct
+        });
+        continue;
+      }
+
+      var lineErr = '';
+      var oldTrackedBatch = 0;
+      var newTrackedBatch = 0;
+      for (var m = 0; m < g.lines.length; m++) {
+        var ln = g.lines[m];
+        if (!isFinite(ln.batchQty) || ln.batchQty < 0) {
+          lineErr = 'INVALID_BATCH_QTY';
+          break;
+        }
+        if (ln.batchQty === 0 && !ln.ingredientId) continue;
+        var pk = packMap[ln.ingredientId];
+        if (!pk) {
+          lineErr = 'UNKNOWN_INGREDIENT:' + ln.ingredientId;
+          break;
+        }
+        if (pk.status === 'INVALID_PACK_INPUT' || pk.status === 'DUPLICATE_INGREDIENT_ID') {
+          lineErr = pk.status;
+          break;
+        }
+        if (ln.recipeUnit !== pk.unit) {
+          lineErr = 'UNIT_MISMATCH:' + ln.recipeUnit + '!=' + pk.unit;
+          break;
+        }
+        oldTrackedBatch += pk.oldUnitCost * ln.batchQty;
+        newTrackedBatch += pk.newUnitCost * ln.batchQty;
+      }
+
+      if (lineErr) {
+        blockedCount++;
+        itemResults.push({
+          recipeId: g.recipeId,
+          menuItem: g.menuItem,
+          status: lineErr.split(':')[0],
+          errorReason: lineErr,
+          oldCostPerServing: null,
+          newCostPerServing: null,
+          deltaCentsPerServing: null,
+          oldFoodCostPct: null,
+          newFoodCostPct: null,
+          targetFoodCostPct: tgtPct
+        });
+        continue;
+      }
+
+      var oldPerServing = (otherB + oldTrackedBatch) / yld;
+      var newPerServing = (otherB + newTrackedBatch) / yld;
+      var oldTrackedPerServing = oldTrackedBatch / yld;
+      var newTrackedPerServing = newTrackedBatch / yld;
+      var deltaCents = Math.round((newPerServing - oldPerServing) * 10000) / 100;
+      var oldPct = (oldPerServing / mPrice) * 100;
+      var newPct = (newPerServing / mPrice) * 100;
+
+      var alertStatus = 'WITHIN_TARGET';
+      if (oldPct <= tgtPct + 1e-9 && newPct > tgtPct + 1e-9) {
+        alertStatus = 'CROSSED_TARGET';
+        newlyCrossedCount++;
+      } else if (oldPct > tgtPct + 1e-9 && newPct > tgtPct + 1e-9) {
+        alertStatus = 'ALREADY_OVER_TARGET';
+      }
+
+      itemResults.push({
+        recipeId: g.recipeId,
+        menuItem: g.menuItem,
+        menuPrice: mPrice,
+        yieldPortions: yld,
+        oldTrackedPerServing: Math.round(oldTrackedPerServing * 10000) / 10000,
+        newTrackedPerServing: Math.round(newTrackedPerServing * 10000) / 10000,
+        oldCostPerServing: Math.round(oldPerServing * 10000) / 10000,
+        newCostPerServing: Math.round(newPerServing * 10000) / 10000,
+        deltaCentsPerServing: deltaCents,
+        oldFoodCostPct: Math.round(oldPct * 100) / 100,
+        newFoodCostPct: Math.round(newPct * 100) / 100,
+        targetFoodCostPct: tgtPct,
+        status: alertStatus,
+        errorReason: ''
+      });
+    }
+
+    return {
+      packs: packResults,
+      items: itemResults,
+      newlyCrossedCount: newlyCrossedCount,
+      blockedCount: blockedCount
+    };
+  }
+
+  return {
+    evaluateSupplierCostImpact: evaluateSupplierCostImpact
+  };
+})();
+
+
+    function clearNode(el) {
+      while (el && el.firstChild) el.removeChild(el.firstChild);
+    }
+    function parsePipeRows(raw, minLen) {
+      var lines = String(raw || "").split(/\r?\n/);
+      var arr = [];
+      for (var i = 0; i < lines.length; i++) {
+        var ln = lines[i].trim();
+        if (!ln || ln.charAt(0) === "#") continue;
+        var p = ln.split("|").map(function(s){ return s.trim(); });
+        if (p.length >= minLen) arr.push(p);
+      }
+      return arr;
+    }
+    function renderShrinkflationSandbox() {
+      var pRows = parsePipeRows(document.getElementById("sgPacksInput").value, 7).map(function(p){
+        return { id: p[0], name: p[1], unit: p[2], oldPackPrice: p[3], oldPackSize: p[4], newPackPrice: p[5], newPackSize: p[6] };
+      });
+      var rRows = parsePipeRows(document.getElementById("sgRecipesInput").value, 9).map(function(p){
+        return { recipeId: p[0], menuItem: p[1], ingredientId: p[2], recipeUnit: p[3], batchQty: p[4], yieldPortions: p[5], otherBatchCost: p[6], menuPrice: p[7], targetFoodCostPct: p[8] };
+      });
+      var rep = SupplierCostGuard.evaluateSupplierCostImpact(pRows, rRows);
+      var tb = document.getElementById("sgResultsBody");
+      clearNode(tb);
+      for (var i = 0; i < rep.items.length; i++) {
+        var it = rep.items[i];
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var cols = [
+          it.menuItem,
+          it.oldCostPerServing !== null ? ("$" + it.oldCostPerServing.toFixed(2) + " → $" + it.newCostPerServing.toFixed(2)) : "—",
+          it.deltaCentsPerServing !== null ? ((it.deltaCentsPerServing > 0 ? "+" : "") + it.deltaCentsPerServing.toFixed(1) + "¢") : "—",
+          it.oldFoodCostPct !== null ? (it.oldFoodCostPct.toFixed(1) + "% → " + it.newFoodCostPct.toFixed(1) + "%") : "—",
+          isFinite(it.targetFoodCostPct) ? (Number(it.targetFoodCostPct).toFixed(1) + "%") : "—",
+          it.status
+        ];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 5) {
+            td.style.fontWeight = "800";
+            td.style.color = it.status === "CROSSED_TARGET" ? "#fca5a5" : (it.status === "WITHIN_TARGET" ? "#6ee7b7" : "#fcd34d");
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      }
+      document.getElementById("sgSummaryBadge").textContent = rep.newlyCrossedCount + " CROSSED TARGET · " + rep.items.length + " ITEMS";
+    }
+    function submitValidationVote76(choice) {
+      var msgEl = document.getElementById("val76Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val76_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val76_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea76-" + choice, "Idea 76 Shrinkflation Worksheet Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+    document.getElementById("sgPacksInput").addEventListener("input", renderShrinkflationSandbox);
+    document.getElementById("sgRecipesInput").addEventListener("input", renderShrinkflationSandbox);
+    document.getElementById("val76BuyBtn").addEventListener("click", function(){ submitValidationVote76("buy"); });
+    document.getElementById("val76KeepBtn").addEventListener("click", function(){ submitValidationVote76("keep"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
       try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
     }
     setLang(initLang === "zh" ? "zh" : "en");
+    renderShrinkflationSandbox();
   })();
   </script>
 </body>
