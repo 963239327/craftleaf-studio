@@ -385,6 +385,91 @@ COIN_001 | 10</textarea>
       </div>
     </section>
 
+    <section id="consignmentPayoutSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🏷️ NEW IN PACK · MACRO-FREE .XLSX + MAKER SLIP · CONSIGNMENT RETURN-WINDOW PAYOUT</span>
+            <span data-lang="zh">🏷️ 新增免宏工作簿 (.XLSX + 寄售对账单) · 寄售店退货期满可打款与暂扣自动分拆</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Show Consignment Shops Which Cleared Sales Are Ready to Pay Out After the Return Window</span>
+            <span data-lang="zh">按结算截止日自动筛出已过退货期的可打款销售行，避免退货未满期误付或重复打款</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Semi-Monthly Maker Pay Run (<code>MKR-PINE</code>, 60% share): Two cleared sales of <strong>$100</strong> (payable <code>2026-11-12</code>) and <strong>$50</strong> (payable <code>2026-11-18</code>) on cutoff <strong>2026-11-15</strong> show <strong>$60.00 to pay</strong> and <strong>$30.00 held until 2026-11-18</strong>; a separate <strong>$24.00</strong> already marked paid stays off the new payment. If the $50 item is returned on <code>2026-11-16</code>, that $30.00 never becomes payable. Duplicate IDs, missing dates, and refunds after payout go to <strong>Review</strong> rather than a guessed total. Included as macro-free <code>08_Consignment_Return_Window_Payout_Split.xlsx</code> (LibreOffice / Excel / Sheets) + printable maker slip HTML in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战半月结示例（主理人 <code>MKR-PINE</code>，60% 分成）：两笔已清算订单分别为 <strong>100</strong>（<code>2026-11-12</code> 满退货期）与 <strong>50</strong>（<code>2026-11-18</code> 满退货期），在 <strong>2026-11-15</strong> 结算日自动拆分为 <strong>本期可付 60.00</strong>、<strong>暂扣 30.00（至 2026-11-18）</strong>，往期已结清的 <strong>24.00</strong> 自动排除；若第二件在 <code>2026-11-16</code> 退货则永不进入可付池；重复单号、漏填日期或打款后退货一律隔离至人工复核。直接在下方免费试算！</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/consignment_payout_cutoff_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Consignment Slip PDF Sample</span>
+          <span data-lang="zh">📄 查看 1 页寄售对账单图解 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Pay-Run Cutoff Date (`YYYY-MM-DD`) &amp; Maker Code</span>
+            <span data-lang="zh">1. 本期结算截止日（`YYYY-MM-DD`）与寄售主理人编码</span>
+          </label>
+          <div class="row2" style="margin-bottom:8px;">
+            <input type="text" id="cpCutoffInput" value="2026-11-15" style="padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;" />
+            <input type="text" id="cpMakerInput" value="MKR-PINE" style="padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;" />
+          </div>
+
+          <label class="fld">
+            <span data-lang="en">2. Sale Lines (`Line_ID | Maker | Item | Sale_Date | CLEARED/PENDING | Sale_$ | Share_% | First_Payable | Return_Date | Prior_Paid_Ref`)</span>
+            <span data-lang="zh">2. 销售明细（`行号 | 主理人 | 商品 | 售出日 | 清算状态 | 金额 | 分成% | 首可结日 | 退货日 | 往期已付批次`）</span>
+          </label>
+          <textarea id="cpLedgerInput" rows="5" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.8px;">SL-1001 | MKR-PINE | Stoneware Pour-Over | 2026-10-29 | CLEARED | 100.00 | 60 | 2026-11-12 |  | 
+SL-1002 | MKR-PINE | Speckled Bud Vase | 2026-11-04 | CLEARED | 50.00 | 60 | 2026-11-18 |  | 
+SL-0988 | MKR-PINE | Matcha Whisk Bowl | 2026-10-14 | CLEARED | 40.00 | 60 | 2026-10-28 |  | PAID-2026-10-31</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cpWorkedBtn">🧪 Worked Nov 15 ($60 Pay · $30 Held · $24 Paid)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cpReturnBtn">↩️ Nov 16 Return ($30 Never Payable)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cpReviewBtn">⚠️ Duplicate / Missing Date / Post-Payout Refund</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">🧾 Maker Payout Slip (Pay Now vs. Hold Until Date vs. Returned/Paid)</span>
+              <span data-lang="zh">🧾 主理人结算分拆单（本期可付 / 未过退货期暂扣 / 已退或已结）</span>
+            </strong>
+            <span id="cpSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="cpReviewBanner" style="display:none;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,0.18);border:1px solid #ef4444;color:#fecaca;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Line ID</th>
+                <th style="padding:6px;">Maker Share</th>
+                <th style="padding:6px;">Bucket</th>
+                <th style="padding:6px;">Status / Hold Date</th>
+              </tr>
+            </thead>
+            <tbody id="cpResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Only cleared sales count; this worksheet neither sets your shop's consignment/return policy nor moves money (zero store integrations or customer PII).</span>
+            <span data-lang="zh"><em>边界说明：</em>仅统计已清算订单；本表不代定门店寄售/退货规则、不经手资金划拨，亦无需绑定收银系统或上传顾客隐私。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Pay consignment makers from a spreadsheet? Anonymous 1-click check (no checkout, email, or shop records):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val84BuyBtn">👍 I would buy the $9.99 pack for this sheet</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val84EnoughBtn">↔️ My current method is enough</button>
+            </div>
+            <span id="val84Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="kitPackListSection" class="panel" style="margin-top:20px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
         <div>
@@ -1554,6 +1639,402 @@ var CashDrawerCloseEngine = (function () {
     document.getElementById("val83BuyBtn").addEventListener("click", function(){ submitValidationVote83("buy"); });
     document.getElementById("val83EnoughBtn").addEventListener("click", function(){ submitValidationVote83("enough"); });
 
+    
+var ConsignmentPayoutEngine = (function () {
+  'use strict';
+
+  function parseIsoDateStrict(raw) {
+    if (raw === null || raw === undefined) return null;
+    var s = String(raw).trim();
+    if (!s) return null;
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+    if (!m) return NaN;
+    var y = parseInt(m[1], 10);
+    var mo = parseInt(m[2], 10);
+    var d = parseInt(m[3], 10);
+    if (mo < 1 || mo > 12 || d < 1 || d > 31) return NaN;
+    var dt = new Date(Date.UTC(y, mo - 1, d));
+    if (dt.getUTCFullYear() !== y || (dt.getUTCMonth() + 1) !== mo || dt.getUTCDate() !== d) {
+      return NaN;
+    }
+    return s;
+  }
+
+  function parsePositiveCents(raw) {
+    if (raw === null || raw === undefined || raw === '') return NaN;
+    var s = String(raw).trim().replace(/^\$/, '').replace(/,/g, '');
+    if (!/^[+]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+    var v = parseFloat(s);
+    if (!isFinite(v) || v <= 0) return NaN;
+    return Math.round(v * 100);
+  }
+
+  function parseSharePct(raw) {
+    if (raw === null || raw === undefined || raw === '') return NaN;
+    var s = String(raw).trim().replace(/%$/, '').trim();
+    if (!/^[+]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+    var v = parseFloat(s);
+    if (!isFinite(v) || v <= 0 || v > 100) return NaN;
+    return v;
+  }
+
+  function fmtUsdFromCents(cents) {
+    var neg = cents < 0;
+    var abs = Math.abs(Math.round(cents));
+    var dollars = Math.floor(abs / 100);
+    var rem = abs % 100;
+    var ds = String(dollars).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    var cs = rem < 10 ? ('0' + rem) : String(rem);
+    return (neg ? '-$' : '$') + ds + '.' + cs;
+  }
+
+  function evaluateConsignmentPayRun(saleRows, options) {
+    options = options || {};
+    var cutoffIso = parseIsoDateStrict(options.cutoffDate);
+    if (!cutoffIso || cutoffIso !== cutoffIso) {
+      return {
+        status: 'INVALID_CUTOFF_DATE',
+        cutoffDate: String(options.cutoffDate || ''),
+        error: 'Enter a valid YYYY-MM-DD pay-run cutoff date (e.g., 2026-11-15).',
+        lines: [],
+        makers: [],
+        totals: { payNowCents: 0, holdCents: 0, returnedOrPaidCents: 0, unclearedCents: 0, reviewCount: 0 }
+      };
+    }
+
+    saleRows = Array.isArray(saleRows) ? saleRows : [];
+    var idCounts = {};
+    for (var i = 0; i < saleRows.length; i++) {
+      var r0 = saleRows[i] || {};
+      var idNorm = String(r0.saleLineId || '').trim().toUpperCase();
+      if (idNorm) {
+        idCounts[idNorm] = (idCounts[idNorm] || 0) + 1;
+      }
+    }
+
+    var evaluatedLines = [];
+    var makersByCode = {};
+    var makerOrder = [];
+    var totalPayNowCents = 0;
+    var totalHoldCents = 0;
+    var totalRetOrPaidCents = 0;
+    var totalUnclearedCents = 0;
+    var totalReviewCount = 0;
+
+    for (var idx = 0; idx < saleRows.length; idx++) {
+      var row = saleRows[idx] || {};
+      var lineId = String(row.saleLineId || '').trim();
+      var makerCode = String(row.makerCode || '').trim();
+      var itemLabel = String(row.itemLabel || '').trim();
+      var statusRaw = String(row.settlementStatus === undefined ? 'CLEARED' : row.settlementStatus).trim().toUpperCase();
+      var priorPaidRef = String(row.priorPaidRef || '').trim();
+
+      if (!lineId && !makerCode && !itemLabel && !row.netSaleUsd) {
+        continue;
+      }
+
+      var saleDate = parseIsoDateStrict(row.saleDate);
+      var firstPayableDate = parseIsoDateStrict(row.firstPayableDate);
+      var returnDate = parseIsoDateStrict(row.returnDate);
+      var saleCents = parsePositiveCents(row.netSaleUsd);
+      var sharePct = parseSharePct(row.makerSharePct);
+      var shareCents = (isFinite(saleCents) && isFinite(sharePct)) ? Math.round((saleCents * sharePct) / 100) : 0;
+
+      var bucket = '';
+      var section = '';
+      var note = '';
+
+      if (!lineId || !makerCode || !isFinite(saleCents) || !isFinite(sharePct)) {
+        bucket = 'REVIEW_MISSING_FIELDS';
+        section = 'REVIEW';
+        note = 'Review: missing Sale_Line_ID, Maker_Code, or valid sale/share amount';
+      } else if ((idCounts[lineId.toUpperCase()] || 0) > 1) {
+        bucket = 'REVIEW_DUPLICATE_ID';
+        section = 'REVIEW';
+        note = 'Review: duplicate Sale_Line_ID (' + lineId + ') — excluded from totals';
+      } else if (returnDate !== returnDate || saleDate !== saleDate || firstPayableDate !== firstPayableDate) {
+        bucket = 'REVIEW_INVALID_DATE';
+        section = 'REVIEW';
+        note = 'Review: invalid calendar date (use YYYY-MM-DD)';
+      } else if (returnDate && priorPaidRef) {
+        bucket = 'REVIEW_REFUND_AFTER_PAYOUT';
+        section = 'REVIEW';
+        note = 'Review: returned on ' + returnDate + ' after prior payout (' + priorPaidRef + ')';
+      } else if (returnDate) {
+        bucket = 'RETURNED';
+        section = 'RETURNED_OR_PAID';
+        note = 'Returned ' + returnDate + ' — never becomes payable';
+      } else if (priorPaidRef) {
+        bucket = 'ALREADY_PAID';
+        section = 'RETURNED_OR_PAID';
+        note = 'Already paid (' + priorPaidRef + ') — stays off new payment';
+      } else if (!firstPayableDate || (saleDate && firstPayableDate < saleDate)) {
+        bucket = 'REVIEW_MISSING_DATE';
+        section = 'REVIEW';
+        note = !firstPayableDate
+          ? 'Review: missing First_Payable_Date — excluded from totals'
+          : 'Review: First_Payable_Date precedes Sale_Date';
+      } else if (statusRaw !== 'CLEARED') {
+        bucket = 'UNCLEARED_PENDING';
+        section = 'UNCLEARED';
+        note = 'Uncleared (' + (statusRaw || 'PENDING') + ') — only cleared sales count';
+      } else if (firstPayableDate <= cutoffIso) {
+        bucket = 'PAY_NOW';
+        section = 'PAY_NOW';
+        note = 'Pay now (cleared, payable ' + firstPayableDate + ' <= ' + cutoffIso + ')';
+      } else {
+        bucket = 'HOLD_UNTIL_DATE';
+        section = 'HOLD';
+        note = 'Hold until ' + firstPayableDate;
+      }
+
+      var payNowLineCents = section === 'PAY_NOW' ? shareCents : 0;
+      var holdLineCents = section === 'HOLD' ? shareCents : 0;
+      var retOrPaidLineCents = section === 'RETURNED_OR_PAID' ? shareCents : 0;
+      var unclearedLineCents = section === 'UNCLEARED' ? shareCents : 0;
+
+      totalPayNowCents += payNowLineCents;
+      totalHoldCents += holdLineCents;
+      totalRetOrPaidCents += retOrPaidLineCents;
+      totalUnclearedCents += unclearedLineCents;
+      if (section === 'REVIEW') {
+        totalReviewCount += 1;
+      }
+
+      var evalLine = {
+        saleLineId: lineId || '(missing-id)',
+        makerCode: makerCode || '(missing-maker)',
+        itemLabel: itemLabel,
+        saleDate: (saleDate && saleDate === saleDate) ? saleDate : '',
+        settlementStatus: statusRaw || 'PENDING',
+        saleCents: isFinite(saleCents) ? saleCents : 0,
+        makerSharePct: isFinite(sharePct) ? sharePct : 0,
+        shareCents: shareCents,
+        shareFormatted: fmtUsdFromCents(shareCents),
+        firstPayableDate: (firstPayableDate && firstPayableDate === firstPayableDate) ? firstPayableDate : '',
+        returnDate: (returnDate && returnDate === returnDate) ? returnDate : '',
+        priorPaidRef: priorPaidRef,
+        bucket: bucket,
+        section: section,
+        payNowCents: payNowLineCents,
+        holdCents: holdLineCents,
+        returnedOrPaidCents: retOrPaidLineCents,
+        unclearedCents: unclearedLineCents,
+        note: note
+      };
+      evaluatedLines.push(evalLine);
+
+      var mkKey = evalLine.makerCode;
+      if (!Object.prototype.hasOwnProperty.call(makersByCode, mkKey)) {
+        makersByCode[mkKey] = {
+          makerCode: mkKey,
+          payNowCents: 0,
+          holdCents: 0,
+          returnedOrPaidCents: 0,
+          unclearedCents: 0,
+          reviewCount: 0,
+          payNowLines: [],
+          holdLines: [],
+          returnedOrPaidLines: [],
+          unclearedLines: [],
+          reviewLines: []
+        };
+        makerOrder.push(mkKey);
+      }
+      var mk = makersByCode[mkKey];
+      mk.payNowCents += payNowLineCents;
+      mk.holdCents += holdLineCents;
+      mk.returnedOrPaidCents += retOrPaidLineCents;
+      mk.unclearedCents += unclearedLineCents;
+      if (section === 'PAY_NOW') mk.payNowLines.push(evalLine);
+      else if (section === 'HOLD') mk.holdLines.push(evalLine);
+      else if (section === 'RETURNED_OR_PAID') mk.returnedOrPaidLines.push(evalLine);
+      else if (section === 'UNCLEARED') mk.unclearedLines.push(evalLine);
+      else {
+        mk.reviewCount += 1;
+        mk.reviewLines.push(evalLine);
+      }
+    }
+
+    var makersList = [];
+    for (var m = 0; m < makerOrder.length; m++) {
+      var mkObj = makersByCode[makerOrder[m]];
+      mkObj.payNowFormatted = fmtUsdFromCents(mkObj.payNowCents);
+      mkObj.holdFormatted = fmtUsdFromCents(mkObj.holdCents);
+      mkObj.returnedOrPaidFormatted = fmtUsdFromCents(mkObj.returnedOrPaidCents);
+      mkObj.unclearedFormatted = fmtUsdFromCents(mkObj.unclearedCents);
+      mkObj.status = mkObj.reviewCount > 0
+        ? 'HOLD_FOR_REVIEW'
+        : (mkObj.payNowCents > 0 ? 'READY_TO_PAY' : 'NO_PAYOUT_DUE');
+      makersList.push(mkObj);
+    }
+
+    var filterMaker = options.makerCode ? String(options.makerCode).trim() : '';
+    var selectedSlip = null;
+    if (filterMaker && Object.prototype.hasOwnProperty.call(makersByCode, filterMaker)) {
+      selectedSlip = makersByCode[filterMaker];
+    } else if (makersList.length > 0) {
+      selectedSlip = makersList[0];
+    }
+
+    return {
+      status: totalReviewCount > 0 ? 'REVIEW_EXCEPTIONS_PRESENT' : 'READY',
+      cutoffDate: cutoffIso,
+      lines: evaluatedLines,
+      makers: makersList,
+      selectedSlip: selectedSlip,
+      totals: {
+        payNowCents: totalPayNowCents,
+        payNowFormatted: fmtUsdFromCents(totalPayNowCents),
+        holdCents: totalHoldCents,
+        holdFormatted: fmtUsdFromCents(totalHoldCents),
+        returnedOrPaidCents: totalRetOrPaidCents,
+        returnedOrPaidFormatted: fmtUsdFromCents(totalRetOrPaidCents),
+        unclearedCents: totalUnclearedCents,
+        unclearedFormatted: fmtUsdFromCents(totalUnclearedCents),
+        reviewCount: totalReviewCount
+      }
+    };
+  }
+
+  return {
+    fmtUsdFromCents: fmtUsdFromCents,
+    parseIsoDateStrict: parseIsoDateStrict,
+    evaluateConsignmentPayRun: evaluateConsignmentPayRun
+  };
+})();
+
+
+    function renderConsignmentPayoutSandbox() {
+      var rawLines = String(document.getElementById("cpLedgerInput").value || "").split(/\r?\n/);
+      var saleRows = [];
+      for (var i = 0; i < rawLines.length; i++) {
+        var ln = rawLines[i].trim();
+        if (!ln || ln.charAt(0) === "#") continue;
+        var p = rawLines[i].split("|").map(function(s){ return s.trim(); });
+        saleRows.push({
+          saleLineId: p[0] || "",
+          makerCode: p[1] || "",
+          itemLabel: p[2] || "",
+          saleDate: p[3] || "",
+          settlementStatus: p[4] || "CLEARED",
+          netSaleUsd: p[5] || "",
+          makerSharePct: p[6] || "",
+          firstPayableDate: p[7] || "",
+          returnDate: p[8] || "",
+          priorPaidRef: p[9] || ""
+        });
+      }
+      var res = ConsignmentPayoutEngine.evaluateConsignmentPayRun(saleRows, {
+        cutoffDate: document.getElementById("cpCutoffInput").value,
+        makerCode: document.getElementById("cpMakerInput").value
+      });
+      var tb = document.getElementById("cpResultsBody");
+      var revBanner = document.getElementById("cpReviewBanner");
+      clearNode(tb);
+      if (res.status === "INVALID_CUTOFF_DATE") {
+        revBanner.style.display = "block";
+        revBanner.textContent = "🛑 " + res.error;
+        document.getElementById("cpSummaryBadge").textContent = "INVALID CUTOFF DATE";
+        return;
+      }
+      var slip = res.selectedSlip;
+      if (!slip) {
+        revBanner.style.display = "none";
+        document.getElementById("cpSummaryBadge").textContent = "NO LINES";
+        return;
+      }
+      if (slip.reviewCount > 0) {
+        revBanner.style.display = "block";
+        revBanner.textContent = "⚠️ " + slip.reviewCount + " exception row(s) sent to REVIEW ($0.00 added to Pay Now or Hold).";
+      } else {
+        revBanner.style.display = "none";
+      }
+      var ordered = []
+        .concat(slip.payNowLines)
+        .concat(slip.holdLines)
+        .concat(slip.returnedOrPaidLines)
+        .concat(slip.unclearedLines)
+        .concat(slip.reviewLines);
+      for (var r = 0; r < ordered.length; r++) {
+        var item = ordered[r];
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var cols = [
+          item.saleLineId,
+          item.shareFormatted + " (" + item.makerSharePct + "%)",
+          item.bucket,
+          item.note
+        ];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 2) {
+            td.style.fontWeight = "800";
+            td.style.color = item.section === "PAY_NOW" ? "#6ee7b7" : (item.section === "HOLD" ? "#fcd34d" : (item.section === "REVIEW" ? "#fca5a5" : "#cbd5e1"));
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      }
+      document.getElementById("cpSummaryBadge").textContent =
+        slip.makerCode + " · PAY " + slip.payNowFormatted
+        + " · HELD " + slip.holdFormatted
+        + " · OFF-RUN " + slip.returnedOrPaidFormatted
+        + (slip.reviewCount > 0 ? (" · REVIEW " + slip.reviewCount) : "");
+    }
+    function trackVal84SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val84_viewed")) {
+          sessionStorage.setItem("craftleaf_val84_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea84-view", "Idea 84 Consignment Payout Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote84(choice) {
+      var msgEl = document.getElementById("val84Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val84_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val84_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea84-" + choice, "Idea 84 Consignment Payout Sheet Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+    document.getElementById("cpCutoffInput").addEventListener("input", renderConsignmentPayoutSandbox);
+    document.getElementById("cpMakerInput").addEventListener("input", renderConsignmentPayoutSandbox);
+    document.getElementById("cpLedgerInput").addEventListener("input", renderConsignmentPayoutSandbox);
+    document.getElementById("cpWorkedBtn").addEventListener("click", function(){
+      document.getElementById("cpCutoffInput").value = "2026-11-15";
+      document.getElementById("cpMakerInput").value = "MKR-PINE";
+      document.getElementById("cpLedgerInput").value = "SL-1001 | MKR-PINE | Stoneware Pour-Over | 2026-10-29 | CLEARED | 100.00 | 60 | 2026-11-12 |  | \nSL-1002 | MKR-PINE | Speckled Bud Vase | 2026-11-04 | CLEARED | 50.00 | 60 | 2026-11-18 |  | \nSL-0988 | MKR-PINE | Matcha Whisk Bowl | 2026-10-14 | CLEARED | 40.00 | 60 | 2026-10-28 |  | PAID-2026-10-31";
+      renderConsignmentPayoutSandbox();
+    });
+    document.getElementById("cpReturnBtn").addEventListener("click", function(){
+      document.getElementById("cpCutoffInput").value = "2026-11-20";
+      document.getElementById("cpMakerInput").value = "MKR-PINE";
+      document.getElementById("cpLedgerInput").value = "SL-1001 | MKR-PINE | Stoneware Pour-Over | 2026-10-29 | CLEARED | 100.00 | 60 | 2026-11-12 |  | \nSL-1002 | MKR-PINE | Speckled Bud Vase | 2026-11-04 | CLEARED | 50.00 | 60 | 2026-11-18 | 2026-11-16 | \nSL-0988 | MKR-PINE | Matcha Whisk Bowl | 2026-10-14 | CLEARED | 40.00 | 60 | 2026-10-28 |  | PAID-2026-10-31";
+      renderConsignmentPayoutSandbox();
+    });
+    document.getElementById("cpReviewBtn").addEventListener("click", function(){
+      document.getElementById("cpCutoffInput").value = "2026-11-15";
+      document.getElementById("cpMakerInput").value = "MKR-PINE";
+      document.getElementById("cpLedgerInput").value = "SL-2001 | MKR-PINE | Duplicate Line A | 2026-10-29 | CLEARED | 70.00 | 60 | 2026-11-12 |  | \nSL-2001 | MKR-PINE | Duplicate Line B | 2026-10-29 | CLEARED | 70.00 | 60 | 2026-11-12 |  | \nSL-2002 | MKR-PINE | Missing Payable Date | 2026-11-02 | CLEARED | 90.00 | 60 |  |  | \nSL-2003 | MKR-PINE | Refund After Payout | 2026-10-10 | CLEARED | 65.00 | 60 | 2026-10-24 | 2026-11-08 | PAID-2026-10-31";
+      renderConsignmentPayoutSandbox();
+    });
+    document.getElementById("val84BuyBtn").addEventListener("click", function(){ submitValidationVote84("buy"); });
+    document.getElementById("val84EnoughBtn").addEventListener("click", function(){ submitValidationVote84("enough"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
@@ -1563,7 +2044,9 @@ var CashDrawerCloseEngine = (function () {
     renderShrinkflationSandbox();
     renderKitPackListSandbox();
     renderCashDrawerSandbox();
+    renderConsignmentPayoutSandbox();
     trackVal83SampleViewOnce();
+    trackVal84SampleViewOnce();
   })();
   </script>
 </body>
