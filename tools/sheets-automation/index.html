@@ -306,6 +306,92 @@ RCP-03 | Cardamom Brioche Bun | BUTTER-UNS | g | 200 | 8 | 5.60 | 4.25 | 28</tex
       </div>
     </section>
 
+    <section id="kitPackListSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">📦 NEW IN PACK · MACRO-FREE .XLSX + PARCEL SLIP · MIXED KIT &amp; LOOSE PART COUNTER</span>
+            <span data-lang="zh">📦 新增免宏工作簿 (.XLSX + 装箱清单) · 套装礼盒与散件混装订单零件自动合并</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Count Shared Physical Parts to Pack When an Order Mixes Boxed Kits &amp; Loose Items</span>
+            <span data-lang="zh">订单同时包含套装与散买零件时，自动按单个包裹合并每种零件总数量</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Packing Check (<code>ORD-1042</code>): <strong>2 Starter Kits</strong> (2 clips + 1 base each), <strong>1 Refill Pack</strong> (3 clips), and <strong>4 Loose Clips</strong> consolidate onto one parcel checklist as <strong>11 Clips and 2 Bases</strong> — never three separate clip lines, and any unmapped SKU blocks that parcel checklist rather than silently dropping part of the order. Included as macro-free <code>06_Kit_And_Loose_Order_Component_Pack_List.xlsx</code> (LibreOffice / Excel / Sheets) + printable HTML in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战装箱示例（<code>ORD-1042</code>）：同一包裹含 <strong>2 盒新手套装</strong>（每盒 2 卡扣 + 1 底座）、<strong>1 包补充装</strong>（3 卡扣）与 <strong>4 个散装卡扣</strong>，系统自动合并输出单行 <strong>11 个卡扣 + 2 个底座</strong>（绝不拆成三行漏数）；一旦混入未映射的新 SKU 立即拦截整张装箱单防止漏发。直接在下方修改测试！</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/kit_component_pack_list_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Pack-List PDF Sample</span>
+          <span data-lang="zh">📄 查看 1 页合并装箱单图解 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Kit &amp; Loose SKU Map (`Sale_SKU | Part_ID | Part_Name | Qty_Per_SKU`)</span>
+            <span data-lang="zh">1. 套装与散件零件映射表（`销售SKU | 零件编号 | 零件名称 | 每件含数量`）</span>
+          </label>
+          <textarea id="kpBomInput" rows="4" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;">KIT-STARTER | CLIP-01 | Locking Clip | 2
+KIT-STARTER | BASE-01 | Mounting Base | 1
+KIT-REFILL | CLIP-01 | Locking Clip | 3
+LOOSE-CLIP | CLIP-01 | Locking Clip | 1</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Order Rows (`Order_ID | Sale_SKU | Qty` — Zero Names or Addresses Needed)</span>
+            <span data-lang="zh">2. 订单商品行（`订单号 | 销售SKU | 下单数量` — 无需客户姓名地址）</span>
+          </label>
+          <textarea id="kpOrdersInput" rows="4" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;">ORD-1042 | KIT-STARTER | 2
+ORD-1042 | KIT-REFILL | 1
+ORD-1042 | LOOSE-CLIP | 4
+ORD-1043 | KIT-STARTER | 1
+ORD-1043 | MYSTERY-KIT | 1</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="kpWorkedBtn">🧪 Worked Order ORD-1042 (11 Clips + 2 Bases)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="kpUnknownBtn">⚠️ Test Unmapped SKU (ORD-1043)</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">📋 Consolidated Parcel Pick List (1 Line Per Physical Part)</span>
+              <span data-lang="zh">📋 单包裹零件合并装箱核对单（每种物理零件仅一行）</span>
+            </strong>
+            <span id="kpSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="kpBlockedBanner" style="display:none;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,0.18);border:1px solid #ef4444;color:#fecaca;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Part ID</th>
+                <th style="padding:6px;">Physical Part</th>
+                <th style="padding:6px;">Pack Qty</th>
+                <th style="padding:6px;">Order SKU Breakdown</th>
+              </tr>
+            </thead>
+            <tbody id="kpResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Feed note:</em> Use for order exports listing kit SKUs + loose items; do not re-expand feeds where Shopify Bundles already exploded kit contents.</span>
+            <span data-lang="zh"><em>数据源提示：</em>适用于导出行仍为套装 SKU + 散件 SKU 的订单；若平台已将子零件拆行展开则无需重复汇总。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Pack mixed kit + loose orders? Quick anonymous check (no checkout, email, or upload):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val79BuyBtn">👍 I would buy the $9.99 edition for this pick list</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val79KeepBtn">↔️ I would keep my current method</button>
+            </div>
+            <span id="val79Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="disc">
       <span data-lang="en"><strong>Disclaimer:</strong> Provided strictly for small-business spreadsheet automation and educational reference only (Not Legal, Tax, Accounting, or Financial Advice). Always test scripts on a duplicate sheet first and consult a qualified CPA regarding IRS Schedule C deductions and mileage rules. CraftLeaf Studio is not affiliated with Google LLC.</span>
       <span data-lang="zh"><strong>免责声明：</strong>本脚本生成器与配套模板仅供小微商家日常表格提效与记账参考，不构成任何税务、会计、法律或财务建议（Not Legal, Tax, Accounting, or Financial Advice）。正式启用前请先在副本表格测试，报税抵扣请以持牌 CPA 意见为准。</span>
@@ -852,6 +938,277 @@ var SupplierCostGuard = (function () {
     document.getElementById("val76BuyBtn").addEventListener("click", function(){ submitValidationVote76("buy"); });
     document.getElementById("val76KeepBtn").addEventListener("click", function(){ submitValidationVote76("keep"); });
 
+    
+var KitPackListEngine = (function () {
+  function normKey(s) {
+    return String(s == null ? '' : s).trim().toUpperCase();
+  }
+
+  function parsePosInt(raw) {
+    if (typeof raw === 'number') {
+      return (isFinite(raw) && raw > 0 && Math.floor(raw) === raw) ? raw : NaN;
+    }
+    var s = String(raw == null ? '' : raw).trim();
+    if (!/^[+]?\d+$/.test(s)) return NaN;
+    var n = parseInt(s, 10);
+    return (isFinite(n) && n > 0) ? n : NaN;
+  }
+
+  function listOrderIds(orderRows) {
+    var seen = {}, out = [];
+    var arr = Array.isArray(orderRows) ? orderRows : [];
+    for (var i = 0; i < arr.length; i++) {
+      var raw = String((arr[i] && arr[i].orderId) || '').trim();
+      var k = normKey(raw);
+      if (k && !seen[k]) {
+        seen[k] = true;
+        out.push(raw);
+      }
+    }
+    return out;
+  }
+
+  function evaluateOrderPackList(bomRows, orderRows, opts) {
+    opts = opts || {};
+    var bArr = Array.isArray(bomRows) ? bomRows : [];
+    var oArr = Array.isArray(orderRows) ? orderRows : [];
+    var allOrders = listOrderIds(oArr);
+    var targetOrderRaw = String(opts.orderId || (allOrders[0] || '')).trim();
+    var targetOrderKey = normKey(targetOrderRaw);
+
+    var bomBySku = {};
+    var bomPairSeen = {};
+    var partMeta = {};
+    var partOrder = [];
+    var errors = [];
+
+    for (var bi = 0; bi < bArr.length; bi++) {
+      var b = bArr[bi] || {};
+      var skuRaw = String(b.saleSku || '').trim();
+      var skuKey = normKey(skuRaw);
+      var partRaw = String(b.partId || '').trim();
+      var partKey = normKey(partRaw);
+      var partName = String(b.partName || partRaw).trim();
+      var qPer = parsePosInt(b.qtyPerSku);
+
+      if (!skuKey || !partKey) {
+        errors.push({ code: 'INVALID_BOM_ROW', sku: skuRaw || '(blank)', detail: 'BOM row ' + (bi + 1) + ' is missing Sale_SKU or Part_ID.' });
+        continue;
+      }
+      if (!isFinite(qPer)) {
+        errors.push({ code: 'INVALID_BOM_QTY', sku: skuRaw, detail: 'BOM SKU ' + skuRaw + ' -> ' + partRaw + ' must have a positive whole-number Qty_Per_SKU.' });
+        continue;
+      }
+      var pairKey = skuKey + '::' + partKey;
+      if (bomPairSeen[pairKey]) {
+        errors.push({ code: 'DUPLICATE_BOM_PAIR', sku: skuRaw, detail: 'BOM lists duplicate (' + skuRaw + ', ' + partRaw + ') rows; combine into one row.' });
+        continue;
+      }
+      bomPairSeen[pairKey] = true;
+
+      if (!partMeta[partKey]) {
+        partMeta[partKey] = { partId: partRaw, partName: partName };
+        partOrder.push(partKey);
+      } else if (partName && partMeta[partKey].partName && partName.toLowerCase() !== partMeta[partKey].partName.toLowerCase()) {
+        errors.push({ code: 'PART_NAME_CONFLICT', sku: skuRaw, detail: 'Part ' + partRaw + ' has conflicting names (' + partMeta[partKey].partName + ' vs ' + partName + ').' });
+      }
+
+      if (!bomBySku[skuKey]) bomBySku[skuKey] = [];
+      bomBySku[skuKey].push({
+        saleSku: skuRaw,
+        partKey: partKey,
+        partId: partMeta[partKey].partId,
+        partName: partMeta[partKey].partName,
+        qtyPerSku: qPer
+      });
+    }
+
+    if (!targetOrderKey) {
+      return {
+        status: 'ENTER_ORDER_ID',
+        orderId: '',
+        availableOrders: allOrders,
+        consolidatedParts: [],
+        totalPhysicalPieces: 0,
+        unmappedSkus: [],
+        errors: errors
+      };
+    }
+
+    var matchingLines = [];
+    var canonicalOrderId = targetOrderRaw;
+    for (var oi = 0; oi < oArr.length; oi++) {
+      var o = oArr[oi] || {};
+      var oidRaw = String(o.orderId || '').trim();
+      var oidKey = normKey(oidRaw);
+      if (!oidKey && !String(o.saleSku || '').trim()) continue;
+      if (oidKey === targetOrderKey) {
+        canonicalOrderId = oidRaw || canonicalOrderId;
+        matchingLines.push({ rowIndex: oi + 1, saleSku: String(o.saleSku || '').trim(), orderQty: o.orderQty });
+      }
+    }
+
+    if (matchingLines.length === 0) {
+      return {
+        status: 'ORDER_NOT_FOUND',
+        orderId: canonicalOrderId,
+        availableOrders: allOrders,
+        consolidatedParts: [],
+        totalPhysicalPieces: 0,
+        unmappedSkus: [],
+        errors: errors.concat([{ code: 'ORDER_NOT_FOUND', sku: '', detail: 'No order lines found for Order ' + canonicalOrderId + '.' }])
+      };
+    }
+
+    var unmappedSkus = [];
+    var partTotals = {};
+    var partSources = {};
+
+    for (var mi = 0; mi < matchingLines.length; mi++) {
+      var ln = matchingLines[mi];
+      var lSkuKey = normKey(ln.saleSku);
+      var lQty = parsePosInt(ln.orderQty);
+      if (!lSkuKey || !isFinite(lQty)) {
+        errors.push({ code: 'INVALID_ORDER_QTY', sku: ln.saleSku || '(blank)', detail: 'Order ' + canonicalOrderId + ' line ' + ln.rowIndex + ' has missing SKU or non-integer quantity.' });
+        continue;
+      }
+      var bomItems = bomBySku[lSkuKey];
+      if (!bomItems || bomItems.length === 0) {
+        if (unmappedSkus.indexOf(ln.saleSku) === -1) unmappedSkus.push(ln.saleSku);
+        errors.push({ code: 'UNMAPPED_SKU_BLOCKED', sku: ln.saleSku, detail: 'Sale SKU "' + ln.saleSku + '" is not mapped in Kit_And_Loose_BOM — checklist blocked so no item is dropped.' });
+        continue;
+      }
+      for (var ci = 0; ci < bomItems.length; ci++) {
+        var comp = bomItems[ci];
+        var addPieces = lQty * comp.qtyPerSku;
+        partTotals[comp.partKey] = (partTotals[comp.partKey] || 0) + addPieces;
+        if (!partSources[comp.partKey]) partSources[comp.partKey] = [];
+        partSources[comp.partKey].push(lQty + '× ' + comp.saleSku + ' (' + addPieces + ')');
+      }
+    }
+
+    if (unmappedSkus.length > 0) {
+      return {
+        status: 'UNMAPPED_SKU_BLOCKED',
+        orderId: canonicalOrderId,
+        availableOrders: allOrders,
+        consolidatedParts: [],
+        totalPhysicalPieces: 0,
+        unmappedSkus: unmappedSkus,
+        errors: errors
+      };
+    }
+
+    if (errors.length > 0) {
+      return {
+        status: errors[0].code,
+        orderId: canonicalOrderId,
+        availableOrders: allOrders,
+        consolidatedParts: [],
+        totalPhysicalPieces: 0,
+        unmappedSkus: [],
+        errors: errors
+      };
+    }
+
+    var consolidatedParts = [];
+    var totalPhysicalPieces = 0;
+    for (var pi = 0; pi < partOrder.length; pi++) {
+      var pk = partOrder[pi];
+      var qty = partTotals[pk] || 0;
+      if (qty > 0) {
+        totalPhysicalPieces += qty;
+        consolidatedParts.push({
+          partId: partMeta[pk].partId,
+          partName: partMeta[pk].partName,
+          totalQty: qty,
+          breakdown: (partSources[pk] || []).join(' + ')
+        });
+      }
+    }
+
+    return {
+      status: 'READY_TO_PACK',
+      orderId: canonicalOrderId,
+      availableOrders: allOrders,
+      consolidatedParts: consolidatedParts,
+      totalPhysicalPieces: totalPhysicalPieces,
+      unmappedSkus: [],
+      errors: []
+    };
+  }
+
+  return {
+    listOrderIds: listOrderIds,
+    evaluateOrderPackList: evaluateOrderPackList
+  };
+})();
+
+
+    var kpActiveOrder = "ORD-1042";
+    function renderKitPackListSandbox() {
+      var bRows = parsePipeRows(document.getElementById("kpBomInput").value, 4).map(function(p){
+        return { saleSku: p[0], partId: p[1], partName: p[2], qtyPerSku: p[3] };
+      });
+      var oRows = parsePipeRows(document.getElementById("kpOrdersInput").value, 3).map(function(p){
+        return { orderId: p[0], saleSku: p[1], orderQty: p[2] };
+      });
+      var res = KitPackListEngine.evaluateOrderPackList(bRows, oRows, { orderId: kpActiveOrder });
+      var tb = document.getElementById("kpResultsBody");
+      var blk = document.getElementById("kpBlockedBanner");
+      clearNode(tb);
+      if (res.status !== "READY_TO_PACK") {
+        blk.style.display = "block";
+        blk.textContent = "🛑 " + res.orderId + " BLOCKED (" + res.status + "): " + (res.errors[0] ? res.errors[0].detail : "Fix SKU mapping first.");
+        document.getElementById("kpSummaryBadge").textContent = res.orderId + " · BLOCKED (0 PARTIAL LINES)";
+        return;
+      }
+      blk.style.display = "none";
+      var summaryTokens = [];
+      for (var i = 0; i < res.consolidatedParts.length; i++) {
+        var pt = res.consolidatedParts[i];
+        summaryTokens.push(pt.totalQty + " " + pt.partId);
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var cols = [pt.partId, pt.partName, String(pt.totalQty) + " pcs", pt.breakdown];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 2) {
+            td.style.fontWeight = "800";
+            td.style.color = "#6ee7b7";
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      }
+      document.getElementById("kpSummaryBadge").textContent =
+        res.orderId + ": " + summaryTokens.join(" · ") + " (" + res.totalPhysicalPieces + " PCS)";
+    }
+    function submitValidationVote79(choice) {
+      var msgEl = document.getElementById("val79Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val79_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val79_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea79-" + choice, "Idea 79 Kit Pack List Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+    document.getElementById("kpBomInput").addEventListener("input", renderKitPackListSandbox);
+    document.getElementById("kpOrdersInput").addEventListener("input", renderKitPackListSandbox);
+    document.getElementById("kpWorkedBtn").addEventListener("click", function(){ kpActiveOrder = "ORD-1042"; renderKitPackListSandbox(); });
+    document.getElementById("kpUnknownBtn").addEventListener("click", function(){ kpActiveOrder = "ORD-1043"; renderKitPackListSandbox(); });
+    document.getElementById("val79BuyBtn").addEventListener("click", function(){ submitValidationVote79("buy"); });
+    document.getElementById("val79KeepBtn").addEventListener("click", function(){ submitValidationVote79("keep"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
@@ -859,6 +1216,7 @@ var SupplierCostGuard = (function () {
     }
     setLang(initLang === "zh" ? "zh" : "en");
     renderShrinkflationSandbox();
+    renderKitPackListSandbox();
   })();
   </script>
 </body>

@@ -756,6 +756,383 @@
   }
 
   // =========================================================================
+  // Issue #78: Local Unbilled Hours Register Engine (Preview Mutates Nothing)
+  // =========================================================================
+  var SAMPLE_UNBILLED_TIMESHEET = [
+    { rowNum: 2, entryId: 'TM-2026-1101', date: '2026-11-17', clientName: 'Acme Product Labs Inc.', description: 'Webhook retry audit (already on unpaid INV-2026-104)', minutes: 90, billable: true },
+    { rowNum: 3, entryId: 'TM-2026-1102', date: '2026-11-18', clientName: 'Acme Product Labs Inc.', description: 'Tuesday overlapping-period API hotfix', minutes: 45, billable: true },
+    { rowNum: 4, entryId: 'TM-2026-1103', date: '2026-11-18', clientName: 'Acme Product Labs Inc.', description: 'Internal admin & non-billable check-in', minutes: 30, billable: false },
+    { rowNum: 5, entryId: 'TM-2026-1104', date: '2026-11-19', clientName: 'Nordic Cloud Systems GmbH', description: 'SSO token rotation review', minutes: 60, billable: true }
+  ];
+
+  var SAMPLE_UNBILLED_REGISTER = [
+    { rowNum: 2, entryId: 'TM-2026-1101', invoiceNumber: 'INV-2026-104', clientName: 'Acme Product Labs Inc.', recordedMinutes: 90, confirmedDate: '2026-11-17' }
+  ];
+
+  var SAMPLE_UNBILLED_CONFLICT_ROW = {
+    rowNum: 6, entryId: 'TM-2026-1101', date: '2026-11-17', clientName: 'Acme Product Labs Inc.', description: 'Edited minutes conflicting with billed register', minutes: 75, billable: true
+  };
+
+  function normalizeEntryIdKey(raw) {
+    return String(raw == null ? '' : raw).trim().replace(/\s+/g, ' ').toUpperCase();
+  }
+
+  function parseBillableFlag(raw) {
+    if (typeof raw === 'boolean') return raw;
+    var v = String(raw == null ? '' : raw).trim().toLowerCase();
+    if (v === 'yes' || v === 'y' || v === 'true' || v === '1' || v === 'billable') return true;
+    if (v === 'no' || v === 'n' || v === 'false' || v === '0' || v === 'non-billable' || v === 'nonbillable') return false;
+    return null;
+  }
+
+  function parseStrictMinutes(raw) {
+    if (typeof raw === 'number') {
+      return (isFinite(raw) && raw > 0) ? Math.round(raw * 100) / 100 : NaN;
+    }
+    var s = String(raw == null ? '' : raw).trim();
+    if (!s || !/^[+]?\d+(?:\.\d+)?$/.test(s)) return NaN;
+    var n = parseFloat(s);
+    return (isFinite(n) && n > 0) ? Math.round(n * 100) / 100 : NaN;
+  }
+
+  function formatMinutesHours(mins) {
+    var m = Math.round(Number(mins || 0) * 100) / 100;
+    var hrs = Math.round((m / 60) * 100) / 100;
+    var mStr = (m % 1 === 0) ? String(Math.round(m)) : m.toFixed(2);
+    return mStr + ' min (' + hrs.toFixed(2) + ' hrs)';
+  }
+
+  function parseTimesheetCsv(csvText) {
+    var rows = parseCsvRows(csvText);
+    if (rows.length < 2) return [];
+    var hdr = rows[0].map(function (h) { return String(h || '').toLowerCase().replace(/[^a-z0-9]/g, ''); });
+    function col(names) {
+      for (var i = 0; i < names.length; i++) {
+        var idx = hdr.indexOf(names[i]);
+        if (idx !== -1) return idx;
+      }
+      return -1;
+    }
+    var cId = col(['entryid', 'id', 'timeentryid', 'logid']);
+    var cDate = col(['date', 'workdate', 'loggeddate']);
+    var cCli = col(['client', 'clientname', 'customer']);
+    var cDesc = col(['description', 'task', 'notes', 'summary']);
+    var cMin = col(['minutes', 'mins', 'durationminutes']);
+    var cHrs = col(['hours', 'hrs']);
+    var cBill = col(['billable', 'isbillable']);
+    var out = [];
+    for (var r = 1; r < rows.length; r++) {
+      var row = rows[r];
+      var rawMin = cMin >= 0 ? (row[cMin] || '') : '';
+      if (!rawMin && cHrs >= 0 && row[cHrs]) {
+        var hv = parseFloat(row[cHrs]);
+        rawMin = isFinite(hv) ? String(Math.round(hv * 6000) / 100) : row[cHrs];
+      }
+      out.push({
+        rowNum: r + 1,
+        entryId: cId >= 0 ? (row[cId] || '') : '',
+        date: cDate >= 0 ? (row[cDate] || '') : '',
+        clientName: cCli >= 0 ? (row[cCli] || '') : '',
+        description: cDesc >= 0 ? (row[cDesc] || '') : '',
+        rawMinutes: rawMin,
+        minutes: parseStrictMinutes(rawMin),
+        rawBillable: cBill >= 0 ? (row[cBill] || '') : 'YES',
+        billable: parseBillableFlag(cBill >= 0 ? (row[cBill] || '') : 'YES')
+      });
+    }
+    return out;
+  }
+
+  function parseRegisterCsv(csvText) {
+    var rows = parseCsvRows(csvText);
+    if (rows.length < 2) return [];
+    var hdr = rows[0].map(function (h) { return String(h || '').toLowerCase().replace(/[^a-z0-9]/g, ''); });
+    function col(names) {
+      for (var i = 0; i < names.length; i++) {
+        var idx = hdr.indexOf(names[i]);
+        if (idx !== -1) return idx;
+      }
+      return -1;
+    }
+    var cId = col(['entryid', 'id', 'timeentryid']);
+    var cInv = col(['invoicenumber', 'invoiceno', 'invoice', 'document']);
+    var cCli = col(['client', 'clientname']);
+    var cMin = col(['recordedminutes', 'minutes', 'mins']);
+    var cDate = col(['confirmeddate', 'date', 'billeddate']);
+    var out = [];
+    for (var r = 1; r < rows.length; r++) {
+      var row = rows[r];
+      var rawMin = cMin >= 0 ? (row[cMin] || '') : '';
+      out.push({
+        rowNum: r + 1,
+        entryId: cId >= 0 ? (row[cId] || '') : '',
+        invoiceNumber: cInv >= 0 ? (row[cInv] || '') : '',
+        clientName: cCli >= 0 ? (row[cCli] || '') : '',
+        rawMinutes: rawMin,
+        recordedMinutes: rawMin !== '' ? parseStrictMinutes(rawMin) : null,
+        confirmedDate: cDate >= 0 ? (row[cDate] || '') : ''
+      });
+    }
+    return out;
+  }
+
+  function listTimesheetClients(timeEntries) {
+    var seen = {}, list = [];
+    var arr = Array.isArray(timeEntries) ? timeEntries : [];
+    for (var i = 0; i < arr.length; i++) {
+      var raw = String(arr[i].clientName || '').trim();
+      var k = normalizeClientKey(raw);
+      if (k && !seen[k]) {
+        seen[k] = true;
+        list.push(raw);
+      }
+    }
+    return list;
+  }
+
+  function evaluateUnbilledHours(timeEntries, registerEntries, opts) {
+    opts = opts || {};
+    var targetClientRaw = String(opts.clientName || '').trim();
+    var targetClientKey = normalizeClientKey(targetClientRaw);
+    var tArr = Array.isArray(timeEntries) ? timeEntries : [];
+    var rArr = Array.isArray(registerEntries) ? registerEntries : [];
+    var issues = [];
+    var regMap = {};
+
+    for (var ri = 0; ri < rArr.length; ri++) {
+      var reg = rArr[ri];
+      var rIdRaw = String(reg.entryId || '').trim();
+      var rIdKey = normalizeEntryIdKey(rIdRaw);
+      var rInvRaw = String(reg.invoiceNumber || '').trim();
+      var rInvKey = normalizeEntryIdKey(rInvRaw);
+      var rMin = (reg.recordedMinutes !== undefined && reg.recordedMinutes !== null && reg.recordedMinutes !== '')
+        ? (typeof reg.recordedMinutes === 'number' ? reg.recordedMinutes : parseStrictMinutes(reg.recordedMinutes))
+        : null;
+
+      if (!rIdKey || !rInvKey) {
+        issues.push({ code: 'REGISTER_MISSING_ID_OR_INVOICE', entryId: rIdRaw || '(blank)', detail: 'Register row ' + (reg.rowNum || (ri + 2)) + ' is missing EntryID or InvoiceNumber.' });
+        continue;
+      }
+      if (rMin !== null && !isFinite(rMin)) {
+        issues.push({ code: 'ENTRY_ID_CONFLICT', entryId: rIdRaw, detail: 'Register row for ' + rIdRaw + ' has invalid RecordedMinutes.' });
+        continue;
+      }
+      if (regMap[rIdKey]) {
+        var prevReg = regMap[rIdKey];
+        if (prevReg.invKey !== rInvKey || (prevReg.recordedMinutes !== null && rMin !== null && Math.round(prevReg.recordedMinutes * 100) !== Math.round(rMin * 100))) {
+          issues.push({ code: 'ENTRY_ID_CONFLICT', entryId: rIdRaw, detail: 'Register lists ' + rIdRaw + ' on conflicting invoices or minutes (' + prevReg.invoiceNumber + ' vs ' + rInvRaw + ').' });
+        }
+        continue;
+      }
+      regMap[rIdKey] = {
+        entryId: rIdRaw,
+        entryKey: rIdKey,
+        invoiceNumber: rInvRaw,
+        invKey: rInvKey,
+        clientName: String(reg.clientName || '').trim(),
+        clientKey: normalizeClientKey(reg.clientName || ''),
+        recordedMinutes: rMin,
+        confirmedDate: String(reg.confirmedDate || '').trim()
+      };
+    }
+
+    if (!targetClientKey) {
+      return {
+        status: 'NO_CLIENT',
+        clientName: '',
+        unbilledRows: [],
+        excludedBilledRows: [],
+        excludedNonBillableRows: [],
+        otherClientCount: tArr.length,
+        unbilledMinutes: 0,
+        unbilledHours: 0,
+        formattedUnbilled: formatMinutesHours(0),
+        issues: issues
+      };
+    }
+
+    var seenTimeIds = {};
+    var unbilledRows = [];
+    var excludedBilledRows = [];
+    var excludedNonBillableRows = [];
+    var otherClientCount = 0;
+    var canonicalClientName = targetClientRaw;
+
+    for (var ti = 0; ti < tArr.length; ti++) {
+      var t = tArr[ti];
+      var rowClientRaw = String(t.clientName || '').trim();
+      var rowClientKey = normalizeClientKey(rowClientRaw);
+      var tIdRaw = String(t.entryId || '').trim();
+      var tIdKey = normalizeEntryIdKey(tIdRaw);
+
+      if (tIdKey) {
+        if (!seenTimeIds[tIdKey]) {
+          seenTimeIds[tIdKey] = { firstClientKey: rowClientKey };
+        } else if (rowClientKey === targetClientKey || seenTimeIds[tIdKey].firstClientKey === targetClientKey) {
+          issues.push({ code: 'ENTRY_ID_CONFLICT', entryId: tIdRaw, detail: 'Duplicate EntryID ' + tIdRaw + ' appears multiple times in timesheet.' });
+        }
+      }
+
+      if (rowClientKey !== targetClientKey) {
+        if (!rowClientKey && !tIdKey) continue;
+        otherClientCount += 1;
+        continue;
+      }
+      canonicalClientName = rowClientRaw || canonicalClientName;
+
+      if (!tIdKey) {
+        issues.push({ code: 'MISSING_ENTRY_ID', entryId: '(blank)', detail: 'Timesheet row ' + (t.rowNum || (ti + 2)) + ' has a blank EntryID.' });
+        continue;
+      }
+      var mins = typeof t.minutes === 'number' ? t.minutes : parseStrictMinutes(t.rawMinutes !== undefined ? t.rawMinutes : t.minutes);
+      if (!isFinite(mins) || mins <= 0) {
+        issues.push({ code: 'INVALID_MINUTES', entryId: tIdRaw, detail: 'Entry ' + tIdRaw + ' has invalid minutes.' });
+        continue;
+      }
+      var billFlag = parseBillableFlag(t.rawBillable !== undefined ? t.rawBillable : t.billable);
+      if (billFlag === null) {
+        issues.push({ code: 'INVALID_BILLABLE_FLAG', entryId: tIdRaw, detail: 'Entry ' + tIdRaw + ' must specify Billable as YES or NO.' });
+        continue;
+      }
+
+      var regHit = regMap[tIdKey];
+      if (regHit) {
+        if (regHit.clientKey && regHit.clientKey !== targetClientKey) {
+          issues.push({ code: 'ENTRY_ID_CONFLICT', entryId: tIdRaw, detail: 'Entry ' + tIdRaw + ' belongs to ' + regHit.clientName + ' in register.' });
+          continue;
+        }
+        if (regHit.recordedMinutes !== null && Math.round(regHit.recordedMinutes * 100) !== Math.round(mins * 100)) {
+          issues.push({ code: 'ENTRY_ID_CONFLICT', entryId: tIdRaw, detail: 'Entry ' + tIdRaw + ' has ' + mins + 'm in timesheet vs ' + regHit.recordedMinutes + 'm on ' + regHit.invoiceNumber + '.' });
+          continue;
+        }
+        excludedBilledRows.push({
+          entryId: tIdRaw,
+          date: String(t.date || ''),
+          clientName: canonicalClientName,
+          description: String(t.description || ''),
+          minutes: mins,
+          hours: Math.round((mins / 60) * 100) / 100,
+          invoiceNumber: regHit.invoiceNumber,
+          confirmedDate: regHit.confirmedDate || ''
+        });
+        continue;
+      }
+
+      if (!billFlag) {
+        excludedNonBillableRows.push({
+          entryId: tIdRaw,
+          date: String(t.date || ''),
+          clientName: canonicalClientName,
+          description: String(t.description || ''),
+          minutes: mins,
+          hours: Math.round((mins / 60) * 100) / 100
+        });
+        continue;
+      }
+
+      unbilledRows.push({
+        entryId: tIdRaw,
+        date: String(t.date || ''),
+        clientName: canonicalClientName,
+        description: String(t.description || ''),
+        minutes: mins,
+        hours: Math.round((mins / 60) * 100) / 100
+      });
+    }
+
+    var status = 'READY';
+    if (issues.length > 0) {
+      status = issues[0].code;
+      for (var ii = 0; ii < issues.length; ii++) {
+        if (issues[ii].code === 'MISSING_ENTRY_ID') { status = 'MISSING_ENTRY_ID'; break; }
+        if (issues[ii].code === 'ENTRY_ID_CONFLICT') { status = 'ENTRY_ID_CONFLICT'; }
+      }
+    }
+
+    var totalHundredths = 0;
+    if (status === 'READY') {
+      for (var ui = 0; ui < unbilledRows.length; ui++) {
+        totalHundredths += Math.round(unbilledRows[ui].minutes * 100);
+      }
+    }
+    var unbilledMinutes = totalHundredths / 100;
+    var unbilledHours = Math.round((unbilledMinutes / 60) * 10000) / 10000;
+
+    return {
+      status: status,
+      clientName: canonicalClientName,
+      unbilledRows: status === 'READY' ? unbilledRows : [],
+      excludedBilledRows: excludedBilledRows,
+      excludedNonBillableRows: excludedNonBillableRows,
+      otherClientCount: otherClientCount,
+      unbilledMinutes: unbilledMinutes,
+      unbilledHours: unbilledHours,
+      formattedUnbilled: formatMinutesHours(unbilledMinutes),
+      issues: issues
+    };
+  }
+
+  function confirmInvoicedEntries(timeEntries, registerEntries, opts) {
+    opts = opts || {};
+    var invRaw = String(opts.invoiceNumber || '').trim();
+    if (!invRaw) {
+      return { ok: false, reason: 'MISSING_INVOICE_NUMBER', updatedRegister: (registerEntries || []).slice() };
+    }
+    var evalRes = evaluateUnbilledHours(timeEntries, registerEntries, { clientName: opts.clientName });
+    if (evalRes.status !== 'READY') {
+      return { ok: false, reason: evalRes.status, issues: evalRes.issues, updatedRegister: (registerEntries || []).slice() };
+    }
+    if (evalRes.unbilledRows.length === 0) {
+      return { ok: false, reason: 'NO_UNBILLED_ROWS', updatedRegister: (registerEntries || []).slice() };
+    }
+    var confirmedDate = String(opts.confirmedDate || new Date().toISOString().slice(0, 10)).trim();
+    var nextReg = (Array.isArray(registerEntries) ? registerEntries : []).map(function (r) {
+      return {
+        entryId: r.entryId,
+        invoiceNumber: r.invoiceNumber,
+        clientName: r.clientName || '',
+        recordedMinutes: r.recordedMinutes !== undefined && r.recordedMinutes !== null ? r.recordedMinutes : '',
+        confirmedDate: r.confirmedDate || ''
+      };
+    });
+    for (var i = 0; i < evalRes.unbilledRows.length; i++) {
+      var row = evalRes.unbilledRows[i];
+      nextReg.push({
+        entryId: row.entryId,
+        invoiceNumber: invRaw,
+        clientName: evalRes.clientName,
+        recordedMinutes: row.minutes,
+        confirmedDate: confirmedDate
+      });
+    }
+    return {
+      ok: true,
+      invoiceNumber: invRaw,
+      addedCount: evalRes.unbilledRows.length,
+      addedMinutes: evalRes.unbilledMinutes,
+      updatedRegister: nextReg
+    };
+  }
+
+  function serializeRegisterCsv(registerEntries) {
+    function csvSafe(v) {
+      var s = String(v == null ? '' : v);
+      if (/^[=+\-@]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    var lines = ['"EntryID","InvoiceNumber","Client","RecordedMinutes","ConfirmedDate"'];
+    var arr = Array.isArray(registerEntries) ? registerEntries : [];
+    for (var i = 0; i < arr.length; i++) {
+      var r = arr[i];
+      var m = (r.recordedMinutes !== undefined && r.recordedMinutes !== null && r.recordedMinutes !== '')
+        ? ((Number(r.recordedMinutes) % 1 === 0) ? String(Math.round(Number(r.recordedMinutes))) : Number(r.recordedMinutes).toFixed(2))
+        : '';
+      lines.push([csvSafe(r.entryId), csvSafe(r.invoiceNumber), csvSafe(r.clientName || ''), csvSafe(m), csvSafe(r.confirmedDate || '')].join(','));
+    }
+    return lines.join('\r\n');
+  }
+
+  // =========================================================================
   // Pure-JS ISO/IEC 18004 Scannable QR Code Matrix & Vector SVG Generator
   // Supports Versions 1–6 (ECC Level L, Byte Mode, up to 134 UTF-8 bytes)
   // =========================================================================
@@ -1064,6 +1441,7 @@
       tabCatalog: 'Item Catalog',
       tabLedger: 'Invoice Ledger',
       tabStatement: 'Open Statement',
+      tabUnbilled: 'Unbilled Hours',
       btnSaveClient: '+ Save Current Client',
       btnSaveItem: '+ Save First Line Item',
       btnSaveLedger: '+ Save Invoice to Ledger',
@@ -1079,6 +1457,16 @@
       btnPrintStmt: '🖨️ Print Statement PDF',
       btnExportStmtCsv: '⬇ Statement CSV',
       btnBackToInvoice: '↩ Single Invoice View',
+      unbIntro: 'Compare time CSV vs. billed EntryID register (preview changes nothing).',
+      btnUnbDemo: '🧪 Load 45m Demo',
+      btnUnbConflict: '⚠️ Test ID Conflict',
+      btnUnbTimeCsv: '📂 Time CSV',
+      btnUnbRegCsv: '📒 Register CSV',
+      lblUnbInv: 'Issued Invoice # (After Sending)',
+      lblUnbDate: 'Confirmed Date',
+      btnConfirmUnb: '✓ Confirm Invoice # & Update Register',
+      btnExportUnbReg: '⬇ Save Register CSV',
+      btnPushUnbToInv: '➕ Copy Unbilled to Invoice',
       tipText: 'Get paid faster with zero monthly SaaS fees? Support independent offline software:',
       tipCta: '☕ Support CraftLeaf Studio',
       guidesFooterTitle: 'Free Industry Invoice & Receipt Templates:',
@@ -1147,6 +1535,7 @@
       tabCatalog: '常用服务价目',
       tabLedger: '历史账单台账',
       tabStatement: '未结对账单',
+      tabUnbilled: '未开票工时核查',
       btnSaveClient: '+ 保存当前客户',
       btnSaveItem: '+ 保存首行服务项',
       btnSaveLedger: '+ 归档当前账单至台账',
@@ -1162,6 +1551,16 @@
       btnPrintStmt: '🖨️ 打印/导出对账单 PDF',
       btnExportStmtCsv: '⬇ 导出对账 CSV',
       btnBackToInvoice: '↩ 返回单张发票视图',
+      unbIntro: '比对工时表与已开发票 EntryID 登记簿（仅预览不改动登记簿）。',
+      btnUnbDemo: '🧪 载入 45 分钟示例',
+      btnUnbConflict: '⚠️ 测试单号工时冲突',
+      btnUnbTimeCsv: '📂 导入工时 CSV',
+      btnUnbRegCsv: '📒 导入登记簿 CSV',
+      lblUnbInv: '已开具发票号（确认后写入）',
+      lblUnbDate: '登记日期',
+      btnConfirmUnb: '✓ 确认发票号并更新登记簿',
+      btnExportUnbReg: '⬇ 导出登记簿 CSV',
+      btnPushUnbToInv: '➕ 填入当前发票草稿',
       tipText: '省下了每月 $15 的海外 SaaS 账单软件月费？欢迎支持纯本地独立工具：',
       tipCta: '☕ 赞助支持青叶工坊',
       guidesFooterTitle: '出海自由职业者与独立开发者常用发票模板指南：',
@@ -1273,6 +1672,15 @@
     exportStatementCsvString: exportStatementCsvString,
     SAMPLE_STATEMENT_LEDGER: SAMPLE_STATEMENT_LEDGER,
     SAMPLE_STATEMENT_DUPLICATE_ROW: SAMPLE_STATEMENT_DUPLICATE_ROW,
+    parseTimesheetCsv: parseTimesheetCsv,
+    parseRegisterCsv: parseRegisterCsv,
+    listTimesheetClients: listTimesheetClients,
+    evaluateUnbilledHours: evaluateUnbilledHours,
+    confirmInvoicedEntries: confirmInvoicedEntries,
+    serializeRegisterCsv: serializeRegisterCsv,
+    SAMPLE_UNBILLED_TIMESHEET: SAMPLE_UNBILLED_TIMESHEET,
+    SAMPLE_UNBILLED_REGISTER: SAMPLE_UNBILLED_REGISTER,
+    SAMPLE_UNBILLED_CONFLICT_ROW: SAMPLE_UNBILLED_CONFLICT_ROW,
     generateQRSvg: generateQRSvg
   };
 
@@ -1385,6 +1793,16 @@
       statementDate: todayIso,
       resolvedDuplicates: {},
       confirmedBalancesCurrent: false
+    },
+    unb: {
+      useDemo: true,
+      includeConflictDemo: false,
+      clientName: 'Acme Product Labs Inc.',
+      confirmInv: 'INV-2026-112',
+      confirmDate: todayIso,
+      statusMsg: '',
+      timeEntries: SAMPLE_UNBILLED_TIMESHEET.slice(),
+      registerEntries: SAMPLE_UNBILLED_REGISTER.slice()
     },
     doc: {
       docType: 'invoice',
@@ -1823,9 +2241,160 @@
     paperEl.appendChild(botWrap);
   }
 
+  function getActiveUnbilledTimeEntries() {
+    if (state.unb.useDemo) {
+      return state.unb.includeConflictDemo
+        ? [SAMPLE_UNBILLED_CONFLICT_ROW, SAMPLE_UNBILLED_TIMESHEET[1], SAMPLE_UNBILLED_TIMESHEET[2], SAMPLE_UNBILLED_TIMESHEET[3]]
+        : state.unb.timeEntries;
+    }
+    return state.unb.timeEntries;
+  }
+
+  function renderUnbilledPaperDom(paperEl) {
+    while (paperEl.firstChild) paperEl.removeChild(paperEl.firstChild);
+    var unlocked = isPro();
+    var d = state.doc;
+    var isZh = d.docLang === 'zh';
+    var effectiveAccent = unlocked ? (d.accentColor || '#1e3a8a') : '#1e3a8a';
+    paperEl.style.setProperty('--inv-accent', effectiveAccent);
+    paperEl.classList.toggle('paper-letter', state.paper === 'letter');
+
+    var res = evaluateUnbilledHours(getActiveUnbilledTimeEntries(), state.unb.registerEntries, {
+      clientName: state.unb.clientName
+    });
+
+    var topWrap = document.createElement('div');
+    var header = document.createElement('div');
+    header.className = 'inv-header';
+
+    var brandBox = document.createElement('div');
+    brandBox.className = 'inv-brand-box';
+    var sName = document.createElement('h2');
+    sName.className = 'inv-sender-name';
+    sName.textContent = d.senderName || 'Your Studio / Name';
+    brandBox.appendChild(sName);
+
+    var metaBox = document.createElement('div');
+    metaBox.className = 'inv-doc-meta';
+    var badge = document.createElement('div');
+    badge.className = 'inv-doc-badge';
+    badge.style.fontSize = '19px';
+    badge.textContent = isZh ? '未开票工时核查单' : 'UNBILLED HOURS CHECK';
+    metaBox.appendChild(badge);
+
+    header.appendChild(brandBox);
+    header.appendChild(metaBox);
+    topWrap.appendChild(header);
+
+    var noticeDiv = document.createElement('div');
+    noticeDiv.className = 'inv-stmt-notice';
+    noticeDiv.textContent = isZh
+      ? '预览仅做工时核对，绝不改动登记簿；即使历史发票尚未回款，其已登记工时也会自动从下一张账单中剔除。'
+      : 'Preview changes nothing: entries recorded on an issued invoice (even if unpaid) and non-billable rows are excluded from your next draft.';
+    topWrap.appendChild(noticeDiv);
+
+    var parties = document.createElement('div');
+    parties.className = 'inv-parties';
+    var cCol = document.createElement('div');
+    var k1 = document.createElement('div');
+    k1.className = 'inv-section-kicker';
+    k1.textContent = isZh ? '核查客户 (Single Client)' : 'Client (Isolated)';
+    var cn = document.createElement('div');
+    cn.className = 'inv-client-name';
+    cn.textContent = res.clientName || '—';
+    cCol.appendChild(k1);
+    cCol.appendChild(cn);
+
+    var hiBox = document.createElement('div');
+    hiBox.className = 'inv-summary-highlight';
+    var k2 = document.createElement('div');
+    k2.className = 'inv-section-kicker';
+    k2.textContent = isZh ? '可计入下一张发票工时' : 'Unbilled Draft Hours';
+    var hiAmt = document.createElement('div');
+    hiAmt.className = 'inv-highlight-amt';
+    hiAmt.textContent = res.status === 'READY' ? res.formattedUnbilled : (isZh ? '⚠️ 需人工复核冲突' : '⚠️ Review Conflict');
+    hiBox.appendChild(k2);
+    hiBox.appendChild(hiAmt);
+    parties.appendChild(cCol);
+    parties.appendChild(hiBox);
+    topWrap.appendChild(parties);
+
+    if (res.status !== 'READY') {
+      var wBox = document.createElement('div');
+      wBox.className = 'stmt-conflict-box';
+      wBox.textContent = res.issues.map(function (x) { return '[' + x.entryId + '] ' + x.detail; }).join(' ');
+      topWrap.appendChild(wBox);
+    } else {
+      var tbl = document.createElement('table');
+      tbl.className = 'inv-table';
+      var thead = document.createElement('thead');
+      var hr = document.createElement('tr');
+      var cols = [['Entry ID', ''], ['Date', ''], ['Task / Status', ''], ['Minutes', 'num'], ['Outcome', '']];
+      for (var c = 0; c < cols.length; c++) {
+        var th = document.createElement('th');
+        th.textContent = cols[c][0];
+        if (cols[c][1]) th.className = cols[c][1];
+        hr.appendChild(th);
+      }
+      thead.appendChild(hr);
+      tbl.appendChild(thead);
+
+      var tbody = document.createElement('tbody');
+      function appendRow(idTxt, dateTxt, descTxt, minVal, outTxt, highlight) {
+        var tr = document.createElement('tr');
+        var td0 = document.createElement('td');
+        var st = document.createElement('strong');
+        st.textContent = idTxt;
+        td0.appendChild(st);
+        var td1 = document.createElement('td');
+        td1.textContent = dateTxt || '—';
+        var td2 = document.createElement('td');
+        td2.textContent = descTxt || '—';
+        var td3 = document.createElement('td');
+        td3.className = 'num';
+        td3.textContent = String(minVal) + 'm (' + (minVal / 60).toFixed(2) + 'h)';
+        var td4 = document.createElement('td');
+        td4.textContent = outTxt;
+        td4.style.fontWeight = highlight ? '800' : '600';
+        td4.style.color = highlight ? '#059669' : '#64748b';
+        tr.appendChild(td0);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tbody.appendChild(tr);
+      }
+      res.unbilledRows.forEach(function (r) {
+        appendRow(r.entryId, r.date, r.description, r.minutes, 'INCLUDE ON NEXT INVOICE', true);
+      });
+      res.excludedBilledRows.forEach(function (r) {
+        appendRow(r.entryId, r.date, r.description, r.minutes, 'Excluded (Billed on ' + r.invoiceNumber + ')', false);
+      });
+      res.excludedNonBillableRows.forEach(function (r) {
+        appendRow(r.entryId, r.date, r.description, r.minutes, 'Excluded (Non-Billable)', false);
+      });
+      tbl.appendChild(tbody);
+      topWrap.appendChild(tbl);
+    }
+
+    var botWrap = document.createElement('div');
+    if (!unlocked || !d.hideFooter) {
+      var ftr = document.createElement('div');
+      ftr.className = 'inv-footer-brand';
+      ftr.textContent = (DOC_LABELS[d.docLang] || DOC_LABELS.en).freeFooter;
+      botWrap.appendChild(ftr);
+    }
+    paperEl.appendChild(topWrap);
+    paperEl.appendChild(botWrap);
+  }
+
   function updateInvoicePreview() {
     if (state.previewMode === 'statement') {
       renderStatementPaperDom($('invoicePaper'));
+      return;
+    }
+    if (state.previewMode === 'unbilled') {
+      renderUnbilledPaperDom($('invoicePaper'));
       return;
     }
     var unlocked = isPro();
@@ -2051,6 +2620,50 @@
     }
   }
 
+  function syncUnbilledControls() {
+    var tEntries = getActiveUnbilledTimeEntries();
+    var clients = listTimesheetClients(tEntries);
+    var cSel = $('unbClientSelect');
+    if (!cSel) return;
+    while (cSel.firstChild) cSel.removeChild(cSel.firstChild);
+    if (clients.length > 0 && clients.indexOf(state.unb.clientName) === -1) {
+      state.unb.clientName = clients[0];
+    }
+    for (var i = 0; i < clients.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = clients[i];
+      opt.textContent = clients[i];
+      if (clients[i] === state.unb.clientName) opt.selected = true;
+      cSel.appendChild(opt);
+    }
+    if ($('unbConfirmInvInput')) $('unbConfirmInvInput').value = state.unb.confirmInv || 'INV-2026-112';
+    if ($('unbConfirmDateInput')) $('unbConfirmDateInput').value = state.unb.confirmDate || todayIso;
+
+    var res = evaluateUnbilledHours(tEntries, state.unb.registerEntries, { clientName: state.unb.clientName });
+    if ($('unbExcludedBanner')) {
+      $('unbExcludedBanner').textContent = state.lang === 'zh'
+        ? ('待开票草稿：' + res.formattedUnbilled + ' · 已剔除已开票 ' + res.excludedBilledRows.length + ' 笔 · 非计费 ' + res.excludedNonBillableRows.length + ' 笔 · 其他客户 ' + res.otherClientCount + ' 笔')
+        : ('Draft ready: ' + res.formattedUnbilled + ' · Excluded: ' + res.excludedBilledRows.length + ' billed · ' + res.excludedNonBillableRows.length + ' non-billable · ' + res.otherClientCount + ' other-client');
+    }
+    var cBox = $('unbConflictBox');
+    if (cBox) {
+      while (cBox.firstChild) cBox.removeChild(cBox.firstChild);
+      if (res.issues.length > 0) {
+        cBox.style.display = 'block';
+        res.issues.forEach(function (iss) {
+          var div = document.createElement('div');
+          div.textContent = '⚠️ [' + iss.entryId + '] ' + iss.detail;
+          cBox.appendChild(div);
+        });
+      } else {
+        cBox.style.display = 'none';
+      }
+    }
+    if ($('unbStatusMsg')) {
+      $('unbStatusMsg').textContent = state.unb.statusMsg || '';
+    }
+  }
+
   function renderCrmPanel() {
     var listEl = $('crmSavedList');
     listEl.innerHTML = '';
@@ -2060,12 +2673,14 @@
     $('crmTabCatalog').classList.toggle('active', state.crmTab === 'catalog');
     $('crmTabLedger').classList.toggle('active', state.crmTab === 'ledger');
     if ($('crmTabStatement')) $('crmTabStatement').classList.toggle('active', state.crmTab === 'statement');
+    if ($('crmTabUnbilled')) $('crmTabUnbilled').classList.toggle('active', state.crmTab === 'unbilled');
 
     $('crmActionsClients').style.display = state.crmTab === 'clients' ? 'flex' : 'none';
     $('crmActionsCatalog').style.display = state.crmTab === 'catalog' ? 'flex' : 'none';
     $('crmActionsLedger').style.display = state.crmTab === 'ledger' ? 'flex' : 'none';
     if ($('crmStatementPane')) $('crmStatementPane').style.display = state.crmTab === 'statement' ? 'block' : 'none';
-    listEl.style.display = state.crmTab === 'statement' ? 'none' : 'flex';
+    if ($('crmUnbilledPane')) $('crmUnbilledPane').style.display = state.crmTab === 'unbilled' ? 'block' : 'none';
+    listEl.style.display = (state.crmTab === 'statement' || state.crmTab === 'unbilled') ? 'none' : 'flex';
 
     if (state.crmTab === 'statement') {
       if (!state.stmt.useDemo && !crmData.ledger.length) {
@@ -2074,6 +2689,11 @@
         state.stmt.useDemo = false;
       }
       syncStatementControls();
+      return;
+    }
+
+    if (state.crmTab === 'unbilled') {
+      syncUnbilledControls();
       return;
     }
 
@@ -2443,6 +3063,7 @@
   function init() {
     var hasUrlTemplate = false;
     var startInStatementMode = false;
+    var startInUnbilledMode = false;
     try {
       var params = new URLSearchParams(window.location.search || '');
       if (params.get('template')) {
@@ -2451,6 +3072,8 @@
       }
       if (params.get('mode') === 'statement') {
         startInStatementMode = true;
+      } else if (params.get('mode') === 'unbilled') {
+        startInUnbilledMode = true;
       }
       var savedLang = localStorage.getItem('craftleaf_lang');
       if (params.get('lang') === 'zh' || params.get('lang') === 'en') {
@@ -2677,6 +3300,160 @@
       });
     }
 
+    if ($('crmTabUnbilled')) {
+      $('crmTabUnbilled').addEventListener('click', function () {
+        state.crmTab = 'unbilled';
+        state.previewMode = 'unbilled';
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+    if ($('loadUnbDemoBtn')) {
+      $('loadUnbDemoBtn').addEventListener('click', function () {
+        state.unb.useDemo = true;
+        state.unb.includeConflictDemo = false;
+        state.unb.timeEntries = SAMPLE_UNBILLED_TIMESHEET.slice();
+        state.unb.registerEntries = SAMPLE_UNBILLED_REGISTER.slice();
+        state.unb.clientName = 'Acme Product Labs Inc.';
+        state.unb.statusMsg = '';
+        state.previewMode = 'unbilled';
+        syncUnbilledControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('toggleUnbConflictBtn')) {
+      $('toggleUnbConflictBtn').addEventListener('click', function () {
+        state.unb.useDemo = true;
+        state.unb.includeConflictDemo = !state.unb.includeConflictDemo;
+        state.unb.statusMsg = '';
+        state.previewMode = 'unbilled';
+        syncUnbilledControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('importUnbTimeCsvBtn') && $('unbTimeCsvFileInput')) {
+      $('importUnbTimeCsvBtn').addEventListener('click', function () {
+        if (!isPro()) { openUnlockModal(); return; }
+        $('unbTimeCsvFileInput').click();
+      });
+      $('unbTimeCsvFileInput').addEventListener('change', function (e) {
+        if (!e.target.files || !e.target.files[0]) return;
+        var rd = new FileReader();
+        rd.onload = function (ev) {
+          state.unb.useDemo = false;
+          state.unb.includeConflictDemo = false;
+          state.unb.timeEntries = parseTimesheetCsv(String(ev.target.result || ''));
+          state.unb.statusMsg = '';
+          syncUnbilledControls();
+          updateInvoicePreview();
+          e.target.value = '';
+        };
+        rd.readAsText(e.target.files[0]);
+      });
+    }
+    if ($('importUnbRegCsvBtn') && $('unbRegCsvFileInput')) {
+      $('importUnbRegCsvBtn').addEventListener('click', function () {
+        if (!isPro()) { openUnlockModal(); return; }
+        $('unbRegCsvFileInput').click();
+      });
+      $('unbRegCsvFileInput').addEventListener('change', function (e) {
+        if (!e.target.files || !e.target.files[0]) return;
+        var rd = new FileReader();
+        rd.onload = function (ev) {
+          state.unb.useDemo = false;
+          state.unb.includeConflictDemo = false;
+          state.unb.registerEntries = parseRegisterCsv(String(ev.target.result || ''));
+          state.unb.statusMsg = '';
+          syncUnbilledControls();
+          updateInvoicePreview();
+          e.target.value = '';
+        };
+        rd.readAsText(e.target.files[0]);
+      });
+    }
+    if ($('unbClientSelect')) {
+      $('unbClientSelect').addEventListener('change', function (e) {
+        state.unb.clientName = e.target.value;
+        state.unb.statusMsg = '';
+        syncUnbilledControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('unbConfirmInvInput')) {
+      $('unbConfirmInvInput').addEventListener('input', function (e) {
+        state.unb.confirmInv = e.target.value;
+      });
+    }
+    if ($('unbConfirmDateInput')) {
+      $('unbConfirmDateInput').addEventListener('input', function (e) {
+        state.unb.confirmDate = e.target.value || todayIso;
+      });
+    }
+    if ($('confirmUnbilledBtn')) {
+      $('confirmUnbilledBtn').addEventListener('click', function () {
+        if (!state.unb.useDemo && !isPro()) { openUnlockModal(); return; }
+        var cRes = confirmInvoicedEntries(getActiveUnbilledTimeEntries(), state.unb.registerEntries, {
+          clientName: state.unb.clientName,
+          invoiceNumber: state.unb.confirmInv,
+          confirmedDate: state.unb.confirmDate || todayIso
+        });
+        if (!cRes.ok) {
+          alert(state.lang === 'zh' ? ('无法确认写入登记簿：' + cRes.reason) : ('Cannot confirm invoice onto register: ' + cRes.reason));
+          return;
+        }
+        state.unb.registerEntries = cRes.updatedRegister;
+        state.unb.statusMsg = state.lang === 'zh'
+          ? ('✓ 已将 ' + cRes.addedCount + ' 笔工时（' + cRes.addedMinutes + ' 分钟）登记至 ' + cRes.invoiceNumber + '；再次比对现显示 0 分钟未开票！')
+          : ('✓ Confirmed ' + cRes.addedCount + ' entry (' + cRes.addedMinutes + ' min) onto ' + cRes.invoiceNumber + '. Repeat import now yields 0 min!');
+        syncUnbilledControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('exportUnbRegCsvBtn')) {
+      $('exportUnbRegCsvBtn').addEventListener('click', function () {
+        if (!isPro()) { openUnlockModal(); return; }
+        var csvRaw = serializeRegisterCsv(state.unb.registerEntries);
+        var blob = new Blob(['\uFEFF' + csvRaw], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'billed-entry-register-' + todayIso + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      });
+    }
+    if ($('pushUnbilledToInvoiceBtn')) {
+      $('pushUnbilledToInvoiceBtn').addEventListener('click', function () {
+        var res = evaluateUnbilledHours(getActiveUnbilledTimeEntries(), state.unb.registerEntries, { clientName: state.unb.clientName });
+        if (res.status !== 'READY' || res.unbilledRows.length === 0) {
+          alert(state.lang === 'zh' ? '当前无无冲突的待开票工时可填入。' : 'No conflict-free unbilled rows to copy onto invoice.');
+          return;
+        }
+        var defaultRate = (state.doc.items[0] && Number(state.doc.items[0].rate)) || 150;
+        state.doc.clientName = res.clientName;
+        state.doc.items = res.unbilledRows.map(function (r) {
+          return {
+            desc: '[' + r.entryId + '] ' + (r.description || 'Logged billable work') + (r.date ? ' (' + r.date + ')' : ''),
+            qty: Math.round((r.minutes / 60) * 100) / 100,
+            rate: defaultRate
+          };
+        });
+        state.previewMode = 'invoice';
+        syncInputsFromDoc();
+        updateInvoicePreview();
+      });
+    }
+    if ($('backFromUnbilledBtn')) {
+      $('backFromUnbilledBtn').addEventListener('click', function () {
+        state.previewMode = 'invoice';
+        state.crmTab = 'clients';
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+
     if ($('importLedgerCsvBtn') && $('ledgerCsvFileInput')) {
       $('importLedgerCsvBtn').addEventListener('click', function () {
         if (!isPro()) { openUnlockModal(); return; }
@@ -2810,6 +3587,9 @@
         state.crmTab = 'statement';
         state.previewMode = 'statement';
         state.stmt.useDemo = !(isPro() && crmData.ledger.length > 0);
+      } else if (startInUnbilledMode) {
+        state.crmTab = 'unbilled';
+        state.previewMode = 'unbilled';
       }
       renderCrmPanel();
       updateInvoicePreview();

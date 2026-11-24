@@ -233,6 +233,7 @@
             <button type="button" id="crmTabCatalog" class="crm-tab" data-i18n="tabCatalog">Item Catalog</button>
             <button type="button" id="crmTabLedger" class="crm-tab" data-i18n="tabLedger">Invoice Ledger</button>
             <button type="button" id="crmTabStatement" class="crm-tab" data-i18n="tabStatement">Open Statement</button>
+            <button type="button" id="crmTabUnbilled" class="crm-tab" data-i18n="tabUnbilled">Unbilled Hours</button>
           </div>
 
           <div id="crmActionsClients" style="display:flex;gap:8px;">
@@ -284,6 +285,46 @@
               <button type="button" id="printStmtPdfBtn" class="btn btn-xs btn-pro" data-i18n="btnPrintStmt">🖨️ Print Statement PDF</button>
               <button type="button" id="exportStmtCsvBtn" class="btn btn-xs btn-emerald" data-i18n="btnExportStmtCsv">⬇ Statement CSV</button>
               <button type="button" id="backToInvoiceViewBtn" class="btn btn-xs" data-i18n="btnBackToInvoice">↩ Single Invoice View</button>
+            </div>
+          </div>
+
+          <div id="crmUnbilledPane" class="stmt-pane" style="display:none;">
+            <div class="stmt-demo-bar">
+              <span class="stmt-demo-note" data-i18n="unbIntro">Compare time CSV vs. billed EntryID register (preview changes nothing).</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" id="loadUnbDemoBtn" class="btn btn-xs" data-i18n="btnUnbDemo">🧪 Load 45m Demo</button>
+                <button type="button" id="toggleUnbConflictBtn" class="btn btn-xs" data-i18n="btnUnbConflict">⚠️ Test ID Conflict</button>
+                <button type="button" id="importUnbTimeCsvBtn" class="btn btn-xs" data-i18n="btnUnbTimeCsv">📂 Time CSV</button>
+                <button type="button" id="importUnbRegCsvBtn" class="btn btn-xs" data-i18n="btnUnbRegCsv">📒 Register CSV</button>
+                <input type="file" id="unbTimeCsvFileInput" accept=".csv,text/csv" hidden />
+                <input type="file" id="unbRegCsvFileInput" accept=".csv,text/csv" hidden />
+              </div>
+            </div>
+
+            <div class="form-grid-3" style="margin-top:8px;">
+              <div class="field">
+                <label for="unbClientSelect" data-i18n="lblStmtClient">Client</label>
+                <select id="unbClientSelect" class="select"></select>
+              </div>
+              <div class="field">
+                <label for="unbConfirmInvInput" data-i18n="lblUnbInv">Issued Invoice # (After Sending)</label>
+                <input type="text" id="unbConfirmInvInput" class="input" value="INV-2026-112" />
+              </div>
+              <div class="field">
+                <label for="unbConfirmDateInput" data-i18n="lblUnbDate">Confirmed Date</label>
+                <input type="date" id="unbConfirmDateInput" class="input" />
+              </div>
+            </div>
+
+            <div id="unbExcludedBanner" class="stmt-excluded-banner"></div>
+            <div id="unbConflictBox" class="stmt-conflict-box" style="display:none;"></div>
+            <div id="unbStatusMsg" style="font-size:12px;font-weight:700;color:#059669;margin-bottom:6px;"></div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              <button type="button" id="confirmUnbilledBtn" class="btn btn-xs btn-emerald" data-i18n="btnConfirmUnb">✓ Confirm Invoice # &amp; Update Register</button>
+              <button type="button" id="exportUnbRegCsvBtn" class="btn btn-xs btn-pro" data-i18n="btnExportUnbReg">⬇ Save Register CSV</button>
+              <button type="button" id="pushUnbilledToInvoiceBtn" class="btn btn-xs" data-i18n="btnPushUnbToInv">➕ Copy Unbilled to Invoice</button>
+              <button type="button" id="backFromUnbilledBtn" class="btn btn-xs" data-i18n="btnBackToInvoice">↩ Single Invoice View</button>
             </div>
           </div>
 
