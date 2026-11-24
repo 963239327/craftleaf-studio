@@ -235,6 +235,38 @@
           </div>
         </div>
 
+        <div id="ghPagesLinkGuardCard" style="margin:10px 0 8px;padding:12px 13px;border-radius:11px;background:#090f1d;border:1px solid rgba(56,189,248,0.42);font-size:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+            <strong style="color:#7dd3fc;font-size:12.5px;">
+              <span data-lang="en">🔍 GitHub Pages Resume &amp; Asset Path Check (Before Sharing With a Recruiter)</span>
+              <span data-lang="zh">🔍 GitHub Pages 简历与图片相对路径防 404 贴士（发给 HR 前必查）</span>
+            </strong>
+            <a href="../../previews/portfolio_broken_link_checker_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:11.5px;color:#6ee7b7;font-weight:700;">
+              <span data-lang="en">📄 1-Page Path Guide PDF →</span>
+              <span data-lang="zh">📄 查看 1 页路径排错速查 PDF →</span>
+            </a>
+          </div>
+          <p style="margin:0 0 8px;color:#cbd5e1;line-height:1.48;">
+            <span data-lang="en"><strong>Worked GitHub Pages Trap:</strong> Suppose your project repo publishes at <code>/my-work/</code>. Your home page (<code>index.html</code> / <code>portfolio-data.js</code>) links to <code>/assets/resume.pdf</code>, while your folder contains <code>assets/Resume.pdf</code>. The leading <code>/</code> points outside <code>/my-work/</code> AND the filename differs in case on Linux — fix it from the home page as <strong><code>./assets/Resume.pdf</code></strong>. (If the PDF is absent, our local folder checker says so rather than inventing a replacement; off-site &amp; dynamic links are marked unchecked.)</span>
+            <span data-lang="zh"><strong>常见 404 陷阱示例：</strong>若仓库部署在子路径 <code>/my-work/</code>，首页写成 <code>/assets/resume.pdf</code> 而文件夹实际为 <code>assets/Resume.pdf</code>，前导斜杠会跳出项目根目录且 Linux 区分大小写导致 404——首页应改为 <strong><code>./assets/Resume.pdf</code></strong>（切勿省略 <code>./</code>）。</span>
+          </p>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:7px;">
+            <button type="button" class="btn btn-sec" style="padding:4px 9px;font-size:11px;" id="lcSampleBrokenBtn">🧪 Worked Broken (/assets/resume.pdf)</button>
+            <button type="button" class="btn btn-sec" style="padding:4px 9px;font-size:11px;" id="lcSampleAbsentBtn">⚠️ Absent PDF Example</button>
+            <button type="button" class="btn btn-sec" style="padding:4px 9px;font-size:11px;" id="lcSampleFixedBtn">✅ Corrected (./assets/Resume.pdf)</button>
+          </div>
+          <div id="lcWorkedVerdictBox" style="padding:8px 10px;border-radius:8px;background:rgba(15,23,42,0.9);border:1px solid var(--border);font-family:Menlo,Consolas,monospace;font-size:11.3px;color:#e2e8f0;line-height:1.45;"></div>
+
+          <div data-lang="en" style="margin-top:9px;padding-top:8px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:11.5px;color:#cbd5e1;">About to share a portfolio? Anonymous 1-click check (no checkout, email, resume, or site upload):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:4px 9px;font-size:11px;" id="val82KitBtn">👍 I would choose the $12 kit to check my whole folder</button>
+              <button type="button" class="btn btn-sec" style="padding:4px 9px;font-size:11px;" id="val82FreeBtn">↔️ The free fix is enough</button>
+            </div>
+            <span id="val82Msg" style="font-size:11px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+
         <label class="fld"><span data-lang="en">3 Quantified Hero Metrics (Value | EN Label | ZH Label)</span><span data-lang="zh">首屏 3 大核心量化指标（数值 | 英文说明 | 中文说明）</span></label>
         <div class="row3" style="margin-bottom:6px;"><input type="text" id="m1Val" /><input type="text" id="m1En" /><input type="text" id="m1Zh" /></div>
         <div class="row3" style="margin-bottom:6px;"><input type="text" id="m2Val" /><input type="text" id="m2En" /><input type="text" id="m2Zh" /></div>
@@ -586,6 +618,813 @@
     }
     byId('themeSelect').value = 'bento';
     loadPreset('swe');
+
+    
+var PortfolioLinkChecker = (function () {
+  'use strict';
+
+  function normalizeBasePath(raw) {
+    var s = String(raw == null ? '/' : raw).trim();
+    if (!s || s === '/') return '/';
+    s = s.replace(/\\/g, '/');
+    if (s.charAt(0) !== '/') s = '/' + s;
+    s = s.replace(/\/+/g, '/');
+    if (s.charAt(s.length - 1) !== '/') s = s + '/';
+    return s;
+  }
+
+  function normPosixPath(raw) {
+    return String(raw == null ? '' : raw)
+      .replace(/\\/g, '/')
+      .replace(/^\/+/, '')
+      .replace(/\/+/g, '/');
+  }
+
+  function dirnamePosix(relFile) {
+    var clean = normPosixPath(relFile);
+    var idx = clean.lastIndexOf('/');
+    return idx < 0 ? '' : clean.slice(0, idx);
+  }
+
+  function splitUrlSuffix(rawUrl) {
+    var s = String(rawUrl || '');
+    var hashIdx = s.indexOf('#');
+    var hash = '';
+    if (hashIdx >= 0) {
+      hash = s.slice(hashIdx);
+      s = s.slice(0, hashIdx);
+    }
+    var qIdx = s.indexOf('?');
+    var query = '';
+    if (qIdx >= 0) {
+      query = s.slice(qIdx);
+      s = s.slice(0, qIdx);
+    }
+    var decoded = s;
+    try {
+      decoded = decodeURIComponent(s);
+    } catch (_e) {}
+    return { cleanPath: decoded, rawPathPart: s, suffix: query + hash };
+  }
+
+  function encodePathPreservingSlashes(relPath) {
+    return String(relPath || '').split('/').map(function (seg) {
+      if (seg === '.' || seg === '..') return seg;
+      return seg.replace(/ /g, '%20');
+    }).join('/');
+  }
+
+  function computeRelativeRef(fromDir, toFile, suffix) {
+    var fromParts = fromDir ? fromDir.split('/').filter(Boolean) : [];
+    var toParts = normPosixPath(toFile).split('/').filter(Boolean);
+    var common = 0;
+    while (
+      common < fromParts.length &&
+      common < toParts.length - 1 &&
+      fromParts[common] === toParts[common]
+    ) {
+      common++;
+    }
+    var upCount = fromParts.length - common;
+    var relSegs = [];
+    for (var u = 0; u < upCount; u++) relSegs.push('..');
+    for (var t = common; t < toParts.length; t++) relSegs.push(toParts[t]);
+    var joined = encodePathPreservingSlashes(relSegs.join('/'));
+    var prefix = upCount > 0 ? joined : ('./' + joined);
+    return prefix + (suffix || '');
+  }
+
+  function resolveRelativeAgainst(fromDir, rawRelPath) {
+    var baseSegs = fromDir ? fromDir.split('/').filter(Boolean) : [];
+    var cleanInput = String(rawRelPath || '').replace(/\\/g, '/');
+    var trailingSlash = cleanInput.length > 1 && cleanInput.charAt(cleanInput.length - 1) === '/';
+    var segs = cleanInput.split('/');
+    var stack = baseSegs.slice();
+    for (var i = 0; i < segs.length; i++) {
+      var seg = segs[i];
+      if (!seg || seg === '.') continue;
+      if (seg === '..') {
+        if (stack.length === 0) {
+          return { escapedRoot: true, resolved: '' };
+        }
+        stack.pop();
+      } else {
+        stack.push(seg);
+      }
+    }
+    return {
+      escapedRoot: false,
+      resolved: stack.join('/'),
+      trailingSlash: trailingSlash
+    };
+  }
+
+  function lineNumberAt(text, index) {
+    var count = 1;
+    for (var i = 0; i < index && i < text.length; i++) {
+      if (text.charCodeAt(i) === 10) count++;
+    }
+    return count;
+  }
+
+  function maskPreservingNewlines(text, pattern) {
+    return text.replace(pattern, function (match) {
+      return match.replace(/[^\n]/g, ' ');
+    });
+  }
+
+  function decodeHtmlEntitiesMinimal(str) {
+    return String(str || '')
+      .replace(/&amp;/gi, '&')
+      .replace(/&#38;/g, '&')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/g, "'");
+  }
+
+  function unescapeJsStringLiteral(litContent) {
+    return String(litContent || '')
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\r')
+      .replace(/\\t/g, '\t')
+      .replace(/\\\//g, '/')
+      .replace(/\\"/g, '"')
+      .replace(/\\'/g, "'")
+      .replace(/\\\\/g, '\\');
+  }
+
+  function stripJsCommentsPreservingLines(jsText) {
+    var out = [];
+    var i = 0;
+    var n = jsText.length;
+    while (i < n) {
+      var ch = jsText.charAt(i);
+      var next = i + 1 < n ? jsText.charAt(i + 1) : '';
+      if (ch === '"' || ch === "'" || ch === '`') {
+        var quote = ch;
+        out.push(ch);
+        i++;
+        while (i < n) {
+          var c = jsText.charAt(i);
+          out.push(c);
+          if (c === '\\' && i + 1 < n) {
+            out.push(jsText.charAt(i + 1));
+            i += 2;
+            continue;
+          }
+          i++;
+          if (c === quote) break;
+        }
+        continue;
+      }
+      if (ch === '/' && next === '/') {
+        while (i < n && jsText.charAt(i) !== '\n') {
+          out.push(' ');
+          i++;
+        }
+        continue;
+      }
+      if (ch === '/' && next === '*') {
+        out.push(' ');
+        out.push(' ');
+        i += 2;
+        while (i < n) {
+          if (jsText.charAt(i) === '*' && i + 1 < n && jsText.charAt(i + 1) === '/') {
+            out.push(' ');
+            out.push(' ');
+            i += 2;
+            break;
+          }
+          out.push(jsText.charAt(i) === '\n' ? '\n' : ' ');
+          i++;
+        }
+        continue;
+      }
+      out.push(ch);
+      i++;
+    }
+    return out.join('');
+  }
+
+  function extractPortfolioDataRefs(jsText, sourceFile, baseOffsetIdx, fullDocText) {
+    var refs = [];
+    if (!jsText || jsText.indexOf('PORTFOLIO_DATA') < 0) return refs;
+    var masked = stripJsCommentsPreservingLines(jsText);
+
+    // Match key: value pairs for portfolio kit fields without executing JS
+    var fieldRe = /\b(resumeUrl|link|image|github|linkedin)\s*:\s*("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|[^,\n\}]+)/g;
+    var m;
+    while ((m = fieldRe.exec(masked)) !== null) {
+      var keyName = m[1];
+      var rawToken = String(m[2] || '').trim();
+      var absIdx = (baseOffsetIdx || 0) + m.index;
+      var line = lineNumberAt(fullDocText || jsText, absIdx);
+      var fieldLabel = keyName === 'resumeUrl' ? 'profile.resumeUrl' : ('PORTFOLIO_DATA.' + keyName);
+
+      if (!rawToken) continue;
+      var firstCh = rawToken.charAt(0);
+      var lastCh = rawToken.charAt(rawToken.length - 1);
+      if ((firstCh === '"' && lastCh === '"') || (firstCh === "'" && lastCh === "'")) {
+        var val = unescapeJsStringLiteral(rawToken.slice(1, -1));
+        refs.push({
+          sourceFile: sourceFile,
+          line: line,
+          originKind: 'portfolio-data',
+          locationLabel: fieldLabel,
+          rawRef: val,
+          isDynamicExpr: false
+        });
+      } else {
+        refs.push({
+          sourceFile: sourceFile,
+          line: line,
+          originKind: 'portfolio-data',
+          locationLabel: fieldLabel,
+          rawRef: rawToken,
+          isDynamicExpr: true
+        });
+      }
+    }
+    return refs;
+  }
+
+  function extractHtmlRefs(htmlText, sourceFile) {
+    var refs = [];
+    var withoutComments = maskPreservingNewlines(htmlText, /<!--[\s\S]*?-->/g);
+
+    // Inspect <script> blocks without executing anything
+    var scriptBlockRe = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+    var sm;
+    while ((sm = scriptBlockRe.exec(withoutComments)) !== null) {
+      var attrs = sm[1] || '';
+      var body = sm[2] || '';
+      var bodyStartIdx = sm.index + sm[0].indexOf('>') + 1;
+
+      if (body.indexOf('PORTFOLIO_DATA') >= 0 && body.indexOf('CraftLeafPortfolioEngine') < 0) {
+        var inlineDataRefs = extractPortfolioDataRefs(body, sourceFile, bodyStartIdx, withoutComments);
+        for (var d = 0; d < inlineDataRefs.length; d++) refs.push(inlineDataRefs[d]);
+      } else if (
+        body.indexOf('CraftLeafPortfolioEngine') < 0 &&
+        (/\.(href|src)\s*=\s*[^=]/.test(body) || /fetch\s*\(/.test(body))
+      ) {
+        refs.push({
+          sourceFile: sourceFile,
+          line: lineNumberAt(withoutComments, bodyStartIdx),
+          originKind: 'html-script',
+          locationLabel: '<script> (dynamic DOM/fetch)',
+          rawRef: '(dynamic script reference)',
+          isDynamicExpr: true
+        });
+      }
+      void attrs;
+    }
+
+    // Mask inline script and style bodies (keep opening <script src="..."> tag intact!)
+    var scrubbed = withoutComments.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script>)/gi, function (_all, openTag, inner, closeTag) {
+      return openTag + inner.replace(/[^\n]/g, ' ') + closeTag;
+    });
+    scrubbed = scrubbed.replace(/(<style\b[^>]*>)([\s\S]*?)(<\/style>)/gi, function (_all, openTag, inner, closeTag) {
+      return openTag + inner.replace(/[^\n]/g, ' ') + closeTag;
+    });
+
+    var tagRe = /<(a|img|link|script|source|embed|object|iframe|video|audio)\b([^>]*)>/gi;
+    var tm;
+    while ((tm = tagRe.exec(scrubbed)) !== null) {
+      var tagName = tm[1].toLowerCase();
+      var attrChunk = tm[2] || '';
+      var tagLine = lineNumberAt(scrubbed, tm.index);
+
+      if (tagName === 'link') {
+        var relM = attrChunk.match(/\brel\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+        var relVal = relM ? String(relM[1] || relM[2] || relM[3] || '').toLowerCase() : '';
+        if (relVal === 'preconnect' || relVal === 'dns-prefetch') continue;
+      }
+
+      var attrRe = /\b(href|src|srcset|data|poster)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/gi;
+      var am;
+      while ((am = attrRe.exec(attrChunk)) !== null) {
+        var attrName = am[1].toLowerCase();
+        if (tagName !== 'object' && attrName === 'data') continue;
+        var rawVal = decodeHtmlEntitiesMinimal(am[2] !== undefined ? am[2] : (am[3] !== undefined ? am[3] : (am[4] || '')));
+        if (attrName === 'srcset') {
+          var parts = rawVal.split(',');
+          for (var p = 0; p < parts.length; p++) {
+            var candidate = parts[p].trim().split(/\s+/)[0] || '';
+            if (candidate) {
+              refs.push({
+                sourceFile: sourceFile,
+                line: tagLine,
+                originKind: 'html',
+                locationLabel: '<' + tagName + ' srcset>',
+                rawRef: candidate,
+                isDynamicExpr: false
+              });
+            }
+          }
+        } else {
+          refs.push({
+            sourceFile: sourceFile,
+            line: tagLine,
+            originKind: 'html',
+            locationLabel: '<' + tagName + ' ' + attrName + '>',
+            rawRef: rawVal,
+            isDynamicExpr: false
+          });
+        }
+      }
+    }
+    return refs;
+  }
+
+  function looksLikeBareExternalDomain(s) {
+    return /^[a-z0-9-]+(\.[a-z0-9-]+)+\b(\/|$)/i.test(s) &&
+      !/\.(pdf|png|jpe?g|gif|svg|webp|ico|css|js|json|md|txt|csv)$/i.test(s.split('/')[0]);
+  }
+
+  function classifyReference(refItem, exactSet, lowerMap, basePath) {
+    var raw = String(refItem.rawRef == null ? '' : refItem.rawRef).trim();
+    var sourceDir = refItem.originKind === 'portfolio-data' ? '' : dirnamePosix(refItem.sourceFile);
+
+    if (refItem.isDynamicExpr) {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'UNCHECKED_DYNAMIC',
+        category: 'unchecked',
+        isBroken: false,
+        reason: 'Dynamically generated or script expression — marked unchecked (buyer scripts are never executed).',
+        suggestedFix: ''
+      };
+    }
+
+    if (!raw) {
+      var optionalBlank = refItem.originKind === 'portfolio-data';
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: '(empty)',
+        status: optionalBlank ? 'SKIPPED_OPTIONAL_BLANK' : 'BROKEN_EMPTY_REF',
+        category: optionalBlank ? 'skipped' : 'broken',
+        isBroken: !optionalBlank,
+        reason: optionalBlank
+          ? 'Optional field left blank — button is omitted.'
+          : 'Empty href/src attribute resolves to the current page instead of an asset.',
+        suggestedFix: ''
+      };
+    }
+
+    if (raw.charAt(0) === '#') {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'SKIPPED_ANCHOR',
+        category: 'skipped',
+        isBroken: false,
+        reason: 'In-page section anchor.',
+        suggestedFix: ''
+      };
+    }
+
+    if (/^(javascript:|vbscript:)/i.test(raw) || /\$\{[^}]+\}|\{\{[^}]+\}\}|<%[\s\S]+%>/.test(raw)) {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'UNCHECKED_DYNAMIC',
+        category: 'unchecked',
+        isBroken: false,
+        reason: 'Dynamic script or template-placeholder URL — marked unchecked.',
+        suggestedFix: ''
+      };
+    }
+
+    if (/^(https?:\/\/|\/\/|mailto:|tel:|data:|blob:)/i.test(raw)) {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'UNCHECKED_EXTERNAL',
+        category: 'unchecked',
+        isBroken: false,
+        reason: 'Off-site or protocol link — marked unchecked (zero outbound requests).',
+        suggestedFix: ''
+      };
+    }
+
+    // In portfolio-data.js, bare domain like "github.com/alex" is external, whereas bare "assets/Resume.pdf"
+    // without "./" gets rewritten by safeUrl() to "https://assets/Resume.pdf"!
+    if (refItem.originKind === 'portfolio-data' && !/^(\.\/|\.\.\/|\/)/.test(raw)) {
+      if (looksLikeBareExternalDomain(raw)) {
+        return {
+          sourceFile: refItem.sourceFile,
+          line: refItem.line,
+          locationLabel: refItem.locationLabel,
+          rawRef: raw,
+          status: 'UNCHECKED_EXTERNAL',
+          category: 'unchecked',
+          isBroken: false,
+          reason: 'Off-site domain in PORTFOLIO_DATA — marked unchecked.',
+          suggestedFix: ''
+        };
+      }
+      var splitBare = splitUrlSuffix(raw);
+      var bareNorm = normPosixPath(splitBare.cleanPath);
+      var bareExact = exactSet[bareNorm] ? bareNorm : null;
+      var bareCased = !bareExact && lowerMap[bareNorm.toLowerCase()] ? lowerMap[bareNorm.toLowerCase()] : null;
+      var targetBare = bareExact || bareCased;
+      if (targetBare) {
+        return {
+          sourceFile: refItem.sourceFile,
+          line: refItem.line,
+          locationLabel: refItem.locationLabel,
+          rawRef: raw,
+          status: bareCased ? 'MISSING_DOT_SLASH_AND_CASE_MISMATCH' : 'MISSING_DOT_SLASH_IN_DATA',
+          category: 'broken',
+          isBroken: true,
+          reason: 'In portfolio-data.js, local paths without leading "./" are treated as external https:// URLs' +
+            (bareCased ? (' AND filename differs in case ("' + bareNorm + '" vs "' + bareCased + '").') : '.'),
+          suggestedFix: computeRelativeRef('', targetBare, splitBare.suffix)
+        };
+      }
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'MISSING_FILE',
+        category: 'broken',
+        isBroken: true,
+        reason: 'Referenced local file "' + bareNorm + '" is absent from this folder (and lacks leading "./").',
+        suggestedFix: ''
+      };
+    }
+
+    var sp = splitUrlSuffix(raw);
+    var urlPath = sp.cleanPath;
+
+    // Root-relative path starting with "/"
+    if (urlPath.charAt(0) === '/') {
+      var baseNoTrail = basePath === '/' ? '' : basePath.slice(0, -1);
+      var insideBase = (basePath === '/') || (urlPath === baseNoTrail) || (urlPath.indexOf(basePath) === 0);
+
+      if (!insideBase) {
+        var strippedOutside = normPosixPath(urlPath);
+        var strippedCand = strippedOutside || 'index.html';
+        if (urlPath.charAt(urlPath.length - 1) === '/' && strippedOutside) {
+          strippedCand = strippedOutside + '/index.html';
+        }
+        if (exactSet[strippedCand]) {
+          return {
+            sourceFile: refItem.sourceFile,
+            line: refItem.line,
+            locationLabel: refItem.locationLabel,
+            rawRef: raw,
+            status: 'OUTSIDE_PROJECT_BASE',
+            category: 'broken',
+            isBroken: true,
+            reason: 'Leading "/" points to domain root outside ' + basePath + ' (a path outside the project may be intentional only if hosted in your root repo); folder contains "' + strippedCand + '".',
+            suggestedFix: computeRelativeRef(sourceDir, strippedCand, sp.suffix)
+          };
+        }
+        var ciMatchOutside = lowerMap[strippedCand.toLowerCase()] || null;
+        if (ciMatchOutside) {
+          return {
+            sourceFile: refItem.sourceFile,
+            line: refItem.line,
+            locationLabel: refItem.locationLabel,
+            rawRef: raw,
+            status: 'OUTSIDE_PROJECT_BASE_AND_CASE_MISMATCH',
+            category: 'broken',
+            isBroken: true,
+            reason: 'First "/" points outside ' + basePath + ' AND filename differs in case ("' + strippedCand + '" vs "' + ciMatchOutside + '" on case-sensitive GitHub Pages). Note: a path outside ' + basePath + ' may be intentional if served elsewhere.',
+            suggestedFix: computeRelativeRef(sourceDir, ciMatchOutside, sp.suffix)
+          };
+        }
+        return {
+          sourceFile: refItem.sourceFile,
+          line: refItem.line,
+          locationLabel: refItem.locationLabel,
+          rawRef: raw,
+          status: 'OUTSIDE_PROJECT_BASE_MISSING',
+          category: 'broken',
+          isBroken: true,
+          reason: 'Leading "/" points outside ' + basePath + ' (may be intentional if hosted at domain root), and "' + strippedCand + '" is absent from this folder.',
+          suggestedFix: ''
+        };
+      }
+
+      var subAfterBase = basePath === '/' ? urlPath.slice(1) : urlPath.slice(basePath.length);
+      var targetFromBase = normPosixPath(subAfterBase);
+      if (!targetFromBase) targetFromBase = 'index.html';
+      else if (subAfterBase.charAt(subAfterBase.length - 1) === '/') targetFromBase = targetFromBase + '/index.html';
+
+      if (exactSet[targetFromBase]) {
+        return {
+          sourceFile: refItem.sourceFile,
+          line: refItem.line,
+          locationLabel: refItem.locationLabel,
+          rawRef: raw,
+          status: 'OK_LOCAL',
+          category: 'ok',
+          isBroken: false,
+          reason: 'Matches "' + targetFromBase + '" under ' + basePath + '.',
+          suggestedFix: ''
+        };
+      }
+      if (exactSet[targetFromBase + '/index.html']) {
+        return {
+          sourceFile: refItem.sourceFile,
+          line: refItem.line,
+          locationLabel: refItem.locationLabel,
+          rawRef: raw,
+          status: 'OK_LOCAL',
+          category: 'ok',
+          isBroken: false,
+          reason: 'Matches directory index "' + targetFromBase + '/index.html".',
+          suggestedFix: ''
+        };
+      }
+      var ciMatchBase = lowerMap[targetFromBase.toLowerCase()] || lowerMap[(targetFromBase + '/index.html').toLowerCase()] || null;
+      if (ciMatchBase) {
+        return {
+          sourceFile: refItem.sourceFile,
+          line: refItem.line,
+          locationLabel: refItem.locationLabel,
+          rawRef: raw,
+          status: 'CASE_MISMATCH',
+          category: 'broken',
+          isBroken: true,
+          reason: 'Filename differs in case ("' + targetFromBase + '" vs "' + ciMatchBase + '"); breaks with 404 on case-sensitive GitHub Pages Linux servers.',
+          suggestedFix: computeRelativeRef(sourceDir, ciMatchBase, sp.suffix)
+        };
+      }
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'MISSING_FILE',
+        category: 'broken',
+        isBroken: true,
+        reason: 'Referenced file "' + targetFromBase + '" is absent from this folder.',
+        suggestedFix: ''
+      };
+    }
+
+    // Standard relative local path (./..., ../..., or sibling/subfolder path in HTML)
+    var relRes = resolveRelativeAgainst(sourceDir, urlPath);
+    if (relRes.escapedRoot) {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'OUTSIDE_FOLDER_ROOT',
+        category: 'broken',
+        isBroken: true,
+        reason: 'Relative "../" climbs outside this portfolio folder (may be intentional if deployed inside a parent directory; cannot verify locally).',
+        suggestedFix: ''
+      };
+    }
+
+    var resolvedRel = relRes.resolved || 'index.html';
+    if (relRes.trailingSlash && resolvedRel !== 'index.html') {
+      resolvedRel = resolvedRel + '/index.html';
+    }
+
+    if (exactSet[resolvedRel]) {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'OK_LOCAL',
+        category: 'ok',
+        isBroken: false,
+        reason: 'Verified local file "' + resolvedRel + '".',
+        suggestedFix: ''
+      };
+    }
+    if (exactSet[resolvedRel + '/index.html']) {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'OK_LOCAL',
+        category: 'ok',
+        isBroken: false,
+        reason: 'Verified directory index "' + resolvedRel + '/index.html".',
+        suggestedFix: ''
+      };
+    }
+
+    var ciRelMatch = lowerMap[resolvedRel.toLowerCase()] || lowerMap[(resolvedRel + '/index.html').toLowerCase()] || null;
+    if (ciRelMatch) {
+      return {
+        sourceFile: refItem.sourceFile,
+        line: refItem.line,
+        locationLabel: refItem.locationLabel,
+        rawRef: raw,
+        status: 'CASE_MISMATCH',
+        category: 'broken',
+        isBroken: true,
+        reason: 'Filename differs in case ("' + resolvedRel + '" vs "' + ciRelMatch + '"); works on macOS/Windows disk but returns 404 on GitHub Pages.',
+        suggestedFix: computeRelativeRef(sourceDir, ciRelMatch, sp.suffix)
+      };
+    }
+
+    return {
+      sourceFile: refItem.sourceFile,
+      line: refItem.line,
+      locationLabel: refItem.locationLabel,
+      rawRef: raw,
+      status: 'MISSING_FILE',
+      category: 'broken',
+      isBroken: true,
+      reason: 'Referenced file "' + resolvedRel + '" is absent from this folder.',
+      suggestedFix: ''
+    };
+  }
+
+  function auditPortfolioFolder(fileInventory, textFilesMap, opts) {
+    opts = opts || {};
+    var basePath = normalizeBasePath(opts.basePath || '/');
+    var inv = Array.isArray(fileInventory) ? fileInventory : [];
+    var texts = textFilesMap || {};
+
+    var exactSet = {};
+    var lowerMap = {};
+    var cleanInventory = [];
+    for (var i = 0; i < inv.length; i++) {
+      var rel = normPosixPath(inv[i]);
+      if (!rel) continue;
+      if (!exactSet[rel]) {
+        exactSet[rel] = true;
+        cleanInventory.push(rel);
+      }
+      var low = rel.toLowerCase();
+      if (!lowerMap[low]) lowerMap[low] = rel;
+    }
+    cleanInventory.sort(function (a, b) {
+      var rankA = a === 'index.html' ? 0 : (a === 'portfolio-data.js' ? 1 : 2);
+      var rankB = b === 'index.html' ? 0 : (b === 'portfolio-data.js' ? 1 : 2);
+      if (rankA !== rankB) return rankA - rankB;
+      return a < b ? -1 : (a > b ? 1 : 0);
+    });
+
+    var extracted = [];
+    for (var fi = 0; fi < cleanInventory.length; fi++) {
+      var fpath = cleanInventory[fi];
+      if (!Object.prototype.hasOwnProperty.call(texts, fpath)) continue;
+      var content = String(texts[fpath] || '');
+      if (/\.html?$/i.test(fpath)) {
+        var hRefs = extractHtmlRefs(content, fpath);
+        for (var hi = 0; hi < hRefs.length; hi++) extracted.push(hRefs[hi]);
+      } else if (/(^|\/)portfolio-data\.js$/i.test(fpath)) {
+        var dRefs = extractPortfolioDataRefs(content, fpath, 0, content);
+        for (var di = 0; di < dRefs.length; di++) extracted.push(dRefs[di]);
+      }
+    }
+
+    var results = [];
+    var brokenItems = [];
+    var okLocalCount = 0;
+    var uncheckedExternalCount = 0;
+    var uncheckedDynamicCount = 0;
+
+    for (var ri = 0; ri < extracted.length; ri++) {
+      var item = classifyReference(extracted[ri], exactSet, lowerMap, basePath);
+      results.push(item);
+      if (item.isBroken) brokenItems.push(item);
+      else if (item.status === 'OK_LOCAL') okLocalCount++;
+      else if (item.status === 'UNCHECKED_EXTERNAL') uncheckedExternalCount++;
+      else if (item.status === 'UNCHECKED_DYNAMIC') uncheckedDynamicCount++;
+    }
+
+    return {
+      basePath: basePath,
+      scannedFilesCount: cleanInventory.length,
+      totalRefsCount: results.length,
+      brokenCount: brokenItems.length,
+      okLocalCount: okLocalCount,
+      uncheckedExternalCount: uncheckedExternalCount,
+      uncheckedDynamicCount: uncheckedDynamicCount,
+      brokenItems: brokenItems,
+      allItems: results
+    };
+  }
+
+  function toCsvReport(report) {
+    var rows = [
+      ['Source_File', 'Line', 'Field_Or_Tag', 'Current_Reference', 'Status', 'Suggested_Fix', 'Explanation']
+    ];
+    var items = (report && report.allItems) || [];
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      rows.push([
+        it.sourceFile,
+        String(it.line),
+        it.locationLabel,
+        it.rawRef,
+        it.status,
+        it.suggestedFix || '',
+        it.reason
+      ]);
+    }
+    return rows.map(function (r) {
+      return r.map(function (cell) {
+        var s = String(cell == null ? '' : cell);
+        if (/[",\r\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+        return s;
+      }).join(',');
+    }).join('\r\n') + '\r\n';
+  }
+
+  return {
+    normalizeBasePath: normalizeBasePath,
+    computeRelativeRef: computeRelativeRef,
+    auditPortfolioFolder: auditPortfolioFolder,
+    toCsvReport: toCsvReport
+  };
+})();
+
+
+    var lcScenario = 'broken';
+    function renderWorkedLinkCheckScenario() {
+      var inv = ['index.html', 'portfolio-data.js', 'assets/Resume.pdf', 'assets/Case_Architecture.png'];
+      var refVal = '/assets/resume.pdf';
+      if (lcScenario === 'absent') {
+        inv = ['index.html', 'portfolio-data.js', 'assets/Case_Architecture.png'];
+        refVal = './assets/resume.pdf';
+      } else if (lcScenario === 'fixed') {
+        refVal = './assets/Resume.pdf';
+      }
+      var rep = PortfolioLinkChecker.auditPortfolioFolder(
+        inv,
+        {
+          'index.html': '<!DOCTYPE html><html><body><a href="' + refVal + '">Resume</a><a href="https://github.com/example-alex/repo">GitHub</a></body></html>',
+          'portfolio-data.js': 'window.PORTFOLIO_DATA = { profile: { resumeUrl: "' + refVal + '" } };'
+        },
+        { basePath: '/my-work/' }
+      );
+      var box = byId('lcWorkedVerdictBox');
+      if (!box) return;
+      if (rep.brokenCount === 0) {
+        box.style.borderColor = 'rgba(52,211,153,0.5)';
+        box.textContent = '✅ [OK_LOCAL on /my-work/] index.html:1 & portfolio-data.js:1 ("' + refVal + '") -> Verified against folder file "assets/Resume.pdf" (off-site GitHub link marked UNCHECKED_EXTERNAL).';
+      } else {
+        var b0 = rep.brokenItems[0];
+        box.style.borderColor = 'rgba(248,113,113,0.55)';
+        box.textContent = '🛑 [' + b0.status + '] ' + b0.sourceFile + ':' + b0.line + ' ("' + b0.rawRef + '") -> '
+          + (b0.suggestedFix ? ('Suggested fix from home page: ' + b0.suggestedFix + ' | ') : 'Suggested fix: (none — PDF is absent; never invents a replacement) | ')
+          + b0.reason;
+      }
+    }
+
+    function trackVal82SampleViewOnce() {
+      if (document.documentElement.classList.contains('zh')) return;
+      try {
+        if (typeof sessionStorage !== 'undefined' && sessionStorage && !sessionStorage.getItem('craftleaf_val82_viewed')) {
+          sessionStorage.setItem('craftleaf_val82_viewed', '1');
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+            window.CraftLeafSDK.trackEvent('idea82-view', 'Idea 82 Portfolio Link Checker Example View');
+          }
+        }
+      } catch (_e) {}
+    }
+
+    function submitValidationVote82(choice) {
+      var msgEl = byId('val82Msg');
+      try {
+        if (typeof sessionStorage !== 'undefined' && sessionStorage && sessionStorage.getItem('craftleaf_val82_voted')) {
+          msgEl.textContent = 'Recorded once for this browser session — thank you!';
+          return;
+        }
+        if (typeof sessionStorage !== 'undefined' && sessionStorage) {
+          sessionStorage.setItem('craftleaf_val82_voted', choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+        window.CraftLeafSDK.trackEvent('idea82-' + choice, 'Idea 82 Portfolio Folder Checker Vote: ' + choice);
+      }
+      msgEl.textContent = 'Thank you — anonymous response recorded for this session.';
+    }
+
+    byId('lcSampleBrokenBtn').addEventListener('click', function () { lcScenario = 'broken'; renderWorkedLinkCheckScenario(); });
+    byId('lcSampleAbsentBtn').addEventListener('click', function () { lcScenario = 'absent'; renderWorkedLinkCheckScenario(); });
+    byId('lcSampleFixedBtn').addEventListener('click', function () { lcScenario = 'fixed'; renderWorkedLinkCheckScenario(); });
+    byId('val82KitBtn').addEventListener('click', function () { submitValidationVote82('kit12'); });
+    byId('val82FreeBtn').addEventListener('click', function () { submitValidationVote82('free'); });
+
+    renderWorkedLinkCheckScenario();
+    trackVal82SampleViewOnce();
   })();
   </script>
 </body>

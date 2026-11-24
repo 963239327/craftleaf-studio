@@ -306,6 +306,85 @@ RCP-03 | Cardamom Brioche Bun | BUTTER-UNS | g | 200 | 8 | 5.60 | 4.25 | 28</tex
       </div>
     </section>
 
+    <section id="cashDrawerCloseSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">💵 NEW IN PACK · MACRO-FREE .XLSX + BLIND COUNT SLIP · CASH DRAWER &amp; FLOAT SPLIT</span>
+            <span data-lang="zh">💵 新增免宏工作簿 (.XLSX + 盲点交班单) · 钱箱面额盲点清点与次日备用金分离</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Count a Cash Drawer Blind by Denomination &amp; Separate the Deposit Envelope From Next Shift's Float</span>
+            <span data-lang="zh">按面额盲点清点收银钱箱，自动核算出长短款与扣除次日备用金后的实装信封金额</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Café &amp; Market-Stall Close: <strong>$100</strong> opening cash + <strong>$240</strong> cash sales − <strong>$10</strong> cash refund − <strong>$20</strong> paid out = <strong>$310.00 expected</strong>. Staff blind-count bills &amp; coins totaling <strong>$305.00</strong> (without seeing expected cash) → drawer is <strong>$5.00 short</strong>; keep the <strong>$100.00 float</strong> and put <strong>$205.00</strong> (not $210) in the deposit envelope. If counted cash is below the target float, shows the exact float shortfall rather than a negative deposit. Included as macro-free <code>07_Cash_Drawer_Blind_Close_And_Float_Split.xlsx</code> (LibreOffice / Excel / Sheets) + printable slip in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战交班示例：开班备用金 <strong>100</strong> + 现金销售 <strong>240</strong> − 现金退款 <strong>10</strong> − 小额现金支出 <strong>20</strong> = <strong>账面应有 310.00</strong>；店员在不看账面数的情况下按面额盲点实盘 <strong>305.00</strong> → 短款 <strong>5.00</strong>；留足次日 <strong>100.00</strong> 备用金后，交款信封实装 <strong>205.00</strong>（绝非 210，避免次日少零钱）；若实盘低于备用金目标则提示补足缺口而非负数存款。直接在下方免费试算！</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/cash_drawer_blind_close_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Cash-Close PDF Sample</span>
+          <span data-lang="zh">📄 查看 1 页钱箱交班单图解 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Staff Blind Denomination Counts (`Denom_ID | Physical_Qty` — Expected Total Hidden From Staff)</span>
+            <span data-lang="zh">1. 店员盲点面额张数/枚数（`面额编码 | 实盘数量` — 盲点环节隐藏账面应有数）</span>
+          </label>
+          <textarea id="cdCountsInput" rows="5" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;">BILL_20 | 4
+BILL_10 | 11
+BILL_5 | 13
+BILL_1 | 32
+ROLL_025 | 1
+COIN_025 | 24
+COIN_010 | 15
+COIN_005 | 8
+COIN_001 | 10</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Owner Till Totals (`Opening | Cash_Sales | Paid_Ins | Cash_Refunds | Paid_Outs | Next_Shift_Float` — Zero Names/POS Login)</span>
+            <span data-lang="zh">2. 店长账面收支与次日留底（`开班留底 | 现金销售 | 补入 | 现金退款 | 支出 | 次日备用金` — 无需员工姓名）</span>
+          </label>
+          <input type="text" id="cdTillInput" value="100.00 | 240.00 | 0.00 | 10.00 | 20.00 | 100.00" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;" />
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cdWorkedBtn">🧪 Worked Close ($310 Exp / $305 Count → $205 Deposit)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cdBelowFloatBtn">⚠️ Below-Float Close ($82 vs $100 Float)</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">🧾 Over/Short &amp; Keep-Float vs. Deposit Envelope Summary</span>
+              <span data-lang="zh">🧾 长短款核对与留底备用金 / 交款信封分拆结果</span>
+            </strong>
+            <span id="cdSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="cdErrorBanner" style="display:none;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,0.18);border:1px solid #ef4444;color:#fecaca;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <tbody id="cdResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Reusable shift count &amp; float-handoff sheet only (no bank connection, POS integration, or employee names) — not an internal audit control.</span>
+            <span data-lang="zh"><em>边界说明：</em>仅用于日常班次面额清点与备用金交接（无需绑定银行、POS 系统或填写员工姓名），不构成内部审计风控或财税建议。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Close a cash drawer? Anonymous 1-click check (no checkout, email, or real till figures):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val83BuyBtn">👍 I would buy the $9.99 pack for this count sheet</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val83EnoughBtn">↔️ My current method is enough</button>
+            </div>
+            <span id="val83Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="kitPackListSection" class="panel" style="margin-top:20px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
         <div>
@@ -1209,6 +1288,272 @@ var KitPackListEngine = (function () {
     document.getElementById("val79BuyBtn").addEventListener("click", function(){ submitValidationVote79("buy"); });
     document.getElementById("val79KeepBtn").addEventListener("click", function(){ submitValidationVote79("keep"); });
 
+    
+var CashDrawerCloseEngine = (function () {
+  'use strict';
+
+  var DENOMINATIONS = [
+    { id: 'BILL_100', label: '$100 Bill', cents: 10000 },
+    { id: 'BILL_50', label: '$50 Bill', cents: 5000 },
+    { id: 'BILL_20', label: '$20 Bill', cents: 2000 },
+    { id: 'BILL_10', label: '$10 Bill', cents: 1000 },
+    { id: 'BILL_5', label: '$5 Bill', cents: 500 },
+    { id: 'BILL_2', label: '$2 Bill', cents: 200 },
+    { id: 'BILL_1', label: '$1 Bill', cents: 100 },
+    { id: 'COIN_100', label: '$1.00 Coin', cents: 100 },
+    { id: 'COIN_050', label: '$0.50 Half-Dollar', cents: 50 },
+    { id: 'COIN_025', label: '$0.25 Quarter', cents: 25 },
+    { id: 'COIN_010', label: '$0.10 Dime', cents: 10 },
+    { id: 'COIN_005', label: '$0.05 Nickel', cents: 5 },
+    { id: 'COIN_001', label: '$0.01 Penny', cents: 1 },
+    { id: 'ROLL_025', label: 'Quarter Roll ($10.00)', cents: 1000 },
+    { id: 'ROLL_010', label: 'Dime Roll ($5.00)', cents: 500 },
+    { id: 'ROLL_005', label: 'Nickel Roll ($2.00)', cents: 200 },
+    { id: 'ROLL_001', label: 'Penny Roll ($0.50)', cents: 50 }
+  ];
+
+  function parseNonNegInt(raw) {
+    if (raw === '' || raw === null || raw === undefined) return 0;
+    if (typeof raw === 'number') {
+      return (isFinite(raw) && raw >= 0 && Math.floor(raw) === raw) ? raw : NaN;
+    }
+    var s = String(raw).trim();
+    if (!s) return 0;
+    if (!/^[+]?\d+$/.test(s)) return NaN;
+    var n = parseInt(s, 10);
+    return (isFinite(n) && n >= 0) ? n : NaN;
+  }
+
+  function parseNonNegCents(raw) {
+    if (raw === '' || raw === null || raw === undefined) return 0;
+    if (typeof raw === 'number') {
+      return (isFinite(raw) && raw >= 0) ? Math.round(raw * 100) : NaN;
+    }
+    var s = String(raw).trim().replace(/^\$/, '').replace(/,/g, '');
+    if (!s) return 0;
+    if (!/^[+]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+    var v = parseFloat(s);
+    return (isFinite(v) && v >= 0) ? Math.round(v * 100) : NaN;
+  }
+
+  function fmtUsdFromCents(cents) {
+    var neg = cents < 0;
+    var abs = Math.abs(Math.round(cents));
+    var dollars = Math.floor(abs / 100);
+    var rem = abs % 100;
+    var ds = String(dollars).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    var cs = rem < 10 ? ('0' + rem) : String(rem);
+    return (neg ? '-$' : '$') + ds + '.' + cs;
+  }
+
+  function evaluateCashDrawerClose(countsMap, tillInputs) {
+    countsMap = countsMap || {};
+    tillInputs = tillInputs || {};
+    var errors = [];
+    var lines = [];
+    var countedCents = 0;
+    var totalPieces = 0;
+
+    for (var i = 0; i < DENOMINATIONS.length; i++) {
+      var d = DENOMINATIONS[i];
+      var rawQty = Object.prototype.hasOwnProperty.call(countsMap, d.id) ? countsMap[d.id] : 0;
+      var qty = parseNonNegInt(rawQty);
+      if (!isFinite(qty)) {
+        errors.push({ code: 'INVALID_DENOM_QTY', field: d.id, detail: d.label + ' quantity must be a whole number >= 0.' });
+        qty = 0;
+      }
+      var lineCents = qty * d.cents;
+      countedCents += lineCents;
+      totalPieces += qty;
+      lines.push({
+        id: d.id,
+        label: d.label,
+        unitCents: d.cents,
+        qty: qty,
+        subtotalCents: lineCents,
+        subtotalUsd: lineCents / 100
+      });
+    }
+
+    var openCents = parseNonNegCents(tillInputs.openingCash);
+    var salesCents = parseNonNegCents(tillInputs.cashSales);
+    var paidInCents = parseNonNegCents(tillInputs.paidIns);
+    var refundCents = parseNonNegCents(tillInputs.cashRefunds);
+    var paidOutCents = parseNonNegCents(tillInputs.paidOuts);
+    var floatCents = parseNonNegCents(tillInputs.targetFloat);
+
+    var tillFields = [
+      ['openingCash', openCents, 'Opening cash'],
+      ['cashSales', salesCents, 'Cash sales'],
+      ['paidIns', paidInCents, 'Paid-ins'],
+      ['cashRefunds', refundCents, 'Cash refunds'],
+      ['paidOuts', paidOutCents, 'Paid-outs'],
+      ['targetFloat', floatCents, 'Target next-shift float']
+    ];
+    for (var tf = 0; tf < tillFields.length; tf++) {
+      if (!isFinite(tillFields[tf][1])) {
+        errors.push({ code: 'INVALID_TILL_AMOUNT', field: tillFields[tf][0], detail: tillFields[tf][2] + ' must be a non-negative dollar amount.' });
+      }
+    }
+
+    if (errors.length > 0) {
+      return {
+        status: 'INVALID_INPUT',
+        errors: errors,
+        lines: lines,
+        countedCents: countedCents,
+        countedUsd: countedCents / 100
+      };
+    }
+
+    var expectedCents = openCents + salesCents + paidInCents - refundCents - paidOutCents;
+    var overShortCents = countedCents - expectedCents;
+    var overShortStatus = overShortCents === 0 ? 'EXACT_MATCH' : (overShortCents < 0 ? 'SHORT' : 'OVER');
+    var overShortLabel = overShortCents === 0
+      ? 'Exact Match ($0.00)'
+      : (overShortCents < 0
+        ? (fmtUsdFromCents(Math.abs(overShortCents)) + ' short')
+        : (fmtUsdFromCents(overShortCents) + ' over'));
+
+    var keepInDrawerCents = Math.min(countedCents, floatCents);
+    var depositEnvelopeCents = countedCents >= floatCents ? (countedCents - floatCents) : 0;
+    var floatShortfallCents = countedCents < floatCents ? (floatCents - countedCents) : 0;
+    var handoffStatus = countedCents >= floatCents ? 'READY_FOR_DEPOSIT' : 'BELOW_TARGET_FLOAT';
+
+    return {
+      status: handoffStatus,
+      errors: [],
+      lines: lines,
+      totalPieces: totalPieces,
+      countedCents: countedCents,
+      countedUsd: countedCents / 100,
+      countedFormatted: fmtUsdFromCents(countedCents),
+      expectedCents: expectedCents,
+      expectedUsd: expectedCents / 100,
+      expectedFormatted: fmtUsdFromCents(expectedCents),
+      overShortCents: overShortCents,
+      overShortUsd: overShortCents / 100,
+      overShortStatus: overShortStatus,
+      overShortLabel: overShortLabel,
+      targetFloatCents: floatCents,
+      targetFloatFormatted: fmtUsdFromCents(floatCents),
+      keepInDrawerCents: keepInDrawerCents,
+      keepInDrawerUsd: keepInDrawerCents / 100,
+      keepInDrawerFormatted: fmtUsdFromCents(keepInDrawerCents),
+      depositEnvelopeCents: depositEnvelopeCents,
+      depositEnvelopeUsd: depositEnvelopeCents / 100,
+      depositEnvelopeFormatted: fmtUsdFromCents(depositEnvelopeCents),
+      floatShortfallCents: floatShortfallCents,
+      floatShortfallUsd: floatShortfallCents / 100,
+      floatShortfallFormatted: fmtUsdFromCents(floatShortfallCents)
+    };
+  }
+
+  return {
+    DENOMINATIONS: DENOMINATIONS,
+    fmtUsdFromCents: fmtUsdFromCents,
+    evaluateCashDrawerClose: evaluateCashDrawerClose
+  };
+})();
+
+
+    function renderCashDrawerSandbox() {
+      var cRows = parsePipeRows(document.getElementById("cdCountsInput").value, 2);
+      var countsMap = {};
+      for (var i = 0; i < cRows.length; i++) {
+        countsMap[cRows[i][0].toUpperCase()] = cRows[i][1];
+      }
+      var tParts = String(document.getElementById("cdTillInput").value || "").split("|").map(function(s){ return s.trim(); });
+      var res = CashDrawerCloseEngine.evaluateCashDrawerClose(countsMap, {
+        openingCash: tParts[0] || "0",
+        cashSales: tParts[1] || "0",
+        paidIns: tParts[2] || "0",
+        cashRefunds: tParts[3] || "0",
+        paidOuts: tParts[4] || "0",
+        targetFloat: tParts[5] || "0"
+      });
+      var tb = document.getElementById("cdResultsBody");
+      var errBanner = document.getElementById("cdErrorBanner");
+      clearNode(tb);
+      if (res.status === "INVALID_INPUT") {
+        errBanner.style.display = "block";
+        errBanner.textContent = "🛑 " + (res.errors[0] ? res.errors[0].detail : "Check till & denomination numbers.");
+        document.getElementById("cdSummaryBadge").textContent = "INVALID INPUT";
+        return;
+      }
+      errBanner.style.display = "none";
+      var summaryRows = [
+        ["Expected Drawer Cash (Open + Sales + Paid-In − Refund − Paid-Out)", res.expectedFormatted, "#cbd5e1"],
+        ["Actual Blind-Counted Cash (" + res.totalPieces + " physical bills/coins/rolls)", res.countedFormatted, "#f8fafc"],
+        ["Over / Short Variance", res.overShortLabel, res.overShortCents === 0 ? "#6ee7b7" : (res.overShortCents < 0 ? "#fca5a5" : "#fcd34d")],
+        ["Keep in Drawer for Next Shift (Target Float " + res.targetFloatFormatted + ")", res.keepInDrawerFormatted, "#cbd5e1"],
+        ["Put in Deposit Envelope (From Actual Cash)", res.depositEnvelopeFormatted, "#6ee7b7"]
+      ];
+      if (res.floatShortfallCents > 0) {
+        summaryRows.push(["⚠️ Float Top-Up Shortfall (Count Below Target Float)", res.floatShortfallFormatted + " shortfall (no negative deposit)", "#fcd34d"]);
+      }
+      for (var r = 0; r < summaryRows.length; r++) {
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var tdK = document.createElement("td");
+        tdK.style.padding = "6px";
+        tdK.textContent = summaryRows[r][0];
+        var tdV = document.createElement("td");
+        tdV.style.padding = "6px";
+        tdV.style.textAlign = "right";
+        tdV.style.fontWeight = "800";
+        tdV.style.color = summaryRows[r][2];
+        tdV.textContent = summaryRows[r][1];
+        tr.appendChild(tdK);
+        tr.appendChild(tdV);
+        tb.appendChild(tr);
+      }
+      document.getElementById("cdSummaryBadge").textContent =
+        res.overShortLabel.toUpperCase() + " · DEPOSIT " + res.depositEnvelopeFormatted
+        + (res.floatShortfallCents > 0 ? (" · FLOAT SHORTFALL " + res.floatShortfallFormatted) : "");
+    }
+    function trackVal83SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val83_viewed")) {
+          sessionStorage.setItem("craftleaf_val83_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea83-view", "Idea 83 Cash Drawer Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote83(choice) {
+      var msgEl = document.getElementById("val83Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val83_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val83_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea83-" + choice, "Idea 83 Cash Drawer Count Sheet Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+    document.getElementById("cdCountsInput").addEventListener("input", renderCashDrawerSandbox);
+    document.getElementById("cdTillInput").addEventListener("input", renderCashDrawerSandbox);
+    document.getElementById("cdWorkedBtn").addEventListener("click", function(){
+      document.getElementById("cdCountsInput").value = "BILL_20 | 4\nBILL_10 | 11\nBILL_5 | 13\nBILL_1 | 32\nROLL_025 | 1\nCOIN_025 | 24\nCOIN_010 | 15\nCOIN_005 | 8\nCOIN_001 | 10";
+      document.getElementById("cdTillInput").value = "100.00 | 240.00 | 0.00 | 10.00 | 20.00 | 100.00";
+      renderCashDrawerSandbox();
+    });
+    document.getElementById("cdBelowFloatBtn").addEventListener("click", function(){
+      document.getElementById("cdCountsInput").value = "BILL_20 | 3\nBILL_10 | 2\nBILL_1 | 2";
+      document.getElementById("cdTillInput").value = "100.00 | 15.00 | 0.00 | 10.00 | 23.00 | 100.00";
+      renderCashDrawerSandbox();
+    });
+    document.getElementById("val83BuyBtn").addEventListener("click", function(){ submitValidationVote83("buy"); });
+    document.getElementById("val83EnoughBtn").addEventListener("click", function(){ submitValidationVote83("enough"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
@@ -1217,6 +1562,8 @@ var KitPackListEngine = (function () {
     setLang(initLang === "zh" ? "zh" : "en");
     renderShrinkflationSandbox();
     renderKitPackListSandbox();
+    renderCashDrawerSandbox();
+    trackVal83SampleViewOnce();
   })();
   </script>
 </body>
