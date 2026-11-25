@@ -83,7 +83,7 @@
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn btn-gold" data-lang="en" data-buy-event="sheets-pack-primary" href="https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=N6i8OAr7_j6-KIB5uHW1RQ==&amp;wanted=true" target="_blank" rel="noopener">
-          📦 Get All 4 .GS Scripts + 8 EN/ZH CSVs + OAuth Setup PDF ($9.99) →
+          📦 Get All 4 .GS Scripts + 6 Macro-Free .XLSX Workbooks + 20 CSVs ($9.99) →
         </a>
         <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 库存预警脚本免费即拷即用！觉得省心欢迎微信赞赏支持</a>
         <a class="btn btn-sec" href="../../previews/smallbiz_sheets_apps_script_sample_preview.pdf" target="_blank" rel="noopener">
@@ -225,6 +225,95 @@
           <span class="pill" id="modeBadge">FREE FULL EXPORT</span>
         </div>
         <pre class="codebox" id="codeOutput"></pre>
+      </div>
+    </section>
+
+    <section id="supplierBillMatchSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🧾 NEW IN PACK · WORKED + BLANK MACRO-FREE .XLSX · SPLIT-DELIVERY SUPPLIER BILL MATCHER</span>
+            <span data-lang="zh">🧾 新增免宏工作簿 (示例版 + 空白模板 .XLSX) · 供应商分批到货对账防重算核查</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Match a Supplier Bill to Split Deliveries Without Counting the Same Receipt Twice</span>
+            <span data-lang="zh">采购单分批到货、分次来账单时：精准核对尚未用掉的实收数量，防止同一张收货单被重复抵扣</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Retail PO Check (<code>PO-401</code>): Order <strong>24 jars</strong> at <strong>$4.00</strong> each. Accept <strong>9</strong> (<code>RCV-01</code>), then <strong>5</strong> (<code>RCV-02</code>); an earlier bill (<code>BILL-101-L1</code>) already accounts for <strong>8</strong>. The next bill (<code>BILL-102-L1</code>) lists <strong>9</strong> → only <strong>6 jars ($24.00)</strong> are backed by unused receipts (9 + 5 − 8), flagging <strong>3 jars / $12.00</strong> for review while keeping the <strong>10 jars still undelivered on the PO</strong> separate. Duplicate receipt or bill lines, unknown PO lines, and unit/price mismatches go straight to Review. Included as worked + blank macro-free <code>10_Supplier_Bill_Split_Delivery_Matcher.xlsx</code> (LibreOffice / Excel / Sheets) + offline HTML in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战分批验收对账示例（<code>PO-401</code>）：订购 <strong>24 罐</strong>（约定单价 <strong>4.00</strong>），分两批实收合格 <strong>9 罐</strong> + <strong>5 罐</strong>（采购单剩余未交货 <strong>10 罐</strong>单独列示）；前一张账单已核销 <strong>8 罐</strong>，新来账单开列 <strong>9 罐</strong> → 仅剩 <strong>6 罐（24.00）</strong>有未核销实收单支撑（9 + 5 − 8），自动标出 <strong>3 罐 / 12.00</strong> 需找供应商复核；重复录入的收货单/账单行、未知采购行或单位/单价不符一律进入复核隔离，绝不误判通过。</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/supplier_bill_split_matcher_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Bill-Matcher PDF Guide</span>
+          <span data-lang="zh">📄 查看 1 页分批对账核查 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Purchase Order Lines (`Supplier | PO_No | Line | Item | Unit | Ordered_Qty | Price_$`)</span>
+            <span data-lang="zh">1. 采购订单行（`供应商 | 采购单号 | 行号 | 商品 | 单位 | 订购数 | 约定单价`）</span>
+          </label>
+          <textarea id="sbmPoInput" rows="2" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.6px;">SUP-OLIVE | PO-401 | L1 | Brined Olive Jars (12oz) | JAR | 24 | 4.00</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Accepted Split Deliveries (`Receipt_ID | Supplier | PO_No | Line | Unit | Accepted_Qty`)</span>
+            <span data-lang="zh">2. 分批验收合格单（`收货单号 | 供应商 | 采购单号 | 行号 | 单位 | 实收数`）</span>
+          </label>
+          <textarea id="sbmReceiptInput" rows="3" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.6px;">RCV-01 | SUP-OLIVE | PO-401 | L1 | JAR | 9
+RCV-02 | SUP-OLIVE | PO-401 | L1 | JAR | 5</textarea>
+
+          <label class="fld">
+            <span data-lang="en">3. Supplier Bill Lines in Order (`Bill_Line_ID | Supplier | PO_No | Line | Unit | Billed_Qty | Price_$`)</span>
+            <span data-lang="zh">3. 供应商账单行（按先后顺序：`账单行号 | 供应商 | 采购单号 | 行号 | 单位 | 开票数 | 账单单价`）</span>
+          </label>
+          <textarea id="sbmBillInput" rows="3" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.6px;">BILL-101-L1 | SUP-OLIVE | PO-401 | L1 | JAR | 8 | 4.00
+BILL-102-L1 | SUP-OLIVE | PO-401 | L1 | JAR | 9 | 4.00</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="sbmWorkedBtn">🧪 Worked (6 Backed · Flag 3 Jars / $12 · 10 Open)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="sbmDupBtn">⚠️ Duplicate Receipt &amp; Bill Guard</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="sbmMismatchBtn">🛑 Unit (CASE) &amp; Price ($4.50) Mismatch</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">🧾 Unused-Receipt Match vs. Quantity &amp; Value to Query</span>
+              <span data-lang="zh">🧾 未用收货单可核销数 vs. 需向供应商复核数量/金额</span>
+            </strong>
+            <span id="sbmSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="sbmReceiptBanner" style="display:none;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,0.18);border:1px solid #ef4444;color:#fecaca;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Bill Line</th>
+                <th style="padding:6px;">Backed by Unused</th>
+                <th style="padding:6px;">Flagged to Query</th>
+                <th style="padding:6px;">PO Undelivered</th>
+                <th style="padding:6px;">Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="sbmResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Compares PO, accepted receipt, and bill records only — does NOT authorize a payment, move money, or handle tax/freight (zero invoice uploads or ERP login).</span>
+            <span data-lang="zh"><em>边界说明：</em>仅比对采购单、实收单与账单数量单价记录，不代表付款审批、不经手资金划拨、不含税费运费核算（零票据上传）。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Match split deliveries on POs? Anonymous 1-click check (no email, PO data, or uploads):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val88BuyBtn">👍 I'd choose the $9.99 pack for this check</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val88EnoughBtn">↔️ The free example is enough</button>
+            </div>
+            <span id="val88Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2500,12 +2589,494 @@ var CraftFairBoothEngine = (function () {
     document.getElementById("val86BuyBtn").addEventListener("click", function(){ submitValidationVote86("buy"); });
     document.getElementById("val86EnoughBtn").addEventListener("click", function(){ submitValidationVote86("enough"); });
 
+    
+var SupplierBillMatcherEngine = (function () {
+  'use strict';
+
+  function normKeyPart(v) {
+    return String(v === null || v === undefined ? '' : v).trim().toUpperCase();
+  }
+
+  function makePoKey(supplier, poNumber, poLineId) {
+    var s = normKeyPart(supplier);
+    var p = normKeyPart(poNumber);
+    var l = normKeyPart(poLineId);
+    if (!s || !p || !l) return '';
+    return s + '|' + p + '|' + l;
+  }
+
+  function parsePositiveWholeQty(val) {
+    if (val === '' || val === null || val === undefined) return null;
+    var s = String(val).trim().replace(/,/g, '');
+    if (!/^[+]?\d+$/.test(s)) return null;
+    var n = parseInt(s, 10);
+    if (!isFinite(n) || n <= 0) return null;
+    return n;
+  }
+
+  function parseUnitPriceCents(val) {
+    if (val === '' || val === null || val === undefined) return null;
+    var s = String(val).trim().replace(/^\$/, '').replace(/,/g, '');
+    if (!/^[+]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return null;
+    var n = parseFloat(s);
+    if (!isFinite(n) || n < 0) return null;
+    return Math.round(n * 100);
+  }
+
+  function fmtUsd(cents) {
+    var c = Math.round(Number(cents) || 0);
+    var neg = c < 0;
+    var abs = Math.abs(c);
+    var dollars = Math.floor(abs / 100);
+    var rem = abs % 100;
+    var ds = String(dollars).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (neg ? '-$' : '$') + ds + '.' + (rem < 10 ? '0' + rem : String(rem));
+  }
+
+  function splitPipeOrCsvLines(rawText, minCols) {
+    var lines = String(rawText || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var trimmed = lines[i].trim();
+      if (!trimmed || trimmed.charAt(0) === '#') continue;
+      var delim = trimmed.indexOf('|') >= 0 ? '|' : ',';
+      var parts = trimmed.split(delim).map(function (x) { return x.trim(); });
+      if (parts.length < minCols) continue;
+      out.push(parts);
+    }
+    return out;
+  }
+
+  function parsePoRows(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 6);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normKeyPart(p[0]);
+      var h5 = normKeyPart(p[5]);
+      if (i === 0 && (h0 === 'SUPPLIER_CODE' || h0 === 'SUPPLIER' || h5 === 'ORDERED_QTY')) continue;
+      res.push({
+        supplier: p[0],
+        poNumber: p[1],
+        poLineId: p[2],
+        itemName: p[3],
+        unit: p[4],
+        orderedQty: p[5],
+        unitPriceUsd: p.length >= 7 ? p[6] : p[5]
+      });
+    }
+    return res;
+  }
+
+  function parseReceiptRows(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 6);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normKeyPart(p[0]);
+      var h5 = normKeyPart(p[5]);
+      if (i === 0 && (h0 === 'RECEIPT_ID' || h5 === 'ACCEPTED_QTY')) continue;
+      res.push({
+        receiptId: p[0],
+        supplier: p[1],
+        poNumber: p[2],
+        poLineId: p[3],
+        unit: p[4],
+        acceptedQty: p[5]
+      });
+    }
+    return res;
+  }
+
+  function parseBillRows(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 7);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normKeyPart(p[0]);
+      var h5 = normKeyPart(p[5]);
+      if (i === 0 && (h0 === 'BILL_LINE_ID' || h5 === 'BILLED_QTY')) continue;
+      res.push({
+        billLineId: p[0],
+        supplier: p[1],
+        poNumber: p[2],
+        poLineId: p[3],
+        unit: p[4],
+        billedQty: p[5],
+        unitPriceUsd: p[6]
+      });
+    }
+    return res;
+  }
+
+  function evaluateThreeWaySplitMatch(poInputs, receiptInputs, billInputs) {
+    var pos = Array.isArray(poInputs) ? poInputs : [];
+    var receipts = Array.isArray(receiptInputs) ? receiptInputs : [];
+    var bills = Array.isArray(billInputs) ? billInputs : [];
+
+    var poKeyCounts = {};
+    for (var i = 0; i < pos.length; i++) {
+      var pk0 = makePoKey(pos[i].supplier, pos[i].poNumber, pos[i].poLineId);
+      if (pk0) poKeyCounts[pk0] = (poKeyCounts[pk0] || 0) + 1;
+    }
+
+    var poMap = {};
+    var poList = [];
+    for (var pIdx = 0; pIdx < pos.length; pIdx++) {
+      var pr = pos[pIdx] || {};
+      var pk = makePoKey(pr.supplier, pr.poNumber, pr.poLineId);
+      var ordQty = parsePositiveWholeQty(pr.orderedQty);
+      var uPriceCents = parseUnitPriceCents(pr.unitPriceUsd);
+      var uom = normKeyPart(pr.unit);
+      var poStatus = 'OK';
+      if (!pk || !uom || ordQty === null || uPriceCents === null) {
+        poStatus = 'REVIEW_INVALID_PO_ROW';
+      } else if ((poKeyCounts[pk] || 0) > 1) {
+        poStatus = 'REVIEW_DUPLICATE_PO_LINE';
+      }
+      var poEntry = {
+        poKey: pk || ('INVALID-PO-' + (pIdx + 1)),
+        supplier: String(pr.supplier || '').trim(),
+        poNumber: String(pr.poNumber || '').trim(),
+        poLineId: String(pr.poLineId || '').trim(),
+        itemName: String(pr.itemName || '').trim(),
+        unit: uom,
+        orderedQty: ordQty !== null ? ordQty : 0,
+        unitPriceCents: uPriceCents !== null ? uPriceCents : 0,
+        status: poStatus,
+        validAcceptedQty: 0,
+        flaggedReceiptCount: 0,
+        matchedAcrossBillsQty: 0,
+        unusedReceiptsLeftQty: 0,
+        stillUndeliveredQty: ordQty !== null ? ordQty : 0
+      };
+      poList.push(poEntry);
+      if (poStatus === 'OK') {
+        poMap[pk] = poEntry;
+      }
+    }
+
+    // Count Receipt_ID occurrences to catch duplicate delivery slips
+    var receiptIdCounts = {};
+    for (var r0 = 0; r0 < receipts.length; r0++) {
+      var rid0 = normKeyPart((receipts[r0] || {}).receiptId);
+      if (rid0) receiptIdCounts[rid0] = (receiptIdCounts[rid0] || 0) + 1;
+    }
+
+    var evaluatedReceipts = [];
+    var receiptReviewCount = 0;
+    for (var rIdx = 0; rIdx < receipts.length; rIdx++) {
+      var rr = receipts[rIdx] || {};
+      var rid = String(rr.receiptId || '').trim();
+      var rKey = makePoKey(rr.supplier, rr.poNumber, rr.poLineId);
+      var rUnit = normKeyPart(rr.unit);
+      var accQty = parsePositiveWholeQty(rr.acceptedQty);
+      var targetPo = rKey ? poMap[rKey] : null;
+
+      var rStatus = 'VALID_RECEIPT';
+      var rNote = '';
+      if (!rid || !rKey) {
+        rStatus = 'REVIEW_MISSING_RECEIPT_ID';
+        rNote = 'Missing Receipt_ID or Supplier/PO/Line reference.';
+      } else if ((receiptIdCounts[normKeyPart(rid)] || 0) > 1) {
+        rStatus = 'REVIEW_DUPLICATE_RECEIPT';
+        rNote = 'Duplicate Receipt_ID (' + rid + ') — quarantined so slip is never counted twice.';
+      } else if (!targetPo) {
+        rStatus = 'REVIEW_UNKNOWN_PO_LINE';
+        rNote = 'Unknown Supplier/PO/Line (' + rKey + ') or duplicate PO definition.';
+      } else if (rUnit !== targetPo.unit) {
+        rStatus = 'REVIEW_UNIT_MISMATCH';
+        rNote = 'Receipt unit ' + (rUnit || '(blank)') + ' != PO unit ' + targetPo.unit + '.';
+      } else if (accQty === null) {
+        rStatus = 'REVIEW_INVALID_QTY';
+        rNote = 'Accepted quantity must be a positive whole number.';
+      } else {
+        rNote = 'Accepted ' + accQty + ' ' + rUnit + ' toward ' + rKey + '.';
+      }
+
+      if (rStatus === 'VALID_RECEIPT' && targetPo) {
+        targetPo.validAcceptedQty += accQty;
+      } else {
+        receiptReviewCount += 1;
+        if (targetPo) {
+          targetPo.flaggedReceiptCount += 1;
+        }
+      }
+
+      evaluatedReceipts.push({
+        receiptId: rid || '(missing-id)',
+        poKey: rKey,
+        supplier: String(rr.supplier || '').trim(),
+        poNumber: String(rr.poNumber || '').trim(),
+        poLineId: String(rr.poLineId || '').trim(),
+        unit: rUnit,
+        acceptedQty: accQty !== null ? accQty : 0,
+        status: rStatus,
+        note: rNote
+      });
+    }
+
+    for (var pUpd = 0; pUpd < poList.length; pUpd++) {
+      var pe = poList[pUpd];
+      pe.stillUndeliveredQty = Math.max(0, pe.orderedQty - pe.validAcceptedQty);
+    }
+
+    // Count Bill_Line_ID occurrences to catch duplicate bill lines
+    var billIdCounts = {};
+    for (var b0 = 0; b0 < bills.length; b0++) {
+      var bid0 = normKeyPart((bills[b0] || {}).billLineId);
+      if (bid0) billIdCounts[bid0] = (billIdCounts[bid0] || 0) + 1;
+    }
+
+    var priorMatchedByPo = {};
+    var evaluatedBills = [];
+    var totalMatchedCents = 0;
+    var totalQueryCents = 0;
+    var totalQueryLines = 0;
+    var totalHardReviewLines = 0;
+
+    for (var bIdx = 0; bIdx < bills.length; bIdx++) {
+      var br = bills[bIdx] || {};
+      var bid = String(br.billLineId || '').trim();
+      var bKey = makePoKey(br.supplier, br.poNumber, br.poLineId);
+      var bUnit = normKeyPart(br.unit);
+      var bQty = parsePositiveWholeQty(br.billedQty);
+      var bPriceCents = parseUnitPriceCents(br.unitPriceUsd);
+      var po = bKey ? poMap[bKey] : null;
+
+      var billedValCents = (bQty !== null && bPriceCents !== null) ? (bQty * bPriceCents) : 0;
+      var priorMatched = (bKey && priorMatchedByPo[bKey]) ? priorMatchedByPo[bKey] : 0;
+      var acceptedTotal = po ? po.validAcceptedQty : 0;
+      var stillUndelivered = po ? po.stillUndeliveredQty : 0;
+
+      var guard = 'ELIGIBLE';
+      var note = '';
+      if (!bid || !bKey) {
+        guard = 'REVIEW_MISSING_BILL_ID';
+        note = 'Missing Bill_Line_ID or Supplier/PO/Line reference.';
+      } else if ((billIdCounts[normKeyPart(bid)] || 0) > 1) {
+        guard = 'REVIEW_DUPLICATE_BILL_LINE';
+        note = 'Duplicate Bill_Line_ID (' + bid + ') — sent to review rather than matching twice.';
+      } else if (!po) {
+        guard = 'REVIEW_UNKNOWN_PO_LINE';
+        note = 'Unknown Supplier + PO + Line (' + bKey + ') — verify PO or supplier code.';
+      } else if (bQty === null || bPriceCents === null) {
+        guard = 'REVIEW_INVALID_QTY_OR_PRICE';
+        note = 'Billed quantity must be a whole number > 0 and unit price >= $0.00.';
+      } else if (bUnit !== po.unit) {
+        guard = 'REVIEW_UNIT_MISMATCH';
+        note = 'Bill unit ' + (bUnit || '(blank)') + ' != PO unit ' + po.unit + ' — sent to review.';
+      } else if (bPriceCents !== po.unitPriceCents) {
+        guard = 'REVIEW_PRICE_MISMATCH';
+        note = 'Bill price ' + fmtUsd(bPriceCents) + ' != PO price ' + fmtUsd(po.unitPriceCents) + ' — sent to review.';
+      } else if (po.flaggedReceiptCount > 0) {
+        guard = 'REVIEW_RECEIPT_EXCEPTION';
+        note = 'PO line has ' + po.flaggedReceiptCount + ' unresolved receipt exception(s) (duplicate or unit mismatch) — fix receipts first.';
+      } else if (po.validAcceptedQty > po.orderedQty) {
+        guard = 'REVIEW_RECEIPTS_EXCEED_PO';
+        note = 'Accepted receipts (' + po.validAcceptedQty + ') exceed PO ordered qty (' + po.orderedQty + ') — check slip or amend PO.';
+      }
+
+      var unusedAvail = 0;
+      var matchedQty = 0;
+      var matchedValCents = 0;
+      var queryQty = bQty !== null ? bQty : 0;
+      var queryValCents = billedValCents;
+      var verdict = guard;
+
+      if (guard === 'ELIGIBLE') {
+        unusedAvail = Math.max(0, acceptedTotal - priorMatched);
+        matchedQty = Math.min(bQty, unusedAvail);
+        matchedValCents = matchedQty * bPriceCents;
+        queryQty = Math.max(0, bQty - matchedQty);
+        queryValCents = queryQty * bPriceCents;
+        priorMatchedByPo[bKey] = priorMatched + matchedQty;
+        po.matchedAcrossBillsQty = priorMatchedByPo[bKey];
+
+        if (queryQty === 0) {
+          verdict = 'MATCHED_FULLY';
+          note = 'All ' + matchedQty + ' ' + bUnit + ' backed by unused receipts (' + fmtUsd(matchedValCents) + ').';
+        } else if (matchedQty > 0) {
+          verdict = 'FLAG_OVER_UNBILLED_RECEIPTS';
+          note = 'Only ' + matchedQty + ' ' + bUnit + ' (' + fmtUsd(matchedValCents) + ') backed by unused receipts (' + acceptedTotal + ' accepted − ' + priorMatched + ' earlier billed); flag ' + queryQty + ' ' + bUnit + ' / ' + fmtUsd(queryValCents) + ' for review.';
+        } else {
+          verdict = 'NO_UNUSED_RECEIPTS_LEFT';
+          note = '0 unused receipts left (' + acceptedTotal + ' accepted − ' + priorMatched + ' earlier billed); flag all ' + queryQty + ' ' + bUnit + ' / ' + fmtUsd(queryValCents) + ' for review.';
+        }
+      } else {
+        totalHardReviewLines += 1;
+      }
+
+      totalMatchedCents += matchedValCents;
+      totalQueryCents += queryValCents;
+      if (queryQty > 0 || guard !== 'ELIGIBLE') {
+        totalQueryLines += 1;
+      }
+
+      evaluatedBills.push({
+        billLineId: bid || '(missing-bill-id)',
+        poKey: bKey,
+        supplier: String(br.supplier || '').trim(),
+        poNumber: String(br.poNumber || '').trim(),
+        poLineId: String(br.poLineId || '').trim(),
+        unit: bUnit,
+        billedQty: bQty !== null ? bQty : 0,
+        unitPriceCents: bPriceCents !== null ? bPriceCents : 0,
+        billedValCents: billedValCents,
+        acceptedTotalQty: acceptedTotal,
+        priorMatchedQty: priorMatched,
+        unusedReceiptsAvailQty: unusedAvail,
+        matchedQty: matchedQty,
+        matchedValCents: matchedValCents,
+        queryQty: queryQty,
+        queryValCents: queryValCents,
+        stillUndeliveredOnPoQty: stillUndelivered,
+        verdict: verdict,
+        note: note
+      });
+    }
+
+    for (var pEnd = 0; pEnd < poList.length; pEnd++) {
+      var pItem = poList[pEnd];
+      pItem.unusedReceiptsLeftQty = Math.max(0, pItem.validAcceptedQty - pItem.matchedAcrossBillsQty);
+    }
+
+    return {
+      poLines: poList,
+      receipts: evaluatedReceipts,
+      bills: evaluatedBills,
+      receiptReviewCount: receiptReviewCount,
+      totalMatchedCents: totalMatchedCents,
+      totalQueryCents: totalQueryCents,
+      totalQueryLines: totalQueryLines,
+      totalHardReviewLines: totalHardReviewLines,
+      scopeNote: 'Compares purchase order lines, accepted delivery slips, and supplier bill lines only; it does NOT authorize a payment, move money, or handle tax, duty, or freight.'
+    };
+  }
+
+  return {
+    fmtUsd: fmtUsd,
+    makePoKey: makePoKey,
+    parsePoRows: parsePoRows,
+    parseReceiptRows: parseReceiptRows,
+    parseBillRows: parseBillRows,
+    evaluateThreeWaySplitMatch: evaluateThreeWaySplitMatch
+  };
+})();
+
+
+    function renderSupplierBillMatchSandbox() {
+      var pos = SupplierBillMatcherEngine.parsePoRows(document.getElementById("sbmPoInput").value);
+      var rcvs = SupplierBillMatcherEngine.parseReceiptRows(document.getElementById("sbmReceiptInput").value);
+      var bills = SupplierBillMatcherEngine.parseBillRows(document.getElementById("sbmBillInput").value);
+      var res = SupplierBillMatcherEngine.evaluateThreeWaySplitMatch(pos, rcvs, bills);
+
+      var rBanner = document.getElementById("sbmReceiptBanner");
+      if (res.receiptReviewCount > 0) {
+        rBanner.style.display = "block";
+        rBanner.textContent = "⚠️ " + res.receiptReviewCount + " receipt slip row(s) quarantined in Review (duplicate ID, unknown PO, or unit mismatch) — 0 false matches.";
+      } else {
+        rBanner.style.display = "none";
+      }
+
+      var tb = document.getElementById("sbmResultsBody");
+      clearNode(tb);
+      res.bills.forEach(function(b) {
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var cols = [
+          b.billLineId + " (" + b.billedQty + " " + b.unit + ")",
+          b.matchedQty + " " + b.unit + " (" + SupplierBillMatcherEngine.fmtUsd(b.matchedValCents) + ")",
+          b.queryQty + " " + b.unit + " (" + SupplierBillMatcherEngine.fmtUsd(b.queryValCents) + ")",
+          b.stillUndeliveredOnPoQty + " " + b.unit,
+          b.verdict
+        ];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 1 && b.matchedQty > 0) {
+            td.style.fontWeight = "800";
+            td.style.color = "#6ee7b7";
+          }
+          if (c === 2 && b.queryQty > 0) {
+            td.style.fontWeight = "800";
+            td.style.color = "#fca5a5";
+          }
+          if (c === 4) {
+            td.style.fontWeight = "800";
+            td.style.color = b.verdict === "MATCHED_FULLY" ? "#6ee7b7" : (b.verdict === "FLAG_OVER_UNBILLED_RECEIPTS" ? "#fcd34d" : "#fca5a5");
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      });
+
+      var lastBill = res.bills.length > 0 ? res.bills[res.bills.length - 1] : null;
+      document.getElementById("sbmSummaryBadge").textContent = lastBill
+        ? ("LATEST " + lastBill.billLineId + ": BACKED " + lastBill.matchedQty + " (" + SupplierBillMatcherEngine.fmtUsd(lastBill.matchedValCents) + ") · QUERY " + lastBill.queryQty + " (" + SupplierBillMatcherEngine.fmtUsd(lastBill.queryValCents) + ") · PO OPEN " + lastBill.stillUndeliveredOnPoQty)
+        : "NO BILL LINES";
+    }
+
+    function trackVal88SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val88_viewed")) {
+          sessionStorage.setItem("craftleaf_val88_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea88-view", "Idea 88 Supplier Bill Split Matcher Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote88(choice) {
+      var msgEl = document.getElementById("val88Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val88_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val88_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea88-" + choice, "Idea 88 Supplier Bill Split Matcher Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+
+    document.getElementById("sbmPoInput").addEventListener("input", renderSupplierBillMatchSandbox);
+    document.getElementById("sbmReceiptInput").addEventListener("input", renderSupplierBillMatchSandbox);
+    document.getElementById("sbmBillInput").addEventListener("input", renderSupplierBillMatchSandbox);
+    document.getElementById("sbmWorkedBtn").addEventListener("click", function(){
+      document.getElementById("sbmPoInput").value = "SUP-OLIVE | PO-401 | L1 | Brined Olive Jars (12oz) | JAR | 24 | 4.00";
+      document.getElementById("sbmReceiptInput").value = "RCV-01 | SUP-OLIVE | PO-401 | L1 | JAR | 9\nRCV-02 | SUP-OLIVE | PO-401 | L1 | JAR | 5";
+      document.getElementById("sbmBillInput").value = "BILL-101-L1 | SUP-OLIVE | PO-401 | L1 | JAR | 8 | 4.00\nBILL-102-L1 | SUP-OLIVE | PO-401 | L1 | JAR | 9 | 4.00";
+      renderSupplierBillMatchSandbox();
+    });
+    document.getElementById("sbmDupBtn").addEventListener("click", function(){
+      document.getElementById("sbmPoInput").value = "SUP-OLIVE | PO-401 | L1 | Brined Olive Jars (12oz) | JAR | 24 | 4.00";
+      document.getElementById("sbmReceiptInput").value = "RCV-01 | SUP-OLIVE | PO-401 | L1 | JAR | 9\nRCV-02 | SUP-OLIVE | PO-401 | L1 | JAR | 5\nRCV-02 | SUP-OLIVE | PO-401 | L1 | JAR | 5";
+      document.getElementById("sbmBillInput").value = "BILL-102-L1 | SUP-OLIVE | PO-401 | L1 | JAR | 9 | 4.00\nBILL-102-L1 | SUP-OLIVE | PO-401 | L1 | JAR | 9 | 4.00";
+      renderSupplierBillMatchSandbox();
+    });
+    document.getElementById("sbmMismatchBtn").addEventListener("click", function(){
+      document.getElementById("sbmPoInput").value = "SUP-OLIVE | PO-401 | L1 | Brined Olive Jars (12oz) | JAR | 24 | 4.00";
+      document.getElementById("sbmReceiptInput").value = "RCV-01 | SUP-OLIVE | PO-401 | L1 | JAR | 9\nRCV-02 | SUP-OLIVE | PO-401 | L1 | JAR | 5";
+      document.getElementById("sbmBillInput").value = "BILL-101-L1 | SUP-OLIVE | PO-401 | L1 | JAR | 8 | 4.00\nBILL-102-UOM | SUP-OLIVE | PO-401 | L1 | CASE | 2 | 4.00\nBILL-103-PRC | SUP-OLIVE | PO-401 | L1 | JAR | 6 | 4.50";
+      renderSupplierBillMatchSandbox();
+    });
+    document.getElementById("val88BuyBtn").addEventListener("click", function(){ submitValidationVote88("buy"); });
+    document.getElementById("val88EnoughBtn").addEventListener("click", function(){ submitValidationVote88("enough"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
       try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
     }
     setLang(initLang === "zh" ? "zh" : "en");
+    renderSupplierBillMatchSandbox();
     renderShrinkflationSandbox();
     renderKitPackListSandbox();
     renderCashDrawerSandbox();
@@ -2514,6 +3085,7 @@ var CraftFairBoothEngine = (function () {
     trackVal83SampleViewOnce();
     trackVal84SampleViewOnce();
     trackVal86SampleViewOnce();
+    trackVal88SampleViewOnce();
   })();
   </script>
 </body>
