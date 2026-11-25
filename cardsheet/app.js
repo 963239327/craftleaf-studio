@@ -1440,6 +1440,28 @@
       });
     }
 
+    // #85: Interactive Grayscale & Corner-Mark toggles on the 4-suit fanned-hand worked example
+    if ($('toggleSuitFanGrayBtn') && $('suitFanPreviewStage')) {
+      var suitGrayOn = true;
+      $('toggleSuitFanGrayBtn').addEventListener('click', function () {
+        suitGrayOn = !suitGrayOn;
+        $('suitFanPreviewStage').classList.toggle('is-gray', suitGrayOn);
+        $('toggleSuitFanGrayBtn').textContent = suitGrayOn
+          ? '◐ Grayscale Fan: ON'
+          : '🌈 Grayscale Fan: OFF (Color)';
+      });
+    }
+    if ($('toggleSuitFanMarksBtn') && $('suitFanPreviewStage')) {
+      var suitMarksOn = true;
+      $('toggleSuitFanMarksBtn').addEventListener('click', function () {
+        suitMarksOn = !suitMarksOn;
+        $('suitFanPreviewStage').classList.toggle('hide-marks', !suitMarksOn);
+        $('toggleSuitFanMarksBtn').textContent = suitMarksOn
+          ? '◈ Corner Marks: ON'
+          : '◈ Corner Marks: OFF (Color-Only Art)';
+      });
+    }
+
     // Workspace Mode Tabs
     $('tabCardsBtn').addEventListener('click', function () {
       state.workspaceTab = 'cards';

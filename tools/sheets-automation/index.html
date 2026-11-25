@@ -385,6 +385,91 @@ COIN_001 | 10</textarea>
       </div>
     </section>
 
+    <section id="craftFairBoothSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🎪 NEW IN PACK · MACRO-FREE .XLSX + 2-EVENT STUDIO · CRAFT-FAIR BOOTH-FEE STOCK CEILING</span>
+            <span data-lang="zh">🎪 新增免宏工作簿 (.XLSX + 双市集对比台) · 手作市集摊位费与现货可带库存上限核查</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Compare Craft-Fair Booth Fees Against the Stock a Maker Can Actually Bring</span>
+            <span data-lang="zh">交不可退摊位费前：按手头现货件数与单件毛利，测算两场市集的最高可承受摊位费上限</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Two-Fair Pre-Booking Check: <strong>10 enamel pins</strong> contributing <strong>$5.00</strong> each + <strong>5 prints</strong> contributing <strong>$8.00</strong> each leave at most <strong>$90.00</strong>; after <strong>$20.00 travel</strong>, the highest booth fee your stock could cover is <strong>$70.00</strong>. Event A's <strong>$85.00</strong> booth is at least <strong>$15.00 short even at 100% sellout</strong>; Event B's <strong>$50.00</strong> booth is <strong>possible, not guaranteed</strong> (+$20.00 max sellout headroom), shown alongside your separate expected-sales result. Rejects planned sales above available stock and flags loss-making items ($0.00 ceiling credit). Included as macro-free <code>09_Craft_Fair_Booth_Fee_Stock_Ceiling.xlsx</code> + offline HTML studio in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战双市集订摊前测算：手头现有 <strong>10 枚徽章（单件贡献 5.00）</strong> + <strong>5 张版画（单件贡献 8.00）</strong> 封顶贡献 <strong>90.00</strong>，扣除 <strong>20.00 往返路费</strong>后，现货最高可覆盖摊位费上限为 <strong>70.00</strong>：市集 A 报价 <strong>85.00</strong> 即使全场售罄仍<strong>至少倒贴 15.00</strong>；市集 B 报价 <strong>50.00</strong> 属于<strong>库存上限可覆盖但非保赚</strong>，并同步单列预计实际售出量结果；超出现货的预计销量自动拦截、亏本引流款单独标黄且不虚增上限。</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/craft_fair_booth_ceiling_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Booth Ceiling Guide PDF</span>
+          <span data-lang="zh">📄 查看 1 页摊位费上限核查 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Event A &amp; Event B Quotes (`Name | Booth_Fee_$ | Other_Fixed_$`)</span>
+            <span data-lang="zh">1. 两场市集报价（`市集名 | 不可退摊位费 | 路费停车等固定杂费`）</span>
+          </label>
+          <div class="row2" style="margin-bottom:8px;">
+            <input type="text" id="cfEventAInput" value="Downtown Fair | 85.00 | 20.00" style="padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.8px;" />
+            <input type="text" id="cfEventBInput" value="Neighborhood Pop-Up | 50.00 | 20.00" style="padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.8px;" />
+          </div>
+
+          <label class="fld">
+            <span data-lang="en">2. Stock Lines (`SKU, Name, On_Hand, Price, Materials, Packaging, Fee, Plan_A, Plan_B`)</span>
+            <span data-lang="zh">2. 现货与单件成本（`编码, 名称, 现货数, 售价, 材料, 包装, 手续费, 市集A预计销量, 市集B预计销量`）</span>
+          </label>
+          <textarea id="cfStockInput" rows="4" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.6px;">SKU-PIN, Hard Enamel Pin, 10, 10.00, 3.50, 1.00, 0.50, 8, 8
+SKU-PRINT, Risograph Art Print, 5, 15.00, 4.50, 1.75, 0.75, 4, 4
+SKU-PROMO, Mini Sticker Sampler, 12, 3.00, 2.40, 0.55, 0.25, 0, 0</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cfWorkedBtn">🧪 Worked ($70 Ceiling: $85 Short vs $50 Possible)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cfOverStockBtn">⚠️ Over-Stock &amp; Loss-Maker Guard</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="cfZeroStockBtn">0️⃣ Zero Stock Check</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">🎪 Two-Event Booth Ceiling &amp; Expected-Quantity Verdict</span>
+              <span data-lang="zh">🎪 双市集摊位费上限与预计销量双维核查结果</span>
+            </strong>
+            <span id="cfSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="cfLossBanner" style="display:none;padding:8px 10px;border-radius:8px;background:rgba(245,158,11,0.16);border:1px solid #f59e0b;color:#fde68a;font-size:11.8px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Event</th>
+                <th style="padding:6px;">Booth Ceiling</th>
+                <th style="padding:6px;">100% Sellout Verdict</th>
+                <th style="padding:6px;">At Expected Sales</th>
+              </tr>
+            </thead>
+            <tbody id="cfResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Comparison of supplied costs &amp; stock on hand — NOT a foot-traffic, sales, or take-home profit forecast.</span>
+            <span data-lang="zh"><em>边界说明：</em>仅对您填入的现货库存、单件成本与摊位固定费做上限比对，不代表客流、销量或实际到手利润预测。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Weighing two craft-fair booth quotes? Anonymous 1-click check (no checkout, email, or inventory upload):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val86BuyBtn">👍 I'd buy the $9.99 pack for this comparison</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val86EnoughBtn">↔️ The free example is enough</button>
+            </div>
+            <span id="val86Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="consignmentPayoutSection" class="panel" style="margin-top:20px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
         <div>
@@ -2035,6 +2120,386 @@ var ConsignmentPayoutEngine = (function () {
     document.getElementById("val84BuyBtn").addEventListener("click", function(){ submitValidationVote84("buy"); });
     document.getElementById("val84EnoughBtn").addEventListener("click", function(){ submitValidationVote84("enough"); });
 
+    
+var CraftFairBoothEngine = (function () {
+  'use strict';
+
+  function toCents(val) {
+    var n = Number(val);
+    if (!isFinite(n)) return null;
+    return Math.round(n * 100);
+  }
+
+  function fmtUsd(cents) {
+    var c = Math.round(Number(cents) || 0);
+    var neg = c < 0;
+    var abs = Math.abs(c);
+    var dollars = Math.floor(abs / 100);
+    var rem = abs % 100;
+    return (neg ? '-$' : '$') + dollars.toLocaleString('en-US') + '.' + (rem < 10 ? '0' + rem : String(rem));
+  }
+
+  function parseWholeStock(val) {
+    if (val === '' || val === null || val === undefined) return { ok: false, qty: 0, reason: 'Blank quantity' };
+    var n = Number(val);
+    if (!isFinite(n) || n < 0 || Math.floor(n) !== n) {
+      return { ok: false, qty: 0, reason: 'Must be a whole number >= 0 (got ' + String(val) + ')' };
+    }
+    return { ok: true, qty: n, reason: '' };
+  }
+
+  function parseStockCsv(rawText) {
+    var lines = String(rawText || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var rows = [];
+    for (var i = 0; i < lines.length; i++) {
+      var trimmed = lines[i].trim();
+      if (!trimmed || trimmed.charAt(0) === '#') continue;
+      var parts = trimmed.split(',').map(function (s) { return s.trim(); });
+      if (i === 0 && parts[0].toLowerCase() === 'sku') continue;
+      rows.push({
+        sku: parts[0] || ('ITEM-' + (rows.length + 1)),
+        name: parts[1] || parts[0] || ('Item ' + (rows.length + 1)),
+        unitsOnHand: parts[2],
+        priceUsd: parts[3],
+        materialsUsd: parts[4],
+        packagingUsd: parts[5],
+        sellingFeeUsd: parts[6],
+        plannedUnitsA: parts[7] !== undefined && parts[7] !== '' ? parts[7] : '0',
+        plannedUnitsB: parts[8] !== undefined && parts[8] !== '' ? parts[8] : '0'
+      });
+    }
+    return rows;
+  }
+
+  function evaluateTwoEvents(rawItems, eventAOpts, eventBOpts) {
+    var items = Array.isArray(rawItems) ? rawItems : [];
+    var evAIn = eventAOpts || {};
+    var evBIn = eventBOpts || {};
+
+    var evaluatedItems = [];
+    var stockErrors = [];
+    var overCapErrorsA = [];
+    var overCapErrorsB = [];
+    var lossMakingSkus = [];
+    var lossPlannedWarningsA = [];
+    var lossPlannedWarningsB = [];
+
+    var maxPositiveStockCents = 0;
+    var totalUnitsOnHand = 0;
+    var expectedContribACents = 0;
+    var expectedContribBCents = 0;
+
+    for (var i = 0; i < items.length; i++) {
+      var raw = items[i] || {};
+      var sku = String(raw.sku || '').trim() || ('ITEM-' + (i + 1));
+      var name = String(raw.name || sku).trim();
+
+      var handCheck = parseWholeStock(raw.unitsOnHand);
+      var planACheck = parseWholeStock(raw.plannedUnitsA !== undefined && raw.plannedUnitsA !== '' ? raw.plannedUnitsA : 0);
+      var planBCheck = parseWholeStock(raw.plannedUnitsB !== undefined && raw.plannedUnitsB !== '' ? raw.plannedUnitsB : 0);
+
+      var priceCents = toCents(raw.priceUsd);
+      var matCents = toCents(raw.materialsUsd || 0);
+      var packCents = toCents(raw.packagingUsd || 0);
+      var feeCents = toCents(raw.sellingFeeUsd || 0);
+
+      var costInvalid = (
+        priceCents === null || priceCents < 0 ||
+        matCents === null || matCents < 0 ||
+        packCents === null || packCents < 0 ||
+        feeCents === null || feeCents < 0
+      );
+
+      var unitContribCents = costInvalid ? 0 : (priceCents - matCents - packCents - feeCents);
+      var status = 'OK';
+
+      if (!handCheck.ok || costInvalid) {
+        status = 'INVALID_INPUT';
+        stockErrors.push(sku + ': invalid stock or negative cost/price input.');
+      } else {
+        totalUnitsOnHand += handCheck.qty;
+        if (unitContribCents < 0) {
+          status = 'LOSS_MAKING_ITEM';
+          lossMakingSkus.push(sku + ' (' + fmtUsd(unitContribCents) + '/unit)');
+        } else if (unitContribCents === 0) {
+          status = 'ZERO_CONTRIBUTION';
+        }
+
+        if (!planACheck.ok || planACheck.qty > handCheck.qty) {
+          if (status === 'OK') status = 'OVER_STOCK_PLANNED';
+          overCapErrorsA.push(
+            !planACheck.ok
+              ? (sku + ': invalid Event A planned units')
+              : (sku + ': planned ' + planACheck.qty + ' exceeds ' + handCheck.qty + ' on hand')
+          );
+        }
+        if (!planBCheck.ok || planBCheck.qty > handCheck.qty) {
+          if (status === 'OK') status = 'OVER_STOCK_PLANNED';
+          overCapErrorsB.push(
+            !planBCheck.ok
+              ? (sku + ': invalid Event B planned units')
+              : (sku + ': planned ' + planBCheck.qty + ' exceeds ' + handCheck.qty + ' on hand')
+          );
+        }
+      }
+
+      // Loss-making items NEVER add to the max booth-fee ceiling!
+      var maxItemCeilingCents = (handCheck.ok && !costInvalid && unitContribCents > 0)
+        ? (handCheck.qty * unitContribCents)
+        : 0;
+      maxPositiveStockCents += maxItemCeilingCents;
+
+      var itemExpACents = 0;
+      if (handCheck.ok && !costInvalid && planACheck.ok && planACheck.qty <= handCheck.qty) {
+        itemExpACents = planACheck.qty * unitContribCents;
+        expectedContribACents += itemExpACents;
+        if (unitContribCents < 0 && planACheck.qty > 0) {
+          lossPlannedWarningsA.push(sku + ': selling ' + planACheck.qty + ' loss-making unit(s) reduces net by ' + fmtUsd(Math.abs(itemExpACents)));
+        }
+      }
+
+      var itemExpBCents = 0;
+      if (handCheck.ok && !costInvalid && planBCheck.ok && planBCheck.qty <= handCheck.qty) {
+        itemExpBCents = planBCheck.qty * unitContribCents;
+        expectedContribBCents += itemExpBCents;
+        if (unitContribCents < 0 && planBCheck.qty > 0) {
+          lossPlannedWarningsB.push(sku + ': selling ' + planBCheck.qty + ' loss-making unit(s) reduces net by ' + fmtUsd(Math.abs(itemExpBCents)));
+        }
+      }
+
+      evaluatedItems.push({
+        sku: sku,
+        name: name,
+        unitsOnHand: handCheck.ok ? handCheck.qty : 0,
+        priceCents: priceCents || 0,
+        materialsCents: matCents || 0,
+        packagingCents: packCents || 0,
+        sellingFeeCents: feeCents || 0,
+        unitContribCents: unitContribCents,
+        status: status,
+        maxItemCeilingCents: maxItemCeilingCents,
+        plannedUnitsA: planACheck.ok ? planACheck.qty : 0,
+        plannedUnitsB: planBCheck.ok ? planBCheck.qty : 0,
+        expectedContribACents: itemExpACents,
+        expectedContribBCents: itemExpBCents
+      });
+    }
+
+    function buildEventVerdict(evRaw, overCapList, expContribCents, lossWarnings, defaultLabel) {
+      var evName = String(evRaw.name || defaultLabel).trim();
+      var boothCents = toCents(evRaw.boothFeeUsd !== undefined ? evRaw.boothFeeUsd : 0);
+      var otherFixedCents = toCents(evRaw.otherFixedUsd !== undefined ? evRaw.otherFixedUsd : 0);
+      if (boothCents === null || boothCents < 0 || otherFixedCents === null || otherFixedCents < 0 || stockErrors.length > 0) {
+        return {
+          name: evName,
+          boothFeeCents: boothCents || 0,
+          otherFixedCents: otherFixedCents || 0,
+          rawAfterFixedCents: 0,
+          boothFeeCeilingCents: 0,
+          selloutDiffCents: 0,
+          ceilingVerdict: 'INVALID_INPUT',
+          ceilingMessage: 'Fix negative fees or invalid stock rows first.',
+          expectedStatus: 'INVALID_INPUT',
+          expectedContribCents: 0,
+          expectedNetAfterBoothCents: null,
+          expectedMessage: 'Fix invalid stock/cost rows.',
+          overCapErrors: overCapList,
+          lossWarnings: lossWarnings
+        };
+      }
+
+      var rawAfterFixedCents = maxPositiveStockCents - otherFixedCents;
+      var boothFeeCeilingCents = Math.max(0, rawAfterFixedCents);
+      var selloutDiffCents = rawAfterFixedCents - boothCents;
+
+      var ceilingVerdict = '';
+      var ceilingMessage = '';
+      if (rawAfterFixedCents < 0) {
+        ceilingVerdict = 'FIXED_COSTS_EXCEED_STOCK';
+        ceilingMessage = 'Other fixed costs (' + fmtUsd(otherFixedCents) + ') already exceed max stock contribution (' + fmtUsd(maxPositiveStockCents) + ') before any booth fee — at least ' + fmtUsd(Math.abs(selloutDiffCents)) + ' short at sellout.';
+      } else if (boothCents > boothFeeCeilingCents) {
+        ceilingVerdict = 'SHORT_EVEN_AT_SELLOUT';
+        ceilingMessage = 'At least ' + fmtUsd(boothCents - boothFeeCeilingCents) + ' short even if 100% of positive-margin stock sells out (' + fmtUsd(boothCents) + ' booth > ' + fmtUsd(boothFeeCeilingCents) + ' ceiling).';
+      } else if (boothCents === boothFeeCeilingCents) {
+        ceilingVerdict = 'EXACT_SELLOUT_REQUIRED';
+        ceilingMessage = 'Requires 100% sellout just to break even ($0.00 headroom above ' + fmtUsd(boothFeeCeilingCents) + ' ceiling; possible, not guaranteed).';
+      } else {
+        ceilingVerdict = 'POSSIBLE_NOT_GUARANTEED';
+        ceilingMessage = 'Possible, not guaranteed: stock ceiling (' + fmtUsd(boothFeeCeilingCents) + ') covers ' + fmtUsd(boothCents) + ' booth with up to ' + fmtUsd(boothFeeCeilingCents - boothCents) + ' max headroom at 100% sellout.';
+      }
+
+      var expectedStatus = 'OK';
+      var expectedNet = null;
+      var expectedMsg = '';
+      if (overCapList.length > 0) {
+        expectedStatus = 'REJECTED_OVER_STOCK';
+        expectedMsg = 'Rejected planned sales above available stock (' + overCapList.join('; ') + ').';
+      } else {
+        expectedNet = expContribCents - otherFixedCents - boothCents;
+        if (expectedNet < 0) {
+          expectedStatus = 'SHORT_AT_EXPECTED_SALES';
+          expectedMsg = fmtUsd(Math.abs(expectedNet)) + ' short at expected quantities (' + fmtUsd(expContribCents) + ' expected contribution vs ' + fmtUsd(boothCents + otherFixedCents) + ' booth + fixed costs).';
+        } else {
+          expectedStatus = 'COVERS_AT_EXPECTED_SALES';
+          expectedMsg = '+' + fmtUsd(expectedNet) + ' above booth + fixed costs at expected quantities (' + fmtUsd(expContribCents) + ' expected contribution).';
+        }
+      }
+
+      return {
+        name: evName,
+        boothFeeCents: boothCents,
+        otherFixedCents: otherFixedCents,
+        rawAfterFixedCents: rawAfterFixedCents,
+        boothFeeCeilingCents: boothFeeCeilingCents,
+        selloutDiffCents: selloutDiffCents,
+        ceilingVerdict: ceilingVerdict,
+        ceilingMessage: ceilingMessage,
+        expectedStatus: expectedStatus,
+        expectedContribCents: expContribCents,
+        expectedNetAfterBoothCents: expectedNet,
+        expectedMessage: expectedMsg,
+        overCapErrors: overCapList,
+        lossWarnings: lossWarnings
+      };
+    }
+
+    var evA = buildEventVerdict(evAIn, overCapErrorsA, expectedContribACents, lossPlannedWarningsA, 'Event A');
+    var evB = buildEventVerdict(evBIn, overCapErrorsB, expectedContribBCents, lossPlannedWarningsB, 'Event B');
+
+    return {
+      items: evaluatedItems,
+      totalUnitsOnHand: totalUnitsOnHand,
+      maxPositiveStockCents: maxPositiveStockCents,
+      lossMakingSkus: lossMakingSkus,
+      stockErrors: stockErrors,
+      eventA: evA,
+      eventB: evB,
+      scopeNote: 'Compares supplied item costs, available stock on hand, and quoted event fees before booking; this is a capacity and cost comparison, not a foot-traffic, sales, or take-home profit forecast.'
+    };
+  }
+
+  return {
+    toCents: toCents,
+    fmtUsd: fmtUsd,
+    parseStockCsv: parseStockCsv,
+    evaluateTwoEvents: evaluateTwoEvents
+  };
+})();
+
+
+    function parsePipeEventInput(raw, fallbackName) {
+      var parts = String(raw || "").split("|").map(function(s){ return s.trim(); });
+      return {
+        name: parts[0] || fallbackName,
+        boothFeeUsd: parts[1] !== undefined && parts[1] !== "" ? parts[1] : "0",
+        otherFixedUsd: parts[2] !== undefined && parts[2] !== "" ? parts[2] : "0"
+      };
+    }
+
+    function renderCraftFairBoothSandbox() {
+      var stockRows = CraftFairBoothEngine.parseStockCsv(document.getElementById("cfStockInput").value);
+      var evA = parsePipeEventInput(document.getElementById("cfEventAInput").value, "Event A");
+      var evB = parsePipeEventInput(document.getElementById("cfEventBInput").value, "Event B");
+      var res = CraftFairBoothEngine.evaluateTwoEvents(stockRows, evA, evB);
+
+      var lossBanner = document.getElementById("cfLossBanner");
+      if (res.lossMakingSkus.length > 0) {
+        lossBanner.style.display = "block";
+        lossBanner.textContent = "⚠️ Flagged LOSS_MAKING_ITEM ($0.00 added to Booth-Fee Ceiling): " + res.lossMakingSkus.join(", ");
+      } else {
+        lossBanner.style.display = "none";
+      }
+
+      var tb = document.getElementById("cfResultsBody");
+      clearNode(tb);
+      [res.eventA, res.eventB].forEach(function(ev) {
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var cols = [
+          ev.name + " (" + CraftFairBoothEngine.fmtUsd(ev.boothFeeCents) + " + " + CraftFairBoothEngine.fmtUsd(ev.otherFixedCents) + ")",
+          CraftFairBoothEngine.fmtUsd(ev.boothFeeCeilingCents),
+          ev.ceilingVerdict + " (" + (ev.selloutDiffCents >= 0 ? "+" : "") + CraftFairBoothEngine.fmtUsd(ev.selloutDiffCents) + ")",
+          ev.expectedStatus === "REJECTED_OVER_STOCK"
+            ? ev.expectedMessage
+            : (ev.expectedStatus + " (" + (ev.expectedNetAfterBoothCents >= 0 ? "+" : "") + CraftFairBoothEngine.fmtUsd(ev.expectedNetAfterBoothCents) + ")")
+        ];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 2) {
+            td.style.fontWeight = "800";
+            td.style.color = ev.ceilingVerdict === "POSSIBLE_NOT_GUARANTEED" ? "#6ee7b7" : "#fca5a5";
+          }
+          if (c === 3 && ev.expectedStatus === "REJECTED_OVER_STOCK") {
+            td.style.fontWeight = "800";
+            td.style.color = "#fca5a5";
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      });
+
+      document.getElementById("cfSummaryBadge").textContent =
+        "STOCK MAX " + CraftFairBoothEngine.fmtUsd(res.maxPositiveStockCents)
+        + " · CEILING A " + CraftFairBoothEngine.fmtUsd(res.eventA.boothFeeCeilingCents)
+        + " (" + res.eventA.ceilingVerdict + ")"
+        + " · B " + CraftFairBoothEngine.fmtUsd(res.eventB.ceilingVerdict === "INVALID_INPUT" ? 0 : res.eventB.boothFeeCeilingCents)
+        + " (" + res.eventB.ceilingVerdict + ")";
+    }
+
+    function trackVal86SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val86_viewed")) {
+          sessionStorage.setItem("craftleaf_val86_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea86-view", "Idea 86 Craft Fair Booth Ceiling Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote86(choice) {
+      var msgEl = document.getElementById("val86Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val86_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val86_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea86-" + choice, "Idea 86 Craft Fair Booth Ceiling Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+
+    document.getElementById("cfEventAInput").addEventListener("input", renderCraftFairBoothSandbox);
+    document.getElementById("cfEventBInput").addEventListener("input", renderCraftFairBoothSandbox);
+    document.getElementById("cfStockInput").addEventListener("input", renderCraftFairBoothSandbox);
+    document.getElementById("cfWorkedBtn").addEventListener("click", function(){
+      document.getElementById("cfEventAInput").value = "Downtown Fair | 85.00 | 20.00";
+      document.getElementById("cfEventBInput").value = "Neighborhood Pop-Up | 50.00 | 20.00";
+      document.getElementById("cfStockInput").value = "SKU-PIN, Hard Enamel Pin, 10, 10.00, 3.50, 1.00, 0.50, 8, 8\nSKU-PRINT, Risograph Art Print, 5, 15.00, 4.50, 1.75, 0.75, 4, 4\nSKU-PROMO, Mini Sticker Sampler, 12, 3.00, 2.40, 0.55, 0.25, 0, 0";
+      renderCraftFairBoothSandbox();
+    });
+    document.getElementById("cfOverStockBtn").addEventListener("click", function(){
+      document.getElementById("cfEventAInput").value = "Downtown Fair | 85.00 | 20.00";
+      document.getElementById("cfEventBInput").value = "Neighborhood Pop-Up | 50.00 | 20.00";
+      document.getElementById("cfStockInput").value = "SKU-PIN, Hard Enamel Pin, 10, 10.00, 3.50, 1.00, 0.50, 12, 8\nSKU-PRINT, Risograph Art Print, 5, 15.00, 4.50, 1.75, 0.75, 4, 4\nSKU-PROMO, Mini Sticker Sampler, 12, 3.00, 2.40, 0.55, 0.25, 2, 0";
+      renderCraftFairBoothSandbox();
+    });
+    document.getElementById("cfZeroStockBtn").addEventListener("click", function(){
+      document.getElementById("cfEventAInput").value = "Downtown Fair | 85.00 | 20.00";
+      document.getElementById("cfEventBInput").value = "Neighborhood Pop-Up | 50.00 | 20.00";
+      document.getElementById("cfStockInput").value = "SKU-PIN, Hard Enamel Pin, 0, 10.00, 3.50, 1.00, 0.50, 0, 0";
+      renderCraftFairBoothSandbox();
+    });
+    document.getElementById("val86BuyBtn").addEventListener("click", function(){ submitValidationVote86("buy"); });
+    document.getElementById("val86EnoughBtn").addEventListener("click", function(){ submitValidationVote86("enough"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
@@ -2045,8 +2510,10 @@ var ConsignmentPayoutEngine = (function () {
     renderKitPackListSandbox();
     renderCashDrawerSandbox();
     renderConsignmentPayoutSandbox();
+    renderCraftFairBoothSandbox();
     trackVal83SampleViewOnce();
     trackVal84SampleViewOnce();
+    trackVal86SampleViewOnce();
   })();
   </script>
 </body>

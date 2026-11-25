@@ -736,6 +736,81 @@ textarea.input-control {
   }
 }
 
+/* #85: 4-Suit Fanned-Hand Grayscale Suit Mark Demo */
+.suit-fan-demo-box {
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.suit-fan-2col {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+@media (max-width: 780px) {
+  .suit-fan-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.suit-fan-stage {
+  background: #0f172a;
+  border-radius: 11px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.suit-fan-stage.is-gray .suit-fan-svg {
+  filter: grayscale(100%) contrast(1.04);
+}
+
+.suit-fan-stage.hide-marks .suit-mark-badge {
+  display: none;
+}
+
+.suit-fan-svg {
+  width: 100%;
+  max-width: 390px;
+  height: auto;
+  display: block;
+}
+
+.suit-key-mini {
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #ffffff;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.suit-key-pill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  font-size: 12px;
+  color: #0f172a;
+}
+
+.sk-chip {
+  display: inline-block;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  margin-right: 4px;
+}
+
 .pf-card {
   border: 1px solid var(--border);
   border-radius: 11px;

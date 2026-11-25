@@ -533,13 +533,103 @@
             </div>
           </div>
 
+          <!-- #85: Color-Only Suits in a Fanned Hand — 4-Suit Grayscale Worked Example & Player Key -->
+          <div class="suit-fan-demo-box">
+            <div class="preflight-head">
+              <div>
+                <span class="pnp-badge" style="background:#dcfce7;color:#166534;">◈ COLOR-ONLY SUIT ART ALREADY FINISHED?</span>
+                <h4 style="margin:4px 0 4px;font-size:15px;color:#0f172a;">Make Color-Only Suits Readable in a Fanned Hand Without Redrawing the Deck</h4>
+                <p class="pnp-cross-desc" style="margin:0;">
+                  Also included in the <strong>$12.99 Creator Kit</strong>: drop your card-face PNGs + a two-column <code>filename, suit</code> list into local <code>Fanned_Suit_Corner_Mark_Stamper.html</code> to stamp high-contrast shape + code corner marks onto <strong>new PNG copies</strong> (exact pixel size preserved; originals &amp; card backs untouched; unmapped cards or duplicate shapes/labels block export). Toggle <strong>Marks OFF</strong> below while in grayscale to see why color-only suits vanish in a tight fan:
+                </p>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" id="toggleSuitFanGrayBtn" class="btn" style="font-size:12px;">◐ Grayscale Fan: ON</button>
+                <button type="button" id="toggleSuitFanMarksBtn" class="btn" style="font-size:12px;">◈ Corner Marks: ON</button>
+              </div>
+            </div>
+
+            <div class="suit-fan-2col">
+              <div id="suitFanPreviewStage" class="suit-fan-stage is-gray">
+                <svg viewBox="0 0 420 220" class="suit-fan-svg" aria-label="Four fanned playing cards comparing color-only suits with corner geometric suit marks">
+                  <!-- Card 1: Ember (Crimson #de4456, Gray Y≈116) -->
+                  <g transform="translate(86,26) rotate(-17 62 162)">
+                    <rect x="0" y="0" width="122" height="168" rx="10" fill="#1e293b" stroke="#de4456" stroke-width="4" />
+                    <rect x="10" y="10" width="24" height="27" rx="5" fill="#de4456" />
+                    <text x="22" y="29" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="900">4</text>
+                    <circle cx="61" cy="96" r="28" fill="#de4456" />
+                    <circle cx="61" cy="96" r="16" fill="#1e293b" />
+                    <g class="suit-mark-badge">
+                      <rect x="8" y="43" width="46" height="21" rx="6" fill="#0f172a" stroke="#ffffff" stroke-width="2.2" />
+                      <circle cx="19" cy="53.5" r="5" fill="none" stroke="#ffffff" stroke-width="2.2" />
+                      <text x="37" y="57.5" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="900">EM</text>
+                    </g>
+                  </g>
+                  <!-- Card 2: Grove (Emerald #2ea252, Gray Y≈118) -->
+                  <g transform="translate(132,16) rotate(-6 62 162)">
+                    <rect x="0" y="0" width="122" height="168" rx="10" fill="#1e293b" stroke="#2ea252" stroke-width="4" />
+                    <rect x="10" y="10" width="24" height="27" rx="5" fill="#2ea252" />
+                    <text x="22" y="29" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="900">7</text>
+                    <circle cx="61" cy="96" r="28" fill="#2ea252" />
+                    <circle cx="61" cy="96" r="16" fill="#1e293b" />
+                    <g class="suit-mark-badge">
+                      <rect x="8" y="43" width="46" height="21" rx="6" fill="#0f172a" stroke="#ffffff" stroke-width="2.2" />
+                      <polygon points="19,47.5 25,58.5 13,58.5" fill="#ffffff" />
+                      <text x="37" y="57.5" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="900">GR</text>
+                    </g>
+                  </g>
+                  <!-- Card 3: Tide (Cobalt #3886d6, Gray Y≈119) -->
+                  <g transform="translate(178,16) rotate(6 62 162)">
+                    <rect x="0" y="0" width="122" height="168" rx="10" fill="#1e293b" stroke="#3886d6" stroke-width="4" />
+                    <rect x="10" y="10" width="24" height="27" rx="5" fill="#3886d6" />
+                    <text x="22" y="29" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="900">2</text>
+                    <circle cx="61" cy="96" r="28" fill="#3886d6" />
+                    <circle cx="61" cy="96" r="16" fill="#1e293b" />
+                    <g class="suit-mark-badge">
+                      <rect x="8" y="43" width="46" height="21" rx="6" fill="#0f172a" stroke="#ffffff" stroke-width="2.2" />
+                      <polygon points="19,46.5 25,53.5 19,60.5 13,53.5" fill="#ffffff" />
+                      <text x="37" y="57.5" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="900">TD</text>
+                    </g>
+                  </g>
+                  <!-- Card 4: Volt (Ochre #a86c2a, Gray Y≈118) -->
+                  <g transform="translate(224,28) rotate(17 62 162)">
+                    <rect x="0" y="0" width="122" height="168" rx="10" fill="#1e293b" stroke="#a86c2a" stroke-width="4" />
+                    <rect x="10" y="10" width="24" height="27" rx="5" fill="#a86c2a" />
+                    <text x="22" y="29" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="900">9</text>
+                    <circle cx="61" cy="96" r="28" fill="#a86c2a" />
+                    <circle cx="61" cy="96" r="16" fill="#1e293b" />
+                    <g class="suit-mark-badge">
+                      <rect x="8" y="43" width="46" height="21" rx="6" fill="#0f172a" stroke="#ffffff" stroke-width="2.2" />
+                      <path d="M19 47.5 v12 M13 53.5 h12" stroke="#ffffff" stroke-width="2.6" />
+                      <text x="37" y="57.5" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="900">VL</text>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+
+              <div class="suit-key-mini">
+                <div style="font-size:11px;font-weight:800;letter-spacing:0.5px;color:#475569;margin-bottom:6px;">MATCHING PLAYER SUIT KEY</div>
+                <div class="suit-key-pill-grid">
+                  <div><span class="sk-chip">◯ EM</span> <strong>Ember</strong> (Red)</div>
+                  <div><span class="sk-chip">▲ GR</span> <strong>Grove</strong> (Green)</div>
+                  <div><span class="sk-chip">◆ TD</span> <strong>Tide</strong> (Blue)</div>
+                  <div><span class="sk-chip">✚ VL</span> <strong>Volt</strong> (Gold)</div>
+                </div>
+                <p style="margin:8px 0 0;font-size:11.5px;color:#475569;line-height:1.45;">
+                  <em>Scope note:</em> Adds a consistent shape + short-label corner mark to new image copies and generates a player key; it does <strong>not</strong> certify a game as accessible.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div class="preflight-foot">
             <span class="preflight-note">
-              <strong>Human judgment stays in the loop:</strong> Wrong dimensions are <strong>Errors</strong> and transparent outer bleed edges are <strong>Warnings</strong>; the designer (not OCR) judges near-cut text and still completes The Game Crafter's required per-card proof after upload.
+              <strong>Human judgment stays in the loop:</strong> Wrong dimensions, unmapped card faces &amp; duplicate suit marks block export automatically; the designer judges near-cut text and completes the printer's required per-card proof after upload.
             </span>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <a href="../previews/poker_deck_preflight_sample_preview.pdf" target="_blank" rel="noopener" class="btn">👁️ Free 1-Page Visual Guide PDF</a>
-              <a id="creatorKitPreflightLink" data-buy-event="cardsheet-creator-kit-preflight" href="https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit" target="_blank" rel="noopener" class="btn btn-primary">🛠️ Get Full Deck Checker in Creator Kit ($12.99)</a>
+              <a href="../previews/poker_deck_preflight_sample_preview.pdf" target="_blank" rel="noopener" class="btn">👁️ Free Bleed Guide PDF</a>
+              <a href="../previews/fanned_suit_mark_stamper_sample_preview.pdf" target="_blank" rel="noopener" class="btn">👁️ Free Suit-Mark Guide PDF</a>
+              <a id="creatorKitPreflightLink" data-buy-event="cardsheet-creator-kit-preflight" href="https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit" target="_blank" rel="noopener" class="btn btn-primary">🛠️ Get Deck Checker + Suit Stamper in Creator Kit ($12.99)</a>
             </div>
           </div>
         </div>

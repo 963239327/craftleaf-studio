@@ -139,6 +139,68 @@
       <ul class="pitfalls-list"><li>Fighting pre-cut Avery circle/square label sheets that drift 3 mm down the page: Printing on $0.15 full-sheet matte sticker paper with our outer trim ticks and cutting clean 50×50 mm squares never wastes a misaligned sheet!</li><li>Tiny unreadable ingredient fonts: Keep ingredient text ≥ 7.5 pt high-contrast vector black so farmers-market shoppers can read allergens easily.</li></ul>
     </section>
 
+    <!-- #86: Worked Pre-Booking Craft-Fair Booth-Fee Ceiling vs. Available Stock Comparison -->
+    <section id="craftFairBoothGuideSection" class="section-card" style="border:1.5px solid #bfdbfe;background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="kicker" style="background:#dbeafe;color:#1d4ed8;">🎪 BOOKING TWO CRAFT FAIRS? CHECK YOUR STOCK CEILING FIRST</span>
+          <h2 style="margin:6px 0 6px;">Compare Craft-Fair Booth Fees Against the Stock You Can Actually Bring</h2>
+          <p style="margin:0;font-size:14px;color:#334155;line-height:1.55;">
+            Before paying a nonrefundable market quote, check the highest booth fee your boxed stock can cover:
+            <strong>10 enamel pins</strong> contributing <strong>$5.00</strong> each ($10 price − $3.50 materials − $1.00 card/bag − $0.50 card fee) and
+            <strong>5 art prints</strong> contributing <strong>$8.00</strong> each leave at most <strong>$90.00</strong>.
+            After <strong>$20.00 travel</strong>, your booth-fee ceiling is <strong>$70.00</strong> — so an <strong>$85.00 booth</strong> is at least <strong>$15.00 short even at 100% sellout</strong>, while a <strong>$50.00 booth</strong> is <strong>possible, not guaranteed</strong> (+$20.00 max sellout headroom, shown alongside your separate expected-sales result).
+          </p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" id="seoCfWorkedBtn" style="padding:7px 11px;border-radius:8px;border:1px solid #93c5fd;background:#eff6ff;color:#1e3a8a;font-weight:700;font-size:12px;cursor:pointer;">▶ Worked ($85 vs $50)</button>
+          <button type="button" id="seoCfOverCapBtn" style="padding:7px 11px;border-radius:8px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-weight:700;font-size:12px;cursor:pointer;">⚠️ Over-Stock &amp; Loss Guard</button>
+          <button type="button" id="seoCfZeroBtn" style="padding:7px 11px;border-radius:8px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-weight:700;font-size:12px;cursor:pointer;">0️⃣ Zero Stock</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px;">
+        <div style="border:1px solid #cbd5e1;border-radius:11px;padding:12px;background:#ffffff;">
+          <label style="display:block;font-size:12px;font-weight:700;color:#1e293b;margin-bottom:6px;">
+            Event A (`Name | Booth_$ | Travel_Fixed_$`)
+            <input type="text" id="seoCfEvA" value="Downtown Holiday Fair | 85.00 | 20.00" style="width:100%;margin-top:4px;padding:7px 9px;border:1px solid #cbd5e1;border-radius:7px;font-family:ui-monospace,monospace;font-size:12px;" />
+          </label>
+          <label style="display:block;font-size:12px;font-weight:700;color:#1e293b;margin-bottom:6px;">
+            Event B (`Name | Booth_$ | Travel_Fixed_$`)
+            <input type="text" id="seoCfEvB" value="Neighborhood Pop-Up | 50.00 | 20.00" style="width:100%;margin-top:4px;padding:7px 9px;border:1px solid #cbd5e1;border-radius:7px;font-family:ui-monospace,monospace;font-size:12px;" />
+          </label>
+          <label style="display:block;font-size:12px;font-weight:700;color:#1e293b;">
+            Items (`SKU, Name, On_Hand, Price, Materials, Pack, Fee, Plan_A, Plan_B`)
+            <textarea id="seoCfItems" rows="4" spellcheck="false" style="width:100%;margin-top:4px;padding:7px 9px;border:1px solid #cbd5e1;border-radius:7px;font-family:ui-monospace,monospace;font-size:11.5px;">SKU-PIN, Enamel Pin, 10, 10.00, 3.50, 1.00, 0.50, 8, 8
+SKU-PRINT, Art Print, 5, 15.00, 4.50, 1.75, 0.75, 4, 4
+SKU-PROMO, Promo Sticker, 12, 3.00, 2.40, 0.55, 0.25, 0, 0</textarea>
+          </label>
+        </div>
+
+        <div style="border:1px solid #cbd5e1;border-radius:11px;padding:12px;background:#ffffff;display:flex;flex-direction:column;justify-content:space-between;gap:8px;">
+          <div>
+            <div id="seoCfHeadline" style="font-size:12.5px;font-weight:800;color:#0f172a;margin-bottom:8px;"></div>
+            <div id="seoCfCardA" style="border:1px solid #fda4af;background:#fff1f2;border-radius:9px;padding:9px 11px;margin-bottom:8px;font-size:12.5px;color:#0f172a;"></div>
+            <div id="seoCfCardB" style="border:1px solid #6ee7b7;background:#ecfdf5;border-radius:9px;padding:9px 11px;font-size:12.5px;color:#0f172a;"></div>
+            <div id="seoCfLossNote" style="margin-top:7px;font-size:11.8px;color:#92400e;font-weight:700;"></div>
+          </div>
+          <p style="margin:4px 0 0;font-size:11.5px;color:#64748b;line-height:1.4;">
+            <strong>Scope note:</strong> Rejects planned sales above available stock and flags loss-making items rather than relying on them to reach the ceiling. This compares supplied costs &amp; stock capacity — it is <strong>not</strong> a sales or take-home profit forecast.
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-size:12.5px;color:#334155;">
+          Included as macro-free <code>09_Craft_Fair_Booth_Fee_Stock_Ceiling.xlsx</code> (LibreOffice Calc / Excel / Sheets) + printable 2-Event HTML studio inside our <strong>$9.99 Small-Biz Sheets &amp; Workbooks Pack</strong>:
+        </span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="../previews/craft_fair_booth_ceiling_sample_preview.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:8px 13px;border-radius:9px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-weight:700;font-size:12.5px;text-decoration:none;">📄 Free 1-Page Guide PDF</a>
+          <a id="seoCraftFairPackBuyLink" data-buy-event="seo-hangtag-craftfair-booth-pack" href="https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=N6i8OAr7_j6-KIB5uHW1RQ==" target="_blank" rel="noopener" class="cta-btn" style="padding:8px 14px;font-size:12.8px;">📊 Get Macro-Free .XLSX in Small-Biz Pack ($9.99) →</a>
+        </div>
+      </div>
+    </section>
+
     <div id="seoAffiliateMount"></div>
 
     <section class="section-card">
@@ -181,6 +243,120 @@
       var lang = (localStorage.getItem('craftleaf_lang') === 'zh') ? 'zh' : 'en';
       window.CraftLeafSDK.renderAffiliateBar(document.getElementById('seoAffiliateMount'), 'print-craft', lang);
     }
+
+    (function () {
+      'use strict';
+      function toCents(v) {
+        var n = Number(v);
+        return isFinite(n) ? Math.round(n * 100) : null;
+      }
+      function fmtUsd(c) {
+        var n = Math.round(Number(c) || 0);
+        var abs = Math.abs(n);
+        var d = Math.floor(abs / 100);
+        var r = abs % 100;
+        return (n < 0 ? '-$' : '$') + d + '.' + (r < 10 ? '0' + r : String(r));
+      }
+      function parseEv(str, defName) {
+        var p = String(str || '').split('|').map(function (s) { return s.trim(); });
+        return { name: p[0] || defName, booth: toCents(p[1] || 0) || 0, fixed: toCents(p[2] || 0) || 0 };
+      }
+      function renderSeoBoothCheck() {
+        var lines = String(document.getElementById('seoCfItems').value || '').split(/\r?\n/);
+        var maxPosCents = 0;
+        var expA = 0;
+        var expB = 0;
+        var overA = [];
+        var overB = [];
+        var lossList = [];
+
+        for (var i = 0; i < lines.length; i++) {
+          var ln = lines[i].trim();
+          if (!ln) continue;
+          var p = ln.split(',').map(function (s) { return s.trim(); });
+          var sku = p[0] || ('ITEM-' + (i + 1));
+          var hand = Number(p[2]);
+          var unitC = (toCents(p[3]) || 0) - (toCents(p[4]) || 0) - (toCents(p[5]) || 0) - (toCents(p[6]) || 0);
+          var planA = Number(p[7] || 0);
+          var planB = Number(p[8] || 0);
+          if (!isFinite(hand) || hand < 0 || Math.floor(hand) !== hand) continue;
+          if (unitC < 0) lossList.push(sku + ' (' + fmtUsd(unitC) + '/unit)');
+          if (unitC > 0) maxPosCents += hand * unitC;
+          if (!isFinite(planA) || planA < 0 || Math.floor(planA) !== planA || planA > hand) {
+            overA.push(sku + ' planned ' + p[7] + ' > ' + hand + ' on hand');
+          } else {
+            expA += planA * unitC;
+          }
+          if (!isFinite(planB) || planB < 0 || Math.floor(planB) !== planB || planB > hand) {
+            overB.push(sku + ' planned ' + p[8] + ' > ' + hand + ' on hand');
+          } else {
+            expB += planB * unitC;
+          }
+        }
+
+        var evA = parseEv(document.getElementById('seoCfEvA').value, 'Event A');
+        var evB = parseEv(document.getElementById('seoCfEvB').value, 'Event B');
+        document.getElementById('seoCfHeadline').textContent =
+          'Max Positive-Margin Stock Contribution: ' + fmtUsd(maxPosCents);
+
+        function fillCard(el, ev, overArr, expCents) {
+          var rawCeil = maxPosCents - ev.fixed;
+          var ceil = Math.max(0, rawCeil);
+          var diff = rawCeil - ev.booth;
+          var ceilTxt = '';
+          if (rawCeil < 0) {
+            el.style.borderColor = '#fda4af';
+            el.style.background = '#fff1f2';
+            ceilTxt = 'Fixed travel (' + fmtUsd(ev.fixed) + ') already exceeds stock (' + fmtUsd(maxPosCents) + ').';
+          } else if (ev.booth > ceil) {
+            el.style.borderColor = '#fda4af';
+            el.style.background = '#fff1f2';
+            ceilTxt = 'Booth Ceiling ' + fmtUsd(ceil) + ' → SHORT EVEN AT SELLOUT (' + fmtUsd(Math.abs(diff)) + ' short vs ' + fmtUsd(ev.booth) + ' booth).';
+          } else {
+            el.style.borderColor = '#6ee7b7';
+            el.style.background = '#ecfdf5';
+            ceilTxt = 'Booth Ceiling ' + fmtUsd(ceil) + ' → POSSIBLE, NOT GUARANTEED (+' + fmtUsd(ceil - ev.booth) + ' max sellout headroom vs ' + fmtUsd(ev.booth) + ' booth).';
+          }
+          var expTxt = overArr.length
+            ? ('Expected Qty: REJECTED_OVER_STOCK (' + overArr.join('; ') + ')')
+            : ('Expected Qty Result: ' + ((expCents - ev.fixed - ev.booth) >= 0 ? '+' : '') + fmtUsd(expCents - ev.fixed - ev.booth) + ' after booth & travel');
+          el.textContent = ev.name + ': ' + ceilTxt + ' · ' + expTxt;
+        }
+
+        fillCard(document.getElementById('seoCfCardA'), evA, overA, expA);
+        fillCard(document.getElementById('seoCfCardB'), evB, overB, expB);
+        document.getElementById('seoCfLossNote').textContent = lossList.length
+          ? ('⚠️ Flagged loss-making item(s) excluded from Booth-Fee Ceiling ($0.00 added): ' + lossList.join(', '))
+          : '';
+      }
+
+      ['seoCfEvA', 'seoCfEvB', 'seoCfItems'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', renderSeoBoothCheck);
+      });
+      document.getElementById('seoCfWorkedBtn').addEventListener('click', function () {
+        document.getElementById('seoCfEvA').value = 'Downtown Holiday Fair | 85.00 | 20.00';
+        document.getElementById('seoCfEvB').value = 'Neighborhood Pop-Up | 50.00 | 20.00';
+        document.getElementById('seoCfItems').value = [
+          'SKU-PIN, Enamel Pin, 10, 10.00, 3.50, 1.00, 0.50, 8, 8',
+          'SKU-PRINT, Art Print, 5, 15.00, 4.50, 1.75, 0.75, 4, 4',
+          'SKU-PROMO, Promo Sticker, 12, 3.00, 2.40, 0.55, 0.25, 0, 0'
+        ].join('\n');
+        renderSeoBoothCheck();
+      });
+      document.getElementById('seoCfOverCapBtn').addEventListener('click', function () {
+        document.getElementById('seoCfItems').value = [
+          'SKU-PIN, Enamel Pin, 10, 10.00, 3.50, 1.00, 0.50, 12, 8',
+          'SKU-PRINT, Art Print, 5, 15.00, 4.50, 1.75, 0.75, 4, 4',
+          'SKU-PROMO, Promo Sticker, 12, 3.00, 2.40, 0.55, 0.25, 2, 0'
+        ].join('\n');
+        renderSeoBoothCheck();
+      });
+      document.getElementById('seoCfZeroBtn').addEventListener('click', function () {
+        document.getElementById('seoCfItems').value = 'SKU-PIN, Enamel Pin, 0, 10.00, 3.50, 1.00, 0.50, 0, 0';
+        renderSeoBoothCheck();
+      });
+      renderSeoBoothCheck();
+    })();
   </script>
 </body>
 </html>
