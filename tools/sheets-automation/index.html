@@ -83,7 +83,7 @@
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn btn-gold" data-lang="en" data-buy-event="sheets-pack-primary" href="https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=N6i8OAr7_j6-KIB5uHW1RQ==&amp;wanted=true" target="_blank" rel="noopener">
-          📦 Get All 4 .GS Scripts + 6 Macro-Free .XLSX Workbooks + 20 CSVs ($9.99) →
+          📦 Get All 4 .GS Scripts + 7 Macro-Free .XLSX Workbooks + 22 CSVs ($9.99) →
         </a>
         <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 库存预警脚本免费即拷即用！觉得省心欢迎微信赞赏支持</a>
         <a class="btn btn-sec" href="../../previews/smallbiz_sheets_apps_script_sample_preview.pdf" target="_blank" rel="noopener">
@@ -225,6 +225,91 @@
           <span class="pill" id="modeBadge">FREE FULL EXPORT</span>
         </div>
         <pre class="codebox" id="codeOutput"></pre>
+      </div>
+    </section>
+
+    <section id="yarnDyeLotSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🧶 NEW IN PACK · WORKED + BLANK MACRO-FREE .XLSX · YARN DYE-LOT INVENTORY SPREADSHEET</span>
+            <span data-lang="zh">🧶 新增免宏工作簿 (示例版 + 空白模板 .XLSX) · 毛线同缸号订单分拣与防混色拦截表</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Flag Yarn Orders That Cannot Be Filled From a Single Dye Lot</span>
+            <span data-lang="zh">毛线总库存看似充足却凑不齐同缸号？打包前一眼看清该拣哪一缸或先暂挂确认</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Yarn-Shop Check (<code>YRN-SAGE</code>): Shelf holds <strong>3 skeins in Lot A</strong> and <strong>2 in Lot B</strong>. Order <code>ORD-201</code> for <strong>4 matching skeins</strong> is <strong>HOLD</strong> (5 on hand, largest single lot 3) and <strong>reserves nothing</strong>. Order <code>ORD-202</code> requesting <strong>2 from B</strong> is <strong>PICK B × 2</strong>. Subsequent order <code>ORD-203</code> requesting <strong>B</strong> holds — never reusing those skeins or silently substituting Lot A. Included as worked + blank macro-free <code>11_Yarn_Single_Dye_Lot_Order_Allocator.xlsx</code> (LibreOffice / Excel / Sheets) + offline HTML in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战毛衣用量同缸分拣示例（<code>YRN-SAGE</code>）：货架共有 <strong>A 缸 3 团</strong> + <strong>B 缸 2 团</strong>（总库存 5 团，最大单缸 3 团）。首单 <code>ORD-201</code> 需 <strong>4 团同缸毛线</strong> → 自动判定 <strong>HOLD 暂挂</strong>（且<strong>锁库为 0</strong>）；次单 <code>ORD-202</code> 指定买 <strong>B 缸 2 团</strong> → 正常 <strong>PICK B × 2</strong>；第三单 <code>ORD-203</code> 再指定买 <strong>B 缸</strong> → 自动拦截暂挂，绝不重复扣减已拣毛线，也绝不私自拿 A 缸混发。</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/yarn_dye_lot_allocator_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Dye-Lot PDF Guide</span>
+          <span data-lang="zh">📄 查看 1 页同缸分拣核查 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Labeled Dye Lots on Shelf (`SKU | Colorway | Dye_Lot | Skeins_On_Hand`)</span>
+            <span data-lang="zh">1. 货架分缸号库存快照（`SKU编码 | 色号品名 | 缸号 | 在库团数`）</span>
+          </label>
+          <textarea id="ydlLotsInput" rows="3" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.6px;">YRN-SAGE | Worsted Merino — Sage | A | 3
+YRN-SAGE | Worsted Merino — Sage | B | 2</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Outbound Orders in Sequence (`Order_Ref | SKU | Requested_Lot_or_ANY | Ordered_Skeins`)</span>
+            <span data-lang="zh">2. 待打包订单顺序（`订单号 | SKU编码 | 指定缸号或ANY | 订购团数`）</span>
+          </label>
+          <textarea id="ydlOrdersInput" rows="4" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.6px;">ORD-201 | YRN-SAGE | ANY | 4
+ORD-202 | YRN-SAGE | B | 2
+ORD-203 | YRN-SAGE | B | 1</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="ydlWorkedBtn">🧶 Worked (3A + 2B → Hold 4 · Pick B×2 · Hold B)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="ydlBestFitBtn">✨ Best-Fit Lot (Keep 6-Skein Lot Intact)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="ydlGuardsBtn">🛑 Duplicate &amp; Unknown Lot Guards</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">🧶 Reusable Single-Lot Pick / Hold Sheet</span>
+              <span data-lang="zh">🧶 同缸号拣货 / 暂挂核查单</span>
+            </strong>
+            <span id="ydlSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="ydlExceptionBanner" style="display:none;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,0.18);border:1px solid #ef4444;color:#fecaca;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Order Ref</th>
+                <th style="padding:6px;">Request</th>
+                <th style="padding:6px;">Before (Total / Max Lot)</th>
+                <th style="padding:6px;">Packing Action</th>
+                <th style="padding:6px;">Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="ydlResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Advises on a stock snapshot only — does NOT update a storefront/POS, reserve live cart stock, or guarantee a visual color match (no customer names or store login).</span>
+            <span data-lang="zh"><em>边界说明：</em>仅对当前录入的分缸库存快照给出分拣/暂挂建议，不自动修改网店或收银库存，也不代表手染毛线肉眼零色差承诺（无需输入顾客姓名）。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Pack multi-skein yarn orders? Anonymous 1-click check (no email, customer names, or POS login):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val89BuyBtn">👍 I'd choose the $9.99 pack for this check</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val89FreeBtn">🆓 Free version only</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val89SkipBtn">⏭️ Skip</button>
+            </div>
+            <span id="val89Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -3070,12 +3155,443 @@ var SupplierBillMatcherEngine = (function () {
     document.getElementById("val88BuyBtn").addEventListener("click", function(){ submitValidationVote88("buy"); });
     document.getElementById("val88EnoughBtn").addEventListener("click", function(){ submitValidationVote88("enough"); });
 
+    
+var YarnDyeLotAllocatorEngine = (function () {
+  'use strict';
+
+  function normToken(v) {
+    return String(v === null || v === undefined ? '' : v).trim().toUpperCase();
+  }
+
+  function makeSkuLotKey(sku, lot) {
+    var s = normToken(sku);
+    var l = normToken(lot);
+    if (!s || !l) return '';
+    return s + '|' + l;
+  }
+
+  function parseNonNegWholeQty(val) {
+    if (val === '' || val === null || val === undefined) return null;
+    var s = String(val).trim().replace(/,/g, '');
+    if (!/^[+]?\d+$/.test(s)) return null;
+    var n = parseInt(s, 10);
+    if (!isFinite(n) || n < 0) return null;
+    return n;
+  }
+
+  function parsePositiveWholeQty(val) {
+    var n = parseNonNegWholeQty(val);
+    if (n === null || n <= 0) return null;
+    return n;
+  }
+
+  function normRequestedLot(val) {
+    var t = normToken(val);
+    if (!t || t === 'ANY' || t === '*' || t === '-') return 'ANY';
+    return t;
+  }
+
+  function splitPipeOrCsvLines(rawText, minCols) {
+    var lines = String(rawText || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var trimmed = lines[i].trim();
+      if (!trimmed || trimmed.charAt(0) === '#') continue;
+      var delim = trimmed.indexOf('|') >= 0 ? '|' : ',';
+      var parts = trimmed.split(delim).map(function (x) { return x.trim(); });
+      if (parts.length < minCols) continue;
+      out.push(parts);
+    }
+    return out;
+  }
+
+  function parseLotStockRows(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 3);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normToken(p[0]);
+      var hLast = normToken(p[p.length - 1]);
+      if (i === 0 && (h0 === 'SKU' || h0 === 'SKU_CODE' || hLast === 'SKEINS_ON_HAND' || hLast === 'ON_HAND_QTY')) {
+        continue;
+      }
+      if (p.length >= 4) {
+        res.push({
+          sku: p[0],
+          colorway: p[1],
+          dyeLot: p[2],
+          skeinsOnHand: p[3]
+        });
+      } else {
+        res.push({
+          sku: p[0],
+          colorway: '',
+          dyeLot: p[1],
+          skeinsOnHand: p[2]
+        });
+      }
+    }
+    return res;
+  }
+
+  function parseOrderRows(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 4);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normToken(p[0]);
+      var h3 = normToken(p[3]);
+      if (i === 0 && (h0 === 'ORDER_REF' || h0 === 'ORDER_ID' || h3 === 'ORDERED_SKEINS' || h3 === 'QTY')) {
+        continue;
+      }
+      res.push({
+        orderRef: p[0],
+        sku: p[1],
+        requestedLot: p[2],
+        orderedSkeins: p[3]
+      });
+    }
+    return res;
+  }
+
+  function evaluateSingleDyeLotOrders(lotRows, orderRows) {
+    var lotKeyCounts = {};
+    for (var i = 0; i < lotRows.length; i++) {
+      var lk0 = makeSkuLotKey(lotRows[i].sku, lotRows[i].dyeLot);
+      if (lk0) lotKeyCounts[lk0] = (lotKeyCounts[lk0] || 0) + 1;
+    }
+
+    var evaluatedLots = [];
+    var skuMap = {};
+    var skuList = [];
+    var lotExceptionCount = 0;
+
+    function ensureSku(skuCode, colorway) {
+      if (!skuMap[skuCode]) {
+        skuMap[skuCode] = {
+          sku: skuCode,
+          colorway: colorway || '',
+          validLots: [],
+          exceptionCount: 0
+        };
+        skuList.push(skuMap[skuCode]);
+      } else if (!skuMap[skuCode].colorway && colorway) {
+        skuMap[skuCode].colorway = colorway;
+      }
+      return skuMap[skuCode];
+    }
+
+    for (var lIdx = 0; lIdx < lotRows.length; lIdx++) {
+      var lr = lotRows[lIdx];
+      var sCode = normToken(lr.sku);
+      var dLot = normToken(lr.dyeLot);
+      var lKey = makeSkuLotKey(sCode, dLot);
+      var initQty = parseNonNegWholeQty(lr.skeinsOnHand);
+      var status = 'VALID_LOT';
+      var detail = '';
+
+      if (!sCode || !dLot) {
+        status = 'REVIEW_MISSING_SKU_OR_LOT';
+        detail = 'Missing SKU code or Dye_Lot label on stock row.';
+      } else if ((lotKeyCounts[lKey] || 0) > 1) {
+        status = 'REVIEW_DUPLICATE_SKU_LOT';
+        detail = 'Duplicate (SKU, Dye_Lot) row — combine counts into one shelf row so skeins are never counted twice.';
+      } else if (initQty === null) {
+        status = 'REVIEW_INVALID_STOCK_QTY';
+        detail = 'Skeins_On_Hand must be a whole integer >= 0.';
+      } else {
+        detail = initQty + ' skein(s) on shelf in lot ' + dLot + '.';
+      }
+
+      var lotEntry = {
+        skuLotKey: lKey,
+        sku: sCode,
+        colorway: String(lr.colorway || '').trim(),
+        dyeLot: dLot,
+        initialSkeins: initQty !== null ? initQty : 0,
+        allocatedSkeins: 0,
+        remainingSkeins: initQty !== null ? initQty : 0,
+        status: status,
+        detail: detail
+      };
+      evaluatedLots.push(lotEntry);
+
+      if (sCode) {
+        var bucket = ensureSku(sCode, lotEntry.colorway);
+        if (status === 'VALID_LOT') {
+          bucket.validLots.push(lotEntry);
+        } else {
+          bucket.exceptionCount += 1;
+          lotExceptionCount += 1;
+        }
+      } else if (status !== 'VALID_LOT') {
+        lotExceptionCount += 1;
+      }
+    }
+
+    var orderRefCounts = {};
+    for (var oPre = 0; oPre < orderRows.length; oPre++) {
+      var oRef0 = normToken(orderRows[oPre].orderRef);
+      if (oRef0) orderRefCounts[oRef0] = (orderRefCounts[oRef0] || 0) + 1;
+    }
+
+    var evaluatedOrders = [];
+    var totalPickedOrders = 0;
+    var totalHeldOrders = 0;
+    var totalReviewOrders = 0;
+    var totalPickedSkeins = 0;
+
+    for (var oIdx = 0; oIdx < orderRows.length; oIdx++) {
+      var orw = orderRows[oIdx];
+      var oRef = String(orw.orderRef || '').trim();
+      var oRefNorm = normToken(oRef);
+      var oSku = normToken(orw.sku);
+      var reqLot = normRequestedLot(orw.requestedLot);
+      var oQty = parsePositiveWholeQty(orw.orderedSkeins);
+      var skuBucket = oSku ? (skuMap[oSku] || null) : null;
+
+      var guard = 'ELIGIBLE';
+      var note = '';
+      if (!oRefNorm || !oSku) {
+        guard = 'REVIEW_MISSING_ORDER_OR_SKU';
+        note = 'Missing Order_Ref or SKU code.';
+      } else if ((orderRefCounts[oRefNorm] || 0) > 1) {
+        guard = 'REVIEW_DUPLICATE_ORDER_REF';
+        note = 'Duplicate Order_Ref — quarantined so dye lots are never depleted twice.';
+      } else if (oQty === null) {
+        guard = 'REVIEW_INVALID_ORDER_QTY';
+        note = 'Ordered_Skeins must be a positive whole number (>= 1).';
+      } else if (!skuBucket) {
+        guard = 'REVIEW_UNKNOWN_SKU';
+        note = 'SKU ' + oSku + ' does not exist in Dye_Lot_Stock.';
+      } else if (skuBucket.exceptionCount > 0) {
+        guard = 'REVIEW_STOCK_LOT_EXCEPTION';
+        note = 'SKU ' + oSku + ' has duplicate or invalid stock-lot rows — resolve before picking.';
+      }
+
+      var totalOnHandBefore = 0;
+      var largestLotBefore = 0;
+      if (skuBucket && guard === 'ELIGIBLE') {
+        for (var k = 0; k < skuBucket.validLots.length; k++) {
+          var rem = skuBucket.validLots[k].remainingSkeins;
+          totalOnHandBefore += rem;
+          if (rem > largestLotBefore) largestLotBefore = rem;
+        }
+      }
+
+      var pickedLot = '';
+      var pickedQty = 0;
+      var verdict = guard;
+      var instruction = '';
+      var requestedLotRemBefore = null;
+
+      if (guard === 'ELIGIBLE') {
+        if (reqLot === 'ANY') {
+          var chosen = null;
+          for (var cIdx = 0; cIdx < skuBucket.validLots.length; cIdx++) {
+            var cand = skuBucket.validLots[cIdx];
+            if (cand.remainingSkeins >= oQty) {
+              if (!chosen || cand.remainingSkeins < chosen.remainingSkeins) {
+                chosen = cand;
+              }
+            }
+          }
+          if (chosen) {
+            pickedLot = chosen.dyeLot;
+            pickedQty = oQty;
+            chosen.allocatedSkeins += oQty;
+            chosen.remainingSkeins -= oQty;
+            verdict = 'PICK_SINGLE_LOT';
+            instruction = 'PICK ' + pickedLot + ' × ' + pickedQty;
+            note = 'Single lot ' + pickedLot + ' covers all ' + pickedQty + ' skein(s) (' + chosen.remainingSkeins + ' left in ' + pickedLot + ').';
+            totalPickedOrders += 1;
+            totalPickedSkeins += pickedQty;
+          } else if (totalOnHandBefore >= oQty) {
+            verdict = 'HOLD_NO_SINGLE_LOT';
+            instruction = 'HOLD (' + totalOnHandBefore + ' on hand, largest single lot ' + largestLotBefore + ' — reserves 0)';
+            note = totalOnHandBefore + ' skein(s) across mixed lots, but largest single lot has ' + largestLotBefore + '; holds without reserving stock.';
+            totalHeldOrders += 1;
+          } else {
+            verdict = 'HOLD_TOTAL_STOCK_SHORT';
+            instruction = 'HOLD (' + totalOnHandBefore + ' total on hand, need ' + oQty + ' — reserves 0)';
+            note = 'Only ' + totalOnHandBefore + ' total skein(s) left across all lots (need ' + oQty + '); reserves 0.';
+            totalHeldOrders += 1;
+          }
+        } else {
+          var targetLot = null;
+          for (var tIdx = 0; tIdx < skuBucket.validLots.length; tIdx++) {
+            if (skuBucket.validLots[tIdx].dyeLot === reqLot) {
+              targetLot = skuBucket.validLots[tIdx];
+              break;
+            }
+          }
+          if (!targetLot) {
+            verdict = 'HOLD_REQUESTED_LOT_NOT_FOUND';
+            instruction = 'HOLD (Lot ' + reqLot + ' not in SKU; do NOT substitute — reserves 0)';
+            note = 'Requested lot ' + reqLot + ' is not listed for ' + oSku + '; do NOT silently substitute another lot.';
+            totalHeldOrders += 1;
+          } else {
+            requestedLotRemBefore = targetLot.remainingSkeins;
+            if (targetLot.remainingSkeins >= oQty) {
+              pickedLot = targetLot.dyeLot;
+              pickedQty = oQty;
+              targetLot.allocatedSkeins += oQty;
+              targetLot.remainingSkeins -= oQty;
+              verdict = 'PICK_SINGLE_LOT';
+              instruction = 'PICK ' + pickedLot + ' × ' + pickedQty;
+              note = 'Requested lot ' + pickedLot + ' covers ' + pickedQty + ' skein(s) (' + targetLot.remainingSkeins + ' left in ' + pickedLot + ').';
+              totalPickedOrders += 1;
+              totalPickedSkeins += pickedQty;
+            } else {
+              verdict = 'HOLD_REQUESTED_LOT_SHORT';
+              instruction = 'HOLD (Lot ' + reqLot + ' has ' + targetLot.remainingSkeins + ' left; do NOT substitute — reserves 0)';
+              note = 'Requested lot ' + reqLot + ' has ' + targetLot.remainingSkeins + ' left after earlier picks (' + totalOnHandBefore + ' total on SKU); never reuses picked skeins or silently substitutes another lot.';
+              totalHeldOrders += 1;
+            }
+          }
+        }
+      } else {
+        instruction = 'REVIEW (' + guard + ')';
+        totalReviewOrders += 1;
+      }
+
+      evaluatedOrders.push({
+        orderRef: oRef || '(missing-order)',
+        sku: oSku,
+        requestedLot: reqLot,
+        orderedSkeins: oQty !== null ? oQty : 0,
+        totalOnHandBefore: totalOnHandBefore,
+        largestSingleLotBefore: largestLotBefore,
+        requestedLotRemBefore: requestedLotRemBefore,
+        pickedLot: pickedLot,
+        pickedSkeins: pickedQty,
+        verdict: verdict,
+        instruction: instruction,
+        note: note
+      });
+    }
+
+    return {
+      lots: evaluatedLots,
+      skus: skuList,
+      orders: evaluatedOrders,
+      lotExceptionCount: lotExceptionCount,
+      totalPickedOrders: totalPickedOrders,
+      totalHeldOrders: totalHeldOrders,
+      totalReviewOrders: totalReviewOrders,
+      totalPickedSkeins: totalPickedSkeins,
+      scopeNote: 'Advises on a manual stock snapshot only — does NOT update an online storefront/POS, reserve live cart stock, or guarantee a visual color match across skeins.'
+    };
+  }
+
+  return {
+    makeSkuLotKey: makeSkuLotKey,
+    normRequestedLot: normRequestedLot,
+    parseLotStockRows: parseLotStockRows,
+    parseOrderRows: parseOrderRows,
+    evaluateSingleDyeLotOrders: evaluateSingleDyeLotOrders
+  };
+})();
+
+
+    function renderYarnDyeLotSandbox() {
+      var lots = YarnDyeLotAllocatorEngine.parseLotStockRows(document.getElementById("ydlLotsInput").value);
+      var orders = YarnDyeLotAllocatorEngine.parseOrderRows(document.getElementById("ydlOrdersInput").value);
+      var res = YarnDyeLotAllocatorEngine.evaluateSingleDyeLotOrders(lots, orders);
+
+      var yBanner = document.getElementById("ydlExceptionBanner");
+      if (res.lotExceptionCount > 0 || res.totalReviewOrders > 0) {
+        yBanner.style.display = "block";
+        yBanner.textContent = "⚠️ " + res.lotExceptionCount + " stock-lot exception(s) & " + res.totalReviewOrders + " order review row(s) quarantined — 0 skeins picked on quarantined rows.";
+      } else {
+        yBanner.style.display = "none";
+      }
+
+      var tb = document.getElementById("ydlResultsBody");
+      clearNode(tb);
+      res.orders.forEach(function(o) {
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var cols = [
+          o.orderRef,
+          o.orderedSkeins + " × " + o.sku + " (" + o.requestedLot + ")",
+          o.totalOnHandBefore + " total / " + o.largestSingleLotBefore + " max",
+          o.instruction,
+          o.verdict
+        ];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 3 || c === 4) {
+            td.style.fontWeight = "800";
+            td.style.color = o.verdict === "PICK_SINGLE_LOT" ? "#6ee7b7" : (o.verdict.indexOf("HOLD_") === 0 ? "#fcd34d" : "#fca5a5");
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      });
+
+      document.getElementById("ydlSummaryBadge").textContent =
+        "PICKED " + res.totalPickedOrders + " (" + res.totalPickedSkeins + " SKEINS) · HELD " + res.totalHeldOrders + " · REVIEW " + (res.totalReviewOrders + res.lotExceptionCount);
+    }
+
+    function trackVal89SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val89_viewed")) {
+          sessionStorage.setItem("craftleaf_val89_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea89-view", "Idea 89 Yarn Single Dye Lot Allocator Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote89(choice) {
+      var msgEl = document.getElementById("val89Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val89_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val89_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea89-" + choice, "Idea 89 Yarn Single Dye Lot Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+
+    document.getElementById("ydlLotsInput").addEventListener("input", renderYarnDyeLotSandbox);
+    document.getElementById("ydlOrdersInput").addEventListener("input", renderYarnDyeLotSandbox);
+    document.getElementById("ydlWorkedBtn").addEventListener("click", function(){
+      document.getElementById("ydlLotsInput").value = "YRN-SAGE | Worsted Merino — Sage | A | 3\nYRN-SAGE | Worsted Merino — Sage | B | 2";
+      document.getElementById("ydlOrdersInput").value = "ORD-201 | YRN-SAGE | ANY | 4\nORD-202 | YRN-SAGE | B | 2\nORD-203 | YRN-SAGE | B | 1";
+      renderYarnDyeLotSandbox();
+    });
+    document.getElementById("ydlBestFitBtn").addEventListener("click", function(){
+      document.getElementById("ydlLotsInput").value = "YRN-OAT | DK Highland Wool — Oat | LOT-10 | 6\nYRN-OAT | DK Highland Wool — Oat | LOT-11 | 3";
+      document.getElementById("ydlOrdersInput").value = "ORD-301 | YRN-OAT | ANY | 3\nORD-302 | YRN-OAT | ANY | 5";
+      renderYarnDyeLotSandbox();
+    });
+    document.getElementById("ydlGuardsBtn").addEventListener("click", function(){
+      document.getElementById("ydlLotsInput").value = "YRN-SAGE | Worsted Merino — Sage | A | 3\nYRN-SAGE | Worsted Merino — Sage | B | 2\nYRN-ROSE | Sock Fingering — Rose | L1 | 4\nYRN-ROSE | Sock Fingering — Rose | L1 | 4";
+      document.getElementById("ydlOrdersInput").value = "ORD-401 | YRN-SAGE | C | 2\nORD-402 | YRN-ROSE | ANY | 2\nORD-403 | YRN-SAGE | ANY | 2\nORD-403 | YRN-SAGE | ANY | 2";
+      renderYarnDyeLotSandbox();
+    });
+    document.getElementById("val89BuyBtn").addEventListener("click", function(){ submitValidationVote89("buy"); });
+    document.getElementById("val89FreeBtn").addEventListener("click", function(){ submitValidationVote89("free"); });
+    document.getElementById("val89SkipBtn").addEventListener("click", function(){ submitValidationVote89("skip"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
       try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
     }
     setLang(initLang === "zh" ? "zh" : "en");
+    renderYarnDyeLotSandbox();
     renderSupplierBillMatchSandbox();
     renderShrinkflationSandbox();
     renderKitPackListSandbox();
@@ -3086,6 +3602,7 @@ var SupplierBillMatcherEngine = (function () {
     trackVal84SampleViewOnce();
     trackVal86SampleViewOnce();
     trackVal88SampleViewOnce();
+    trackVal89SampleViewOnce();
   })();
   </script>
 </body>

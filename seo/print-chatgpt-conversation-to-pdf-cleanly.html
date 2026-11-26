@@ -139,6 +139,70 @@
       <ul class="pitfalls-list"><li>Unsearchable 25 MB PNG-in-PDF files: Screenshot extensions rasterize text into blurry bitmaps where you can&#x27;t <code>Cmd+F</code> search, copy code snippets, or click links — and slicing mid-line splits sentences in half across page breaks!</li><li>Sharing ChatGPT public share links when you only wanted 6 clean turns: CleanPrint lets you prune stray follow-up prompts locally before exporting your PDF.</li></ul>
     </section>
 
+    <!-- #90_BRANCH_COMPARATOR_START -->
+    <section id="forkedDraftComparisonSection" class="section-card" style="border:1.5px solid #93c5fd;background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="kicker" style="background:#dbeafe;color:#1d4ed8;">🔀 REGENERATED DRAFTS OR EDITED PROMPTS? · INCLUDED IN CLEANPRINT PRO ($5.99)</span>
+          <h2 style="margin:6px 0 6px;">Compare Two ChatGPT Drafts in Markdown Without Mixing Their Follow-Up Edits</h2>
+          <p style="margin:0;font-size:14px;color:#334155;line-height:1.56;">
+            When you regenerate a reply or edit an earlier prompt, a flat linear transcript dumps sibling drafts back-to-back so an editor cannot tell which version received follow-up feedback.
+            Our local <code>ChatGPT_Forked_Draft_Branch_Comparator_Studio.html</code> companion reads your own extracted OpenAI <code>conversations.json</code> in browser RAM (zero uploads — OpenAI already gives you your backup &amp; free viewer) and saves a portable <code>.md</code> note: <strong>shared turns once</strong>, then <strong>Path A</strong> and <strong>Path B</strong> with their own follow-ups kept strictly separate.
+          </p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" id="seoCmpForkBtn" style="padding:7px 11px;border-radius:8px;border:1px solid #93c5fd;background:#eff6ff;color:#1e3a8a;font-weight:700;font-size:12px;cursor:pointer;">▶ Worked Agenda Fork (Q&amp;A under B)</button>
+          <button type="button" id="seoCmpEditPromptBtn" style="padding:7px 11px;border-radius:8px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-weight:700;font-size:12px;cursor:pointer;">✏️ Edited-Prompt Fork</button>
+          <button type="button" id="seoCmpMissingBtn" style="padding:7px 11px;border-radius:8px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-weight:700;font-size:12px;cursor:pointer;">⚠️ Missing-Parent Guard</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:12px;">
+        <div style="border:1px solid #fda4af;background:#fff1f2;border-radius:11px;padding:12px;">
+          <strong style="display:block;font-size:12.5px;color:#9f1239;margin-bottom:6px;">❌ Confusing Linear Transcript (Mutually Exclusive Replies Look Consecutive)</strong>
+          <pre id="seoCmpFlatPre" style="margin:0;padding:10px;border-radius:8px;background:#ffffff;border:1px solid #fecdd3;font-size:11.6px;line-height:1.45;white-space:pre-wrap;color:#0f172a;"></pre>
+        </div>
+        <div style="border:1px solid #6ee7b7;background:#ecfdf5;border-radius:11px;padding:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
+            <strong style="font-size:12.5px;color:#065f46;">✅ Portable Two-Path Markdown Comparison (Shared Once → A vs. B)</strong>
+            <span id="seoCmpStatusBadge" style="font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:#d1fae5;color:#065f46;"></span>
+          </div>
+          <pre id="seoCmpBranchedPre" style="margin:0;padding:10px;border-radius:8px;background:#ffffff;border:1px solid #a7f3d0;font-size:11.6px;line-height:1.45;white-space:pre-wrap;color:#0f172a;"></pre>
+        </div>
+      </div>
+
+      <p style="margin:10px 0 0;font-size:12px;color:#475569;">
+        <strong>Scope &amp; safety:</strong> Supports tested OpenAI <code>conversations.json</code> (<code>mapping</code>) shapes locally, flags missing parents as incomplete rather than guessing, identifies unsupported linear exports, and never requests your archive on this page.
+      </p>
+
+      <div style="margin-top:12px;padding-top:12px;border-top:1px dashed #cbd5e1;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:12.5px;color:#1e293b;font-weight:700;">Quick comprehension &amp; workflow check (anonymous, 0 email, 0 archive upload): Which draft got “add a Q&amp;A”, and how would you handle forked drafts?</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" id="val90PickABtn" style="padding:5px 10px;border-radius:7px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;">Step 1: Draft A (10-min demo)</button>
+            <button type="button" id="val90PickBBtn" style="padding:5px 10px;border-radius:7px;border:1px solid #93c5fd;background:#eff6ff;color:#1e3a8a;font-size:12px;font-weight:700;cursor:pointer;">Step 1: Draft B (20-min workshop)</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button type="button" id="val90BuyBtn" style="padding:6px 11px;border-radius:7px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;">👍 Step 2: Would choose the $5.99 pack for this</button>
+          <button type="button" id="val90FreeBtn" style="padding:6px 11px;border-radius:7px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;">🆓 Step 2: Free viewer or manual notes</button>
+          <button type="button" id="val90NeitherBtn" style="padding:6px 11px;border-radius:7px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-size:12px;font-weight:700;cursor:pointer;">⏭️ Step 2: Neither</button>
+          <span id="val90Msg" style="font-size:12px;font-weight:700;color:#059669;"></span>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-size:12.5px;color:#334155;">
+          Bundled inside <strong>CleanPrint Pro ($5.99 lifetime)</strong> alongside Multi-Tab PDF Queue + TOC &amp; 4 Pro Typography Themes:
+        </span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="../previews/chatgpt_forked_draft_comparator_sample_preview.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:8px 13px;border-radius:9px;border:1px solid #cbd5e1;background:#ffffff;color:#0f172a;font-weight:700;font-size:12.5px;text-decoration:none;">📄 Free 1-Page Comparator PDF Guide</a>
+          <a id="seoCleanPrintBranchBuyLink" data-buy-event="seo-chatgpt-branch-comparator-pro" href="https://stardustdemo.gumroad.com/l/cleanprint-pro" target="_blank" rel="noopener" class="cta-btn" style="padding:8px 14px;font-size:12.8px;">🔀 Get CleanPrint Pro + Local Branch Comparator ($5.99) →</a>
+        </div>
+      </div>
+    </section>
+    <!-- #90_BRANCH_COMPARATOR_END -->
+
     <div id="seoAffiliateMount"></div>
 
     <section class="section-card">
@@ -182,5 +246,514 @@
       window.CraftLeafSDK.renderAffiliateBar(document.getElementById('seoAffiliateMount'), 'print-craft', lang);
     }
   </script>
+<!-- #90_BRANCH_SCRIPT_START -->
+  <script>
+
+var ChatGptBranchComparatorEngine = (function () {
+  'use strict';
+
+  function isPlainObject(v) {
+    return Boolean(v) && typeof v === 'object' && !Array.isArray(v);
+  }
+
+  function extractVisibleMessage(node) {
+    if (!isPlainObject(node) || !isPlainObject(node.message)) return null;
+    var msg = node.message;
+    if (isPlainObject(msg.metadata) && msg.metadata.is_visually_hidden_from_conversation === true) {
+      return null;
+    }
+    var role = isPlainObject(msg.author) && typeof msg.author.role === 'string'
+      ? msg.author.role.trim().toLowerCase()
+      : '';
+    if (role !== 'user' && role !== 'assistant') {
+      return null;
+    }
+    var content = isPlainObject(msg.content) ? msg.content : null;
+    if (!content) return null;
+
+    var textChunks = [];
+    var hadNonTextPart = false;
+    if (Array.isArray(content.parts)) {
+      for (var i = 0; i < content.parts.length; i++) {
+        var part = content.parts[i];
+        if (typeof part === 'string') {
+          if (part.trim().length > 0) textChunks.push(part);
+        } else if (isPlainObject(part) && typeof part.text === 'string') {
+          if (part.text.trim().length > 0) textChunks.push(part.text);
+        } else if (part !== null && part !== undefined && part !== '') {
+          hadNonTextPart = true;
+        }
+      }
+    } else if (typeof content.text === 'string' && content.text.trim().length > 0) {
+      textChunks.push(content.text);
+    }
+
+    var combined = textChunks.join('\n\n').trim();
+    if (!combined && hadNonTextPart) {
+      combined = '[Non-text attachment or unsupported part omitted]';
+    }
+    if (!combined) return null;
+
+    return {
+      nodeId: String(node.id || msg.id || ''),
+      role: role,
+      roleLabel: role === 'user' ? 'User' : 'Assistant',
+      text: combined,
+      createTime: typeof msg.create_time === 'number' ? msg.create_time : null
+    };
+  }
+
+  function parseArchiveJson(rawJsonText) {
+    var parsed;
+    try {
+      parsed = JSON.parse(String(rawJsonText || ''));
+    } catch (err) {
+      return {
+        ok: false,
+        status: 'UNSUPPORTED_INVALID_JSON',
+        reason: 'File is not valid JSON: ' + String(err && err.message ? err.message : err),
+        conversations: []
+      };
+    }
+
+    var rawList = [];
+    if (Array.isArray(parsed)) {
+      if (parsed.length === 0) {
+        return {
+          ok: false,
+          status: 'UNSUPPORTED_EMPTY_CONVERSATION',
+          reason: 'Archive array is empty ([]). Pick an extracted OpenAI conversations.json with at least one chat.',
+          conversations: []
+        };
+      }
+      rawList = parsed;
+    } else if (isPlainObject(parsed)) {
+      if (Array.isArray(parsed.messages) && !isPlainObject(parsed.mapping)) {
+        return {
+          ok: false,
+          status: 'UNSUPPORTED_EXPORT_SHAPE',
+          reason: 'Unsupported linear messages[] export shape. Tested format required: OpenAI ChatGPT conversations.json containing mapping parent/children node objects.',
+          conversations: []
+        };
+      }
+      rawList = [parsed];
+    } else {
+      return {
+        ok: false,
+        status: 'UNSUPPORTED_EXPORT_SHAPE',
+        reason: 'Unsupported JSON root type. Expected an array or object with OpenAI ChatGPT mapping nodes.',
+        conversations: []
+      };
+    }
+
+    var validConvs = [];
+    for (var i = 0; i < rawList.length; i++) {
+      var item = rawList[i];
+      if (!isPlainObject(item) || !isPlainObject(item.mapping)) {
+        return {
+          ok: false,
+          status: 'UNSUPPORTED_EXPORT_SHAPE',
+          reason: 'Conversation #' + (i + 1) + ' does not contain an OpenAI ChatGPT mapping object. Only tested mapping node-tree exports are supported.',
+          conversations: []
+        };
+      }
+      var keys = Object.keys(item.mapping);
+      if (keys.length === 0) continue;
+      validConvs.push(inspectConversation(item, i));
+    }
+
+    if (validConvs.length === 0) {
+      return {
+        ok: false,
+        status: 'UNSUPPORTED_EMPTY_CONVERSATION',
+        reason: 'No conversations with non-empty mapping trees were found.',
+        conversations: []
+      };
+    }
+
+    return {
+      ok: true,
+      status: 'SUPPORTED_OPENAI_MAPPING',
+      reason: 'Parsed ' + validConvs.length + ' tested OpenAI mapping conversation(s) locally.',
+      conversations: validConvs
+    };
+  }
+
+  function traceNodeChain(mapping, endpointId) {
+    var nodeIds = [];
+    var seen = {};
+    var cur = endpointId;
+    var incomplete = false;
+    var incompleteReason = '';
+    var missingParentId = '';
+    var brokenAtNodeId = '';
+
+    while (cur !== null && cur !== undefined && cur !== '') {
+      if (Object.prototype.hasOwnProperty.call(seen, cur)) {
+        incomplete = true;
+        brokenAtNodeId = cur;
+        incompleteReason = 'Cycle detected in parent links at node "' + cur + '".';
+        break;
+      }
+      if (!Object.prototype.hasOwnProperty.call(mapping, cur) || !isPlainObject(mapping[cur])) {
+        incomplete = true;
+        missingParentId = cur;
+        incompleteReason = 'Endpoint or ancestor node "' + cur + '" is missing from mapping.';
+        break;
+      }
+      seen[cur] = true;
+      nodeIds.unshift(cur);
+      var nodeObj = mapping[cur];
+      var parentId = nodeObj.parent;
+      if (parentId === null || parentId === undefined || parentId === '') {
+        break;
+      }
+      var pStr = String(parentId);
+      if (!Object.prototype.hasOwnProperty.call(mapping, pStr) || !isPlainObject(mapping[pStr])) {
+        incomplete = true;
+        missingParentId = pStr;
+        brokenAtNodeId = cur;
+        incompleteReason = 'Missing parent node "' + pStr + '" referenced by node "' + cur + '".';
+        break;
+      }
+      cur = pStr;
+    }
+
+    var turns = [];
+    for (var i = 0; i < nodeIds.length; i++) {
+      var nid = nodeIds[i];
+      var m = extractVisibleMessage(mapping[nid]);
+      if (m) {
+        m.nodeId = nid;
+        turns.push(m);
+      }
+    }
+
+    var firstAsst = '';
+    var lastTurnSnippet = '';
+    for (var t = 0; t < turns.length; t++) {
+      if (!firstAsst && turns[t].role === 'assistant') {
+        firstAsst = turns[t].text.slice(0, 48);
+      }
+    }
+    if (turns.length > 0) {
+      lastTurnSnippet = turns[turns.length - 1].roleLabel + ': ' + turns[turns.length - 1].text.slice(0, 52);
+    }
+
+    return {
+      endpointId: endpointId,
+      originNodeId: nodeIds.length > 0 ? nodeIds[0] : '',
+      nodeIds: nodeIds,
+      turns: turns,
+      incomplete: incomplete,
+      missingParentId: missingParentId,
+      brokenAtNodeId: brokenAtNodeId,
+      incompleteReason: incompleteReason,
+      label: (incomplete ? '[INCOMPLETE] ' : '') + endpointId + ' (' + turns.length + ' turns — ' + (lastTurnSnippet || firstAsst || 'empty') + ')'
+    };
+  }
+
+  function inspectConversation(convObj, idx) {
+    var mapping = convObj.mapping || {};
+    var allIds = Object.keys(mapping);
+    var flatNaiveTurns = [];
+    var danglingChildren = [];
+    var candidateLeaves = [];
+
+    for (var i = 0; i < allIds.length; i++) {
+      var nid = allIds[i];
+      var node = mapping[nid];
+      if (!isPlainObject(node)) continue;
+      var vis = extractVisibleMessage(node);
+      if (vis) {
+        vis.nodeId = nid;
+        flatNaiveTurns.push(vis);
+      }
+      var ch = Array.isArray(node.children) ? node.children : [];
+      var existingChildren = 0;
+      for (var c = 0; c < ch.length; c++) {
+        var cid = String(ch[c]);
+        if (Object.prototype.hasOwnProperty.call(mapping, cid) && isPlainObject(mapping[cid])) {
+          existingChildren += 1;
+        } else {
+          danglingChildren.push({ parentId: nid, missingChildId: cid });
+        }
+      }
+      if (existingChildren === 0) {
+        candidateLeaves.push(nid);
+      }
+    }
+
+    if (typeof convObj.current_node === 'string' && convObj.current_node && candidateLeaves.indexOf(convObj.current_node) < 0) {
+      if (Object.prototype.hasOwnProperty.call(mapping, convObj.current_node)) {
+        candidateLeaves.push(convObj.current_node);
+      }
+    }
+
+    var paths = [];
+    for (var p = 0; p < candidateLeaves.length; p++) {
+      var traced = traceNodeChain(mapping, candidateLeaves[p]);
+      if (traced.turns.length > 0 || traced.incomplete) {
+        paths.push(traced);
+      }
+    }
+
+    return {
+      index: idx,
+      id: String(convObj.id || ('conv_' + (idx + 1))),
+      title: String(convObj.title || ('Untitled Conversation #' + (idx + 1))),
+      currentNode: typeof convObj.current_node === 'string' ? convObj.current_node : '',
+      paths: paths,
+      flatNaiveTurns: flatNaiveTurns,
+      danglingChildren: danglingChildren
+    };
+  }
+
+  function formatTurnsMarkdown(turns, headingPrefix) {
+    if (!turns || turns.length === 0) {
+      return '_No turns in this section._';
+    }
+    var lines = [];
+    for (var i = 0; i < turns.length; i++) {
+      var t = turns[i];
+      lines.push('### ' + headingPrefix + ' Turn ' + (i + 1) + ' — ' + t.roleLabel + ' (`' + t.nodeId + '`)');
+      lines.push('');
+      lines.push(t.text);
+      lines.push('');
+    }
+    return lines.join('\n').trim();
+  }
+
+  function compareTwoPaths(convReport, endpointA, endpointB) {
+    if (!convReport || !Array.isArray(convReport.paths) || convReport.paths.length === 0) {
+      return {
+        ok: false,
+        status: 'NO_PATHS_AVAILABLE',
+        incomplete: true,
+        warning: 'Conversation has no visible user/assistant paths to compare.',
+        sharedTurns: [],
+        pathATurns: [],
+        pathBTurns: [],
+        markdown: ''
+      };
+    }
+
+    var pathA = null;
+    var pathB = null;
+    for (var i = 0; i < convReport.paths.length; i++) {
+      if (convReport.paths[i].endpointId === endpointA) pathA = convReport.paths[i];
+      if (convReport.paths[i].endpointId === endpointB) pathB = convReport.paths[i];
+    }
+    if (!pathA) pathA = convReport.paths[0];
+    if (!pathB) pathB = convReport.paths.length > 1 ? convReport.paths[1] : convReport.paths[0];
+
+    var incompleteReasons = [];
+    if (pathA.incomplete) {
+      incompleteReasons.push('Path A (' + pathA.endpointId + '): ' + pathA.incompleteReason);
+    }
+    if (pathB.incomplete) {
+      incompleteReasons.push('Path B (' + pathB.endpointId + '): ' + pathB.incompleteReason);
+    }
+    if (!pathA.incomplete && !pathB.incomplete && pathA.originNodeId !== pathB.originNodeId) {
+      incompleteReasons.push(
+        'Disconnected root ancestry ("' + pathA.originNodeId + '" vs "' + pathB.originNodeId + '") — parent link missing; refusing to guess shared history.'
+      );
+    }
+
+    var isIncomplete = incompleteReasons.length > 0;
+    var sharedTurns = [];
+    var pathATurns = [];
+    var pathBTurns = [];
+    var status = 'CLEAN_FORK_COMPARISON';
+    var forkSummary = '';
+
+    if (isIncomplete) {
+      status = 'INCOMPLETE_PATH_FLAGGED';
+      // Never guess shared prefix when a parent is missing or roots are disconnected
+      sharedTurns = [];
+      pathATurns = pathA.turns.slice();
+      pathBTurns = pathB.turns.slice();
+      forkSummary = 'INCOMPLETE PATH FLAGGED — ' + incompleteReasons.join(' | ');
+    } else if (pathA.endpointId === pathB.endpointId) {
+      status = 'IDENTICAL_PATH_SELECTED';
+      sharedTurns = pathA.turns.slice();
+      pathATurns = [];
+      pathBTurns = [];
+      forkSummary = 'Both selectors point to the same endpoint (' + pathA.endpointId + '). Pick two distinct branch endpoints to see where they diverged.';
+    } else {
+      var commonLen = 0;
+      var maxCommon = Math.min(pathA.nodeIds.length, pathB.nodeIds.length);
+      while (commonLen < maxCommon && pathA.nodeIds[commonLen] === pathB.nodeIds[commonLen]) {
+        commonLen += 1;
+      }
+      var sharedSet = {};
+      for (var s = 0; s < commonLen; s++) {
+        sharedSet[pathA.nodeIds[s]] = true;
+      }
+      for (var ta = 0; ta < pathA.turns.length; ta++) {
+        if (sharedSet[pathA.turns[ta].nodeId]) {
+          sharedTurns.push(pathA.turns[ta]);
+        } else {
+          pathATurns.push(pathA.turns[ta]);
+        }
+      }
+      for (var tb = 0; tb < pathB.turns.length; tb++) {
+        if (!sharedSet[pathB.turns[tb].nodeId]) {
+          pathBTurns.push(pathB.turns[tb]);
+        }
+      }
+      if (sharedTurns.length > 0) {
+        var lastShared = sharedTurns[sharedTurns.length - 1];
+        forkSummary = 'Diverged after Shared Turn #' + sharedTurns.length + ' (' + lastShared.roleLabel + ': "' + lastShared.text.slice(0, 60) + '").';
+      } else {
+        forkSummary = 'Diverged at Turn #1 (edited opening prompt).';
+      }
+    }
+
+    var mdLines = [
+      '---',
+      'title: ' + JSON.stringify(convReport.title + ' — Branch Comparison'),
+      'comparison_status: ' + status,
+      'path_a_endpoint: ' + JSON.stringify(pathA.endpointId),
+      'path_b_endpoint: ' + JSON.stringify(pathB.endpointId),
+      'shared_turns: ' + sharedTurns.length,
+      'path_a_diverged_turns: ' + pathATurns.length,
+      'path_b_diverged_turns: ' + pathBTurns.length,
+      'incomplete_path_flagged: ' + (isIncomplete ? 'true' : 'false'),
+      '---',
+      '',
+      '# ' + convReport.title + ' — Forked Draft Comparison',
+      ''
+    ];
+
+    if (isIncomplete) {
+      mdLines.push('> ⚠️ **INCOMPLETE PATH — MISSING PARENT FLAGGED**: ' + incompleteReasons.join(' '));
+      mdLines.push('> Refusing to guess shared context or attach orphaned turns to another branch.');
+      mdLines.push('');
+    } else {
+      mdLines.push('> **Fork Point:** ' + forkSummary);
+      mdLines.push('');
+      mdLines.push('## Shared Conversation Prefix (Before Fork)');
+      mdLines.push('');
+      mdLines.push(formatTurnsMarkdown(sharedTurns, 'Shared'));
+      mdLines.push('');
+    }
+
+    mdLines.push('## Path A (`' + pathA.endpointId + '`' + (pathA.incomplete ? ' — INCOMPLETE' : '') + ')');
+    mdLines.push('');
+    mdLines.push(formatTurnsMarkdown(pathATurns, 'Path A'));
+    mdLines.push('');
+
+    mdLines.push('## Path B (`' + pathB.endpointId + '`' + (pathB.incomplete ? ' — INCOMPLETE' : '') + ')');
+    mdLines.push('');
+    mdLines.push(formatTurnsMarkdown(pathBTurns, 'Path B'));
+    mdLines.push('');
+    mdLines.push('---');
+    mdLines.push('_Generated 100% locally from user-extracted OpenAI `conversations.json` (`mapping` tree). Visible `user`/`assistant` text only; does not recover deleted content._');
+
+    return {
+      ok: true,
+      status: status,
+      incomplete: isIncomplete,
+      incompleteReasons: incompleteReasons,
+      forkSummary: forkSummary,
+      pathA: pathA,
+      pathB: pathB,
+      sharedTurns: sharedTurns,
+      pathATurns: pathATurns,
+      pathBTurns: pathBTurns,
+      flatNaiveTurns: convReport.flatNaiveTurns,
+      markdown: mdLines.join('\n')
+    };
+  }
+
+  return {
+    parseArchiveJson: parseArchiveJson,
+    inspectConversation: inspectConversation,
+    compareTwoPaths: compareTwoPaths
+  };
+})();
+
+  (function () {
+    'use strict';
+    var FORK_JSON = "[{\"id\": \"conv-agenda-fork-01\", \"title\": \"Product Launch Session Agenda\", \"create_time\": 1764100000.0, \"current_node\": \"b2_workshop_qa\", \"mapping\": {\"root\": {\"id\": \"root\", \"parent\": null, \"children\": [\"sys_0\", \"u1_prompt\"], \"message\": null}, \"sys_0\": {\"id\": \"sys_0\", \"parent\": \"root\", \"children\": [], \"message\": {\"id\": \"sys_0\", \"author\": {\"role\": \"system\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"You are a helpful technical writing assistant.\"]}}}, \"u1_prompt\": {\"id\": \"u1_prompt\", \"parent\": \"root\", \"children\": [\"a1_demo\", \"b1_workshop\"], \"message\": {\"id\": \"u1_prompt\", \"author\": {\"role\": \"user\"}, \"create_time\": 1764100010.0, \"content\": {\"content_type\": \"text\", \"parts\": [\"Draft an agenda\"]}}}, \"a1_demo\": {\"id\": \"a1_demo\", \"parent\": \"u1_prompt\", \"children\": [], \"message\": {\"id\": \"a1_demo\", \"author\": {\"role\": \"assistant\"}, \"create_time\": 1764100020.0, \"content\": {\"content_type\": \"text\", \"parts\": [\"10-minute demo:\\n- 0:00\\u20132:00 Problem framing\\n- 2:00\\u20138:00 Live walkthrough\\n- 8:00\\u201310:00 Next steps\"]}}}, \"b1_workshop\": {\"id\": \"b1_workshop\", \"parent\": \"u1_prompt\", \"children\": [\"u2_add_qa\"], \"message\": {\"id\": \"b1_workshop\", \"author\": {\"role\": \"assistant\"}, \"create_time\": 1764100035.0, \"content\": {\"content_type\": \"text\", \"parts\": [\"20-minute workshop:\\n- 0:00\\u20135:00 Context & goals\\n- 5:00\\u201315:00 Guided hands-on exercise\\n- 15:00\\u201320:00 Wrap-up\"]}}}, \"u2_add_qa\": {\"id\": \"u2_add_qa\", \"parent\": \"b1_workshop\", \"children\": [\"b2_workshop_qa\"], \"message\": {\"id\": \"u2_add_qa\", \"author\": {\"role\": \"user\"}, \"create_time\": 1764100060.0, \"content\": {\"content_type\": \"text\", \"parts\": [\"add a Q&A\"]}}}, \"b2_workshop_qa\": {\"id\": \"b2_workshop_qa\", \"parent\": \"u2_add_qa\", \"children\": [], \"message\": {\"id\": \"b2_workshop_qa\", \"author\": {\"role\": \"assistant\"}, \"create_time\": 1764100075.0, \"content\": {\"content_type\": \"text\", \"parts\": [\"20-minute workshop (with Q&A):\\n- 0:00\\u20134:00 Context & goals\\n- 4:00\\u201313:00 Guided hands-on exercise\\n- 13:00\\u201318:00 Live Q&A\\n- 18:00\\u201320:00 Wrap-up\"]}}}}}, {\"id\": \"conv-edited-prompt-02\", \"title\": \"API Migration Release Notes (Edited Prompt Fork)\", \"create_time\": 1764102000.0, \"current_node\": \"p2_sec_reply\", \"mapping\": {\"root\": {\"id\": \"root\", \"parent\": null, \"children\": [\"u0\"], \"message\": null}, \"u0\": {\"id\": \"u0\", \"parent\": \"root\", \"children\": [\"a0\"], \"message\": {\"id\": \"u0\", \"author\": {\"role\": \"user\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"Summarize breaking changes in v2 auth tokens.\"]}}}, \"a0\": {\"id\": \"a0\", \"parent\": \"u0\", \"children\": [\"p1_dev_edit\", \"p2_sec_edit\"], \"message\": {\"id\": \"a0\", \"author\": {\"role\": \"assistant\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"v2 tokens expire in 15 minutes and require audience scoping.\"]}}}, \"p1_dev_edit\": {\"id\": \"p1_dev_edit\", \"parent\": \"a0\", \"children\": [\"p1_dev_reply\"], \"message\": {\"id\": \"p1_dev_edit\", \"author\": {\"role\": \"user\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"Rewrite as a 3-step SDK upgrade checklist for app developers.\"]}}}, \"p1_dev_reply\": {\"id\": \"p1_dev_reply\", \"parent\": \"p1_dev_edit\", \"children\": [], \"message\": {\"id\": \"p1_dev_reply\", \"author\": {\"role\": \"assistant\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"SDK Checklist: 1) Pass `aud`, 2) Enable 12-min refresh timer, 3) Drop v1 fallback.\"]}}}, \"p2_sec_edit\": {\"id\": \"p2_sec_edit\", \"parent\": \"a0\", \"children\": [\"p2_sec_reply\"], \"message\": {\"id\": \"p2_sec_edit\", \"author\": {\"role\": \"user\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"Rewrite as a compliance memo for security reviewers.\"]}}}, \"p2_sec_reply\": {\"id\": \"p2_sec_reply\", \"parent\": \"p2_sec_edit\", \"children\": [], \"message\": {\"id\": \"p2_sec_reply\", \"author\": {\"role\": \"assistant\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"Security Memo: Shortened 15-min TTL bounds replay windows; strict `aud` validation blocks cross-service token reuse.\"]}}}}}]";
+    var MISS_JSON = "[{\"id\": \"conv-missing-parent-01\", \"title\": \"Partial Export With Missing Parent Node\", \"create_time\": 1764105000.0, \"current_node\": \"b2_orphan_leaf\", \"mapping\": {\"root\": {\"id\": \"root\", \"parent\": null, \"children\": [\"u1_prompt\"], \"message\": null}, \"u1_prompt\": {\"id\": \"u1_prompt\", \"parent\": \"root\", \"children\": [\"a1_demo\"], \"message\": {\"id\": \"u1_prompt\", \"author\": {\"role\": \"user\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"Draft an agenda\"]}}}, \"a1_demo\": {\"id\": \"a1_demo\", \"parent\": \"u1_prompt\", \"children\": [], \"message\": {\"id\": \"a1_demo\", \"author\": {\"role\": \"assistant\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"10-minute demo\"]}}}, \"b2_orphan_leaf\": {\"id\": \"b2_orphan_leaf\", \"parent\": \"missing_node_b1\", \"children\": [], \"message\": {\"id\": \"b2_orphan_leaf\", \"author\": {\"role\": \"assistant\"}, \"content\": {\"content_type\": \"text\", \"parts\": [\"20-minute workshop (with Q&A) \\u2014 parent node missing_node_b1 absent from file\"]}}}}}]";
+    var selectedDraftStep1 = '';
+
+    function renderScenario(mode) {
+      var archive = ChatGptBranchComparatorEngine.parseArchiveJson(mode === 'missing' ? MISS_JSON : FORK_JSON);
+      var convIdx = mode === 'edit' ? 1 : 0;
+      var conv = archive.conversations[convIdx];
+      var cmp = ChatGptBranchComparatorEngine.compareTwoPaths(conv, conv.paths[0].endpointId, conv.paths[1].endpointId);
+
+      var flatLines = [];
+      for (var i = 0; i < cmp.flatNaiveTurns.length; i++) {
+        var ft = cmp.flatNaiveTurns[i];
+        flatLines.push((i + 1) + '. [' + ft.roleLabel + '] ' + ft.text);
+      }
+      document.getElementById('seoCmpFlatPre').textContent = flatLines.join('\n\n');
+      document.getElementById('seoCmpBranchedPre').textContent = cmp.markdown;
+
+      var badge = document.getElementById('seoCmpStatusBadge');
+      badge.textContent = cmp.status;
+      badge.style.background = cmp.incomplete ? '#fef3c7' : '#d1fae5';
+      badge.style.color = cmp.incomplete ? '#92400e' : '#065f46';
+    }
+
+    function trackView90Once() {
+      try {
+        if (typeof sessionStorage !== 'undefined' && sessionStorage && !sessionStorage.getItem('craftleaf_val90_viewed')) {
+          sessionStorage.setItem('craftleaf_val90_viewed', '1');
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+            window.CraftLeafSDK.trackEvent('idea90-view', 'Idea 90 ChatGPT Forked Draft Comparator View');
+          }
+        }
+      } catch (_e) {}
+    }
+
+    function pickStep1(ans) {
+      selectedDraftStep1 = ans;
+      var msg = document.getElementById('val90Msg');
+      msg.textContent = ans === 'B'
+        ? 'Step 1 selected: Draft B (20-minute workshop received "add a Q&A"). Now click a Step 2 option!'
+        : 'Step 1 selected: Draft A. Now click a Step 2 option!';
+    }
+
+    function submitVote90(choice) {
+      var msg = document.getElementById('val90Msg');
+      if (!selectedDraftStep1) {
+        msg.textContent = 'Please click Step 1 (Draft A or Draft B) first so both answers record together.';
+        return;
+      }
+      try {
+        if (typeof sessionStorage !== 'undefined' && sessionStorage && sessionStorage.getItem('craftleaf_val90_voted')) {
+          msg.textContent = 'Recorded once for this session — thank you!';
+          return;
+        }
+        if (typeof sessionStorage !== 'undefined' && sessionStorage) {
+          sessionStorage.setItem('craftleaf_val90_voted', selectedDraftStep1 + ':' + choice);
+        }
+      } catch (_e) {}
+      var tag = 'idea90-' + selectedDraftStep1.toLowerCase() + '-' + choice;
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+        window.CraftLeafSDK.trackEvent(tag, 'Idea 90 Vote: draft=' + selectedDraftStep1 + ', choice=' + choice);
+      }
+      msg.textContent = 'Thank you — anonymous response (' + selectedDraftStep1 + ' + ' + choice + ') recorded for this session.';
+    }
+
+    document.getElementById('seoCmpForkBtn').addEventListener('click', function () { renderScenario('fork'); });
+    document.getElementById('seoCmpEditPromptBtn').addEventListener('click', function () { renderScenario('edit'); });
+    document.getElementById('seoCmpMissingBtn').addEventListener('click', function () { renderScenario('missing'); });
+    document.getElementById('val90PickABtn').addEventListener('click', function () { pickStep1('A'); });
+    document.getElementById('val90PickBBtn').addEventListener('click', function () { pickStep1('B'); });
+    document.getElementById('val90BuyBtn').addEventListener('click', function () { submitVote90('buy'); });
+    document.getElementById('val90FreeBtn').addEventListener('click', function () { submitVote90('free'); });
+    document.getElementById('val90NeitherBtn').addEventListener('click', function () { submitVote90('neither'); });
+
+    renderScenario('fork');
+    trackView90Once();
+  })();
+  </script>
+  <!-- #90_BRANCH_SCRIPT_END -->
 </body>
 </html>
