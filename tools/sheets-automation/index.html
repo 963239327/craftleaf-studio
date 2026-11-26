@@ -83,7 +83,7 @@
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn btn-gold" data-lang="en" data-buy-event="sheets-pack-primary" href="https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=N6i8OAr7_j6-KIB5uHW1RQ==&amp;wanted=true" target="_blank" rel="noopener">
-          📦 Get All 4 .GS Scripts + 7 Macro-Free .XLSX Workbooks + 22 CSVs ($9.99) →
+          📦 Get All 4 .GS Scripts + 8 Macro-Free .XLSX Workbooks + 24 CSVs ($9.99) →
         </a>
         <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 库存预警脚本免费即拷即用！觉得省心欢迎微信赞赏支持</a>
         <a class="btn btn-sec" href="../../previews/smallbiz_sheets_apps_script_sample_preview.pdf" target="_blank" rel="noopener">
@@ -225,6 +225,92 @@
           <span class="pill" id="modeBadge">FREE FULL EXPORT</span>
         </div>
         <pre class="codebox" id="codeOutput"></pre>
+      </div>
+    </section>
+
+    <section id="stockCartonPickerSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">📦 NEW IN PACK · WORKED + BLANK MACRO-FREE .XLSX · STOCK CARTON FIT &amp; BILLABLE-WEIGHT PICKER</span>
+            <span data-lang="zh">📦 新增免宏工作簿 (示例版 + 空白模板 .XLSX) · 现货纸箱内径适配与体积计费重档位优选表</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Pick a Stock Carton by Inside Fit &amp; Billable-Weight Band Before Buying a Label</span>
+            <span data-lang="zh">买面单前先比对货架现货纸箱：先验内径竖放适配，再看换小号纸箱能否真正降一档计费重</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked 3-Carton Packing-Bench Check (divisor <code>139</code>): A padded wreath is <strong>7 in tall</strong> and must stay upright → rejects the <strong>6.5 in inside-height</strong> box. Comparing the two fitting cartons (<code>20×16×12</code> vs. <code>18×14×8</code> outside): at <strong>4 lb gross</strong> (3.5 lb net + 0.5 lb tare), they bill at <strong>28 lb vs. 15 lb</strong> (<strong>PICK 18×14×8</strong>, saving 13 billable lb); at <strong>30 lb gross</strong>, both bill at <strong>30 lb</strong> (<strong>SAME WEIGHT BAND</strong> — no band advantage). Included as worked + blank macro-free <code>12_Stock_Carton_Fit_And_Billable_Weight_Picker.xlsx</code> (LibreOffice / Excel / Sheets) + printable bench pick-list HTML in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战三款货架纸箱比对示例（卖家确认体积重除数 <code>139</code>）：带缓冲花环高 <strong>7 英寸</strong>且须竖放 → 自动剔除<strong>内高仅 6.5 寸</strong>的浅箱；其余两款适配纸箱（外径 <code>20×16×12</code> 对比 <code>18×14×8</code>）在含箱毛重 <strong>4 磅</strong>时计费重为 <strong>28 磅 vs. 15 磅</strong>（立省 13 磅档位）；当毛重达 <strong>30 磅</strong>时两箱均按 <strong>30 磅</strong>实重计费（同档无差，如实提示无降档收益）。</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/stock_carton_dim_picker_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Carton-Picker PDF Guide</span>
+          <span data-lang="zh">📄 查看 1 页纸箱选型速查 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Shelf Stock Cartons (`Carton_ID | Label | In_L | In_W | In_H | Out_L | Out_W | Out_H | Tare_lb`)</span>
+            <span data-lang="zh">1. 货架常备纸箱规格（`纸箱号 | 说明 | 内长 | 内宽 | 内高 | 外长 | 外宽 | 外高 | 空箱重lb`）</span>
+          </label>
+          <textarea id="scpCartonsInput" rows="3" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.5px;">BOX-SHALLOW | Shallow Wreath Box (6.5" In-H) | 17.5 | 13.5 | 6.5 | 18 | 14 | 7 | 0.5
+BOX-20X16X12 | Large Deep Shipper | 19.5 | 15.5 | 11.5 | 20 | 16 | 12 | 0.5
+BOX-18X14X8 | Medium Upright Shipper | 17.5 | 13.5 | 7.5 | 18 | 14 | 8 | 0.5</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Padded Orders (`Item_ID | Desc | Padded_L | W | H | UPRIGHT_or_ANY | Net_lb | Seller_DIM_Divisor`)</span>
+            <span data-lang="zh">2. 带缓冲待发商品（`编号 | 说明 | 缓冲长 | 宽 | 高 | UPRIGHT或ANY | 净重lb | 确认体积重除数`）</span>
+          </label>
+          <textarea id="scpItemsInput" rows="4" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.5px;">WREATH-4LB | 7" Upright Wreath (4 lb Gross) | 13 | 11 | 7 | UPRIGHT | 3.5 | 139
+WREATH-30LB | 7" Upright Heavy Base (30 lb Gross) | 13 | 11 | 7 | UPRIGHT | 29.5 | 139
+URN-TALL-12.5 | 12.5" Tall Urn (Exceeds Shelf) | 13 | 11 | 12.5 | UPRIGHT | 3.5 | 139</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="scpWorkedBtn">📦 Worked (28 vs 15 lb · 30 lb Tie · No Fit)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="scpRotateBtn">🔄 UPRIGHT vs ANY Rotation</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="scpGuardsBtn">🛡️ Missing Divisor &amp; Spec Guards</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">📦 Reusable Packing-Bench Carton Pick List</span>
+              <span data-lang="zh">📦 打包台常备纸箱优选对照表</span>
+            </strong>
+            <span id="scpSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="scpExceptionBanner" style="display:none;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,0.18);border:1px solid #ef4444;color:#fecaca;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Item</th>
+                <th style="padding:6px;">Padded Dims</th>
+                <th style="padding:6px;">Fit</th>
+                <th style="padding:6px;">Bench Pick &amp; Band Result</th>
+                <th style="padding:6px;">Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="scpResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Seller-confirmed whole-pound actual-vs-DIM rule only — does NOT guess a carrier divisor, quote postage, calculate surcharges, or change live checkout rates.</span>
+            <span data-lang="zh"><em>边界说明：</em>仅按卖家确认的整磅实重与体积重规则比对货架纸箱，不猜测承运商除数、不报价邮资附加费、也不改动网店结账运费。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Stock multiple box sizes? Anonymous 1-click check (0 email, 0 store login):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val92BuyBtn">👍 $9.99 pack for my own box list</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val92FreeBtn">🆓 Single-box calculator is enough</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val92SkipBtn">⏭️ Neither</button>
+            </div>
+            <span id="val92Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -3585,12 +3671,489 @@ var YarnDyeLotAllocatorEngine = (function () {
     document.getElementById("val89FreeBtn").addEventListener("click", function(){ submitValidationVote89("free"); });
     document.getElementById("val89SkipBtn").addEventListener("click", function(){ submitValidationVote89("skip"); });
 
+    
+var StockCartonPickerEngine = (function () {
+  'use strict';
+
+  function normToken(v) {
+    return String(v === null || v === undefined ? '' : v).trim().toUpperCase();
+  }
+
+  function parsePositiveNum(val) {
+    if (val === '' || val === null || val === undefined) return null;
+    var s = String(val).trim().replace(/,/g, '');
+    if (!/^[+]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return null;
+    var n = parseFloat(s);
+    if (!isFinite(n) || n <= 0) return null;
+    return n;
+  }
+
+  function parseNonNegNum(val) {
+    if (val === '' || val === null || val === undefined) return null;
+    var s = String(val).trim().replace(/,/g, '');
+    if (!/^[+]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return null;
+    var n = parseFloat(s);
+    if (!isFinite(n) || n < 0) return null;
+    return n;
+  }
+
+  function normOrientation(val) {
+    var t = normToken(val);
+    if (t === 'ANY' || t === 'ANY_ROTATION' || t === 'ROTATE') return 'ANY';
+    if (!t || t === 'UPRIGHT' || t === 'UPRIGHT_Z' || t === 'KEEP_UPRIGHT') return 'UPRIGHT';
+    return 'INVALID';
+  }
+
+  function splitPipeOrCsvLines(rawText, minCols) {
+    var lines = String(rawText || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var trimmed = lines[i].trim();
+      if (!trimmed || trimmed.charAt(0) === '#') continue;
+      var delim = trimmed.indexOf('|') >= 0 ? '|' : ',';
+      var parts = trimmed.split(delim).map(function (x) { return x.trim(); });
+      if (parts.length < minCols) continue;
+      out.push(parts);
+    }
+    return out;
+  }
+
+  function parseCartonShelfRows(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 8);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normToken(p[0]);
+      if (i === 0 && (h0 === 'CARTON_ID' || h0 === 'BOX_ID')) continue;
+      if (p.length >= 9) {
+        res.push({
+          cartonId: p[0],
+          label: p[1],
+          insideL: p[2],
+          insideW: p[3],
+          insideH: p[4],
+          outsideL: p[5],
+          outsideW: p[6],
+          outsideH: p[7],
+          tareLb: p[8]
+        });
+      } else {
+        res.push({
+          cartonId: p[0],
+          label: p[0],
+          insideL: p[1],
+          insideW: p[2],
+          insideH: p[3],
+          outsideL: p[4],
+          outsideW: p[5],
+          outsideH: p[6],
+          tareLb: p[7]
+        });
+      }
+    }
+    return res;
+  }
+
+  function parseOrderItemRows(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 7);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normToken(p[0]);
+      if (i === 0 && (h0 === 'ITEM_ID' || h0 === 'ORDER_ID' || h0 === 'ORDER_OR_ITEM_ID')) continue;
+      if (p.length >= 8) {
+        res.push({
+          itemId: p[0],
+          desc: p[1],
+          paddedL: p[2],
+          paddedW: p[3],
+          paddedH: p[4],
+          orientation: p[5],
+          netLb: p[6],
+          dimDivisor: p[7]
+        });
+      } else {
+        res.push({
+          itemId: p[0],
+          desc: p[0],
+          paddedL: p[1],
+          paddedW: p[2],
+          paddedH: p[3],
+          orientation: p[4],
+          netLb: p[5],
+          dimDivisor: p[6]
+        });
+      }
+    }
+    return res;
+  }
+
+  function sort3Asc(a, b, c) {
+    var arr = [a, b, c];
+    arr.sort(function (x, y) { return x - y; });
+    return arr;
+  }
+
+  function doesItemFitCarton(itemL, itemW, itemH, orient, carton) {
+    var EPS = 1e-9;
+    if (orient === 'UPRIGHT') {
+      if (itemH > carton.insideH + EPS) return false;
+      var flat1 = (itemL <= carton.insideL + EPS) && (itemW <= carton.insideW + EPS);
+      var flat2 = (itemW <= carton.insideL + EPS) && (itemL <= carton.insideW + EPS);
+      return flat1 || flat2;
+    }
+    var iDims = sort3Asc(itemL, itemW, itemH);
+    var cDims = sort3Asc(carton.insideL, carton.insideW, carton.insideH);
+    return (
+      iDims[0] <= cDims[0] + EPS &&
+      iDims[1] <= cDims[1] + EPS &&
+      iDims[2] <= cDims[2] + EPS
+    );
+  }
+
+  function evaluateStockCartonPickList(cartonRows, itemRows) {
+    var cartonIdCounts = {};
+    var i;
+    for (i = 0; i < cartonRows.length; i++) {
+      var cid = normToken(cartonRows[i].cartonId);
+      if (cid) cartonIdCounts[cid] = (cartonIdCounts[cid] || 0) + 1;
+    }
+
+    var evaluatedCartons = [];
+    var validCartons = [];
+    var cartonExceptionCount = 0;
+
+    for (i = 0; i < cartonRows.length; i++) {
+      var cr = cartonRows[i];
+      var cidNorm = normToken(cr.cartonId);
+      var iL = parsePositiveNum(cr.insideL);
+      var iW = parsePositiveNum(cr.insideW);
+      var iH = parsePositiveNum(cr.insideH);
+      var oL = parsePositiveNum(cr.outsideL);
+      var oW = parsePositiveNum(cr.outsideW);
+      var oH = parsePositiveNum(cr.outsideH);
+      var tare = parseNonNegNum(cr.tareLb);
+
+      var cStatus = 'VALID_CARTON';
+      if (!cidNorm) {
+        cStatus = 'REVIEW_MISSING_CARTON_ID';
+      } else if ((cartonIdCounts[cidNorm] || 0) > 1) {
+        cStatus = 'REVIEW_DUPLICATE_CARTON_ID';
+      } else if (iL === null || iW === null || iH === null || oL === null || oW === null || oH === null || tare === null) {
+        cStatus = 'REVIEW_INVALID_DIMS_OR_TARE';
+      } else {
+        var rOL = Math.ceil(oL - 1e-9);
+        var rOW = Math.ceil(oW - 1e-9);
+        var rOH = Math.ceil(oH - 1e-9);
+        if (rOL + 1e-9 < iL || rOW + 1e-9 < iW || rOH + 1e-9 < iH) {
+          cStatus = 'REVIEW_OUTSIDE_SMALLER_THAN_INSIDE';
+        }
+      }
+
+      var roundedCuIn = 0;
+      if (cStatus === 'VALID_CARTON') {
+        roundedCuIn = Math.ceil(oL - 1e-9) * Math.ceil(oW - 1e-9) * Math.ceil(oH - 1e-9);
+      } else {
+        cartonExceptionCount++;
+      }
+
+      var cEntry = {
+        cartonId: cidNorm || '(missing-carton)',
+        label: String(cr.label || cidNorm || '').trim(),
+        insideL: iL || 0,
+        insideW: iW || 0,
+        insideH: iH || 0,
+        outsideL: oL || 0,
+        outsideW: oW || 0,
+        outsideH: oH || 0,
+        tareLb: tare !== null ? tare : 0,
+        roundedOutsideCuIn: roundedCuIn,
+        status: cStatus
+      };
+      evaluatedCartons.push(cEntry);
+      if (cStatus === 'VALID_CARTON') validCartons.push(cEntry);
+    }
+
+    var itemIdCounts = {};
+    for (i = 0; i < itemRows.length; i++) {
+      var iid = normToken(itemRows[i].itemId);
+      if (iid) itemIdCounts[iid] = (itemIdCounts[iid] || 0) + 1;
+    }
+
+    var evaluatedItems = [];
+    var lowerBandCount = 0;
+    var sameBandCount = 0;
+    var singleFitCount = 0;
+    var noFitCount = 0;
+    var reviewItemCount = 0;
+
+    for (i = 0; i < itemRows.length; i++) {
+      var ir = itemRows[i];
+      var iidRaw = String(ir.itemId || '').trim();
+      var iidNorm = normToken(iidRaw);
+      var pL = parsePositiveNum(ir.paddedL);
+      var pW = parsePositiveNum(ir.paddedW);
+      var pH = parsePositiveNum(ir.paddedH);
+      var orient = normOrientation(ir.orientation);
+      var netLb = parsePositiveNum(ir.netLb);
+      var divisor = parsePositiveNum(ir.dimDivisor);
+
+      var guard = 'ELIGIBLE';
+      if (!iidNorm) {
+        guard = 'REVIEW_MISSING_ITEM_ID';
+      } else if ((itemIdCounts[iidNorm] || 0) > 1) {
+        guard = 'REVIEW_DUPLICATE_ID';
+      } else if (divisor === null) {
+        guard = 'REVIEW_CONFIRM_DIM_DIVISOR';
+      } else if (pL === null || pW === null || pH === null || netLb === null || orient === 'INVALID') {
+        guard = 'REVIEW_INVALID_ITEM_SPECS';
+      } else if (cartonExceptionCount > 0) {
+        guard = 'REVIEW_CARTON_SHELF_EXCEPTION';
+      } else if (validCartons.length === 0) {
+        guard = 'REVIEW_EMPTY_CARTON_SHELF';
+      }
+
+      if (guard !== 'ELIGIBLE') {
+        reviewItemCount++;
+        evaluatedItems.push({
+          itemId: iidRaw || '(missing-id)',
+          desc: String(ir.desc || '').trim(),
+          paddedDimsLabel: (ir.paddedL || '?') + '×' + (ir.paddedW || '?') + '×' + (ir.paddedH || '?') + '" (' + orient + ')',
+          netLb: netLb || 0,
+          dimDivisor: divisor || 0,
+          fittingCount: 0,
+          lowestBillableLb: null,
+          highestFitBillableLb: null,
+          bandSavingsLb: 0,
+          recommendedCartonId: '',
+          verdict: guard,
+          instruction: 'REVIEW (' + guard + ' — confirm divisor & valid specs before picking)',
+          comparisons: []
+        });
+        continue;
+      }
+
+      var fittingCandidates = [];
+      var allComparisons = [];
+      for (var cIdx = 0; cIdx < validCartons.length; cIdx++) {
+        var box = validCartons[cIdx];
+        var fits = doesItemFitCarton(pL, pW, pH, orient, box);
+        if (!fits) {
+          allComparisons.push({
+            cartonId: box.cartonId,
+            fits: false,
+            grossLb: null,
+            actualWholeLb: null,
+            dimWholeLb: null,
+            billableLb: null
+          });
+          continue;
+        }
+        var grossLb = Math.round((netLb + box.tareLb) * 10000) / 10000;
+        var actualWholeLb = Math.ceil(grossLb - 1e-9);
+        var dimWholeLb = Math.ceil((box.roundedOutsideCuIn / divisor) - 1e-9);
+        var billableLb = Math.max(actualWholeLb, dimWholeLb);
+        var cand = {
+          cartonId: box.cartonId,
+          label: box.label,
+          fits: true,
+          grossLb: grossLb,
+          actualWholeLb: actualWholeLb,
+          dimWholeLb: dimWholeLb,
+          billableLb: billableLb,
+          roundedOutsideCuIn: box.roundedOutsideCuIn
+        };
+        fittingCandidates.push(cand);
+        allComparisons.push(cand);
+      }
+
+      if (fittingCandidates.length === 0) {
+        noFitCount++;
+        evaluatedItems.push({
+          itemId: iidRaw,
+          desc: String(ir.desc || '').trim(),
+          paddedDimsLabel: pL + '×' + pW + '×' + pH + '" (' + orient + ')',
+          netLb: netLb,
+          dimDivisor: divisor,
+          fittingCount: 0,
+          lowestBillableLb: null,
+          highestFitBillableLb: null,
+          bandSavingsLb: 0,
+          recommendedCartonId: '',
+          verdict: 'NO_FIT',
+          instruction: 'NO FIT on shelf (0 fitting cartons in ' + orient + ' orientation — do not force-pack)',
+          comparisons: allComparisons
+        });
+        continue;
+      }
+
+      // Sort fitting cartons by: 1) lowest whole-lb billable weight, 2) smallest rounded outside cu in
+      var sortedFit = fittingCandidates.slice().sort(function (a, b) {
+        if (a.billableLb !== b.billableLb) return a.billableLb - b.billableLb;
+        return a.roundedOutsideCuIn - b.roundedOutsideCuIn;
+      });
+      var best = sortedFit[0];
+      var highestLb = sortedFit[0].billableLb;
+      for (var s = 1; s < sortedFit.length; s++) {
+        if (sortedFit[s].billableLb > highestLb) highestLb = sortedFit[s].billableLb;
+      }
+      var savingsLb = highestLb - best.billableLb;
+
+      var verdict = 'ONLY_ONE_FITS';
+      var instruction = '';
+      if (fittingCandidates.length === 1) {
+        verdict = 'ONLY_ONE_FITS';
+        singleFitCount++;
+        instruction = 'ONLY FIT: ' + best.cartonId + ' (' + best.billableLb + ' lb billable; 1 fitting box on shelf)';
+      } else if (savingsLb > 0) {
+        verdict = 'PICK_LOWER_BAND';
+        lowerBandCount++;
+        instruction = 'PICK ' + best.cartonId + ' (' + best.billableLb + ' lb vs ' + highestLb + ' lb max fitting — saves ' + savingsLb + ' billable lb)';
+      } else {
+        verdict = 'SAME_WEIGHT_BAND';
+        sameBandCount++;
+        instruction = 'SAME WEIGHT BAND at ' + best.billableLb + ' lb (no band advantage across ' + fittingCandidates.length + ' fitting boxes; smallest fit ' + best.cartonId + ')';
+      }
+
+      evaluatedItems.push({
+        itemId: iidRaw,
+        desc: String(ir.desc || '').trim(),
+        paddedDimsLabel: pL + '×' + pW + '×' + pH + '" (' + orient + ')',
+        netLb: netLb,
+        dimDivisor: divisor,
+        fittingCount: fittingCandidates.length,
+        lowestBillableLb: best.billableLb,
+        highestFitBillableLb: highestLb,
+        bandSavingsLb: savingsLb,
+        recommendedCartonId: best.cartonId,
+        verdict: verdict,
+        instruction: instruction,
+        comparisons: allComparisons
+      });
+    }
+
+    return {
+      cartons: evaluatedCartons,
+      items: evaluatedItems,
+      cartonExceptionCount: cartonExceptionCount,
+      lowerBandCount: lowerBandCount,
+      sameBandCount: sameBandCount,
+      singleFitCount: singleFitCount,
+      noFitCount: noFitCount,
+      reviewItemCount: reviewItemCount,
+      scopeNote: 'Seller-confirmed whole-pound actual-vs-DIM comparison only — does NOT guess a carrier divisor, quote postage rates, calculate surcharges, or change live checkout rates.'
+    };
+  }
+
+  return {
+    normOrientation: normOrientation,
+    parseCartonShelfRows: parseCartonShelfRows,
+    parseOrderItemRows: parseOrderItemRows,
+    evaluateStockCartonPickList: evaluateStockCartonPickList
+  };
+})();
+
+
+    function renderStockCartonSandbox() {
+      var cartons = StockCartonPickerEngine.parseCartonShelfRows(document.getElementById("scpCartonsInput").value);
+      var items = StockCartonPickerEngine.parseOrderItemRows(document.getElementById("scpItemsInput").value);
+      var res = StockCartonPickerEngine.evaluateStockCartonPickList(cartons, items);
+
+      var sBanner = document.getElementById("scpExceptionBanner");
+      if (res.cartonExceptionCount > 0 || res.reviewItemCount > 0) {
+        sBanner.style.display = "block";
+        sBanner.textContent = "⚠️ " + res.cartonExceptionCount + " carton-spec exception(s) & " + res.reviewItemCount + " item review row(s) quarantined — confirm divisor and valid clearances.";
+      } else {
+        sBanner.style.display = "none";
+      }
+
+      var tb = document.getElementById("scpResultsBody");
+      clearNode(tb);
+      res.items.forEach(function(it) {
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var cols = [
+          it.itemId,
+          it.paddedDimsLabel,
+          String(it.fittingCount),
+          it.instruction,
+          it.verdict
+        ];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 3 || c === 4) {
+            td.style.fontWeight = "800";
+            td.style.color = it.verdict === "PICK_LOWER_BAND"
+              ? "#6ee7b7"
+              : (it.verdict === "SAME_WEIGHT_BAND" || it.verdict === "ONLY_ONE_FITS" ? "#fcd34d" : "#fca5a5");
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      });
+
+      document.getElementById("scpSummaryBadge").textContent =
+        "LOWER BAND " + res.lowerBandCount + " · SAME BAND " + res.sameBandCount + " · NO FIT " + res.noFitCount + " · REVIEW " + (res.reviewItemCount + res.cartonExceptionCount);
+    }
+
+    function trackVal92SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val92_viewed")) {
+          sessionStorage.setItem("craftleaf_val92_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea92-view", "Idea 92 Stock Carton Fit & Billable Weight Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote92(choice) {
+      var msgEl = document.getElementById("val92Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val92_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val92_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea92-" + choice, "Idea 92 Stock Carton Picker Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+
+    document.getElementById("scpCartonsInput").addEventListener("input", renderStockCartonSandbox);
+    document.getElementById("scpItemsInput").addEventListener("input", renderStockCartonSandbox);
+    document.getElementById("scpWorkedBtn").addEventListener("click", function(){
+      document.getElementById("scpCartonsInput").value = "BOX-SHALLOW | Shallow Wreath Box (6.5\" In-H) | 17.5 | 13.5 | 6.5 | 18 | 14 | 7 | 0.5\nBOX-20X16X12 | Large Deep Shipper | 19.5 | 15.5 | 11.5 | 20 | 16 | 12 | 0.5\nBOX-18X14X8 | Medium Upright Shipper | 17.5 | 13.5 | 7.5 | 18 | 14 | 8 | 0.5";
+      document.getElementById("scpItemsInput").value = "WREATH-4LB | 7\" Upright Wreath (4 lb Gross) | 13 | 11 | 7 | UPRIGHT | 3.5 | 139\nWREATH-30LB | 7\" Upright Heavy Base (30 lb Gross) | 13 | 11 | 7 | UPRIGHT | 29.5 | 139\nURN-TALL-12.5 | 12.5\" Tall Urn (Exceeds Shelf) | 13 | 11 | 12.5 | UPRIGHT | 3.5 | 139";
+      renderStockCartonSandbox();
+    });
+    document.getElementById("scpRotateBtn").addEventListener("click", function(){
+      document.getElementById("scpCartonsInput").value = "BOX-SHALLOW | Shallow Wreath Box (6.5\" In-H) | 17.5 | 13.5 | 6.5 | 18 | 14 | 7 | 0.5\nBOX-20X16X12 | Large Deep Shipper | 19.5 | 15.5 | 11.5 | 20 | 16 | 12 | 0.5\nBOX-18X14X8 | Medium Upright Shipper | 17.5 | 13.5 | 7.5 | 18 | 14 | 8 | 0.5";
+      document.getElementById("scpItemsInput").value = "FRAME-UPRIGHT | 13x6x11 Must Stay Upright | 13 | 6 | 11 | UPRIGHT | 3.5 | 139\nFRAME-ROTATE | Same 13x6x11 Safe to Lay Flat | 13 | 6 | 11 | ANY | 3.5 | 139";
+      renderStockCartonSandbox();
+    });
+    document.getElementById("scpGuardsBtn").addEventListener("click", function(){
+      document.getElementById("scpCartonsInput").value = "BOX-OK | Standard Box | 12 | 10 | 8 | 13 | 11 | 9 | 0.4\nBOX-BAD | Outside Smaller Than Inside | 14 | 10 | 8 | 13 | 11 | 9 | 0.4";
+      document.getElementById("scpItemsInput").value = "ITEM-NODIV | Missing Seller Divisor | 10 | 8 | 6 | UPRIGHT | 2.5 | \nITEM-DUP | Duplicate Row | 10 | 8 | 6 | UPRIGHT | 2.5 | 139\nITEM-DUP | Duplicate Row | 10 | 8 | 6 | UPRIGHT | 2.5 | 139";
+      renderStockCartonSandbox();
+    });
+    document.getElementById("val92BuyBtn").addEventListener("click", function(){ submitValidationVote92("buy"); });
+    document.getElementById("val92FreeBtn").addEventListener("click", function(){ submitValidationVote92("free"); });
+    document.getElementById("val92SkipBtn").addEventListener("click", function(){ submitValidationVote92("skip"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
       try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
     }
     setLang(initLang === "zh" ? "zh" : "en");
+    renderStockCartonSandbox();
     renderYarnDyeLotSandbox();
     renderSupplierBillMatchSandbox();
     renderShrinkflationSandbox();
@@ -3603,6 +4166,7 @@ var YarnDyeLotAllocatorEngine = (function () {
     trackVal86SampleViewOnce();
     trackVal88SampleViewOnce();
     trackVal89SampleViewOnce();
+    trackVal92SampleViewOnce();
   })();
   </script>
 </body>
