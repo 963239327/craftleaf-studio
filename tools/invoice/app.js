@@ -1133,6 +1133,404 @@
   }
 
   // =========================================================================
+  // Issue #94: Local Cross-Client Billable Time Overlap Checker (Read-Only)
+  // =========================================================================
+  var SAMPLE_OVERLAP_WORKED_ROWS = [
+    { rowNum: 2, sourceLabel: 'Client A CSV', rowId: 'CL-A-101', clientName: 'Client A (Acme Product Labs)', start: '2026-11-24 09:00', end: '2026-11-24 10:00', description: 'API schema review & webhook mapping', rawBillable: 'YES' },
+    { rowNum: 2, sourceLabel: 'Client B CSV', rowId: 'CL-B-204', clientName: 'Client B (Beacon Retail Co.)', start: '2026-11-24 09:45', end: '2026-11-24 10:15', description: 'Urgent checkout hotfix triage call', rawBillable: 'YES' },
+    { rowNum: 3, sourceLabel: 'Client A CSV', rowId: 'CL-A-102', clientName: 'Client A (Acme Product Labs)', start: '2026-11-24 10:15', end: '2026-11-24 10:45', description: 'Post-call test harness notes (touches 10:15 boundary)', rawBillable: 'YES' }
+  ];
+
+  var SAMPLE_OVERLAP_NESTED_ROWS = [
+    { rowNum: 2, sourceLabel: 'Combined CSV', rowId: 'NL-301', clientName: 'Client A (Acme Product Labs)', start: '2026-11-25 13:00', end: '2026-11-25 15:00', description: 'Deep-dive migration pairing', rawBillable: 'YES' },
+    { rowNum: 3, sourceLabel: 'Combined CSV', rowId: 'NL-302', clientName: 'Client B (Beacon Retail Co.)', start: '2026-11-25 13:30', end: '2026-11-25 14:00', description: 'Nested 30-min production check', rawBillable: 'YES' },
+    { rowNum: 4, sourceLabel: 'Combined CSV', rowId: 'NL-303', clientName: 'Internal Studio', start: '2026-11-25 13:45', end: '2026-11-25 14:15', description: 'Personal reminder note (non-billable)', rawBillable: 'NO' },
+    { rowNum: 5, sourceLabel: 'Combined CSV', rowId: 'NL-304', clientName: 'Client A (Acme Product Labs)', start: '2026-11-25 15:00', end: '2026-11-25 15:30', description: 'Adjacent follow-up (touches 15:00 only)', rawBillable: 'YES' }
+  ];
+
+  var SAMPLE_OVERLAP_AMBIGUOUS_ROWS = [
+    { rowNum: 2, sourceLabel: 'Combined CSV', rowId: 'AMB-401', clientName: 'Client A', start: '2026-11-26 09:00', end: '', rawDurationIgnored: '60', description: 'Missing End timestamp (never guessed from duration)', rawBillable: 'YES' },
+    { rowNum: 3, sourceLabel: 'Combined CSV', rowId: 'AMB-402', clientName: 'Client B', start: '03/04/2026 09:30', end: '03/04/2026 10:30', rawDurationIgnored: '60', description: 'Ambiguous slash date MM/DD vs DD/MM', rawBillable: 'YES' },
+    { rowNum: 4, sourceLabel: 'Combined CSV', rowId: 'AMB-403', clientName: 'Client A', start: '2026-11-26 11:00', end: '2026-11-26 10:30', rawDurationIgnored: '30', description: 'End earlier than Start', rawBillable: 'YES' },
+    { rowNum: 5, sourceLabel: 'Combined CSV', rowId: 'AMB-401', clientName: 'Client B', start: '2026-11-26 14:00', end: '2026-11-26 14:30', rawDurationIgnored: '30', description: 'Duplicate RowID across logs', rawBillable: 'YES' }
+  ];
+
+  function pad2Overlap(n) {
+    return n < 10 ? ('0' + n) : String(n);
+  }
+
+  function isValidCalendarDateOverlap(y, m, d) {
+    if (y < 1970 || y > 2100 || m < 1 || m > 12 || d < 1 || d > 31) return false;
+    var dt = new Date(Date.UTC(y, m - 1, d));
+    return dt.getUTCFullYear() === y && (dt.getUTCMonth() + 1) === m && dt.getUTCDate() === d;
+  }
+
+  function parseUnambiguousTimestampOv(rawTs, rawDateCol, allowEndOfDay24) {
+    var ts = String(rawTs == null ? '' : rawTs).trim();
+    var dtCol = String(rawDateCol == null ? '' : rawDateCol).trim();
+    if (!ts) {
+      return { ok: false, code: 'MISSING_TIMESTAMP', detail: 'Timestamp is blank (never guessed from duration).' };
+    }
+    if (/[\/.]/.test(ts.split(/[T\s]/)[0]) || /[\/.]/.test(dtCol)) {
+      return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Ambiguous date separator in "' + (ts || dtCol) + '"; use ISO YYYY-MM-DD HH:MM.' };
+    }
+    if (/\b(?:am|pm)\b/i.test(ts)) {
+      return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: '12-hour AM/PM clock in "' + ts + '"; use 24-hour YYYY-MM-DD HH:MM.' };
+    }
+
+    var timeOnlyMatch = ts.match(/^(\d{2}):(\d{2})(?::(\d{2}))?$/);
+    if (timeOnlyMatch) {
+      if (!dtCol) {
+        return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Time-only "' + ts + '" has no YYYY-MM-DD date; include full YYYY-MM-DD HH:MM.' };
+      }
+      var dm = dtCol.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!dm) {
+        return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Date column "' + dtCol + '" must be YYYY-MM-DD.' };
+      }
+      var y1 = parseInt(dm[1], 10), mo1 = parseInt(dm[2], 10), d1 = parseInt(dm[3], 10);
+      if (!isValidCalendarDateOverlap(y1, mo1, d1)) {
+        return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Invalid calendar date "' + dtCol + '".' };
+      }
+      var hh1 = parseInt(timeOnlyMatch[1], 10), mm1 = parseInt(timeOnlyMatch[2], 10), ss1 = timeOnlyMatch[3] ? parseInt(timeOnlyMatch[3], 10) : 0;
+      if (hh1 === 24 && allowEndOfDay24 && mm1 === 0 && ss1 === 0) {
+        return { ok: true, ms: Date.UTC(y1, mo1 - 1, d1, 24, 0, 0), mode: 'NAIVE', canonical: dtCol + ' 24:00' };
+      }
+      if (hh1 > 23 || mm1 > 59 || ss1 > 59) {
+        return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Out-of-range 24h clock in "' + ts + '".' };
+      }
+      return {
+        ok: true,
+        ms: Date.UTC(y1, mo1 - 1, d1, hh1, mm1, ss1),
+        mode: 'NAIVE',
+        canonical: dtCol + ' ' + pad2Overlap(hh1) + ':' + pad2Overlap(mm1) + (ss1 > 0 ? (':' + pad2Overlap(ss1)) : '')
+      };
+    }
+
+    var fullMatch = ts.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d{1,3})?(Z|([+-])(\d{2}):?(\d{2}))?$/);
+    if (!fullMatch) {
+      return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Unrecognized or ambiguous timestamp "' + ts + '"; expected YYYY-MM-DD HH:MM.' };
+    }
+    var y2 = parseInt(fullMatch[1], 10), mo2 = parseInt(fullMatch[2], 10), d2 = parseInt(fullMatch[3], 10);
+    if (!isValidCalendarDateOverlap(y2, mo2, d2)) {
+      return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Invalid calendar date in "' + ts + '".' };
+    }
+    if (dtCol && !/^\d{4}-\d{2}-\d{2}$/.test(dtCol)) {
+      return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Invalid Date column "' + dtCol + '".' };
+    }
+    var hh2 = parseInt(fullMatch[4], 10), mm2 = parseInt(fullMatch[5], 10), ss2 = fullMatch[6] ? parseInt(fullMatch[6], 10) : 0;
+    var tzToken = fullMatch[7] || '';
+    if (hh2 === 24 && allowEndOfDay24 && mm2 === 0 && ss2 === 0 && !tzToken) {
+      return { ok: true, ms: Date.UTC(y2, mo2 - 1, d2, 24, 0, 0), mode: 'NAIVE', canonical: fullMatch[1] + '-' + fullMatch[2] + '-' + fullMatch[3] + ' 24:00' };
+    }
+    if (hh2 > 23 || mm2 > 59 || ss2 > 59) {
+      return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Out-of-range 24h time in "' + ts + '".' };
+    }
+    var baseUtcMs = Date.UTC(y2, mo2 - 1, d2, hh2, mm2, ss2);
+    if (!tzToken) {
+      return {
+        ok: true,
+        ms: baseUtcMs,
+        mode: 'NAIVE',
+        canonical: fullMatch[1] + '-' + fullMatch[2] + '-' + fullMatch[3] + ' ' + pad2Overlap(hh2) + ':' + pad2Overlap(mm2) + (ss2 > 0 ? (':' + pad2Overlap(ss2)) : '')
+      };
+    }
+    var offsetMin = 0;
+    if (tzToken !== 'Z') {
+      var sign = fullMatch[8] === '-' ? -1 : 1;
+      var offH = parseInt(fullMatch[9], 10), offM = parseInt(fullMatch[10], 10);
+      if (offH > 14 || offM > 59) {
+        return { ok: false, code: 'AMBIGUOUS_TIMESTAMP', detail: 'Invalid UTC offset in "' + ts + '".' };
+      }
+      offsetMin = sign * (offH * 60 + offM);
+    }
+    return {
+      ok: true,
+      ms: baseUtcMs - offsetMin * 60000,
+      mode: 'OFFSET',
+      canonical: fullMatch[1] + '-' + fullMatch[2] + '-' + fullMatch[3] + ' ' + pad2Overlap(hh2) + ':' + pad2Overlap(mm2) + (ss2 > 0 ? (':' + pad2Overlap(ss2)) : '') + (tzToken === 'Z' ? 'Z' : tzToken)
+    };
+  }
+
+  function formatUtcNeutralMsOverlap(ms, suffix) {
+    var d = new Date(ms);
+    var ss = d.getUTCSeconds();
+    return d.getUTCFullYear() + '-' + pad2Overlap(d.getUTCMonth() + 1) + '-' + pad2Overlap(d.getUTCDate()) + ' ' +
+      pad2Overlap(d.getUTCHours()) + ':' + pad2Overlap(d.getUTCMinutes()) + (ss > 0 ? (':' + pad2Overlap(ss)) : '') + (suffix || '');
+  }
+
+  function formatOverlapWindowLabel(startMs, endMs, mode) {
+    var sfx = mode === 'OFFSET' ? ' UTC' : '';
+    var sFull = formatUtcNeutralMsOverlap(startMs, '');
+    var eFull = formatUtcNeutralMsOverlap(endMs, '');
+    if (sFull.slice(0, 10) === eFull.slice(0, 10)) {
+      return sFull.slice(0, 10) + ' ' + sFull.slice(11) + '\u2013' + eFull.slice(11) + sfx;
+    }
+    return sFull + '\u2013' + eFull + sfx;
+  }
+
+  function parseOverlapLogCsv(csvText, fallbackClientAlias, sourceLabel) {
+    var rows = parseCsvRowsRfc4180(csvText);
+    if (rows.length < 2) return [];
+    var hdr = rows[0].map(function (h) { return String(h || '').toLowerCase().replace(/[^a-z0-9]/g, ''); });
+    function col(names) {
+      for (var i = 0; i < names.length; i++) {
+        var idx = hdr.indexOf(names[i]);
+        if (idx !== -1) return idx;
+      }
+      return -1;
+    }
+    var cId = col(['rowid', 'entryid', 'id', 'logid', 'timeentryid']);
+    var cCli = col(['client', 'clientalias', 'clientname', 'customer', 'account']);
+    var cDate = col(['date', 'workdate', 'logdate']);
+    var cStart = col(['start', 'starttime', 'starttimestamp', 'startedat', 'begin']);
+    var cEnd = col(['end', 'endtime', 'endtimestamp', 'endedat', 'stop', 'finish']);
+    var cDesc = col(['description', 'task', 'notes', 'summary', 'memo']);
+    var cBill = col(['billable', 'isbillable']);
+    var cDur = col(['duration', 'durationminutes', 'minutes', 'hours']);
+
+    var out = [];
+    for (var r = 1; r < rows.length; r++) {
+      var row = rows[r];
+      var cliVal = cCli >= 0 ? (row[cCli] || '') : '';
+      if (!cliVal && fallbackClientAlias) cliVal = String(fallbackClientAlias).trim();
+      out.push({
+        rowNum: r + 1,
+        sourceLabel: sourceLabel || '',
+        rowId: cId >= 0 ? (row[cId] || '') : '',
+        clientName: cliVal,
+        date: cDate >= 0 ? (row[cDate] || '') : '',
+        start: cStart >= 0 ? (row[cStart] || '') : '',
+        end: cEnd >= 0 ? (row[cEnd] || '') : '',
+        rawDurationIgnored: cDur >= 0 ? (row[cDur] || '') : '',
+        description: cDesc >= 0 ? (row[cDesc] || '') : '',
+        rawBillable: cBill >= 0 ? (row[cBill] || '') : 'YES'
+      });
+    }
+    return out;
+  }
+
+  function evaluateBillableTimeOverlaps(logRows) {
+    var arr = Array.isArray(logRows) ? logRows : [];
+    var issues = [];
+    var seenIds = {};
+    var parsedBillable = [];
+    var excludedNonBillable = [];
+    var modesSeen = { NAIVE: 0, OFFSET: 0 };
+
+    for (var i = 0; i < arr.length; i++) {
+      var r = arr[i] || {};
+      var rowLabel = (r.sourceLabel ? (r.sourceLabel + ' ') : '') + 'row ' + (r.rowNum || (i + 2));
+      var idRaw = String(r.rowId !== undefined ? r.rowId : (r.entryId || '')).trim();
+      var idKey = normalizeEntryIdKey(idRaw);
+      var cliRaw = String(r.clientName !== undefined ? r.clientName : (r.client || '')).trim();
+      var cliKey = normalizeClientKey(cliRaw);
+
+      if (!idKey) {
+        issues.push({ code: 'MISSING_ROW_ID', rowId: '(blank)', detail: 'Log ' + rowLabel + ' has a blank RowID; assign stable IDs before checking overlaps.' });
+        continue;
+      }
+      if (seenIds[idKey]) {
+        issues.push({ code: 'DUPLICATE_ROW_ID', rowId: idRaw, detail: 'Duplicate RowID "' + idRaw + '" appears in both ' + seenIds[idKey] + ' and ' + rowLabel + '.' });
+        continue;
+      }
+      seenIds[idKey] = rowLabel;
+
+      if (!cliKey) {
+        issues.push({ code: 'MISSING_CLIENT', rowId: idRaw, detail: 'Row "' + idRaw + '" (' + rowLabel + ') has a blank Client alias.' });
+        continue;
+      }
+
+      var rawBill = r.rawBillable !== undefined ? r.rawBillable : (r.billable !== undefined ? r.billable : 'YES');
+      var billFlag = (typeof rawBill === 'boolean') ? rawBill : parseBillableFlag(String(rawBill).trim() || 'YES');
+      if (billFlag === null) {
+        issues.push({ code: 'INVALID_BILLABLE_FLAG', rowId: idRaw, detail: 'Row "' + idRaw + '" must mark Billable as YES or NO.' });
+        continue;
+      }
+
+      var pStart = parseUnambiguousTimestampOv(r.start, r.date, false);
+      if (!pStart.ok) {
+        var durHint = r.rawDurationIgnored ? ' (duration "' + r.rawDurationIgnored + '" is intentionally ignored \u2014 never guessed)' : '';
+        issues.push({ code: pStart.code, rowId: idRaw, detail: 'Row "' + idRaw + '" Start: ' + pStart.detail + durHint });
+        continue;
+      }
+      var pEnd = parseUnambiguousTimestampOv(r.end, r.date, true);
+      if (!pEnd.ok) {
+        var durHint2 = r.rawDurationIgnored ? ' (duration "' + r.rawDurationIgnored + '" is intentionally ignored \u2014 never guessed)' : '';
+        issues.push({ code: pEnd.code, rowId: idRaw, detail: 'Row "' + idRaw + '" End: ' + pEnd.detail + durHint2 });
+        continue;
+      }
+      if (pStart.mode !== pEnd.mode) {
+        issues.push({ code: 'MIXED_TIMEZONE_AMBIGUITY', rowId: idRaw, detail: 'Row "' + idRaw + '" mixes timezone-offset and naive timestamps.' });
+        continue;
+      }
+      if (pEnd.ms <= pStart.ms) {
+        issues.push({ code: 'INVALID_INTERVAL_ORDER', rowId: idRaw, detail: 'Row "' + idRaw + '" End (' + pEnd.canonical + ') must be strictly after Start (' + pStart.canonical + ').' });
+        continue;
+      }
+
+      if (!billFlag) {
+        excludedNonBillable.push({
+          rowId: idRaw,
+          clientName: cliRaw,
+          intervalLabel: formatOverlapWindowLabel(pStart.ms, pEnd.ms, pStart.mode),
+          minutes: Math.round(((pEnd.ms - pStart.ms) / 60000) * 100) / 100,
+          description: String(r.description || '')
+        });
+        continue;
+      }
+
+      modesSeen[pStart.mode] += 1;
+      parsedBillable.push({
+        rowId: idRaw,
+        clientName: cliRaw,
+        clientKey: cliKey,
+        startMs: pStart.ms,
+        endMs: pEnd.ms,
+        mode: pStart.mode,
+        intervalLabel: formatOverlapWindowLabel(pStart.ms, pEnd.ms, pStart.mode),
+        minutes: Math.round(((pEnd.ms - pStart.ms) / 60000) * 100) / 100,
+        description: String(r.description || '')
+      });
+    }
+
+    if (modesSeen.NAIVE > 0 && modesSeen.OFFSET > 0) {
+      issues.push({
+        code: 'MIXED_TIMEZONE_AMBIGUITY',
+        rowId: '(multiple)',
+        detail: 'Some billable rows include UTC offsets while others are timezone-naive; standardize all rows first.'
+      });
+      return {
+        status: 'REVIEW_INPUT_ISSUES',
+        checkedBillableCount: parsedBillable.length,
+        excludedNonBillableRows: excludedNonBillable,
+        touchingBoundaryCount: 0,
+        overlaps: [],
+        crossClientOverlapCount: 0,
+        sameClientOverlapCount: 0,
+        unionOverlappedMinutes: 0,
+        formattedUnionOverlap: formatMinutesHours(0),
+        issues: issues
+      };
+    }
+
+    var sorted = parsedBillable.slice().sort(function (a, b) {
+      if (a.startMs !== b.startMs) return a.startMs - b.startMs;
+      if (a.endMs !== b.endMs) return a.endMs - b.endMs;
+      return a.rowId < b.rowId ? -1 : (a.rowId > b.rowId ? 1 : 0);
+    });
+
+    var overlaps = [];
+    var rawOverlapIntervals = [];
+    var touchingBoundaryCount = 0;
+
+    for (var aIdx = 0; aIdx < sorted.length; aIdx++) {
+      var rowA = sorted[aIdx];
+      for (var bIdx = aIdx + 1; bIdx < sorted.length; bIdx++) {
+        var rowB = sorted[bIdx];
+        if (rowB.startMs > rowA.endMs) break;
+        if (rowB.startMs === rowA.endMs) {
+          touchingBoundaryCount += 1;
+          continue;
+        }
+        var ovStart = rowA.startMs > rowB.startMs ? rowA.startMs : rowB.startMs;
+        var ovEnd = rowA.endMs < rowB.endMs ? rowA.endMs : rowB.endMs;
+        if (ovEnd > ovStart) {
+          var ovMin = Math.round(((ovEnd - ovStart) / 60000) * 100) / 100;
+          var scope = rowA.clientKey !== rowB.clientKey ? 'CROSS_CLIENT' : 'SAME_CLIENT';
+          rawOverlapIntervals.push([ovStart, ovEnd]);
+          overlaps.push({
+            pairIndex: overlaps.length + 1,
+            scope: scope,
+            sharedWindow: formatOverlapWindowLabel(ovStart, ovEnd, rowA.mode),
+            overlapStartMs: ovStart,
+            overlapEndMs: ovEnd,
+            overlapMinutes: ovMin,
+            formattedOverlap: formatMinutesHours(ovMin),
+            rowIdA: rowA.rowId,
+            clientA: rowA.clientName,
+            intervalA: rowA.intervalLabel,
+            descriptionA: rowA.description,
+            rowIdB: rowB.rowId,
+            clientB: rowB.clientName,
+            intervalB: rowB.intervalLabel,
+            descriptionB: rowB.description
+          });
+        }
+      }
+    }
+
+    var unionOverlappedMinutes = 0;
+    if (rawOverlapIntervals.length > 0) {
+      rawOverlapIntervals.sort(function (x, y) { return x[0] !== y[0] ? (x[0] - y[0]) : (x[1] - y[1]); });
+      var curS = rawOverlapIntervals[0][0], curE = rawOverlapIntervals[0][1];
+      var unionMs = 0;
+      for (var u = 1; u < rawOverlapIntervals.length; u++) {
+        var nxt = rawOverlapIntervals[u];
+        if (nxt[0] <= curE) {
+          if (nxt[1] > curE) curE = nxt[1];
+        } else {
+          unionMs += (curE - curS);
+          curS = nxt[0];
+          curE = nxt[1];
+        }
+      }
+      unionMs += (curE - curS);
+      unionOverlappedMinutes = Math.round((unionMs / 60000) * 100) / 100;
+    }
+
+    var crossCount = 0, sameCount = 0;
+    for (var oi = 0; oi < overlaps.length; oi++) {
+      if (overlaps[oi].scope === 'CROSS_CLIENT') crossCount += 1;
+      else sameCount += 1;
+    }
+
+    var status = 'CLEAN_NO_OVERLAPS';
+    if (issues.length > 0) status = 'REVIEW_INPUT_ISSUES';
+    else if (overlaps.length > 0) status = 'OVERLAPS_FOUND';
+
+    return {
+      status: status,
+      checkedBillableCount: sorted.length,
+      excludedNonBillableRows: excludedNonBillable,
+      touchingBoundaryCount: touchingBoundaryCount,
+      overlaps: overlaps,
+      crossClientOverlapCount: crossCount,
+      sameClientOverlapCount: sameCount,
+      unionOverlappedMinutes: unionOverlappedMinutes,
+      formattedUnionOverlap: formatMinutesHours(unionOverlappedMinutes),
+      issues: issues
+    };
+  }
+
+  function serializeOverlapReportCsv(evalRes) {
+    function csvSafeOv(v) {
+      var s = String(v == null ? '' : v);
+      if (/^[=+\-@]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    var res = evalRes || {};
+    var lines = ['"OverlapScope","SharedWindow","OverlapMinutes","RowID_1","Client_1","Interval_1","RowID_2","Client_2","Interval_2","ReviewNote"'];
+    var ovs = Array.isArray(res.overlaps) ? res.overlaps : [];
+    for (var i = 0; i < ovs.length; i++) {
+      var o = ovs[i];
+      var mStr = (o.overlapMinutes % 1 === 0) ? String(Math.round(o.overlapMinutes)) : o.overlapMinutes.toFixed(2);
+      lines.push([
+        csvSafeOv(o.scope),
+        csvSafeOv(o.sharedWindow),
+        csvSafeOv(mStr),
+        csvSafeOv(o.rowIdA),
+        csvSafeOv(o.clientA),
+        csvSafeOv(o.intervalA),
+        csvSafeOv(o.rowIdB),
+        csvSafeOv(o.clientB),
+        csvSafeOv(o.intervalB),
+        csvSafeOv('Review-only flag; source logs unchanged')
+      ].join(','));
+    }
+    return lines.join('\r\n');
+  }
+
+  // =========================================================================
   // Pure-JS ISO/IEC 18004 Scannable QR Code Matrix & Vector SVG Generator
   // Supports Versions 1–6 (ECC Level L, Byte Mode, up to 134 UTF-8 bytes)
   // =========================================================================
@@ -1442,6 +1840,7 @@
       tabLedger: 'Invoice Ledger',
       tabStatement: 'Open Statement',
       tabUnbilled: 'Unbilled Hours',
+      tabOverlap: 'Time Overlap',
       btnSaveClient: '+ Save Current Client',
       btnSaveItem: '+ Save First Line Item',
       btnSaveLedger: '+ Save Invoice to Ledger',
@@ -1467,6 +1866,14 @@
       btnConfirmUnb: '✓ Confirm Invoice # & Update Register',
       btnExportUnbReg: '⬇ Save Register CSV',
       btnPushUnbToInv: '➕ Copy Unbilled to Invoice',
+      ovIntro: 'Check shared clock minutes across client logs before invoicing (read-only; never edits logs).',
+      btnOvWorked: '🧪 15m Overlap + 10:15 Touch',
+      btnOvNested: '🪆 Nested 30m',
+      btnOvAmbig: '⚠️ Test Ambiguous Input',
+      btnOvCsvA: '📂 Log A / Combined CSV',
+      btnOvCsvB: '📂 Optional Log B CSV',
+      btnExportOvCsv: '⬇ Overlap Review CSV',
+      btnPrintOv: '🖨️ Print Review Sheet',
       tipText: 'Get paid faster with zero monthly SaaS fees? Support independent offline software:',
       tipCta: '☕ Support CraftLeaf Studio',
       guidesFooterTitle: 'Free Industry Invoice & Receipt Templates:',
@@ -1536,6 +1943,7 @@
       tabLedger: '历史账单台账',
       tabStatement: '未结对账单',
       tabUnbilled: '未开票工时核查',
+      tabOverlap: '时段重叠核查',
       btnSaveClient: '+ 保存当前客户',
       btnSaveItem: '+ 保存首行服务项',
       btnSaveLedger: '+ 归档当前账单至台账',
@@ -1561,6 +1969,14 @@
       btnConfirmUnb: '✓ 确认发票号并更新登记簿',
       btnExportUnbReg: '⬇ 导出登记簿 CSV',
       btnPushUnbToInv: '➕ 填入当前发票草稿',
+      ovIntro: '开票前核查跨客户工时表是否存在同一自然钟点重叠（纯只读提示，绝不改原始记录）。',
+      btnOvWorked: '🧪 15分钟重叠+10:15临界不误报',
+      btnOvNested: '🪆 30分钟嵌套重叠',
+      btnOvAmbig: '⚠️ 测试缺失/歧义拦截',
+      btnOvCsvA: '📂 导入客户A/合并CSV',
+      btnOvCsvB: '📂 可选导入客户B CSV',
+      btnExportOvCsv: '⬇ 导出重叠核查 CSV',
+      btnPrintOv: '🖨️ 打印核查清单',
       tipText: '省下了每月 $15 的海外 SaaS 账单软件月费？欢迎支持纯本地独立工具：',
       tipCta: '☕ 赞助支持青叶工坊',
       guidesFooterTitle: '出海自由职业者与独立开发者常用发票模板指南：',
@@ -1681,6 +2097,13 @@
     SAMPLE_UNBILLED_TIMESHEET: SAMPLE_UNBILLED_TIMESHEET,
     SAMPLE_UNBILLED_REGISTER: SAMPLE_UNBILLED_REGISTER,
     SAMPLE_UNBILLED_CONFLICT_ROW: SAMPLE_UNBILLED_CONFLICT_ROW,
+    parseUnambiguousTimestampOv: parseUnambiguousTimestampOv,
+    parseOverlapLogCsv: parseOverlapLogCsv,
+    evaluateBillableTimeOverlaps: evaluateBillableTimeOverlaps,
+    serializeOverlapReportCsv: serializeOverlapReportCsv,
+    SAMPLE_OVERLAP_WORKED_ROWS: SAMPLE_OVERLAP_WORKED_ROWS,
+    SAMPLE_OVERLAP_NESTED_ROWS: SAMPLE_OVERLAP_NESTED_ROWS,
+    SAMPLE_OVERLAP_AMBIGUOUS_ROWS: SAMPLE_OVERLAP_AMBIGUOUS_ROWS,
     generateQRSvg: generateQRSvg
   };
 
@@ -1803,6 +2226,11 @@
       statusMsg: '',
       timeEntries: SAMPLE_UNBILLED_TIMESHEET.slice(),
       registerEntries: SAMPLE_UNBILLED_REGISTER.slice()
+    },
+    ov: {
+      useDemo: true,
+      feedARows: SAMPLE_OVERLAP_WORKED_ROWS.slice(),
+      feedBRows: []
     },
     doc: {
       docType: 'invoice',
@@ -2388,6 +2816,150 @@
     paperEl.appendChild(botWrap);
   }
 
+  function getActiveOverlapRows() {
+    return (state.ov.feedARows || []).concat(state.ov.feedBRows || []);
+  }
+
+  function renderOverlapPaperDom(paperEl) {
+    while (paperEl.firstChild) paperEl.removeChild(paperEl.firstChild);
+    var unlocked = isPro();
+    var d = state.doc;
+    var isZh = d.docLang === 'zh';
+    var effectiveAccent = unlocked ? (d.accentColor || '#1e3a8a') : '#1e3a8a';
+    paperEl.style.setProperty('--inv-accent', effectiveAccent);
+    paperEl.classList.toggle('paper-letter', state.paper === 'letter');
+
+    var res = evaluateBillableTimeOverlaps(getActiveOverlapRows());
+
+    var topWrap = document.createElement('div');
+    var header = document.createElement('div');
+    header.className = 'inv-header';
+
+    var brandBox = document.createElement('div');
+    brandBox.className = 'inv-brand-box';
+    var senderH2 = document.createElement('h2');
+    senderH2.className = 'inv-sender-name';
+    senderH2.textContent = isZh ? '跨客户计费工时重叠预检报告' : 'Cross-Client Billable Time Overlap Review';
+    brandBox.appendChild(senderH2);
+    var subMeta = document.createElement('div');
+    subMeta.className = 'inv-preline';
+    subMeta.textContent = isZh
+      ? ('已核查计费行：' + res.checkedBillableCount + ' · 相接临界不误报：' + res.touchingBoundaryCount + ' · 非计费剔除：' + res.excludedNonBillableRows.length)
+      : ('Billable Rows Checked: ' + res.checkedBillableCount + ' · Touching Boundaries Ignored: ' + res.touchingBoundaryCount + ' · Non-Billable Excluded: ' + res.excludedNonBillableRows.length);
+    brandBox.appendChild(subMeta);
+
+    var docMeta = document.createElement('div');
+    docMeta.className = 'inv-doc-meta';
+    var badge = document.createElement('div');
+    badge.className = 'inv-doc-badge';
+    badge.textContent = isZh ? '只读时段核查清单' : 'READ-ONLY OVERLAP CHECK';
+    docMeta.appendChild(badge);
+    var noteEl = document.createElement('div');
+    noteEl.style.fontSize = '11px';
+    noteEl.style.color = '#64748b';
+    noteEl.style.marginTop = '4px';
+    noteEl.textContent = isZh ? '绝不修改原始日志、不自动扣减工时、不生成账单' : 'Never edits logs, subtracts time, sets charges, or issues invoices';
+    docMeta.appendChild(noteEl);
+
+    header.appendChild(brandBox);
+    header.appendChild(docMeta);
+    topWrap.appendChild(header);
+
+    var notice = document.createElement('div');
+    notice.className = 'stmt-Excluded-note';
+    notice.style.background = res.status === 'REVIEW_INPUT_ISSUES' ? '#fef2f2' : (res.overlaps.length > 0 ? '#fffbeb' : '#ecfdf5');
+    notice.style.borderLeft = '4px solid ' + (res.status === 'REVIEW_INPUT_ISSUES' ? '#ef4444' : (res.overlaps.length > 0 ? '#d97706' : '#059669'));
+    notice.style.padding = '9px 12px';
+    notice.style.borderRadius = '8px';
+    notice.style.fontSize = '12px';
+    notice.style.margin = '12px 0';
+    notice.textContent = isZh
+      ? '提示说明：发现钟点重叠仅代表发账单前值得复核（并非认定计费违规）；首尾相接（如 10:15 结束紧接 10:15 开始）共享 0 分钟，绝不误报。'
+      : 'Review Guidance: A flagged interval prompts pre-invoice review (not proof of improper billing). Touching boundaries (end == start, e.g., 10:15 followed by 10:15) share 0 minutes and are never flagged.';
+    topWrap.appendChild(notice);
+
+    if (res.issues.length > 0) {
+      var errBox = document.createElement('div');
+      errBox.className = 'stmt-conflict-box';
+      errBox.style.display = 'block';
+      errBox.style.marginBottom = '12px';
+      var errTitle = document.createElement('strong');
+      errTitle.textContent = isZh
+        ? '⚠️ 存在缺失或歧义时间戳 / 重复行号（绝不按时长盲猜起止时间）：'
+        : '⚠️ Ambiguous or Incomplete Input Flagged (Never Guessed from Duration):';
+      errBox.appendChild(errTitle);
+      res.issues.forEach(function (iss) {
+        var line = document.createElement('div');
+        line.style.marginTop = '4px';
+        line.textContent = '• [' + iss.code + '] ' + iss.detail;
+        errBox.appendChild(line);
+      });
+      topWrap.appendChild(errBox);
+    }
+
+    var tbl = document.createElement('table');
+    tbl.className = 'inv-table';
+    var thead = document.createElement('thead');
+    var hr = document.createElement('tr');
+    var cols = isZh
+      ? ['重叠钟点区间', '重叠时长', '记录 1 (行号 · 客户 · 原区间)', '记录 2 (行号 · 客户 · 原区间)', '类型']
+      : ['Shared Clock Window', 'Overlap', 'Row 1 (ID · Client · Span)', 'Row 2 (ID · Client · Span)', 'Scope'];
+    cols.forEach(function (c) {
+      var th = document.createElement('th');
+      th.textContent = c;
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    tbl.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+    if (res.overlaps.length === 0) {
+      var trEmpty = document.createElement('tr');
+      var tdEmpty = document.createElement('td');
+      tdEmpty.colSpan = 5;
+      tdEmpty.style.fontWeight = '700';
+      tdEmpty.style.color = res.issues.length > 0 ? '#b91c1c' : '#059669';
+      tdEmpty.textContent = res.issues.length > 0
+        ? (isZh ? '请先修正上方缺失/歧义时间戳或重复 RowID 后再完成核查。' : 'Resolve the ambiguous/missing input rows above first to complete the overlap check.')
+        : (isZh ? '✓ 未发现任何计费钟点重叠。' : '✓ 0 overlapping billable clock intervals found.');
+      trEmpty.appendChild(tdEmpty);
+      tbody.appendChild(trEmpty);
+    } else {
+      res.overlaps.forEach(function (ov) {
+        var tr = document.createElement('tr');
+        var cells = [
+          ov.sharedWindow,
+          ov.formattedOverlap,
+          ov.rowIdA + ' · ' + ov.clientA + ' (' + ov.intervalA + ')',
+          ov.rowIdB + ' · ' + ov.clientB + ' (' + ov.intervalB + ')',
+          ov.scope === 'CROSS_CLIENT' ? (isZh ? '跨客户重叠' : 'Cross-Client') : (isZh ? '同客户重叠' : 'Same-Client')
+        ];
+        cells.forEach(function (val, idx) {
+          var td = document.createElement('td');
+          if (idx <= 1) {
+            td.style.fontWeight = '800';
+            td.style.color = '#b45309';
+          }
+          td.textContent = val;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+    tbl.appendChild(tbody);
+    topWrap.appendChild(tbl);
+
+    var botWrap = document.createElement('div');
+    if (!unlocked || !d.hideFooter) {
+      var ftr = document.createElement('div');
+      ftr.className = 'inv-footer-brand';
+      ftr.textContent = (DOC_LABELS[d.docLang] || DOC_LABELS.en).freeFooter;
+      botWrap.appendChild(ftr);
+    }
+    paperEl.appendChild(topWrap);
+    paperEl.appendChild(botWrap);
+  }
+
   function updateInvoicePreview() {
     if (state.previewMode === 'statement') {
       renderStatementPaperDom($('invoicePaper'));
@@ -2395,6 +2967,10 @@
     }
     if (state.previewMode === 'unbilled') {
       renderUnbilledPaperDom($('invoicePaper'));
+      return;
+    }
+    if (state.previewMode === 'overlap') {
+      renderOverlapPaperDom($('invoicePaper'));
       return;
     }
     var unlocked = isPro();
@@ -2664,6 +3240,39 @@
     }
   }
 
+  function syncOverlapControls() {
+    var res = evaluateBillableTimeOverlaps(getActiveOverlapRows());
+    if ($('ovSummaryBanner')) {
+      if (res.status === 'REVIEW_INPUT_ISSUES') {
+        $('ovSummaryBanner').textContent = state.lang === 'zh'
+          ? ('⚠️ 发现 ' + res.issues.length + ' 项输入歧义/缺失行，请先修正后再依赖零重叠结论')
+          : ('⚠️ ' + res.issues.length + ' input hygiene issue(s) flagged — never guessed from durations');
+      } else if (res.overlaps.length > 0) {
+        $('ovSummaryBanner').textContent = state.lang === 'zh'
+          ? ('🔎 提示复核：' + res.overlaps.length + ' 处重叠区间（共 ' + res.formattedUnionOverlap + '）· 相接临界忽略 ' + res.touchingBoundaryCount + ' 处')
+          : ('🔎 Flagged for review: ' + res.overlaps.length + ' interval(s) (' + res.formattedUnionOverlap + ') · Touching ignored: ' + res.touchingBoundaryCount);
+      } else {
+        $('ovSummaryBanner').textContent = state.lang === 'zh'
+          ? ('✓ 已核查 ' + res.checkedBillableCount + ' 笔计费记录：0 重叠（相接临界忽略 ' + res.touchingBoundaryCount + ' 处）')
+          : ('✓ ' + res.checkedBillableCount + ' billable rows checked: 0 overlaps (' + res.touchingBoundaryCount + ' touching ignored)');
+      }
+    }
+    var iBox = $('ovIssueBox');
+    if (iBox) {
+      while (iBox.firstChild) iBox.removeChild(iBox.firstChild);
+      if (res.issues.length > 0) {
+        iBox.style.display = 'block';
+        res.issues.forEach(function (iss) {
+          var div = document.createElement('div');
+          div.textContent = '⚠️ [' + iss.code + '] ' + iss.detail;
+          iBox.appendChild(div);
+        });
+      } else {
+        iBox.style.display = 'none';
+      }
+    }
+  }
+
   function renderCrmPanel() {
     var listEl = $('crmSavedList');
     listEl.innerHTML = '';
@@ -2674,13 +3283,15 @@
     $('crmTabLedger').classList.toggle('active', state.crmTab === 'ledger');
     if ($('crmTabStatement')) $('crmTabStatement').classList.toggle('active', state.crmTab === 'statement');
     if ($('crmTabUnbilled')) $('crmTabUnbilled').classList.toggle('active', state.crmTab === 'unbilled');
+    if ($('crmTabOverlap')) $('crmTabOverlap').classList.toggle('active', state.crmTab === 'overlap');
 
     $('crmActionsClients').style.display = state.crmTab === 'clients' ? 'flex' : 'none';
     $('crmActionsCatalog').style.display = state.crmTab === 'catalog' ? 'flex' : 'none';
     $('crmActionsLedger').style.display = state.crmTab === 'ledger' ? 'flex' : 'none';
     if ($('crmStatementPane')) $('crmStatementPane').style.display = state.crmTab === 'statement' ? 'block' : 'none';
     if ($('crmUnbilledPane')) $('crmUnbilledPane').style.display = state.crmTab === 'unbilled' ? 'block' : 'none';
-    listEl.style.display = (state.crmTab === 'statement' || state.crmTab === 'unbilled') ? 'none' : 'flex';
+    if ($('crmOverlapPane')) $('crmOverlapPane').style.display = state.crmTab === 'overlap' ? 'block' : 'none';
+    listEl.style.display = (state.crmTab === 'statement' || state.crmTab === 'unbilled' || state.crmTab === 'overlap') ? 'none' : 'flex';
 
     if (state.crmTab === 'statement') {
       if (!state.stmt.useDemo && !crmData.ledger.length) {
@@ -2694,6 +3305,11 @@
 
     if (state.crmTab === 'unbilled') {
       syncUnbilledControls();
+      return;
+    }
+
+    if (state.crmTab === 'overlap') {
+      syncOverlapControls();
       return;
     }
 
@@ -3064,6 +3680,7 @@
     var hasUrlTemplate = false;
     var startInStatementMode = false;
     var startInUnbilledMode = false;
+    var startInOverlapMode = false;
     try {
       var params = new URLSearchParams(window.location.search || '');
       if (params.get('template')) {
@@ -3074,6 +3691,8 @@
         startInStatementMode = true;
       } else if (params.get('mode') === 'unbilled') {
         startInUnbilledMode = true;
+      } else if (params.get('mode') === 'overlap') {
+        startInOverlapMode = true;
       }
       var savedLang = localStorage.getItem('craftleaf_lang');
       if (params.get('lang') === 'zh' || params.get('lang') === 'en') {
@@ -3454,6 +4073,111 @@
       });
     }
 
+    if ($('crmTabOverlap')) {
+      $('crmTabOverlap').addEventListener('click', function () {
+        state.crmTab = 'overlap';
+        state.previewMode = 'overlap';
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+    if ($('loadOvWorkedBtn')) {
+      $('loadOvWorkedBtn').addEventListener('click', function () {
+        state.ov.useDemo = true;
+        state.ov.feedARows = SAMPLE_OVERLAP_WORKED_ROWS.slice();
+        state.ov.feedBRows = [];
+        state.previewMode = 'overlap';
+        syncOverlapControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('loadOvNestedBtn')) {
+      $('loadOvNestedBtn').addEventListener('click', function () {
+        state.ov.useDemo = true;
+        state.ov.feedARows = SAMPLE_OVERLAP_NESTED_ROWS.slice();
+        state.ov.feedBRows = [];
+        state.previewMode = 'overlap';
+        syncOverlapControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('loadOvAmbigBtn')) {
+      $('loadOvAmbigBtn').addEventListener('click', function () {
+        state.ov.useDemo = true;
+        state.ov.feedARows = SAMPLE_OVERLAP_AMBIGUOUS_ROWS.slice();
+        state.ov.feedBRows = [];
+        state.previewMode = 'overlap';
+        syncOverlapControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('importOvCsvABtn') && $('ovCsvAFileInput')) {
+      $('importOvCsvABtn').addEventListener('click', function () {
+        if (!isPro()) { openUnlockModal(); return; }
+        $('ovCsvAFileInput').click();
+      });
+      $('ovCsvAFileInput').addEventListener('change', function (e) {
+        if (!e.target.files || !e.target.files[0]) return;
+        var rd = new FileReader();
+        rd.onload = function (ev) {
+          state.ov.useDemo = false;
+          state.ov.feedARows = parseOverlapLogCsv(String(ev.target.result || ''), '', 'Log A');
+          syncOverlapControls();
+          updateInvoicePreview();
+          e.target.value = '';
+        };
+        rd.readAsText(e.target.files[0]);
+      });
+    }
+    if ($('importOvCsvBBtn') && $('ovCsvBFileInput')) {
+      $('importOvCsvBBtn').addEventListener('click', function () {
+        if (!isPro()) { openUnlockModal(); return; }
+        $('ovCsvBFileInput').click();
+      });
+      $('ovCsvBFileInput').addEventListener('change', function (e) {
+        if (!e.target.files || !e.target.files[0]) return;
+        var rd = new FileReader();
+        rd.onload = function (ev) {
+          state.ov.useDemo = false;
+          state.ov.feedBRows = parseOverlapLogCsv(String(ev.target.result || ''), '', 'Log B');
+          syncOverlapControls();
+          updateInvoicePreview();
+          e.target.value = '';
+        };
+        rd.readAsText(e.target.files[0]);
+      });
+    }
+    if ($('exportOvReportCsvBtn')) {
+      $('exportOvReportCsvBtn').addEventListener('click', function () {
+        if (!state.ov.useDemo && !isPro()) { openUnlockModal(); return; }
+        var csvRaw = serializeOverlapReportCsv(evaluateBillableTimeOverlaps(getActiveOverlapRows()));
+        var blob = new Blob(['\uFEFF' + csvRaw], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'billable-time-overlap-review-' + todayIso + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      });
+    }
+    if ($('printOvReportBtn')) {
+      $('printOvReportBtn').addEventListener('click', function () {
+        if (!state.ov.useDemo && !isPro()) { openUnlockModal(); return; }
+        prepareVectorPrint();
+        window.print();
+      });
+    }
+    if ($('backFromOverlapBtn')) {
+      $('backFromOverlapBtn').addEventListener('click', function () {
+        state.previewMode = 'invoice';
+        state.crmTab = 'clients';
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+
     if ($('importLedgerCsvBtn') && $('ledgerCsvFileInput')) {
       $('importLedgerCsvBtn').addEventListener('click', function () {
         if (!isPro()) { openUnlockModal(); return; }
@@ -3590,6 +4314,9 @@
       } else if (startInUnbilledMode) {
         state.crmTab = 'unbilled';
         state.previewMode = 'unbilled';
+      } else if (startInOverlapMode) {
+        state.crmTab = 'overlap';
+        state.previewMode = 'overlap';
       }
       renderCrmPanel();
       updateInvoicePreview();

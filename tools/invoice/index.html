@@ -234,6 +234,7 @@
             <button type="button" id="crmTabLedger" class="crm-tab" data-i18n="tabLedger">Invoice Ledger</button>
             <button type="button" id="crmTabStatement" class="crm-tab" data-i18n="tabStatement">Open Statement</button>
             <button type="button" id="crmTabUnbilled" class="crm-tab" data-i18n="tabUnbilled">Unbilled Hours</button>
+            <button type="button" id="crmTabOverlap" class="crm-tab" data-i18n="tabOverlap">Time Overlap</button>
           </div>
 
           <div id="crmActionsClients" style="display:flex;gap:8px;">
@@ -325,6 +326,30 @@
               <button type="button" id="exportUnbRegCsvBtn" class="btn btn-xs btn-pro" data-i18n="btnExportUnbReg">⬇ Save Register CSV</button>
               <button type="button" id="pushUnbilledToInvoiceBtn" class="btn btn-xs" data-i18n="btnPushUnbToInv">➕ Copy Unbilled to Invoice</button>
               <button type="button" id="backFromUnbilledBtn" class="btn btn-xs" data-i18n="btnBackToInvoice">↩ Single Invoice View</button>
+            </div>
+          </div>
+
+          <div id="crmOverlapPane" class="stmt-pane" style="display:none;">
+            <div class="stmt-demo-bar">
+              <span class="stmt-demo-note" data-i18n="ovIntro">Check shared clock minutes across client logs before invoicing (read-only; never edits logs).</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" id="loadOvWorkedBtn" class="btn btn-xs" data-i18n="btnOvWorked">🧪 15m Overlap + 10:15 Touch</button>
+                <button type="button" id="loadOvNestedBtn" class="btn btn-xs" data-i18n="btnOvNested">🪆 Nested 30m</button>
+                <button type="button" id="loadOvAmbigBtn" class="btn btn-xs" data-i18n="btnOvAmbig">⚠️ Test Ambiguous Input</button>
+                <button type="button" id="importOvCsvABtn" class="btn btn-xs" data-i18n="btnOvCsvA">📂 Log A / Combined CSV</button>
+                <button type="button" id="importOvCsvBBtn" class="btn btn-xs" data-i18n="btnOvCsvB">📂 Optional Log B CSV</button>
+                <input type="file" id="ovCsvAFileInput" accept=".csv,text/csv" hidden />
+                <input type="file" id="ovCsvBFileInput" accept=".csv,text/csv" hidden />
+              </div>
+            </div>
+
+            <div id="ovSummaryBanner" class="stmt-excluded-banner" style="margin-top:8px;"></div>
+            <div id="ovIssueBox" class="stmt-conflict-box" style="display:none;"></div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              <button type="button" id="exportOvReportCsvBtn" class="btn btn-xs btn-emerald" data-i18n="btnExportOvCsv">⬇ Overlap Review CSV</button>
+              <button type="button" id="printOvReportBtn" class="btn btn-xs btn-pro" data-i18n="btnPrintOv">🖨️ Print Review Sheet</button>
+              <button type="button" id="backFromOverlapBtn" class="btn btn-xs" data-i18n="btnBackToInvoice">↩ Single Invoice View</button>
             </div>
           </div>
 

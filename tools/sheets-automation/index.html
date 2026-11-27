@@ -228,6 +228,103 @@
       </div>
     </section>
 
+    <section id="bakeryPickupCapSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🎂 NEW IN PACK · WORKED + BLANK MACRO-FREE .XLSX · BAKERY PICKUP-DATE CAKE CAP CHECKER</span>
+            <span data-lang="zh">🎂 新增免宏工作簿 (示例版 + 空白模板 .XLSX) · 烘焙自提日全口味蛋糕总产能上限核查表</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Cap Bakery Preorders by Cakes Per Pickup Date — Not by Order Count</span>
+            <span data-lang="zh">接下一单前先看自提日还能做几只蛋糕：线上+电话跨口味合并统计、取消单自动剔除、询单不误占名额</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Saturday Batch Check (<code>2026-11-28</code>, baker cap = <strong>12 cakes</strong> across all flavors): <strong>6 chocolate</strong> + <strong>4 lemon</strong> accepted across Online + Phone (plus 2 vanilla cancelled &amp; excluded) = <strong>10 promised</strong>, <strong>2 still available</strong>. A proposed request for <strong>3 cakes</strong> is <strong>1 over capacity</strong> (2 available); a request for <strong>2 cakes</strong> <strong>fits 12/12 exactly</strong> — evaluated without counting inquiries as already booked. Included as worked + blank macro-free <code>13_Bakery_Pickup_Date_Cake_Cap_Checker.xlsx</code> (LibreOffice / Excel / Sheets) + printable studio HTML in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">周六单批次跨口味实战示例（<code>2026-11-28</code>，自设上限 <strong>12 只蛋糕</strong>）：线上+电话已确认 <strong>6 只巧克力 + 4 只柠檬 = 10 只已承诺</strong>（另 2 只取消单自动剔除），剩余可接 <strong>2 只</strong>。新客询单要 <strong>3 只</strong> → 提示<strong>超上限 1 只</strong>（仍余 2 只）；询单要 <strong>2 只</strong> → 提示<strong>恰好满额 12/12</strong>，且未确认询单绝不提前扣减额度。</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/bakery_pickup_date_cap_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Bakery-Cap PDF Guide</span>
+          <span data-lang="zh">📄 查看 1 页烘焙排产核查 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Baker Pickup-Date Caps (`Pickup_Date | Label | Whole_Cake_Cap`)</span>
+            <span data-lang="zh">1. 自提日整只蛋糕总产能上限（`日期 | 批次说明 | 蛋糕总上限`）</span>
+          </label>
+          <textarea id="bpcCapsInput" rows="2" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.5px;">2026-11-28 | Saturday Batch (All Flavors) | 12
+2026-11-29 | Sunday Small Batch | 8</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Confirmed Online + Phone Order Lines (`Line_ID | Channel | Pickup_Date | Flavor | Cakes_Qty | ACCEPTED_or_CANCELLED`)</span>
+            <span data-lang="zh">2. 已确认线上/电话订单行（`行号 | 渠道 | 自提日 | 口味 | 数量 | ACCEPTED或CANCELLED`）</span>
+          </label>
+          <textarea id="bpcOrdersInput" rows="5" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.5px;">ORD-ON-101 | ONLINE | 2026-11-28 | Chocolate Ganache Cake | 4 | ACCEPTED
+ORD-PH-102 | PHONE | 2026-11-28 | Chocolate Ganache Cake | 2 | ACCEPTED
+ORD-ON-103 | ONLINE | 2026-11-28 | Meyer Lemon Cake | 3 | ACCEPTED
+ORD-PH-104 | PHONE | 2026-11-28 | Meyer Lemon Cake | 1 | ACCEPTED
+ORD-ON-105 | ONLINE | 2026-11-28 | Vanilla Berry Cake (Cancelled) | 2 | CANCELLED</textarea>
+
+          <label class="fld">
+            <span data-lang="en">3. Proposed Customer Inquiries — Not Booked Yet (`Request_ID | Pickup_Date | Notes | Proposed_Cakes_Qty`)</span>
+            <span data-lang="zh">3. 待回复客户询单（未入账，`询单号 | 自提日 | 口味备注 | 拟订只数`）</span>
+          </label>
+          <textarea id="bpcRequestsInput" rows="3" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.5px;">REQ-SAT-3 | 2026-11-28 | Request for 3 Cakes | 3
+REQ-SAT-2 | 2026-11-28 | Request for 2 Cakes | 2</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="bpcWorkedBtn">🎂 Worked Saturday (3 Over vs 2 Exact Fit)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="bpcCancelBtn">↩️ Cancellation Frees 2 Cakes</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="bpcGuardsBtn">🛑 Duplicate Line ID &amp; Missing Cap</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">🎂 Pre-Acceptance Pickup-Date Capacity Check</span>
+              <span data-lang="zh">🎂 接单前自提日余量核查结果</span>
+            </strong>
+            <span id="bpcSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="bpcExceptionBanner" style="display:none;padding:9px 11px;border-radius:8px;background:rgba(239,68,68,0.18);border:1px solid #ef4444;color:#fecaca;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Inquiry</th>
+                <th style="padding:6px;">Date</th>
+                <th style="padding:6px;">Avail / Cap</th>
+                <th style="padding:6px;">Reply Guidance (Unbooked)</th>
+                <th style="padding:6px;">Verdict</th>
+              </tr>
+            </thead>
+            <tbody id="bpcResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> You set each pickup date's cake cap; this sheet neither predicts oven capacity nor blocks an online checkout, and needs zero customer names.</span>
+            <span data-lang="zh"><em>边界说明：</em>各日蛋糕上限由烘焙主理人自行设定；本表不预测烤箱产能，也不拦截网店结账，无需填写客户姓名隐私。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Anonymous 1-click workflow poll (0 email, 0 customer data, 0 payment):</span>
+            <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#e2e8f0;width:100%;cursor:pointer;">
+              <input type="checkbox" id="val95EligChk" />
+              <span>I take pickup preorders</span>
+            </label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val95BuyBtn">👍 I'd buy the $9.99 pack for this check</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val95EnoughBtn">↔️ My current sheet is enough</button>
+            </div>
+            <span id="val95Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="stockCartonPickerSection" class="panel" style="margin-top:20px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
         <div>
@@ -4147,12 +4244,591 @@ var StockCartonPickerEngine = (function () {
     document.getElementById("val92FreeBtn").addEventListener("click", function(){ submitValidationVote92("free"); });
     document.getElementById("val92SkipBtn").addEventListener("click", function(){ submitValidationVote92("skip"); });
 
+    
+var BakeryPickupCapEngine = (function () {
+  'use strict';
+
+  function normToken(v) {
+    return String(v === null || v === undefined ? '' : v).trim().toUpperCase();
+  }
+
+  function isValidIsoDate(s) {
+    var str = String(s === null || s === undefined ? '' : s).trim();
+    var m = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return false;
+    var y = parseInt(m[1], 10), mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+    if (y < 1970 || y > 2100 || mo < 1 || mo > 12 || d < 1 || d > 31) return false;
+    var dt = new Date(Date.UTC(y, mo - 1, d));
+    return dt.getUTCFullYear() === y && (dt.getUTCMonth() + 1) === mo && dt.getUTCDate() === d;
+  }
+
+  function parsePositiveWholeInt(val) {
+    if (val === '' || val === null || val === undefined || typeof val === 'boolean') return null;
+    var s = String(val).trim().replace(/,/g, '');
+    if (!/^[+]?\d+$/.test(s)) return null;
+    var n = parseInt(s, 10);
+    if (!isFinite(n) || n <= 0) return null;
+    return n;
+  }
+
+  function normOrderStatus(val) {
+    var t = normToken(val);
+    if (t === 'ACCEPTED' || t === 'CONFIRMED' || t === 'PROMISED') return 'ACCEPTED';
+    if (t === 'CANCELLED' || t === 'CANCELED') return 'CANCELLED';
+    return 'INVALID';
+  }
+
+  function normChannel(val) {
+    var t = normToken(val);
+    if (!t) return 'UNSPECIFIED';
+    if (t === 'ONLINE' || t === 'WEB' || t === 'SHOPIFY' || t === 'FORM') return 'ONLINE';
+    if (t === 'PHONE' || t === 'CALL' || t === 'SMS' || t === 'WALKIN' || t === 'COUNTER') return 'PHONE';
+    return t;
+  }
+
+  function splitPipeOrCsvLines(rawText, minCols) {
+    var lines = String(rawText || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var trimmed = lines[i].trim();
+      if (!trimmed || trimmed.charAt(0) === '#') continue;
+      var delim = trimmed.indexOf('|') >= 0 ? '|' : ',';
+      var parts = trimmed.split(delim).map(function (x) { return x.trim().replace(/^"|"$/g, ''); });
+      if (parts.length < minCols) continue;
+      out.push(parts);
+    }
+    return out;
+  }
+
+  function parsePickupCaps(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 2);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normToken(p[0]);
+      if (i === 0 && (h0 === 'PICKUP_DATE' || h0 === 'PICKUPDATE' || h0 === 'DATE')) continue;
+      if (p.length >= 3) {
+        res.push({ pickupDate: p[0], label: p[1], capCakes: p[2] });
+      } else {
+        res.push({ pickupDate: p[0], label: '', capCakes: p[1] });
+      }
+    }
+    return res;
+  }
+
+  function parseOrderLines(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 5);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normToken(p[0]);
+      if (i === 0 && (h0 === 'ORDER_LINE_ID' || h0 === 'ORDERLINEID' || h0 === 'LINE_ID')) continue;
+      if (p.length >= 6) {
+        res.push({
+          lineId: p[0],
+          channel: p[1],
+          pickupDate: p[2],
+          flavor: p[3],
+          cakesQty: p[4],
+          status: p[5]
+        });
+      } else {
+        res.push({
+          lineId: p[0],
+          channel: p[1],
+          pickupDate: p[2],
+          flavor: 'All Flavors',
+          cakesQty: p[3],
+          status: p[4]
+        });
+      }
+    }
+    return res;
+  }
+
+  function parseProposedRequests(rawText) {
+    var rows = splitPipeOrCsvLines(rawText, 3);
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var p = rows[i];
+      var h0 = normToken(p[0]);
+      if (i === 0 && (h0 === 'REQUEST_ID' || h0 === 'REQUESTID' || h0 === 'INQUIRY_ID')) continue;
+      if (p.length >= 4) {
+        res.push({
+          requestId: p[0],
+          pickupDate: p[1],
+          flavorSummary: p[2],
+          proposedCakesQty: p[3]
+        });
+      } else {
+        res.push({
+          requestId: p[0],
+          pickupDate: p[1],
+          flavorSummary: 'Assorted Cakes',
+          proposedCakesQty: p[2]
+        });
+      }
+    }
+    return res;
+  }
+
+  /**
+   * Pure read-only capacity evaluation:
+   * - Sums ACCEPTED whole-cake quantities across Online + Phone channels per Pickup_Date.
+   * - Excludes CANCELLED order lines.
+   * - Quarantines duplicate Order_Line_IDs or malformed order rows so capacity is never misstated.
+   * - Evaluates each proposed request independently WITHOUT adding it to booked orders.
+   */
+  function evaluateBakeryPickupCap(capRows, orderRows, proposedRows) {
+    var cArr = Array.isArray(capRows) ? capRows : [];
+    var oArr = Array.isArray(orderRows) ? orderRows : [];
+    var pArr = Array.isArray(proposedRows) ? proposedRows : [];
+
+    // 1. Validate Baker Pickup-Date Caps
+    var dateCapCounts = {};
+    for (var ci = 0; ci < cArr.length; ci++) {
+      var dtKey0 = String((cArr[ci] && cArr[ci].pickupDate) || '').trim();
+      if (dtKey0) dateCapCounts[dtKey0] = (dateCapCounts[dtKey0] || 0) + 1;
+    }
+
+    var capMap = {};
+    var evaluatedCaps = [];
+    var capExceptionCount = 0;
+
+    for (var cIdx = 0; cIdx < cArr.length; cIdx++) {
+      var cr = cArr[cIdx] || {};
+      var dRaw = String(cr.pickupDate || '').trim();
+      var capInt = parsePositiveWholeInt(cr.capCakes);
+      var cGuard = 'VALID_DATE_CAP';
+      if (!isValidIsoDate(dRaw)) {
+        cGuard = 'REVIEW_INVALID_PICKUP_DATE';
+        capExceptionCount++;
+      } else if ((dateCapCounts[dRaw] || 0) > 1) {
+        cGuard = 'REVIEW_DUPLICATE_DATE_CAP';
+        capExceptionCount++;
+      } else if (capInt === null) {
+        cGuard = 'REVIEW_INVALID_CAKE_CAP';
+        capExceptionCount++;
+      } else {
+        capMap[dRaw] = {
+          pickupDate: dRaw,
+          label: String(cr.label || '').trim(),
+          capCakes: capInt,
+          onlinePromised: 0,
+          phoneOtherPromised: 0,
+          totalPromised: 0,
+          cancelledExcluded: 0
+        };
+      }
+      evaluatedCaps.push({
+        pickupDate: dRaw,
+        label: String(cr.label || '').trim(),
+        capCakes: capInt,
+        guard: cGuard
+      });
+    }
+
+    // 2. Validate Accepted / Cancelled Order Lines (strict duplicate Order_Line_ID check)
+    var lineIdCounts = {};
+    for (var oi0 = 0; oi0 < oArr.length; oi0++) {
+      var lid0 = normToken((oArr[oi0] && oArr[oi0].lineId) || '');
+      if (lid0) lineIdCounts[lid0] = (lineIdCounts[lid0] || 0) + 1;
+    }
+
+    var evaluatedOrders = [];
+    var orderExceptionCount = 0;
+    var promisedByDate = {};
+    var onlineByDate = {};
+    var phoneByDate = {};
+    var cancelledByDate = {};
+
+    for (var oi = 0; oi < oArr.length; oi++) {
+      var orow = oArr[oi] || {};
+      var lidRaw = String(orow.lineId || '').trim();
+      var lidKey = normToken(lidRaw);
+      var chNorm = normChannel(orow.channel);
+      var pDate = String(orow.pickupDate || '').trim();
+      var qtyInt = parsePositiveWholeInt(orow.cakesQty);
+      var stNorm = normOrderStatus(orow.status);
+
+      var oGuard = 'VALID_ORDER_LINE';
+      if (!lidKey) {
+        oGuard = 'REVIEW_MISSING_LINE_ID';
+        orderExceptionCount++;
+      } else if ((lineIdCounts[lidKey] || 0) > 1) {
+        oGuard = 'REVIEW_DUPLICATE_LINE_ID';
+        orderExceptionCount++;
+      } else if (!isValidIsoDate(pDate)) {
+        oGuard = 'REVIEW_INVALID_PICKUP_DATE';
+        orderExceptionCount++;
+      } else if (qtyInt === null) {
+        oGuard = 'REVIEW_INVALID_CAKES_QTY';
+        orderExceptionCount++;
+      } else if (stNorm === 'INVALID') {
+        oGuard = 'REVIEW_INVALID_ORDER_STATUS';
+        orderExceptionCount++;
+      }
+
+      var countedPromised = 0;
+      if (oGuard === 'VALID_ORDER_LINE') {
+        if (stNorm === 'ACCEPTED') {
+          countedPromised = qtyInt;
+          promisedByDate[pDate] = (promisedByDate[pDate] || 0) + qtyInt;
+          if (chNorm === 'ONLINE') onlineByDate[pDate] = (onlineByDate[pDate] || 0) + qtyInt;
+          else phoneByDate[pDate] = (phoneByDate[pDate] || 0) + qtyInt;
+        } else if (stNorm === 'CANCELLED') {
+          cancelledByDate[pDate] = (cancelledByDate[pDate] || 0) + qtyInt;
+        }
+      }
+
+      evaluatedOrders.push({
+        lineId: lidRaw,
+        channel: chNorm,
+        pickupDate: pDate,
+        flavor: String(orow.flavor || '').trim(),
+        cakesQty: qtyInt,
+        status: stNorm,
+        guard: oGuard,
+        countedPromised: countedPromised
+      });
+    }
+
+    // Enrich Date Summaries
+    var dateSummaries = [];
+    for (var dc = 0; dc < evaluatedCaps.length; dc++) {
+      var ec = evaluatedCaps[dc];
+      var dKey = ec.pickupDate;
+      var prom = promisedByDate[dKey] || 0;
+      var onl = onlineByDate[dKey] || 0;
+      var phn = phoneByDate[dKey] || 0;
+      var canc = cancelledByDate[dKey] || 0;
+      var avail = (ec.guard === 'VALID_DATE_CAP' && orderExceptionCount === 0) ? (ec.capCakes - prom) : null;
+      dateSummaries.push({
+        pickupDate: dKey,
+        label: ec.label,
+        capCakes: ec.capCakes,
+        onlinePromised: onl,
+        phoneOtherPromised: phn,
+        totalPromised: prom,
+        cancelledExcluded: canc,
+        availableCakes: avail,
+        guard: orderExceptionCount > 0 ? 'REVIEW_ORDER_LOG_EXCEPTION' : ec.guard
+      });
+    }
+
+    // 3. Evaluate Proposed Inquiries Independently (NEVER treated as already booked!)
+    var reqIdCounts = {};
+    for (var pi0 = 0; pi0 < pArr.length; pi0++) {
+      var rid0 = normToken((pArr[pi0] && pArr[pi0].requestId) || '');
+      if (rid0) reqIdCounts[rid0] = (reqIdCounts[rid0] || 0) + 1;
+    }
+
+    var evaluatedRequests = [];
+    var fitsCount = 0;
+    var exactFitCount = 0;
+    var overCapCount = 0;
+    var reviewReqCount = 0;
+
+    for (var pi = 0; pi < pArr.length; pi++) {
+      var pr = pArr[pi] || {};
+      var ridRaw = String(pr.requestId || '').trim();
+      var ridKey = normToken(ridRaw);
+      var reqDate = String(pr.pickupDate || '').trim();
+      var reqQty = parsePositiveWholeInt(pr.proposedCakesQty);
+      var flavorSum = String(pr.flavorSummary || '').trim();
+
+      if (!ridKey) {
+        reviewReqCount++;
+        evaluatedRequests.push({
+          requestId: '(blank)',
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: null,
+          alreadyPromised: null,
+          stillAvailable: null,
+          overByCakes: null,
+          remainingIfAccepted: null,
+          verdict: 'REVIEW_MISSING_REQUEST_ID',
+          instruction: 'REVIEW: Assign a Request_ID to evaluate this proposed order.'
+        });
+        continue;
+      }
+      if ((reqIdCounts[ridKey] || 0) > 1) {
+        reviewReqCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: null,
+          alreadyPromised: null,
+          stillAvailable: null,
+          overByCakes: null,
+          remainingIfAccepted: null,
+          verdict: 'REVIEW_DUPLICATE_REQUEST_ID',
+          instruction: 'REVIEW: Duplicate Request_ID "' + ridRaw + '" in inquiry list.'
+        });
+        continue;
+      }
+      if (orderExceptionCount > 0 || capExceptionCount > 0) {
+        reviewReqCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: null,
+          alreadyPromised: null,
+          stillAvailable: null,
+          overByCakes: null,
+          remainingIfAccepted: null,
+          verdict: 'REVIEW_ORDER_LOG_EXCEPTION',
+          instruction: 'HALT: Fix duplicate Order_Line_ID or invalid order/cap rows before promising cakes.'
+        });
+        continue;
+      }
+      if (!isValidIsoDate(reqDate) || !capMap[reqDate]) {
+        reviewReqCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: null,
+          alreadyPromised: null,
+          stillAvailable: null,
+          overByCakes: null,
+          remainingIfAccepted: null,
+          verdict: 'REVIEW_SET_DATE_CAP',
+          instruction: 'SET DATE CAP FIRST: Enter your cake cap for "' + (reqDate || 'date') + '" in Pickup_Date_Caps (sheet never guesses oven capacity).'
+        });
+        continue;
+      }
+      if (reqQty === null) {
+        reviewReqCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: null,
+          dateCap: capMap[reqDate].capCakes,
+          alreadyPromised: promisedByDate[reqDate] || 0,
+          stillAvailable: capMap[reqDate].capCakes - (promisedByDate[reqDate] || 0),
+          overByCakes: null,
+          remainingIfAccepted: null,
+          verdict: 'REVIEW_INVALID_REQUEST_QTY',
+          instruction: 'REVIEW: Proposed_Cakes_Qty must be a positive whole number of cakes.'
+        });
+        continue;
+      }
+
+      var capVal = capMap[reqDate].capCakes;
+      var promisedVal = promisedByDate[reqDate] || 0;
+      var availVal = capVal - promisedVal;
+
+      if (availVal < 0) {
+        overCapCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: capVal,
+          alreadyPromised: promisedVal,
+          stillAvailable: availVal,
+          overByCakes: reqQty - availVal,
+          remainingIfAccepted: null,
+          verdict: 'DATE_ALREADY_OVERBOOKED',
+          instruction: 'ALREADY OVERBOOKED: ' + promisedVal + ' promised exceeds ' + capVal + ' cap by ' + (promisedVal - capVal) + ' cake(s).'
+        });
+        continue;
+      }
+
+      if (reqQty > availVal) {
+        var overBy = reqQty - availVal;
+        overCapCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: capVal,
+          alreadyPromised: promisedVal,
+          stillAvailable: availVal,
+          overByCakes: overBy,
+          remainingIfAccepted: null,
+          verdict: 'OVER_CAPACITY',
+          instruction: 'DECLINE OR RESCHEDULE \u2014 ' + overBy + ' cake(s) over cap (' + availVal + ' still available of ' + capVal + '; ' + promisedVal + ' promised).'
+        });
+      } else if (reqQty === availVal) {
+        exactFitCount++;
+        fitsCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: capVal,
+          alreadyPromised: promisedVal,
+          stillAvailable: availVal,
+          overByCakes: 0,
+          remainingIfAccepted: 0,
+          verdict: 'EXACT_FIT',
+          instruction: 'FITS EXACTLY (' + (promisedVal + reqQty) + '/' + capVal + ' cakes; 0 remaining if accepted \u2014 add to Order_Lines_Log only after confirming).'
+        });
+      } else {
+        var remAfter = availVal - reqQty;
+        fitsCount++;
+        evaluatedRequests.push({
+          requestId: ridRaw,
+          pickupDate: reqDate,
+          flavorSummary: flavorSum,
+          proposedCakesQty: reqQty,
+          dateCap: capVal,
+          alreadyPromised: promisedVal,
+          stillAvailable: availVal,
+          overByCakes: 0,
+          remainingIfAccepted: remAfter,
+          verdict: 'FITS_WITH_HEADROOM',
+          instruction: 'FITS (' + (promisedVal + reqQty) + '/' + capVal + ' cakes; ' + remAfter + ' cake(s) would remain \u2014 inquiry not booked yet).'
+        });
+      }
+    }
+
+    return {
+      dateSummaries: dateSummaries,
+      orders: evaluatedOrders,
+      requests: evaluatedRequests,
+      capExceptionCount: capExceptionCount,
+      orderExceptionCount: orderExceptionCount,
+      fitsCount: fitsCount,
+      exactFitCount: exactFitCount,
+      overCapCount: overCapCount,
+      reviewReqCount: reviewReqCount,
+      scopeNote: 'Baker-defined pickup-date cake cap check only \u2014 neither predicts oven capacity nor blocks a live online checkout; proposed requests stay unbooked until added as ACCEPTED.'
+    };
+  }
+
+  return {
+    isValidIsoDate: isValidIsoDate,
+    parsePickupCaps: parsePickupCaps,
+    parseOrderLines: parseOrderLines,
+    parseProposedRequests: parseProposedRequests,
+    evaluateBakeryPickupCap: evaluateBakeryPickupCap
+  };
+})();
+
+
+    function renderBakeryPickupCapSandbox() {
+      var caps = BakeryPickupCapEngine.parsePickupCaps(document.getElementById("bpcCapsInput").value);
+      var orders = BakeryPickupCapEngine.parseOrderLines(document.getElementById("bpcOrdersInput").value);
+      var reqs = BakeryPickupCapEngine.parseProposedRequests(document.getElementById("bpcRequestsInput").value);
+      var res = BakeryPickupCapEngine.evaluateBakeryPickupCap(caps, orders, reqs);
+
+      var bBanner = document.getElementById("bpcExceptionBanner");
+      if (res.capExceptionCount > 0 || res.orderExceptionCount > 0 || res.reviewReqCount > 0) {
+        bBanner.style.display = "block";
+        bBanner.textContent = "⚠️ " + res.orderExceptionCount + " order-line issue(s) & " + (res.capExceptionCount + res.reviewReqCount) + " date/inquiry review row(s) quarantined — fix duplicate Order_Line_ID or missing date cap first.";
+      } else {
+        bBanner.style.display = "none";
+      }
+
+      var tb = document.getElementById("bpcResultsBody");
+      clearNode(tb);
+      res.requests.forEach(function(rq) {
+        var tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+        var availLabel = (rq.stillAvailable !== null && rq.dateCap !== null)
+          ? (rq.stillAvailable + " avail / " + rq.dateCap + " cap (" + rq.alreadyPromised + " promised)")
+          : "—";
+        var cols = [
+          rq.requestId + " (" + (rq.proposedCakesQty !== null ? rq.proposedCakesQty : "?") + " cakes)",
+          rq.pickupDate,
+          availLabel,
+          rq.instruction,
+          rq.verdict
+        ];
+        for (var c = 0; c < cols.length; c++) {
+          var td = document.createElement("td");
+          td.style.padding = "6px";
+          if (c === 3 || c === 4) {
+            td.style.fontWeight = "800";
+            td.style.color = (rq.verdict === "EXACT_FIT" || rq.verdict === "FITS_WITH_HEADROOM")
+              ? "#6ee7b7"
+              : (rq.verdict === "OVER_CAPACITY" ? "#fcd34d" : "#fca5a5");
+          }
+          td.textContent = cols[c];
+          tr.appendChild(td);
+        }
+        tb.appendChild(tr);
+      });
+
+      document.getElementById("bpcSummaryBadge").textContent =
+        "FITS " + res.fitsCount + " (EXACT " + res.exactFitCount + ") · OVER CAP " + res.overCapCount + " · REVIEW " + (res.reviewReqCount + res.orderExceptionCount + res.capExceptionCount);
+    }
+
+    function trackVal95SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val95_viewed")) {
+          sessionStorage.setItem("craftleaf_val95_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea95-view", "Idea 95 Bakery Pickup Date Cake Cap Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote95(choice) {
+      var msgEl = document.getElementById("val95Msg");
+      var eligChk = document.getElementById("val95EligChk");
+      var eligTag = (eligChk && eligChk.checked) ? "-eligible" : "";
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val95_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val95_voted", choice + eligTag);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea95-" + choice + eligTag, "Idea 95 Bakery Pickup Cap Vote: " + choice + eligTag);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+
+    document.getElementById("bpcCapsInput").addEventListener("input", renderBakeryPickupCapSandbox);
+    document.getElementById("bpcOrdersInput").addEventListener("input", renderBakeryPickupCapSandbox);
+    document.getElementById("bpcRequestsInput").addEventListener("input", renderBakeryPickupCapSandbox);
+    document.getElementById("bpcWorkedBtn").addEventListener("click", function(){
+      document.getElementById("bpcCapsInput").value = "2026-11-28 | Saturday Batch (All Flavors) | 12\n2026-11-29 | Sunday Small Batch | 8";
+      document.getElementById("bpcOrdersInput").value = "ORD-ON-101 | ONLINE | 2026-11-28 | Chocolate Ganache Cake | 4 | ACCEPTED\nORD-PH-102 | PHONE | 2026-11-28 | Chocolate Ganache Cake | 2 | ACCEPTED\nORD-ON-103 | ONLINE | 2026-11-28 | Meyer Lemon Cake | 3 | ACCEPTED\nORD-PH-104 | PHONE | 2026-11-28 | Meyer Lemon Cake | 1 | ACCEPTED\nORD-ON-105 | ONLINE | 2026-11-28 | Vanilla Berry Cake (Cancelled) | 2 | CANCELLED";
+      document.getElementById("bpcRequestsInput").value = "REQ-SAT-3 | 2026-11-28 | Request for 3 Cakes | 3\nREQ-SAT-2 | 2026-11-28 | Request for 2 Cakes | 2";
+      renderBakeryPickupCapSandbox();
+    });
+    document.getElementById("bpcCancelBtn").addEventListener("click", function(){
+      document.getElementById("bpcCapsInput").value = "2026-11-28 | Saturday Batch (Reopened After Cancel) | 12";
+      document.getElementById("bpcOrdersInput").value = "ORD-ON-101 | ONLINE | 2026-11-28 | Chocolate Ganache Cake | 6 | ACCEPTED\nORD-PH-102 | PHONE | 2026-11-28 | Meyer Lemon Cake | 4 | ACCEPTED\nORD-ON-103 | ONLINE | 2026-11-28 | Berry Cake (Cancelled) | 2 | CANCELLED";
+      document.getElementById("bpcRequestsInput").value = "REQ-REOPEN-2 | 2026-11-28 | Reopened 2-Cake Inquiry | 2";
+      renderBakeryPickupCapSandbox();
+    });
+    document.getElementById("bpcGuardsBtn").addEventListener("click", function(){
+      document.getElementById("bpcCapsInput").value = "2026-11-28 | Saturday Batch | 12";
+      document.getElementById("bpcOrdersInput").value = "ORD-ON-101 | ONLINE | 2026-11-28 | Chocolate Cake | 4 | ACCEPTED\nORD-ON-101 | PHONE | 2026-11-28 | Duplicate Line ID | 2 | ACCEPTED";
+      document.getElementById("bpcRequestsInput").value = "REQ-DUP | 2026-11-28 | Blocked While Dup Exists | 1\nREQ-NOCAP | 2026-12-05 | Missing Date Cap | 2";
+      renderBakeryPickupCapSandbox();
+    });
+    document.getElementById("val95BuyBtn").addEventListener("click", function(){ submitValidationVote95("buy"); });
+    document.getElementById("val95EnoughBtn").addEventListener("click", function(){ submitValidationVote95("enough"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
       try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
     }
     setLang(initLang === "zh" ? "zh" : "en");
+    renderBakeryPickupCapSandbox();
     renderStockCartonSandbox();
     renderYarnDyeLotSandbox();
     renderSupplierBillMatchSandbox();
@@ -4167,6 +4843,7 @@ var StockCartonPickerEngine = (function () {
     trackVal88SampleViewOnce();
     trackVal89SampleViewOnce();
     trackVal92SampleViewOnce();
+    trackVal95SampleViewOnce();
   })();
   </script>
 </body>

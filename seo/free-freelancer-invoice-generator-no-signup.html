@@ -168,6 +168,36 @@
       </div>
     </section>
     <section class="section-card">
+      <h2>Worked Pro Example #3: Find Overlapping Billable Time Across Client Logs Before Invoicing (15-Minute Shared Interval Check)</h2>
+      <div style="overflow-x:auto;">
+        <table class="spec-table">
+          <thead><tr><th>Row ID</th><th>Client Log</th><th>Start → End (24h ISO)</th><th>Pre-Invoice Overlap Review</th></tr></thead>
+          <tbody><tr><td><code>CL-A-101</code></td><td>Client A · API schema review</td><td><code>2026-11-24 09:00</code> → <code>10:00</code></td><td><strong>Flagged: <code>09:45–10:00</code> (<code>15 min</code>)</strong> with <code>CL-B-204</code></td></tr><tr><td><code>CL-B-204</code></td><td>Client B · Urgent hotfix triage</td><td><code>2026-11-24 09:45</code> → <code>10:15</code></td><td><strong>Flagged: <code>09:45–10:00</code> (<code>15 min</code>)</strong> with <code>CL-A-101</code></td></tr><tr><td><code>CL-A-102</code></td><td>Client A · Post-call harness notes</td><td><code>2026-11-24 10:15</code> → <code>10:45</code></td><td><strong>Not Flagged (<code>0 min</code>)</strong> — <code>10:15</code> start merely touches <code>CL-B-204</code> end</td></tr><tr><td><strong>Read-Only Scope</strong></td><td><strong>Source Logs Never Modified</strong></td><td>Missing/ambiguous timestamps flagged</td><td><strong>Never edits logs, subtracts time, sets charges, or issues invoices</strong></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <section id="timeOverlapCheckSection" class="section-card" style="border-color:#6ee7b7;background:linear-gradient(135deg,#ffffff 0%,#ecfdf5 100%);">
+      <span class="kicker" style="background:#d1fae5;color:#065f46;">INCLUDED IN INVOICE STUDIO PRO ($9 ONCE) · CROSS-CLIENT CLOCK OVERLAP CHECK</span>
+      <h2>Keep Separate Hourly Logs for Multiple Clients? Catch Shared Clock Minutes Before Sending Either Invoice</h2>
+      <p style="margin:0 0 14px;color:#334155;font-size:14.5px;">Two valid entries with different Row IDs can still claim the same clock minutes across clients. Drop Client A + Client B CSVs (or one combined log) locally in browser RAM: overlapping billable intervals are listed with both Row IDs, touching boundaries (10:15 end → 10:15 start) are ignored, and missing or slash-date timestamps are flagged rather than guessed from durations. A flag is not proof of improper billing — you decide what, if anything, to change.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="../tools/invoice/index.html?template=freelance&amp;mode=overlap">Try Live 15-Min Overlap Check →</a>
+        <a class="cta-btn-secondary" href="../previews/cross_client_time_overlap_sample_preview.pdf">1-Page Overlap Guide PDF →</a>
+      </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #cbd5e1;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-size:12.5px;color:#334155;">Workflow feedback poll (no logs, email, or payment requested — recorded once per session):</span>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:#1e293b;font-weight:600;width:100%;cursor:pointer;">
+          <input type="checkbox" id="idea94EligChk" />
+          <span>I bill by the hour for multiple clients</span>
+        </label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="cta-btn-secondary" style="padding:7px 12px;font-size:12.5px;cursor:pointer;" id="idea94BuyBtn">👍 I&#x27;d buy the $9 pack for this check</button>
+          <button type="button" class="cta-btn-secondary" style="padding:7px 12px;font-size:12.5px;cursor:pointer;" id="idea94KeepBtn">↔️ I&#x27;ll use my calendar/formula</button>
+        </div>
+        <span id="idea94VoteMsg" style="font-size:12px;font-weight:700;color:#059669;width:100%;"></span>
+      </div>
+    </section>
+    <section class="section-card">
       <h2>Copy-Paste Payment Terms &amp; Schedule C Tax Tips</h2>
       <div class="checklist-box">
         <ul class="checklist-list"><li>Recommended Standard Terms: &#x27;Net 14 Days — 1.5% monthly late fee (18% APR) applies to overdue balances past 30 days.&#x27;</li><li>Kickoff Deposit Rule: Collect 40%–50% upfront on projects over $1,000 before starting work, and record it in &#x27;Deposit / Paid Deducted&#x27;.</li><li>Tax Write-Off Tip: Deduct payment processing fees (Stripe 2.9% + $0.30, PayPal, wire fees) and software tools on IRS Schedule C Line 10/18.</li></ul>
@@ -228,17 +258,18 @@
     (function() {
       function recordVote_idea78(choice) {
         var msg = document.getElementById('idea78VoteMsg');
+        var eligTag = '';
         try {
           if (typeof sessionStorage !== 'undefined' && sessionStorage && sessionStorage.getItem('craftleaf_idea78_voted')) {
             if (msg) msg.textContent = 'Recorded once for this session — thank you!';
             return;
           }
           if (typeof sessionStorage !== 'undefined' && sessionStorage) {
-            sessionStorage.setItem('craftleaf_idea78_voted', choice);
+            sessionStorage.setItem('craftleaf_idea78_voted', choice + eligTag);
           }
         } catch (_e) {}
         if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
-          window.CraftLeafSDK.trackEvent('idea78-' + choice, 'idea78 validation vote: ' + choice);
+          window.CraftLeafSDK.trackEvent('idea78-' + choice + eligTag, 'idea78 validation vote: ' + choice + eligTag);
         }
         if (msg) msg.textContent = 'Thank you — anonymous response recorded for this session.';
       }
@@ -246,6 +277,31 @@
       var b2 = document.getElementById('idea78KeepBtn');
       if (b1) b1.addEventListener('click', function() { recordVote_idea78('buy'); });
       if (b2) b2.addEventListener('click', function() { recordVote_idea78('keep'); });
+    })();
+    (function() {
+      function recordVote_idea94(choice) {
+        var msg = document.getElementById('idea94VoteMsg');
+
+        var elig = document.getElementById('idea94EligChk');
+        var eligTag = (elig && elig.checked) ? '-eligible' : '-unfiltered';
+        try {
+          if (typeof sessionStorage !== 'undefined' && sessionStorage && sessionStorage.getItem('craftleaf_idea94_voted')) {
+            if (msg) msg.textContent = 'Recorded once for this session — thank you!';
+            return;
+          }
+          if (typeof sessionStorage !== 'undefined' && sessionStorage) {
+            sessionStorage.setItem('craftleaf_idea94_voted', choice + eligTag);
+          }
+        } catch (_e) {}
+        if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+          window.CraftLeafSDK.trackEvent('idea94-' + choice + eligTag, 'idea94 validation vote: ' + choice + eligTag);
+        }
+        if (msg) msg.textContent = 'Thank you — anonymous response recorded for this session.';
+      }
+      var b1 = document.getElementById('idea94BuyBtn');
+      var b2 = document.getElementById('idea94KeepBtn');
+      if (b1) b1.addEventListener('click', function() { recordVote_idea94('buy'); });
+      if (b2) b2.addEventListener('click', function() { recordVote_idea94('keep'); });
     })();
   </script>
 </body>
