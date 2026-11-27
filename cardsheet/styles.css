@@ -811,6 +811,27 @@ textarea.input-control {
   margin-right: 4px;
 }
 
+.board-tiler-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 780px) {
+  .board-tiler-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.board-tiler-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  background: #0f172a;
+  margin: 6px 0;
+}
+
 .pf-card {
   border: 1px solid var(--border);
   border-radius: 11px;

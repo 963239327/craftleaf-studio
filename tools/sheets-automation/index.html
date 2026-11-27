@@ -228,6 +228,94 @@
       </div>
     </section>
 
+    <section id="shopifyCsvOverwriteSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🛡️ NEW IN PACK · LOCAL CSV DIFF + WORKED/BLANK .XLSX · SHOPIFY CSV OVERWRITE RISK GUARD</span>
+            <span data-lang="zh">🛡️ 新增免宏工作簿 + 本地双 CSV 对比台 · Shopify 商品表覆盖导入防误删核查器</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Flag Shopify Catalog Fields &amp; Variants at Risk Before a CSV Overwrite</span>
+            <span data-lang="zh">勾选“覆盖同名 Handle 商品”前先本地核查：精准区分留空误删列、安全省略列与附图续行</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Pre-Import Check: <code>linen-apron</code> currently has Vendor <strong>Cedar Loom</strong>. Including an empty <code>Vendor</code> cell on the product row flags <strong>FIELD_CLEAR_ON_OVERWRITE</strong> (erases <code>Cedar Loom</code>), whereas omitting the <code>Vendor</code> column on a tags-only CSV flags <strong>0 clears</strong>, and blank cells on row 2's extra-image continuation row (<code>Image Position = 2</code>) are ignored safely. Updating <code>Variant SKU</code> on 2-variant <code>canvas-tote</code> without <code>Option1 Value</code> flags <strong>VARIANT_RISK_MISSING_OPTION_COLUMNS</strong> without predicting the final catalog. Included as <code>Shopify_CSV_Overwrite_Risk_Studio.html</code> + worked/blank <code>14_Shopify_CSV_Overwrite_Risk_Guard.xlsx</code> in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战覆盖导入前核查：商品 <code>linen-apron</code> 原导出 Vendor 为 <strong>Cedar Loom</strong>。若导入表保留了 <code>Vendor</code> 列但主行单元格留空，立即标红预警 <strong>FIELD_CLEAR_ON_OVERWRITE</strong>（防止覆盖清空）；若仅上传 <code>Handle, Tags</code>（未包含 <code>Vendor</code> 列）则安全放行，第 2 行纯附图续行（<code>Image Position = 2</code>）留空亦绝不误报；多规格 <code>canvas-tote</code> 改 SKU 却漏带 <code>Option1 Value</code> 自动提示变体缺失风险。</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/shopify_csv_overwrite_guard_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page Overwrite-Guard PDF Guide</span>
+          <span data-lang="zh">📄 查看 1 页覆盖防误删速查 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Fresh Shopify Product Export Baseline CSV (Synthetic Example — Keep Your Backup!)</span>
+            <span data-lang="zh">1. 最新导出的原商品表 CSV（合成演示数据 — 正式操作前请另存原表备份）</span>
+          </label>
+          <textarea id="sogBaselineInput" rows="4" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.3px;">Handle,Title,Body (HTML),Vendor,Type,Tags,Option1 Name,Option1 Value,Variant SKU,Variant Price,Image Src,Image Position
+linen-apron,Washed Linen Apron,"&lt;p&gt;Cross-back Belgian linen apron.&lt;/p&gt;",Cedar Loom,Kitchen Linen,"apron, linen",Title,Default Title,APR-LIN-01,48.00,https://cdn.example/linen-apron-front.jpg,1
+linen-apron,,,,,,,,,,,https://cdn.example/linen-apron-stitch.jpg,2
+canvas-tote,Heavyweight Market Tote,"&lt;p&gt;18 oz waxed cotton tote.&lt;/p&gt;",Cedar Loom,Bags,"tote, canvas",Color,Natural,TOTE-NAT,34.00,https://cdn.example/tote-nat.jpg,1
+canvas-tote,,,,,,Color,Navy,TOTE-NVY,34.00,https://cdn.example/tote-nvy.jpg,2</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Proposed Overwrite Import CSV (Compare Blank Cell vs. Omitted Column)</span>
+            <span data-lang="zh">2. 拟上传覆盖导入的修改后 CSV（对比留空单元格 vs 省略列）</span>
+          </label>
+          <textarea id="sogProposedInput" rows="4" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:11.3px;">Handle,Title,Vendor,Tags,Variant SKU,Image Src,Image Position
+linen-apron,Washed Linen Apron,,"apron, linen, holiday-gift",APR-LIN-01,https://cdn.example/linen-apron-front.jpg,1
+linen-apron,,,,,https://cdn.example/linen-apron-stitch.jpg,2
+canvas-tote,Heavyweight Market Tote,Cedar Loom,"tote, canvas, restocked",TOTE-NAT-V2,,</textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="sogWorkedBtn">🧪 Worked Risky (Blank Vendor + Missing Option)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="sogSafeOmittedBtn">✅ Omitted Vendor Column (Tags-Only Safe)</button>
+            <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="sogUnknownBtn">⚠️ Unknown Header &amp; Ambiguous Row</button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;overflow-x:auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <strong style="font-size:13.5px;">
+              <span data-lang="en">🛡️ Handles, Fields, Old Values &amp; Pre-Overwrite Review Reasons</span>
+              <span data-lang="zh">🛡️ 受影响商品 Handle、原旧值与覆盖风险核查清单</span>
+            </strong>
+            <span id="sogSummaryBadge" style="font-size:12px;font-weight:800;color:#6ee7b7;"></span>
+          </div>
+          <div id="sogSafeBanner" style="padding:7px 10px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);color:#a7f3d0;font-size:11.5px;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:#cbd5e1;text-align:left;">
+                <th style="padding:6px;">Handle</th>
+                <th style="padding:6px;">Field</th>
+                <th style="padding:6px;">Old Value</th>
+                <th style="padding:6px;">Reason for Review</th>
+              </tr>
+            </thead>
+            <tbody id="sogResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Local CSV comparison only — no store connection, write-back, catalog prediction, recovery promise, or replacement for a backup.</span>
+            <span data-lang="zh"><em>边界说明：</em>仅在浏览器本地比对 CSV 表格，不连接网店后台、不回写数据、不预测最终目录，亦不可替代导入前的原表完整备份。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Edit Shopify catalogs in Sheets/Excel? Anonymous 1-click check (0 checkout, 0 email, 0 file upload):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val96BuyBtn">👍 I don't own the pack and would buy it ($9.99) for this</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val96OwnBtn">📦 I already own it</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val96ManualBtn">↔️ A manual comparison is enough</button>
+            </div>
+            <span id="val96Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="bakeryPickupCapSection" class="panel" style="margin-top:20px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
         <div>
@@ -4822,12 +4910,803 @@ var BakeryPickupCapEngine = (function () {
     document.getElementById("val95BuyBtn").addEventListener("click", function(){ submitValidationVote95("buy"); });
     document.getElementById("val95EnoughBtn").addEventListener("click", function(){ submitValidationVote95("enough"); });
 
+    
+var ShopifyCsvOverwriteGuard = (function () {
+  'use strict';
+
+  var PRODUCT_LEVEL_HEADERS = {
+    'title': 'Title',
+    'body (html)': 'Body (HTML)',
+    'vendor': 'Vendor',
+    'product category': 'Product Category',
+    'type': 'Type',
+    'tags': 'Tags',
+    'published': 'Published',
+    'seo title': 'SEO Title',
+    'seo description': 'SEO Description',
+    'gift card': 'Gift Card',
+    'status': 'Status',
+    'collection': 'Collection',
+    'google shopping / google product category': 'Google Shopping / Google Product Category',
+    'google shopping / gender': 'Google Shopping / Gender',
+    'google shopping / age group': 'Google Shopping / Age Group',
+    'google shopping / mpn': 'Google Shopping / MPN',
+    'google shopping / condition': 'Google Shopping / Condition',
+    'google shopping / custom product': 'Google Shopping / Custom Product',
+    'google shopping / custom label 0': 'Google Shopping / Custom Label 0',
+    'google shopping / custom label 1': 'Google Shopping / Custom Label 1',
+    'google shopping / custom label 2': 'Google Shopping / Custom Label 2',
+    'google shopping / custom label 3': 'Google Shopping / Custom Label 3',
+    'google shopping / custom label 4': 'Google Shopping / Custom Label 4'
+  };
+
+  var OPTION_HEADERS = {
+    'option1 name': 'Option1 Name',
+    'option1 value': 'Option1 Value',
+    'option1 linked to': 'Option1 Linked To',
+    'option2 name': 'Option2 Name',
+    'option2 value': 'Option2 Value',
+    'option2 linked to': 'Option2 Linked To',
+    'option3 name': 'Option3 Name',
+    'option3 value': 'Option3 Value',
+    'option3 linked to': 'Option3 Linked To'
+  };
+
+  var VARIANT_LEVEL_HEADERS = {
+    'variant sku': 'Variant SKU',
+    'variant grams': 'Variant Grams',
+    'variant inventory tracker': 'Variant Inventory Tracker',
+    'variant inventory qty': 'Variant Inventory Qty',
+    'variant inventory policy': 'Variant Inventory Policy',
+    'variant fulfillment service': 'Variant Fulfillment Service',
+    'variant price': 'Variant Price',
+    'variant compare at price': 'Variant Compare At Price',
+    'variant requires shipping': 'Variant Requires Shipping',
+    'variant taxable': 'Variant Taxable',
+    'variant barcode': 'Variant Barcode',
+    'variant image': 'Variant Image',
+    'variant weight unit': 'Variant Weight Unit',
+    'variant tax code': 'Variant Tax Code',
+    'cost per item': 'Cost per item'
+  };
+
+  var IMAGE_CONT_HEADERS = {
+    'image src': 'Image Src',
+    'image position': 'Image Position',
+    'image alt text': 'Image Alt Text'
+  };
+
+  function normHeaderKey(h) {
+    return String(h === null || h === undefined ? '' : h)
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .replace(/\s+/g, ' ')
+      .toLowerCase();
+  }
+
+  function trimCell(v) {
+    return String(v === null || v === undefined ? '' : v).trim();
+  }
+
+  function classifyHeader(rawHeader) {
+    var k = normHeaderKey(rawHeader);
+    if (!k) return { kind: 'blank', canonical: '' };
+    if (k === 'handle') return { kind: 'handle', canonical: 'Handle' };
+    if (Object.prototype.hasOwnProperty.call(PRODUCT_LEVEL_HEADERS, k)) {
+      return { kind: 'product', canonical: PRODUCT_LEVEL_HEADERS[k] };
+    }
+    if (Object.prototype.hasOwnProperty.call(OPTION_HEADERS, k)) {
+      return { kind: 'option', canonical: OPTION_HEADERS[k] };
+    }
+    if (Object.prototype.hasOwnProperty.call(VARIANT_LEVEL_HEADERS, k)) {
+      return { kind: 'variant', canonical: VARIANT_LEVEL_HEADERS[k] };
+    }
+    if (Object.prototype.hasOwnProperty.call(IMAGE_CONT_HEADERS, k)) {
+      return { kind: 'image', canonical: IMAGE_CONT_HEADERS[k] };
+    }
+    if (/^(included|price|compare at price)\s*\/\s*.+$/.test(k)) {
+      return { kind: 'variant', canonical: String(rawHeader).trim() };
+    }
+    if (/^variant metafield:\s*.+\[.+\]$/.test(k) || /^.+\(variant\.metafields\..+\)$/.test(k)) {
+      return { kind: 'variant', canonical: String(rawHeader).trim() };
+    }
+    if (/^metafield:\s*.+\[.+\]$/.test(k) || /^.+\(product\.metafields\..+\)$/.test(k)) {
+      return { kind: 'product', canonical: String(rawHeader).trim() };
+    }
+    return { kind: 'unknown', canonical: String(rawHeader).trim() };
+  }
+
+  function parseRfc4180OrPipeTable(rawText) {
+    var text = String(rawText || '').replace(/^\uFEFF/, '');
+    if (!text.trim()) return [];
+    // Detect pipe-shorthand table when first non-empty line contains '|' and no quotes
+    var firstLineMatch = text.match(/[^\r\n]+/);
+    if (firstLineMatch && firstLineMatch[0].indexOf('|') >= 0 && firstLineMatch[0].indexOf('"') === -1) {
+      var lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+      var pipeRows = [];
+      for (var li = 0; li < lines.length; li++) {
+        var ln = lines[li];
+        if (!ln.trim() || ln.trim().charAt(0) === '#') continue;
+        pipeRows.push(ln.split('|').map(function (c) { return c.trim(); }));
+      }
+      return pipeRows;
+    }
+
+    var rows = [];
+    var curRow = [];
+    var curCell = '';
+    var inQuotes = false;
+    for (var i = 0; i < text.length; i++) {
+      var ch = text.charAt(i);
+      if (inQuotes) {
+        if (ch === '"') {
+          if (i + 1 < text.length && text.charAt(i + 1) === '"') {
+            curCell += '"';
+            i++;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          curCell += ch;
+        }
+      } else {
+        if (ch === '"') {
+          inQuotes = true;
+        } else if (ch === ',') {
+          curRow.push(curCell);
+          curCell = '';
+        } else if (ch === '\r') {
+          if (i + 1 < text.length && text.charAt(i + 1) === '\n') i++;
+          curRow.push(curCell);
+          curCell = '';
+          if (curRow.some(function (x) { return String(x).trim() !== ''; })) {
+            rows.push(curRow);
+          }
+          curRow = [];
+        } else if (ch === '\n') {
+          curRow.push(curCell);
+          curCell = '';
+          if (curRow.some(function (x) { return String(x).trim() !== ''; })) {
+            rows.push(curRow);
+          }
+          curRow = [];
+        } else {
+          curCell += ch;
+        }
+      }
+    }
+    if (curCell !== '' || curRow.length > 0) {
+      curRow.push(curCell);
+      if (curRow.some(function (x) { return String(x).trim() !== ''; })) {
+        rows.push(curRow);
+      }
+    }
+    return rows;
+  }
+
+  function indexCatalogCsv(rawText, label) {
+    var matrix = parseRfc4180OrPipeTable(rawText);
+    var headerIssues = [];
+    var ambiguousRows = [];
+    if (!matrix.length) {
+      headerIssues.push({
+        source: label,
+        code: 'REVIEW_EMPTY_CSV',
+        header: '',
+        reason: label + ' CSV is empty — paste or load both fresh export and proposed import.'
+      });
+      return {
+        ok: false,
+        headers: [],
+        headerByKey: {},
+        headerIssues: headerIssues,
+        ambiguousRows: ambiguousRows,
+        handlesOrder: [],
+        handlesMap: {}
+      };
+    }
+
+    var rawHeaders = matrix[0];
+    var headers = [];
+    var headerByKey = {};
+    for (var c = 0; c < rawHeaders.length; c++) {
+      var rawH = String(rawHeaders[c] || '').trim();
+      var info = classifyHeader(rawH);
+      var k = normHeaderKey(rawH);
+      if (info.kind === 'blank') {
+        headerIssues.push({
+          source: label,
+          code: 'REVIEW_BLANK_HEADER',
+          header: 'Column #' + (c + 1),
+          reason: label + ' has a blank column header at column #' + (c + 1) + ' — review header row before import.'
+        });
+      } else if (Object.prototype.hasOwnProperty.call(headerByKey, k)) {
+        headerIssues.push({
+          source: label,
+          code: 'REVIEW_DUPLICATE_HEADER',
+          header: rawH,
+          reason: label + ' repeats column header "' + rawH + '" — Shopify overwrite behavior on duplicate headers is ambiguous.'
+        });
+      } else if (info.kind === 'unknown') {
+        headerIssues.push({
+          source: label,
+          code: 'REVIEW_UNKNOWN_HEADER',
+          header: rawH,
+          reason: label + ' includes unrecognized header "' + rawH + '" — check spelling against Shopify CSV headers so intended edits are not ignored.'
+        });
+      }
+      var colMeta = { index: c, raw: rawH, key: k, kind: info.kind, canonical: info.canonical };
+      headers.push(colMeta);
+      if (k && !Object.prototype.hasOwnProperty.call(headerByKey, k)) {
+        headerByKey[k] = colMeta;
+      }
+    }
+
+    if (!Object.prototype.hasOwnProperty.call(headerByKey, 'handle')) {
+      headerIssues.push({
+        source: label,
+        code: 'REVIEW_MISSING_HANDLE_COLUMN',
+        header: 'Handle',
+        reason: label + ' is missing required "Handle" column — cannot match products safely.'
+      });
+      return {
+        ok: false,
+        headers: headers,
+        headerByKey: headerByKey,
+        headerIssues: headerIssues,
+        ambiguousRows: ambiguousRows,
+        handlesOrder: [],
+        handlesMap: {}
+      };
+    }
+
+    var handleColIdx = headerByKey['handle'].index;
+    var handlesOrder = [];
+    var handlesMap = {};
+
+    for (var r = 1; r < matrix.length; r++) {
+      var rowArr = matrix[r];
+      var csvLineNum = r + 1;
+      var handleVal = trimCell(rowArr[handleColIdx]).toLowerCase();
+      var nonHandleNonEmpty = 0;
+      var hasProductVal = false;
+      var hasOptionVal = false;
+      var hasVariantVal = false;
+      var hasImageVal = false;
+      var cellByKey = {};
+
+      for (var hc = 0; hc < headers.length; hc++) {
+        var meta = headers[hc];
+        var val = hc < rowArr.length ? trimCell(rowArr[hc]) : '';
+        if (meta.key) cellByKey[meta.key] = val;
+        if (meta.kind === 'handle') continue;
+        if (val !== '') {
+          nonHandleNonEmpty++;
+          if (meta.kind === 'product') hasProductVal = true;
+          else if (meta.kind === 'option') hasOptionVal = true;
+          else if (meta.kind === 'variant') hasVariantVal = true;
+          else if (meta.kind === 'image') hasImageVal = true;
+        }
+      }
+
+      if (!handleVal) {
+        if (nonHandleNonEmpty > 0) {
+          ambiguousRows.push({
+            source: label,
+            line: csvLineNum,
+            handle: '(blank)',
+            code: 'REVIEW_BLANK_HANDLE_ROW',
+            reason: label + ' row ' + csvLineNum + ' has blank Handle with non-empty cells — assign explicit Handle before overwrite.'
+          });
+        }
+        continue;
+      }
+
+      if (!Object.prototype.hasOwnProperty.call(handlesMap, handleVal)) {
+        handlesOrder.push(handleVal);
+        handlesMap[handleVal] = {
+          handle: handleVal,
+          primaryRow: null,
+          variantRows: [],
+          imageContinuationRows: [],
+          allRows: []
+        };
+      }
+      var bucket = handlesMap[handleVal];
+      var isFirstForHandle = bucket.allRows.length === 0;
+      var opt1 = cellByKey['option1 value'] || '';
+      var opt2 = cellByKey['option2 value'] || '';
+      var opt3 = cellByKey['option3 value'] || '';
+      var imgSrc = cellByKey['image src'] || '';
+      var imgPos = cellByKey['image position'] || '';
+      var imgAlt = cellByKey['image alt text'] || '';
+
+      var rowClass = 'PRIMARY';
+      if (!isFirstForHandle) {
+        // Extra-image continuation row: zero product/option/variant edits, only image fields populated!
+        if (!hasProductVal && !hasOptionVal && !hasVariantVal && (imgSrc !== '' || imgPos !== '' || imgAlt !== '')) {
+          rowClass = 'IMAGE_CONTINUATION';
+        } else if (nonHandleNonEmpty === 0) {
+          rowClass = 'AMBIGUOUS_EMPTY_HANDLE_ROW';
+          ambiguousRows.push({
+            source: label,
+            line: csvLineNum,
+            handle: handleVal,
+            code: 'REVIEW_EMPTY_CONTINUATION_ROW',
+            reason: label + ' row ' + csvLineNum + ' (' + handleVal + ') repeats Handle with all other included columns blank.'
+          });
+        } else if (opt1 === '' && (hasVariantVal || hasProductVal)) {
+          rowClass = 'AMBIGUOUS_CONTINUATION_ROW';
+          ambiguousRows.push({
+            source: label,
+            line: csvLineNum,
+            handle: handleVal,
+            code: 'REVIEW_AMBIGUOUS_CONTINUATION_ROW',
+            reason: label + ' row ' + csvLineNum + ' (' + handleVal + ') is a secondary row with blank Option1 Value yet edits product/variant fields.'
+          });
+        } else {
+          rowClass = 'SECONDARY_VARIANT';
+        }
+      }
+
+      var rec = {
+        line: csvLineNum,
+        rowClass: rowClass,
+        cells: cellByKey,
+        optKey: [opt1.toLowerCase(), opt2.toLowerCase(), opt3.toLowerCase()].join('||'),
+        optLabel: [opt1, opt2, opt3].filter(function (x) { return x !== ''; }).join(' / ') || 'Default Title',
+        hasVariantVal: hasVariantVal,
+        hasOptionVal: hasOptionVal,
+        hasProductVal: hasProductVal
+      };
+      bucket.allRows.push(rec);
+      if (isFirstForHandle) {
+        bucket.primaryRow = rec;
+        bucket.variantRows.push(rec);
+      } else if (rowClass === 'IMAGE_CONTINUATION') {
+        bucket.imageContinuationRows.push(rec);
+      } else if (rowClass === 'SECONDARY_VARIANT') {
+        bucket.variantRows.push(rec);
+      }
+    }
+
+    // Check duplicate option tuples within any handle
+    for (var hi = 0; hi < handlesOrder.length; hi++) {
+      var hKey = handlesOrder[hi];
+      var hb = handlesMap[hKey];
+      if (hb.variantRows.length > 1) {
+        var seenOpt = {};
+        for (var vi = 0; vi < hb.variantRows.length; vi++) {
+          var vr = hb.variantRows[vi];
+          if (Object.prototype.hasOwnProperty.call(seenOpt, vr.optKey)) {
+            ambiguousRows.push({
+              source: label,
+              line: vr.line,
+              handle: hKey,
+              code: 'REVIEW_DUPLICATE_VARIANT_OPTIONS',
+              reason: label + ' row ' + vr.line + ' (' + hKey + ') repeats variant option combination "' + vr.optLabel + '".'
+            });
+          }
+          seenOpt[vr.optKey] = true;
+        }
+      }
+    }
+
+    return {
+      ok: true,
+      headers: headers,
+      headerByKey: headerByKey,
+      headerIssues: headerIssues,
+      ambiguousRows: ambiguousRows,
+      handlesOrder: handlesOrder,
+      handlesMap: handlesMap
+    };
+  }
+
+  function evaluateShopifyOverwriteDiff(baselineCsvText, proposedCsvText) {
+    var baseIdx = indexCatalogCsv(baselineCsvText, 'Export Baseline');
+    var propIdx = indexCatalogCsv(proposedCsvText, 'Proposed Import');
+
+    var findings = [];
+    var intendedChanges = [];
+    var safeNotes = [];
+
+    // 1. Surface any header issues or ambiguous rows first -> go straight to Review
+    var allHeaderIssues = baseIdx.headerIssues.concat(propIdx.headerIssues);
+    for (var i = 0; i < allHeaderIssues.length; i++) {
+      var hi = allHeaderIssues[i];
+      findings.push({
+        handle: '(header)',
+        field: hi.header || 'CSV Header',
+        oldValue: '—',
+        proposedValue: '—',
+        category: 'REVIEW_HEADER',
+        code: hi.code,
+        reason: hi.reason
+      });
+    }
+
+    var allAmb = baseIdx.ambiguousRows.concat(propIdx.ambiguousRows);
+    for (var a = 0; a < allAmb.length; a++) {
+      var ar = allAmb[a];
+      findings.push({
+        handle: ar.handle,
+        field: 'Row #' + ar.line,
+        oldValue: '—',
+        proposedValue: 'Ambiguous row structure',
+        category: 'REVIEW_AMBIGUOUS_ROW',
+        code: ar.code,
+        reason: ar.reason
+      });
+    }
+
+    if (!baseIdx.ok || !propIdx.ok) {
+      return {
+        ok: false,
+        findings: findings,
+        intendedChanges: intendedChanges,
+        safeNotes: safeNotes,
+        omittedProductColumns: [],
+        fieldClearCount: 0,
+        variantRiskCount: 0,
+        reviewCount: findings.length,
+        safeImageContCount: 0,
+        verdict: 'REVIEW_REQUIRED_BEFORE_IMPORT'
+      };
+    }
+
+    // Track omitted product-level columns that existed in Baseline (preserved on Shopify Overwrite)
+    var omittedProductColumns = [];
+    for (var bc = 0; bc < baseIdx.headers.length; bc++) {
+      var bMeta = baseIdx.headers[bc];
+      if (bMeta.kind === 'product' && !Object.prototype.hasOwnProperty.call(propIdx.headerByKey, bMeta.key)) {
+        omittedProductColumns.push(bMeta.canonical);
+      }
+    }
+
+    var propHasOpt1Val = Object.prototype.hasOwnProperty.call(propIdx.headerByKey, 'option1 value');
+    var propHasOpt2Val = Object.prototype.hasOwnProperty.call(propIdx.headerByKey, 'option2 value');
+    var propHasOpt3Val = Object.prototype.hasOwnProperty.call(propIdx.headerByKey, 'option3 value');
+    var propVariantCols = propIdx.headers.filter(function (h) { return h.kind === 'variant'; });
+    var propProductCols = propIdx.headers.filter(function (h) { return h.kind === 'product'; });
+
+    var fieldClearCount = 0;
+    var variantRiskCount = 0;
+    var reviewCount = findings.length;
+    var safeImageContCount = 0;
+
+    for (var p = 0; p < propIdx.handlesOrder.length; p++) {
+      var handle = propIdx.handlesOrder[p];
+      var propBucket = propIdx.handlesMap[handle];
+      safeImageContCount += propBucket.imageContinuationRows.length;
+
+      if (!Object.prototype.hasOwnProperty.call(baseIdx.handlesMap, handle)) {
+        reviewCount++;
+        findings.push({
+          handle: handle,
+          field: 'Handle',
+          oldValue: '(not in fresh export)',
+          proposedValue: handle,
+          category: 'REVIEW_NEW_HANDLE',
+          code: 'REVIEW_HANDLE_NOT_IN_EXPORT',
+          reason: 'Handle "' + handle + '" is not in the fresh export baseline — verify handle spelling so Overwrite does not create an unintended duplicate product.'
+        });
+        continue;
+      }
+
+      var baseBucket = baseIdx.handlesMap[handle];
+      var basePrimary = baseBucket.primaryRow;
+      var propPrimary = propBucket.primaryRow;
+
+      // 2. Product-level included-column checks on primary product row ONLY
+      //    (Extra-image continuation rows are NEVER treated as edits to Vendor/Title/Body!)
+      for (var pc = 0; pc < propProductCols.length; pc++) {
+        var pCol = propProductCols[pc];
+        var oldVal = trimCell(basePrimary.cells[pCol.key]);
+        var newVal = trimCell(propPrimary.cells[pCol.key]);
+        if (oldVal !== '' && newVal === '') {
+          fieldClearCount++;
+          findings.push({
+            handle: handle,
+            field: pCol.canonical,
+            oldValue: oldVal,
+            proposedValue: '(blank cell in included column)',
+            category: 'FIELD_CLEAR_RISK',
+            code: 'FIELD_CLEAR_ON_OVERWRITE',
+            reason: 'Included "' + pCol.canonical + '" column is blank on "' + handle + '" product row — Overwrite will erase "' + oldVal + '" (omit column or restore value).'
+          });
+        } else if (oldVal !== '' && newVal !== '' && oldVal !== newVal) {
+          // Flag unexpected Body (HTML) or Published/Status downgrades for visibility alongside intended edits
+          if (pCol.key === 'body (html)') {
+            reviewCount++;
+            findings.push({
+              handle: handle,
+              field: pCol.canonical,
+              oldValue: oldVal,
+              proposedValue: newVal,
+              category: 'REVIEW_CONTENT_CHANGE',
+              code: 'DESCRIPTION_CHANGED_ON_OVERWRITE',
+              reason: 'Included "Body (HTML)" changes existing description on "' + handle + '" — confirm this text edit is intentional.'
+            });
+          } else {
+            intendedChanges.push({
+              handle: handle,
+              field: pCol.canonical,
+              oldValue: oldVal,
+              proposedValue: newVal
+            });
+          }
+        }
+      }
+
+      // 3. Variant & Option-column dependency checks (flags risk; never predicts final catalog)
+      var baseUsesOpt2 = baseBucket.variantRows.some(function (vr) { return trimCell(vr.cells['option2 value']) !== ''; });
+      var baseUsesOpt3 = baseBucket.variantRows.some(function (vr) { return trimCell(vr.cells['option3 value']) !== ''; });
+      var baseIsMultiVariant = baseBucket.variantRows.length > 1;
+      var baseOpt1NonDefault = baseBucket.variantRows.some(function (vr) {
+        var v1 = trimCell(vr.cells['option1 value']);
+        return v1 !== '' && v1.toLowerCase() !== 'default title';
+      });
+      var propTouchesVariants = propVariantCols.length > 0 || propBucket.variantRows.some(function (vr) { return vr.hasVariantVal || vr.hasOptionVal; });
+
+      var missingOptCols = [];
+      if (propTouchesVariants) {
+        if ((baseIsMultiVariant || baseOpt1NonDefault || propHasOpt2Val || propHasOpt3Val) && !propHasOpt1Val) {
+          missingOptCols.push('Option1 Value');
+        }
+        if (baseUsesOpt2 && !propHasOpt2Val) {
+          missingOptCols.push('Option2 Value');
+        }
+        if (baseUsesOpt3 && !propHasOpt3Val) {
+          missingOptCols.push('Option3 Value');
+        }
+        // Also check when Option1 Value header IS present, but blank on primary row while editing SKU/Price on a non-default-option product
+        if (propHasOpt1Val && trimCell(propPrimary.cells['option1 value']) === '' && (baseIsMultiVariant || baseOpt1NonDefault)) {
+          missingOptCols.push('Option1 Value (blank cell)');
+        }
+      }
+
+      if (missingOptCols.length > 0) {
+        variantRiskCount++;
+        var baseVarSummary = baseBucket.variantRows.map(function (vr) {
+          var sku = trimCell(vr.cells['variant sku']);
+          return vr.optLabel + (sku ? ' [' + sku + ']' : '');
+        }).join('; ');
+        findings.push({
+          handle: handle,
+          field: missingOptCols.join(', '),
+          oldValue: baseVarSummary,
+          proposedValue: 'Missing required option column(s) on variant edit',
+          category: 'VARIANT_RISK',
+          code: 'VARIANT_RISK_MISSING_OPTION_COLUMNS',
+          reason: 'Variant/SKU update on "' + handle + '" is missing required ' + missingOptCols.join(' & ') + ' — risks breaking or replacing existing variants on Overwrite (review before import; tool does not predict final catalog).'
+        });
+        continue;
+      }
+
+      // Check omitted sibling variants when multi-variant handle includes option columns or multiple variants
+      if (baseIsMultiVariant && (propHasOpt1Val || propTouchesVariants)) {
+        var propByOptKey = {};
+        for (var pvi = 0; pvi < propBucket.variantRows.length; pvi++) {
+          propByOptKey[propBucket.variantRows[pvi].optKey] = propBucket.variantRows[pvi];
+        }
+        var omittedSiblings = [];
+        for (var bvi = 0; bvi < baseBucket.variantRows.length; bvi++) {
+          var bvr = baseBucket.variantRows[bvi];
+          if (!Object.prototype.hasOwnProperty.call(propByOptKey, bvr.optKey)) {
+            var bSku = trimCell(bvr.cells['variant sku']);
+            omittedSiblings.push(bvr.optLabel + (bSku ? ' [' + bSku + ']' : ''));
+          }
+        }
+        if (omittedSiblings.length > 0) {
+          variantRiskCount++;
+          findings.push({
+            handle: handle,
+            field: 'Sibling Variants (' + omittedSiblings.length + ' omitted)',
+            oldValue: omittedSiblings.join('; '),
+            proposedValue: 'Omitted from proposed handle rows',
+            category: 'VARIANT_RISK',
+            code: 'VARIANT_RISK_MISSING_SIBLING_VARIANTS',
+            reason: 'Multi-variant handle "' + handle + '" omits ' + omittedSiblings.length + ' existing variant row(s) (' + omittedSiblings.join('; ') + ') — Overwrite risks deleting omitted variants (review before import; tool does not predict final catalog).'
+          });
+        }
+      }
+
+      // 4. Variant-level field clear & unexpected price change checks on matched variants
+      if (propVariantCols.length > 0) {
+        var baseVarMap = {};
+        for (var bv = 0; bv < baseBucket.variantRows.length; bv++) {
+          baseVarMap[baseBucket.variantRows[bv].optKey] = baseBucket.variantRows[bv];
+        }
+        for (var pv = 0; pv < propBucket.variantRows.length; pv++) {
+          var pVar = propBucket.variantRows[pv];
+          var matchedBaseVar = baseVarMap[pVar.optKey] || (baseBucket.variantRows.length === 1 && propBucket.variantRows.length === 1 ? baseBucket.variantRows[0] : null);
+          if (!matchedBaseVar) {
+            reviewCount++;
+            findings.push({
+              handle: handle,
+              field: 'Variant (' + pVar.optLabel + ')',
+              oldValue: '(not in baseline variants)',
+              proposedValue: pVar.optLabel,
+              category: 'VARIANT_RISK',
+              code: 'REVIEW_UNMATCHED_VARIANT_OPTION',
+              reason: 'Proposed variant option "' + pVar.optLabel + '" on "' + handle + '" did not match an existing baseline variant — verify whether adding/renaming a variant is intended.'
+            });
+            continue;
+          }
+          for (var vc = 0; vc < propVariantCols.length; vc++) {
+            var vCol = propVariantCols[vc];
+            var oldV = trimCell(matchedBaseVar.cells[vCol.key]);
+            var newV = trimCell(pVar.cells[vCol.key]);
+            if (oldV !== '' && newV === '') {
+              fieldClearCount++;
+              findings.push({
+                handle: handle,
+                field: vCol.canonical + ' (' + pVar.optLabel + ')',
+                oldValue: oldV,
+                proposedValue: '(blank cell in included column)',
+                category: 'FIELD_CLEAR_RISK',
+                code: 'VARIANT_FIELD_CLEAR_ON_OVERWRITE',
+                reason: 'Included "' + vCol.canonical + '" cell is blank on "' + handle + '" (' + pVar.optLabel + ') — Overwrite risks clearing "' + oldV + '".'
+              });
+            } else if (vCol.key === 'variant price' && oldV !== '' && newV !== '' && parseFloat(oldV) !== parseFloat(newV)) {
+              reviewCount++;
+              findings.push({
+                handle: handle,
+                field: 'Variant Price (' + pVar.optLabel + ')',
+                oldValue: oldV,
+                proposedValue: newV,
+                category: 'REVIEW_PRICE_CHANGE',
+                code: 'VARIANT_PRICE_CHANGED_ON_OVERWRITE',
+                reason: 'Included "Variant Price" changes "' + handle + '" (' + pVar.optLabel + ') from ' + oldV + ' to ' + newV + ' — confirm price edit is intentional.'
+              });
+            }
+          }
+        }
+      }
+
+      if (propBucket.imageContinuationRows.length > 0) {
+        safeNotes.push(handle + ': ' + propBucket.imageContinuationRows.length + ' extra-image continuation row(s) ignored safely for product/vendor fields.');
+      }
+    }
+
+    if (omittedProductColumns.length > 0) {
+      safeNotes.push('Omitted product column(s) preserved on Overwrite: ' + omittedProductColumns.join(', ') + '.');
+    }
+
+    var verdict = (fieldClearCount === 0 && variantRiskCount === 0 && reviewCount === 0)
+      ? 'CLEAN_NO_OVERWRITE_RISKS'
+      : 'AT_RISK_REVIEW_BEFORE_IMPORT';
+
+    return {
+      ok: true,
+      findings: findings,
+      intendedChanges: intendedChanges,
+      safeNotes: safeNotes,
+      omittedProductColumns: omittedProductColumns,
+      fieldClearCount: fieldClearCount,
+      variantRiskCount: variantRiskCount,
+      reviewCount: reviewCount,
+      safeImageContCount: safeImageContCount,
+      handlesChecked: propIdx.handlesOrder.length,
+      verdict: verdict,
+      scopeNote: 'Local pre-import CSV comparison only — no Shopify store connection, no write-back, no catalog prediction or recovery promise, and never a replacement for keeping your untouched export backup.'
+    };
+  }
+
+  return {
+    classifyHeader: classifyHeader,
+    parseRfc4180OrPipeTable: parseRfc4180OrPipeTable,
+    indexCatalogCsv: indexCatalogCsv,
+    evaluateShopifyOverwriteDiff: evaluateShopifyOverwriteDiff
+  };
+})();
+
+
+    function renderShopifyOverwriteSandbox() {
+      var res = ShopifyCsvOverwriteGuard.evaluateShopifyOverwriteDiff(
+        document.getElementById("sogBaselineInput").value,
+        document.getElementById("sogProposedInput").value
+      );
+      var sb = document.getElementById("sogSafeBanner");
+      sb.textContent = res.safeNotes.length
+        ? ("✓ Safe rules applied: " + res.safeNotes.join(" · "))
+        : "✓ Comparing included columns, variant option dependencies, and continuation rows locally.";
+
+      var tb = document.getElementById("sogResultsBody");
+      clearNode(tb);
+      if (!res.findings.length) {
+        var trOk = document.createElement("tr");
+        var tdOk = document.createElement("td");
+        tdOk.colSpan = 4;
+        tdOk.style.padding = "7px";
+        tdOk.style.color = "#6ee7b7";
+        tdOk.style.fontWeight = "700";
+        tdOk.textContent = "CLEAN — 0 blank erasures, 0 variant option risks, 0 ambiguous headers/rows (" + res.intendedChanges.length + " intended non-blank edit(s)).";
+        trOk.appendChild(tdOk);
+        tb.appendChild(trOk);
+      } else {
+        res.findings.forEach(function(f) {
+          var tr = document.createElement("tr");
+          tr.style.borderBottom = "1px solid rgba(51,65,85,0.5)";
+          var cols = [f.handle, f.field, f.oldValue, f.code + " — " + f.reason];
+          for (var c = 0; c < cols.length; c++) {
+            var td = document.createElement("td");
+            td.style.padding = "6px";
+            if (c === 0 || c === 3) {
+              td.style.fontWeight = c === 0 ? "800" : "700";
+            }
+            if (c === 3) {
+              td.style.color = f.code.indexOf("CLEAR") >= 0 ? "#fca5a5" : (f.code.indexOf("VARIANT") >= 0 ? "#fcd34d" : "#93c5fd");
+            }
+            td.textContent = cols[c];
+            tr.appendChild(td);
+          }
+          tb.appendChild(tr);
+        });
+      }
+
+      document.getElementById("sogSummaryBadge").textContent =
+        "CLEARS " + res.fieldClearCount + " · VARIANT RISKS " + res.variantRiskCount + " · REVIEW " + res.reviewCount + " · SAFE IMG CONT " + res.safeImageContCount;
+    }
+
+    function trackVal96SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof localStorage !== "undefined" && localStorage && !localStorage.getItem("craftleaf_val96_viewed")) {
+          localStorage.setItem("craftleaf_val96_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea96-view", "Idea 96 Shopify CSV Overwrite Guard Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote96(choice) {
+      var msgEl = document.getElementById("val96Msg");
+      try {
+        if (typeof localStorage !== "undefined" && localStorage && localStorage.getItem("craftleaf_val96_voted")) {
+          msgEl.textContent = "Recorded once per browser — thank you!";
+          return;
+        }
+        if (typeof localStorage !== "undefined" && localStorage) {
+          localStorage.setItem("craftleaf_val96_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea96-" + choice, "Idea 96 Shopify CSV Overwrite Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded once for this browser.";
+    }
+
+    var SOG_WORKED_BASE = "Handle,Title,Body (HTML),Vendor,Type,Tags,Option1 Name,Option1 Value,Variant SKU,Variant Price,Image Src,Image Position\nlinen-apron,Washed Linen Apron,\"<p>Cross-back Belgian linen apron.</p>\",Cedar Loom,Kitchen Linen,\"apron, linen\",Title,Default Title,APR-LIN-01,48.00,https://cdn.example/linen-apron-front.jpg,1\nlinen-apron,,,,,,,,,,,https://cdn.example/linen-apron-stitch.jpg,2\ncanvas-tote,Heavyweight Market Tote,\"<p>18 oz waxed cotton tote.</p>\",Cedar Loom,Bags,\"tote, canvas\",Color,Natural,TOTE-NAT,34.00,https://cdn.example/tote-nat.jpg,1\ncanvas-tote,,,,,,Color,Navy,TOTE-NVY,34.00,https://cdn.example/tote-nvy.jpg,2";
+    document.getElementById("sogBaselineInput").addEventListener("input", renderShopifyOverwriteSandbox);
+    document.getElementById("sogProposedInput").addEventListener("input", renderShopifyOverwriteSandbox);
+    document.getElementById("sogWorkedBtn").addEventListener("click", function(){
+      document.getElementById("sogBaselineInput").value = SOG_WORKED_BASE;
+      document.getElementById("sogProposedInput").value = "Handle,Title,Vendor,Tags,Variant SKU,Image Src,Image Position\nlinen-apron,Washed Linen Apron,,\"apron, linen, holiday-gift\",APR-LIN-01,https://cdn.example/linen-apron-front.jpg,1\nlinen-apron,,,,,https://cdn.example/linen-apron-stitch.jpg,2\ncanvas-tote,Heavyweight Market Tote,Cedar Loom,\"tote, canvas, restocked\",TOTE-NAT-V2,,";
+      renderShopifyOverwriteSandbox();
+    });
+    document.getElementById("sogSafeOmittedBtn").addEventListener("click", function(){
+      document.getElementById("sogBaselineInput").value = SOG_WORKED_BASE;
+      document.getElementById("sogProposedInput").value = "Handle,Tags\nlinen-apron,\"apron, linen, holiday-gift\"\ncanvas-tote,\"tote, canvas, restocked\"";
+      renderShopifyOverwriteSandbox();
+    });
+    document.getElementById("sogUnknownBtn").addEventListener("click", function(){
+      document.getElementById("sogBaselineInput").value = SOG_WORKED_BASE;
+      document.getElementById("sogProposedInput").value = "Handle,Vendor,Product_Tags_Typo,Option1 Value,Variant SKU\nlinen-apron,Cedar Loom,gift,Default Title,APR-LIN-01\nlinen-apron,,,,APR-GHOST\n,Cedar Loom,orphan,Default Title,ORPHAN-1";
+      renderShopifyOverwriteSandbox();
+    });
+    document.getElementById("val96BuyBtn").addEventListener("click", function(){ submitValidationVote96("buy"); });
+    document.getElementById("val96OwnBtn").addEventListener("click", function(){ submitValidationVote96("own"); });
+    document.getElementById("val96ManualBtn").addEventListener("click", function(){ submitValidationVote96("manual"); });
+
     var params = new URLSearchParams(window.location.search || "");
     var initLang = params.get("lang");
     if (!initLang) {
       try { initLang = localStorage.getItem("craftleaf_lang"); } catch (e) {}
     }
     setLang(initLang === "zh" ? "zh" : "en");
+    renderShopifyOverwriteSandbox();
     renderBakeryPickupCapSandbox();
     renderStockCartonSandbox();
     renderYarnDyeLotSandbox();
@@ -4844,6 +5723,7 @@ var BakeryPickupCapEngine = (function () {
     trackVal89SampleViewOnce();
     trackVal92SampleViewOnce();
     trackVal95SampleViewOnce();
+    trackVal96SampleViewOnce();
   })();
   </script>
 </body>

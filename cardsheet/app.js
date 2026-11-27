@@ -1462,6 +1462,107 @@
       });
     }
 
+    // #97: Interactive Protected-Join Board Tiler (US Letter vs ISO A4 vs Impossible Withheld Guard + 1-browser poll)
+    function setBoardTilerDemoMode(mode) {
+      var letterBtn = $('btModeLetterBtn');
+      var a4Btn = $('btModeA4Btn');
+      var withheldBtn = $('btModeWithheldBtn');
+      var ordSeamX1 = $('btOrdSeamX1');
+      var ordSeamX2 = $('btOrdSeamX2');
+      var ordSeamY1 = $('btOrdSeamY1');
+      var ordCaption = $('btOrdCaption');
+      var protCard = $('btProtCard');
+      var protBadge = $('btProtBadge');
+      var protZone = $('btProtZoneMain');
+      var protZoneLbl = $('btProtZoneLabel');
+      var protSeams = $('btProtSeamsGroup');
+      var protCaption = $('btProtCaption');
+      if (!letterBtn || !protBadge || !protCaption) return;
+
+      letterBtn.classList.toggle('btn-primary', mode === 'letter');
+      a4Btn.classList.toggle('btn-primary', mode === 'a4');
+      withheldBtn.classList.toggle('btn-primary', mode === 'withheld');
+
+      if (mode === 'a4') {
+        if (ordSeamX1) { ordSeamX1.setAttribute('x1', '149'); ordSeamX1.setAttribute('x2', '149'); }
+        if (ordSeamX2) { ordSeamX2.setAttribute('x1', '289'); ordSeamX2.setAttribute('x2', '289'); }
+        if (ordSeamY1) { ordSeamY1.setAttribute('y1', '109'); ordSeamY1.setAttribute('y2', '109'); }
+        if (ordCaption) {
+          ordCaption.textContent = 'Default ISO A4 Seams (187.3 mm & 374.6 mm X; 274.3 mm Y): Paper joins still slice across 25 VP · Meridian Gate, 40 VP · Citadel Spire, and Station IV · Cloud Dock.';
+        }
+        if (protCard) { protCard.classList.remove('pf-err'); protCard.classList.add('pf-ok'); }
+        protBadge.className = 'pf-pill pf-pill-ok';
+        protBadge.textContent = 'ISO A4 FEASIBLE · 6 TILES · 18.00"';
+        if (protZone) { protZone.setAttribute('x', '139'); protZone.setAttribute('width', '44'); }
+        if (protZoneLbl) { protZoneLbl.setAttribute('x', '161'); protZoneLbl.textContent = '25 VP'; }
+        if (protSeams) protSeams.style.display = '';
+        protCaption.textContent = 'Protected ISO A4 Layout (165.5 mm & 333.5 mm X; 210.0 mm Y): Exports 6 overlapping A4 pages + Assembly Key & 25.0 mm scale bar; board stays exact 18.00 in (457.2 mm) wide.';
+      } else if (mode === 'withheld') {
+        if (protCard) { protCard.classList.remove('pf-ok'); protCard.classList.add('pf-err'); }
+        protBadge.className = 'pf-pill pf-pill-err';
+        protBadge.textContent = 'WITHHELD — NAMED TRACK > SHEET';
+        if (protZone) { protZone.setAttribute('x', '52'); protZone.setAttribute('width', '184'); }
+        if (protZoneLbl) { protZoneLbl.setAttribute('x', '144'); protZoneLbl.textContent = '9.18" FULL-SPAN TRACK'; }
+        if (protSeams) protSeams.style.display = 'none';
+        protCaption.textContent = 'Edition Withheld (Never Shrunk): Names "Full-Span Imperial Score Track" (233.2 mm > 203.2 mm Letter & 197.3 mm A4 printable width) and blocks export rather than silently shrinking your 18.00" board.';
+      } else {
+        if (ordSeamX1) { ordSeamX1.setAttribute('x1', '154'); ordSeamX1.setAttribute('x2', '154'); }
+        if (ordSeamX2) { ordSeamX2.setAttribute('x1', '297'); ordSeamX2.setAttribute('x2', '297'); }
+        if (ordSeamY1) { ordSeamY1.setAttribute('y1', '101'); ordSeamY1.setAttribute('y2', '101'); }
+        if (ordCaption) {
+          ordCaption.textContent = 'Default US Letter Seams (193.2 mm & 386.4 mm X; 256.7 mm Y): Paper joins cut directly across 25 VP · Meridian Gate, 40 VP · Citadel Spire, and Station IV · Cloud Dock.';
+        }
+        if (protCard) { protCard.classList.remove('pf-err'); protCard.classList.add('pf-ok'); }
+        protBadge.className = 'pf-pill pf-pill-ok';
+        protBadge.textContent = '0 JOINS ON SPACES · 18.00"';
+        if (protZone) { protZone.setAttribute('x', '139'); protZone.setAttribute('width', '44'); }
+        if (protZoneLbl) { protZoneLbl.setAttribute('x', '161'); protZoneLbl.textContent = '25 VP'; }
+        if (protSeams) protSeams.style.display = '';
+        protCaption.textContent = 'Protected US Letter Layout (165.5 mm & 333.5 mm X; 218.5 mm Y): Exports 6 overlapping numbered pages + Assembly Key & 1.00" scale bar; board stays exact 18.00 in (457.2 mm) wide.';
+      }
+    }
+
+    function submitBoardTilerVote97(choice) {
+      var msgEl = $('val97Msg');
+      if (!msgEl) return;
+      try {
+        if (typeof localStorage !== 'undefined' && localStorage && localStorage.getItem('craftleaf_val97_voted')) {
+          msgEl.textContent = 'Recorded once per browser — thank you!';
+          return;
+        }
+        if (typeof localStorage !== 'undefined' && localStorage) {
+          localStorage.setItem('craftleaf_val97_voted', choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+        window.CraftLeafSDK.trackEvent('idea97-' + choice, 'Idea 97 Protected Board Joins Vote: ' + choice);
+      }
+      msgEl.textContent = 'Thank you — anonymous response recorded once for this browser.';
+    }
+
+    if ($('btModeLetterBtn') && $('btModeA4Btn') && $('btModeWithheldBtn')) {
+      try {
+        if (state.lang !== 'zh' && typeof localStorage !== 'undefined' && localStorage && !localStorage.getItem('craftleaf_val97_viewed')) {
+          localStorage.setItem('craftleaf_val97_viewed', '1');
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+            window.CraftLeafSDK.trackEvent('idea97-view', 'Idea 97 Protected Board Joins Comparison View');
+          }
+        }
+      } catch (_e) {}
+      $('btModeLetterBtn').addEventListener('click', function () { setBoardTilerDemoMode('letter'); });
+      $('btModeA4Btn').addEventListener('click', function () { setBoardTilerDemoMode('a4'); });
+      $('btModeWithheldBtn').addEventListener('click', function () { setBoardTilerDemoMode('withheld'); });
+    }
+    if ($('val97BuyBtn')) {
+      $('val97BuyBtn').addEventListener('click', function () { submitBoardTilerVote97('buy'); });
+    }
+    if ($('val97OwnBtn')) {
+      $('val97OwnBtn').addEventListener('click', function () { submitBoardTilerVote97('own'); });
+    }
+    if ($('val97FreeBtn')) {
+      $('val97FreeBtn').addEventListener('click', function () { submitBoardTilerVote97('free'); });
+    }
+
     // Workspace Mode Tabs
     $('tabCardsBtn').addEventListener('click', function () {
       state.workspaceTab = 'cards';

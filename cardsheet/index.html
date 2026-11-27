@@ -622,14 +622,105 @@
             </div>
           </div>
 
+          <!-- #97: Protected-Join Multi-Sheet Board Tiler (ISO A4 & US Letter) — 18" Board Side-by-Side Comparison -->
+          <div id="protectedBoardTilingSection" class="suit-fan-demo-box">
+            <div class="preflight-head">
+              <div>
+                <span class="pnp-badge" style="background:#fef3c7;color:#92400e;">🗺️ BOARD TOO LARGE FOR ONE HOME-PRINTER SHEET?</span>
+                <h4 style="margin:4px 0 4px;font-size:15px;color:#0f172a;">Keep Page Joins Off Scoring Spaces When Tiling an 18" Board for ISO A4 &amp; US Letter</h4>
+                <p class="pnp-cross-desc" style="margin:0;">
+                  Shrinking an <code>18.00" × 18.00"</code> (<code>457.2 mm</code>) board makes spaces too small for pieces, while ordinary poster tiling slices a paper seam straight through a score number or station name.
+                  Inside the <strong>$12.99 Creator Kit</strong>, local <code>Protected_Join_Board_Tiler.html</code> previews cuts separately on <strong>US Letter</strong> and <strong>ISO A4</strong>, shifts joins into clean corridors with <code>+10 mm</code> glue tabs while keeping the board <strong>18.00 inches wide</strong>, and <strong>names &amp; withholds any unworkable edition</strong> rather than silently shrinking the board:
+                </p>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" id="btModeLetterBtn" class="btn btn-primary" style="font-size:12px;">📄 US Letter (8.5×11")</button>
+                <button type="button" id="btModeA4Btn" class="btn" style="font-size:12px;">📄 ISO A4 (210×297mm)</button>
+                <button type="button" id="btModeWithheldBtn" class="btn" style="font-size:12px;">🛑 Impossible 9.2" Track</button>
+              </div>
+            </div>
+
+            <div class="board-tiler-2col">
+              <!-- Left: Ordinary Uniform Poster Seam -->
+              <div class="pf-card pf-err">
+                <div class="pf-card-top">
+                  <strong>1. Ordinary Uniform Poster Tiling</strong>
+                  <span id="btOrdBadge" class="pf-pill pf-pill-err">BISECTS 3 SPACES · 18.00"</span>
+                </div>
+                <svg viewBox="0 0 360 180" class="board-tiler-svg" aria-label="18 inch board with ordinary poster seams bisecting score and station boxes">
+                  <rect x="10" y="10" width="340" height="160" rx="6" fill="#16223a" stroke="#d97706" stroke-width="2.5" />
+                  <rect x="48" y="30" width="46" height="26" rx="5" fill="#1e40af" stroke="#93c5fd" stroke-width="1.8" />
+                  <text x="71" y="47" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="800">10 VP</text>
+                  <rect x="139" y="36" width="44" height="28" rx="5" fill="#991b1b" stroke="#fda4af" stroke-width="2" />
+                  <text x="161" y="54" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="800">25 VP</text>
+                  <rect x="194" y="92" width="56" height="28" rx="5" fill="#065f46" stroke="#6ee7b7" stroke-width="2" />
+                  <text x="222" y="109" text-anchor="middle" fill="#ffffff" font-size="8.5" font-weight="800">CLOUD DOCK</text>
+                  <rect x="272" y="44" width="46" height="28" rx="5" fill="#78350f" stroke="#fde047" stroke-width="2" />
+                  <text x="295" y="61" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="800">40 VP</text>
+                  <!-- Ordinary seams slicing through 25 VP, 40 VP, and CLOUD DOCK -->
+                  <line id="btOrdSeamX1" x1="154" y1="10" x2="154" y2="170" stroke="#fb7185" stroke-width="2.8" stroke-dasharray="6 4" />
+                  <line id="btOrdSeamX2" x1="297" y1="10" x2="297" y2="170" stroke="#fb7185" stroke-width="2.8" stroke-dasharray="6 4" />
+                  <line id="btOrdSeamY1" x1="10" y1="101" x2="350" y2="101" stroke="#fb7185" stroke-width="2.8" stroke-dasharray="6 4" />
+                </svg>
+                <p id="btOrdCaption" class="pf-caption"><strong>Default US Letter Seams (<code>193.2 mm</code> &amp; <code>386.4 mm</code> X; <code>256.7 mm</code> Y):</strong> Paper joins cut directly across <code>25 VP · Meridian Gate</code>, <code>40 VP · Citadel Spire</code>, and <code>Station IV · Cloud Dock</code>.</p>
+              </div>
+
+              <!-- Right: Protected-Join Solver + Assembly Key -->
+              <div id="btProtCard" class="pf-card pf-ok">
+                <div class="pf-card-top">
+                  <strong>2. Protected-Join Tiler + Assembly Key</strong>
+                  <span id="btProtBadge" class="pf-pill pf-pill-ok">0 JOINS ON SPACES · 18.00"</span>
+                </div>
+                <svg viewBox="0 0 360 180" class="board-tiler-svg" aria-label="18 inch board with protected joins shifted into open corridors keeping spaces intact">
+                  <rect x="10" y="10" width="340" height="160" rx="6" fill="#16223a" stroke="#d97706" stroke-width="2.5" />
+                  <rect x="48" y="30" width="46" height="26" rx="5" fill="#1e40af" stroke="#93c5fd" stroke-width="1.8" />
+                  <text x="71" y="47" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="800">10 VP</text>
+                  <rect id="btProtZoneMain" x="139" y="36" width="44" height="28" rx="5" fill="#1e40af" stroke="#93c5fd" stroke-width="2" />
+                  <text id="btProtZoneLabel" x="161" y="54" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="800">25 VP</text>
+                  <rect x="194" y="92" width="56" height="28" rx="5" fill="#065f46" stroke="#6ee7b7" stroke-width="2" />
+                  <text x="222" y="109" text-anchor="middle" fill="#ffffff" font-size="8.5" font-weight="800">CLOUD DOCK</text>
+                  <rect x="272" y="44" width="46" height="28" rx="5" fill="#78350f" stroke="#fde047" stroke-width="2" />
+                  <text x="295" y="61" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="800">40 VP</text>
+                  <!-- Protected seams + +10mm glue tabs -->
+                  <g id="btProtSeamsGroup">
+                    <rect x="128" y="10" width="8" height="160" fill="rgba(16,185,129,0.28)" />
+                    <line x1="128" y1="10" x2="128" y2="170" stroke="#10b981" stroke-width="2.8" />
+                    <rect x="258" y="10" width="8" height="160" fill="rgba(16,185,129,0.28)" />
+                    <line x1="258" y1="10" x2="258" y2="170" stroke="#10b981" stroke-width="2.8" />
+                    <rect x="10" y="76" width="340" height="7" fill="rgba(16,185,129,0.24)" />
+                    <line x1="10" y1="76" x2="350" y2="76" stroke="#10b981" stroke-width="2.8" />
+                  </g>
+                  <text x="24" y="24" fill="#6ee7b7" font-size="8.5" font-weight="800">R1C1</text>
+                  <text x="142" y="24" fill="#6ee7b7" font-size="8.5" font-weight="800">R1C2</text>
+                  <text x="272" y="24" fill="#6ee7b7" font-size="8.5" font-weight="800">R1C3</text>
+                  <text x="24" y="162" fill="#6ee7b7" font-size="8.5" font-weight="800">R2C1</text>
+                  <text x="142" y="162" fill="#6ee7b7" font-size="8.5" font-weight="800">R2C2</text>
+                  <text x="272" y="162" fill="#6ee7b7" font-size="8.5" font-weight="800">R2C3</text>
+                </svg>
+                <p id="btProtCaption" class="pf-caption"><strong>Protected US Letter Layout (<code>165.5 mm</code> &amp; <code>333.5 mm</code> X; <code>218.5 mm</code> Y):</strong> Exports <code>6</code> overlapping numbered pages + Assembly Key &amp; <code>1.00"</code> scale bar; board stays <strong>exact 18.00 in (457.2 mm)</strong> wide.</p>
+              </div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding-top:6px;border-top:1px dashed #cbd5e1;">
+              <span style="font-size:12px;color:#334155;">Formatting a multi-sheet PnP board? Anonymous 1-click check (0 checkout, 0 email, 0 art upload):</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" id="val97BuyBtn" class="btn" style="font-size:11.5px;">👍 I would buy the $12.99 kit for protected joins</button>
+                <button type="button" id="val97OwnBtn" class="btn" style="font-size:11.5px;">📦 I already own the kit</button>
+                <button type="button" id="val97FreeBtn" class="btn" style="font-size:11.5px;">🆓 Free poster tiling is enough</button>
+              </div>
+              <span id="val97Msg" style="font-size:11.5px;color:#047857;font-weight:700;width:100%;"></span>
+            </div>
+          </div>
+
           <div class="preflight-foot">
             <span class="preflight-note">
-              <strong>Human judgment stays in the loop:</strong> Wrong dimensions, unmapped card faces &amp; duplicate suit marks block export automatically; the designer judges near-cut text and completes the printer's required per-card proof after upload.
+              <strong>Human judgment &amp; printer physics:</strong> Wrong card sizes, unmapped suit faces, and unplaceable protected board areas block export automatically rather than guessing or shrinking; software controls file boundaries, not individual printer paper-feed tolerances.
             </span>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <a href="../previews/poker_deck_preflight_sample_preview.pdf" target="_blank" rel="noopener" class="btn">👁️ Free Bleed Guide PDF</a>
               <a href="../previews/fanned_suit_mark_stamper_sample_preview.pdf" target="_blank" rel="noopener" class="btn">👁️ Free Suit-Mark Guide PDF</a>
-              <a id="creatorKitPreflightLink" data-buy-event="cardsheet-creator-kit-preflight" href="https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit" target="_blank" rel="noopener" class="btn btn-primary">🛠️ Get Deck Checker + Suit Stamper in Creator Kit ($12.99)</a>
+              <a href="../previews/board_protected_join_tiler_sample_preview.pdf" target="_blank" rel="noopener" class="btn">👁️ Free Board-Tiler Guide PDF</a>
+              <a id="creatorKitPreflightLink" data-buy-event="cardsheet-creator-kit-preflight" href="https://stardustdemo.gumroad.com/l/tabletop-pnp-creator-kit" target="_blank" rel="noopener" class="btn btn-primary">🛠️ Get Deck Checker, Suit Stamper &amp; Board Tiler in Creator Kit ($12.99)</a>
             </div>
           </div>
         </div>
