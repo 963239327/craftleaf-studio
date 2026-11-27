@@ -99,6 +99,15 @@ Seven Monte-Carlo-balanced, tactile 2–4 sheet strategy board games crafted for
 
 ---
 
+## 📡 Browser Story Game: 《糟了！我只是来恋综修网线的》
+
+<a href="https://oopswifi.github.io/?ref=studio"><img src="https://oopswifi.github.io/og-cover.jpg" width="480" alt="糟了！我只是来恋综修网线的 · Oops! I'm Just Here to Fix the Wi-Fi"></a>
+
+A laid-off programmer goes to a dating-show set to fix the Wi-Fi and gets drafted as the male guest: a first-person, photo-real interactive romance comedy in Chinese, with timed choices, live comments and multiple endings. The prologue and episode 1 are free in the browser.  
+被裁员的程序员去恋综片场修网线，结果被总导演抓去当男嘉宾。第一人称真人风互动恋爱喜剧：限时抉择、弹幕和多结局；序章和第一集免费，浏览器打开就能玩（简体 / 繁體）。
+
+▶ [Play the free demo / 免费试玩](https://oopswifi.github.io/?ref=studio) · [Press kit / 媒体资料](https://oopswifi.github.io/press.html) · [itch.io](https://stardustdemo.itch.io/oops-fix-the-wifi)
+
 ## 📦 Summary of Latest Official Downloads & Free Samples
 
 | Asset | Type | Direct Download |
