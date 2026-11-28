@@ -235,6 +235,7 @@
             <button type="button" id="crmTabStatement" class="crm-tab" data-i18n="tabStatement">Open Statement</button>
             <button type="button" id="crmTabUnbilled" class="crm-tab" data-i18n="tabUnbilled">Unbilled Hours</button>
             <button type="button" id="crmTabOverlap" class="crm-tab" data-i18n="tabOverlap">Time Overlap</button>
+            <button type="button" id="crmTabProgress" class="crm-tab" data-i18n="tabProgress">Quote Progress</button>
           </div>
 
           <div id="crmActionsClients" style="display:flex;gap:8px;">
@@ -350,6 +351,32 @@
               <button type="button" id="exportOvReportCsvBtn" class="btn btn-xs btn-emerald" data-i18n="btnExportOvCsv">⬇ Overlap Review CSV</button>
               <button type="button" id="printOvReportBtn" class="btn btn-xs btn-pro" data-i18n="btnPrintOv">🖨️ Print Review Sheet</button>
               <button type="button" id="backFromOverlapBtn" class="btn btn-xs" data-i18n="btnBackToInvoice">↩ Single Invoice View</button>
+            </div>
+          </div>
+
+          <div id="crmProgressPane" class="stmt-pane" style="display:none;">
+            <div class="stmt-demo-bar">
+              <span class="stmt-demo-note" data-i18n="pqIntro">Check remaining allowance per fixed-price quote line before sending the next progress invoice (sent/unpaid consume; drafts do not).</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" id="loadPqOver50Btn" class="btn btn-xs" data-i18n="btnPqOver50">🧪 $50 Design Excess ($850/$1k)</button>
+                <button type="button" id="loadPqCleanBtn" class="btn btn-xs" data-i18n="btnPqClean">✅ Within Allowance</button>
+                <button type="button" id="loadPqHoldBtn" class="btn btn-xs" data-i18n="btnPqHold">⚠️ Unmapped / Credit / Changed Quote</button>
+                <button type="button" id="importPqQuoteCsvBtn" class="btn btn-xs" data-i18n="btnPqQuoteCsv">📂 Quote CSV</button>
+                <button type="button" id="importPqHistCsvBtn" class="btn btn-xs" data-i18n="btnPqHistCsv">📂 Prior Invoices CSV</button>
+                <button type="button" id="importPqDraftCsvBtn" class="btn btn-xs" data-i18n="btnPqDraftCsv">📂 Next Draft CSV</button>
+                <input type="file" id="pqQuoteCsvFileInput" accept=".csv,text/csv" hidden />
+                <input type="file" id="pqHistCsvFileInput" accept=".csv,text/csv" hidden />
+                <input type="file" id="pqDraftCsvFileInput" accept=".csv,text/csv" hidden />
+              </div>
+            </div>
+
+            <div id="pqSummaryBanner" class="stmt-excluded-banner" style="margin-top:8px;"></div>
+            <div id="pqIssueBox" class="stmt-conflict-box" style="display:none;"></div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              <button type="button" id="exportPqCheckCsvBtn" class="btn btn-xs btn-emerald" data-i18n="btnExportPqCsv">⬇ Check Sheet CSV</button>
+              <button type="button" id="printPqCheckBtn" class="btn btn-xs btn-pro" data-i18n="btnPrintPq">🖨️ Print Check Sheet</button>
+              <button type="button" id="backFromProgressBtn" class="btn btn-xs" data-i18n="btnBackToInvoice">↩ Single Invoice View</button>
             </div>
           </div>
 

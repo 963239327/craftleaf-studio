@@ -83,7 +83,7 @@
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <a class="btn btn-gold" data-lang="en" data-buy-event="sheets-pack-primary" href="https://stardustdemo.gumroad.com/l/solofounder-finance-os-pro?option=N6i8OAr7_j6-KIB5uHW1RQ==&amp;wanted=true" target="_blank" rel="noopener">
-          📦 Get All 4 .GS Scripts + 8 Macro-Free .XLSX Workbooks + 24 CSVs ($9.99) →
+          📦 Get All 4 .GS Scripts + 11 Macro-Free .XLSX Workbooks + 30 CSVs ($9.99) →
         </a>
         <a class="btn btn-sec" data-lang="zh" href="https://stardustdemo.gumroad.com/l/coffee" data-craftleaf-tip="1">☕ 库存预警脚本免费即拷即用！觉得省心欢迎微信赞赏支持</a>
         <a class="btn btn-sec" href="../../previews/smallbiz_sheets_apps_script_sample_preview.pdf" target="_blank" rel="noopener">
@@ -825,6 +825,85 @@ COIN_001 | 10</textarea>
               <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val83EnoughBtn">↔️ My current method is enough</button>
             </div>
             <span id="val83Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="giftCertTillCloseSection" class="panel" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+        <div>
+          <span class="pill" style="margin-bottom:6px;">
+            <span data-lang="en">🎟️ NEW IN PACK · MACRO-FREE .XLSX (WORKED + BLANK) · PAPER GIFT CERTIFICATE vs. TILL RECEIPT CLOSE</span>
+            <span data-lang="zh">🎟️ 新增免宏工作簿 (.XLSX 示例版 + 空白模板) · 纸质礼券核销台账与收银小票逐单核对</span>
+          </span>
+          <h2 style="margin:4px 0 4px;font-size:19px;">
+            <span data-lang="en">Find Paper Gift Certificate Redemptions That Disagree With the Till Receipt — Even When Daily Totals Agree</span>
+            <span data-lang="zh">打烊关账逐单比对：即使全天礼券总额相等，也能揪出金额写反、分单或漏登的小票</span>
+          </h2>
+          <p style="margin:0;font-size:13px;color:var(--muted);max-width:860px;">
+            <span data-lang="en">Worked Closing Check: Receipts <code>R17</code> and <code>R25</code> show <strong>$18.00</strong> (+ $7.00 cash excluded) and <strong>$12.00</strong> paid by gift certificate on the till, while the paper voucher log says <strong>$12.00</strong> and <strong>$18.00</strong>. Both daily totals equal <strong>$30.00</strong>, so a balance tracker or cash count misses it — this check flags <code>R17</code> as <strong>$6.00 short in the log</strong> and <code>R25</code> as <strong>$6.00 over</strong>. Sums multiple vouchers on one receipt, excludes cash/card splits, and lists unmatched receipts &amp; ambiguous duplicates separately without guessing, editing balances, or requiring customer names/PINs. Included as <code>15_Gift_Certificate_Till_Receipt_Reconciler.xlsx</code> (Worked + Blank) + offline HTML slip in the Small-Biz Sheets Pack above.</span>
+            <span data-lang="zh">实战打烊核对示例：收银小票显示 <code>R17</code> 与 <code>R25</code> 的礼券抵扣额分别为 <strong>18.00</strong>（同单 7.00 现金补差自动剔除）与 <strong>12.00</strong>，而纸质核销本记成了 <strong>12.00</strong> 与 <strong>18.00</strong>。两边全天礼券总额都是 <strong>30.00</strong>，普通余额表或盘现金根本查不出——本表逐单标出 <code>R17</code> <strong>台账少记 6.00</strong>、<code>R25</code> <strong>台账多记 6.00</strong>；同单多张礼券自动合并相加，未匹配单据与重复/无单号记录分栏单列绝不瞎猜，无需顾客姓名或完整密码。</span>
+          </p>
+        </div>
+        <a class="btn btn-sec" href="../../previews/gift_certificate_till_reconciler_sample_preview.pdf" target="_blank" rel="noopener" style="font-size:12.5px;padding:8px 13px;">
+          <span data-lang="en">📄 1-Page LibreOffice / Excel Guide PDF</span>
+          <span data-lang="zh">📄 查看 1 页礼券逐单核对图解 PDF</span>
+        </a>
+      </div>
+
+      <div class="studio-grid" style="grid-template-columns:1fr 1.15fr;margin-top:10px;">
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <label class="fld" style="margin-top:0;">
+            <span data-lang="en">1. Till Receipt Certificate Tenders (`Receipt_Ref | Cert_Tender_$ | Cash_Excluded_$`)</span>
+            <span data-lang="zh">1. 收银小票礼券实收部分（`小票单号 | 礼券抵扣额 | 同单现金刷卡剔除额`）</span>
+          </label>
+          <textarea id="gcTillInput" rows="4" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;">R17 | 18.00 | 7.00
+R25 | 12.00 | 0.00</textarea>
+
+          <label class="fld">
+            <span data-lang="en">2. Paper Certificate Log (`Log_Row_ID | Voucher_Alias | Receipt_Ref | Redeemed_$`)</span>
+            <span data-lang="zh">2. 纸质礼券核销本记录（`登记行号 | 礼券短编号 | 小票单号 | 核销礼券额`）</span>
+          </label>
+          <textarea id="gcLogInput" rows="4" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#090e1a;color:#fff;font-family:Menlo,Consolas,monospace;font-size:12px;">LOG-01 | GC-041 | R17 | 12.00
+LOG-02 | GC-058 | R25 | 18.00</textarea>
+
+          <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" class="btn btn-sec" style="padding:6px 11px;font-size:12px;" id="gcWorked30Btn">
+              <span data-lang="en">🧪 $30 Equal-Totals Trap (R17 / R25)</span>
+              <span data-lang="zh">🧪 载入 30=30 金额写反示例</span>
+            </button>
+            <button type="button" class="btn btn-sec" style="padding:6px 11px;font-size:12px;" id="gcSplitEdgeBtn">
+              <span data-lang="en">🔎 2-Voucher + Cash + Unmatched + Dup</span>
+              <span data-lang="zh">🔎 双券合并+现金剔除+漏单/重单隔离</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="background:var(--alt);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+            <strong style="font-size:13px;">
+              <span data-lang="en">Per-Receipt Closing Shortlist</span>
+              <span data-lang="zh">打烊逐单核查异常短名单</span>
+            </strong>
+            <span id="gcSummaryBadge" class="pill" style="font-size:11px;padding:3px 9px;"></span>
+          </div>
+          <div id="gcEqualTrapBanner" style="display:none;padding:8px 10px;border-radius:8px;background:rgba(245,158,11,0.16);border:1px solid rgba(251,191,36,0.45);color:#fde68a;font-size:12px;font-weight:700;margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <tbody id="gcResultsBody"></tbody>
+          </table>
+          <p style="margin:8px 0 0;font-size:11.5px;color:var(--muted);">
+            <span data-lang="en"><em>Scope note:</em> Informational closing comparison only (no customer names, redeemable codes, POS integration, balance edits, expiry/tax rulings, or fraud claims).</span>
+            <span data-lang="zh"><em>边界说明：</em>仅供打烊双账单逐单比对参考（无需顾客姓名或完整兑换码、不改余额、不做税务/有效期/舞弊判定）。</span>
+          </p>
+
+          <div data-lang="en" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;color:#cbd5e1;">Accept paper gift certificates at close? Anonymous 1-click check (no receipts, email, or checkout):</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val99BuyBtn">👍 I'd use this receipt check in the $9.99 pack</button>
+              <button type="button" class="btn btn-sec" style="padding:5px 10px;font-size:11.5px;" id="val99KeepBtn">↔️ My current close check is enough</button>
+            </div>
+            <span id="val99Msg" style="font-size:11.5px;color:#6ee7b7;width:100%;"></span>
           </div>
         </div>
       </div>
@@ -2168,6 +2247,585 @@ var CashDrawerCloseEngine = (function () {
     });
     document.getElementById("val83BuyBtn").addEventListener("click", function(){ submitValidationVote83("buy"); });
     document.getElementById("val83EnoughBtn").addEventListener("click", function(){ submitValidationVote83("enough"); });
+
+    
+var GiftCertTillReconciler = (function () {
+  'use strict';
+
+  function normRef(v) {
+    return String(v === null || v === undefined ? '' : v).trim().replace(/\s+/g, ' ').toUpperCase();
+  }
+
+  function parseCentsNonNeg(raw, allowBlankZero) {
+    var s = String(raw === null || raw === undefined ? '' : raw).trim();
+    if (!s) {
+      return allowBlankZero ? { ok: true, cents: 0 } : { ok: false, reason: 'Amount is blank.' };
+    }
+    var clean = s.replace(/[$,\s]/g, '');
+    if (!/^[+]?\d+(?:\.\d{1,2})?$/.test(clean)) {
+      return { ok: false, reason: 'Invalid non-negative dollar amount "' + s + '".' };
+    }
+    var parts = clean.replace(/^\+/, '').split('.');
+    var whole = parseInt(parts[0], 10);
+    var frac = (parts[1] || '') + '00';
+    var cents = whole * 100 + parseInt(frac.slice(0, 2), 10);
+    if (!isFinite(cents) || cents < 0) {
+      return { ok: false, reason: 'Invalid amount "' + s + '".' };
+    }
+    return { ok: true, cents: cents };
+  }
+
+  function fmtPlainDollars(cents) {
+    var sign = cents < 0 ? '-' : '';
+    var abs = Math.abs(Math.round(cents));
+    var w = Math.floor(abs / 100);
+    var c = abs % 100;
+    return sign + String(w) + '.' + (c < 10 ? '0' + c : String(c));
+  }
+
+  function fmtSignedPlainDollars(cents) {
+    if (cents === 0) return '0.00';
+    return (cents > 0 ? '+' : '-') + fmtPlainDollars(Math.abs(cents));
+  }
+
+  function fmtDisplayDollars(cents) {
+    var sign = cents < 0 ? '-' : '';
+    var abs = Math.abs(Math.round(cents));
+    var w = Math.floor(abs / 100);
+    var c = abs % 100;
+    return sign + '$' + w.toLocaleString('en-US') + '.' + (c < 10 ? '0' + c : String(c));
+  }
+
+  function splitPipeOrCsv(rawText) {
+    var text = String(rawText == null ? '' : rawText).replace(/^\uFEFF/, '');
+    var lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    var out = [];
+    for (var li = 0; li < lines.length; li++) {
+      var line = lines[li];
+      if (!line.trim() || line.trim().charAt(0) === '#') continue;
+      if (line.indexOf('|') >= 0 && line.indexOf('"') === -1) {
+        out.push(line.split('|').map(function (c) { return c.trim(); }));
+        continue;
+      }
+      var row = [];
+      var cur = '';
+      var inQ = false;
+      for (var i = 0; i < line.length; i++) {
+        var ch = line.charAt(i);
+        if (inQ) {
+          if (ch === '"') {
+            if (i + 1 < line.length && line.charAt(i + 1) === '"') { cur += '"'; i += 1; }
+            else { inQ = false; }
+          } else { cur += ch; }
+        } else if (ch === '"') {
+          inQ = true;
+        } else if (ch === ',') {
+          row.push(cur.trim());
+          cur = '';
+        } else {
+          cur += ch;
+        }
+      }
+      row.push(cur.trim());
+      out.push(row);
+    }
+    return out;
+  }
+
+  function parseTillRows(rawText) {
+    var rows = splitPipeOrCsv(rawText);
+    if (!rows.length) return [];
+    var h0 = normRef(rows[0][0]);
+    var start = (h0 === 'RECEIPT_REF' || h0 === 'RECEIPT' || h0 === 'RECEIPTID' || h0 === 'TILL_RECEIPT') ? 1 : 0;
+    var out = [];
+    for (var i = start; i < rows.length; i++) {
+      var r = rows[i];
+      out.push({
+        rowNum: i + 1,
+        receiptRef: String(r[0] || '').trim(),
+        certTender: String(r[1] || '').trim(),
+        cashExcluded: String(r[2] || '').trim(),
+        note: String(r[3] || '').trim()
+      });
+    }
+    return out;
+  }
+
+  function parsePaperLogRows(rawText) {
+    var rows = splitPipeOrCsv(rawText);
+    if (!rows.length) return [];
+    var h0 = normRef(rows[0][0]);
+    var hasHeader = (h0 === 'LOG_ROW_ID' || h0 === 'LOGID' || h0 === 'VOUCHER_SHORT_REF' || h0 === 'VOUCHER' || h0 === 'RECEIPT_REF');
+    var hasLogIdCol = true;
+    if (hasHeader && (h0 === 'VOUCHER_SHORT_REF' || h0 === 'VOUCHER')) {
+      hasLogIdCol = false;
+    } else if (!hasHeader && rows[0].length === 3) {
+      hasLogIdCol = false;
+    }
+    var start = hasHeader ? 1 : 0;
+    var out = [];
+    for (var i = start; i < rows.length; i++) {
+      var r = rows[i];
+      if (hasLogIdCol) {
+        out.push({
+          rowNum: i + 1,
+          logRowId: String(r[0] || ('L-' + (i + 1))).trim(),
+          voucherRef: String(r[1] || '').trim(),
+          receiptRef: String(r[2] || '').trim(),
+          redeemedCert: String(r[3] || '').trim(),
+          note: String(r[4] || '').trim()
+        });
+      } else {
+        out.push({
+          rowNum: i + 1,
+          logRowId: 'L-' + (i + 1),
+          voucherRef: String(r[0] || '').trim(),
+          receiptRef: String(r[1] || '').trim(),
+          redeemedCert: String(r[2] || '').trim(),
+          note: String(r[3] || '').trim()
+        });
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Compares gift-certificate tender portions on till receipts against paper gift-certificate log entries.
+   * - Sums multiple paper vouchers redeemed on the same receipt before comparing.
+   * - Excludes cash / card / other non-certificate tender on split-payment receipts.
+   * - Separates (1) Per-receipt amount disagreements, (2) Unmatched receipts, and (3) Ambiguous duplicates / missing refs.
+   * - Never guesses which voucher paid an unreferenced receipt, never changes voucher balances, and never claims fraud.
+   */
+  function reconcileGiftCertClose(tillInput, logInput) {
+    var tRows = Array.isArray(tillInput) ? tillInput : [];
+    var lRows = Array.isArray(logInput) ? logInput : [];
+
+    var ambiguousItems = [];
+    var tillReceiptCounts = {};
+    for (var ti0 = 0; ti0 < tRows.length; ti0++) {
+      var rk0 = normRef(tRows[ti0] && tRows[ti0].receiptRef);
+      if (rk0) tillReceiptCounts[rk0] = (tillReceiptCounts[rk0] || 0) + 1;
+    }
+
+    var voucherRefCounts = {};
+    var logIdCounts = {};
+    for (var li0 = 0; li0 < lRows.length; li0++) {
+      var vk0 = normRef(lRows[li0] && lRows[li0].voucherRef);
+      var lk0 = normRef(lRows[li0] && lRows[li0].logRowId);
+      if (vk0) voucherRefCounts[vk0] = (voucherRefCounts[vk0] || 0) + 1;
+      if (lk0) logIdCounts[lk0] = (logIdCounts[lk0] || 0) + 1;
+    }
+
+    var validTillByReceipt = {};
+    var receiptOrder = [];
+    var ambiguousReceiptKeys = {};
+    var validTillCertTotalCents = 0;
+    var totalCashExcludedCents = 0;
+
+    function registerReceiptKey(key, displayRef) {
+      if (receiptOrder.indexOf(key) === -1) receiptOrder.push(key);
+      if (!validTillByReceipt[key]) {
+        validTillByReceipt[key] = {
+          receiptKey: key,
+          receiptRef: displayRef || key,
+          hasTill: false,
+          tillCertCents: 0,
+          cashExcludedCents: 0,
+          logCertCents: 0,
+          logVoucherCount: 0,
+          voucherRefs: []
+        };
+      }
+    }
+
+    for (var ti = 0; ti < tRows.length; ti++) {
+      var tr = tRows[ti] || {};
+      var rRaw = String(tr.receiptRef == null ? '' : tr.receiptRef).trim();
+      var rKey = normRef(rRaw);
+      var pCert = parseCentsNonNeg(tr.certTender, false);
+      var pCash = parseCentsNonNeg(tr.cashExcluded, true);
+
+      if (!rKey) {
+        ambiguousItems.push({
+          code: 'UNREFERENCED_TILL_ROW',
+          ref: 'Till Row ' + (tr.rowNum || (ti + 1)),
+          detail: 'Till row has a blank Receipt_Ref (never guessed against unmatched log entries).'
+        });
+        continue;
+      }
+      if (!pCert.ok || pCert.cents <= 0 || !pCash.ok) {
+        ambiguousReceiptKeys[rKey] = true;
+        ambiguousItems.push({
+          code: 'INVALID_TILL_AMOUNT',
+          ref: rRaw,
+          detail: 'Till receipt "' + rRaw + '" has an invalid or zero certificate tender amount.'
+        });
+        continue;
+      }
+      if (tillReceiptCounts[rKey] > 1) {
+        if (!ambiguousReceiptKeys[rKey]) {
+          ambiguousReceiptKeys[rKey] = true;
+          ambiguousItems.push({
+            code: 'AMBIGUOUS_DUPLICATE_TILL_RECEIPT',
+            ref: rRaw,
+            detail: 'Receipt "' + rRaw + '" appears ' + tillReceiptCounts[rKey] + ' times in till rows — held separately rather than guessing whether it was exported twice or split.'
+          });
+        }
+        continue;
+      }
+
+      registerReceiptKey(rKey, rRaw);
+      validTillByReceipt[rKey].hasTill = true;
+      validTillByReceipt[rKey].tillCertCents = pCert.cents;
+      validTillByReceipt[rKey].cashExcludedCents = pCash.cents;
+      validTillCertTotalCents += pCert.cents;
+      totalCashExcludedCents += pCash.cents;
+    }
+
+    var validPaperLogTotalCents = 0;
+    for (var li = 0; li < lRows.length; li++) {
+      var lr = lRows[li] || {};
+      var lIdRaw = String(lr.logRowId == null ? '' : lr.logRowId).trim() || ('Log Row ' + (li + 1));
+      var lIdKey = normRef(lIdRaw);
+      var vRaw = String(lr.voucherRef == null ? '' : lr.voucherRef).trim();
+      var vKey = normRef(vRaw);
+      var recRaw = String(lr.receiptRef == null ? '' : lr.receiptRef).trim();
+      var recKey = normRef(recRaw);
+      var pRed = parseCentsNonNeg(lr.redeemedCert, false);
+
+      if (lIdKey && logIdCounts[lIdKey] > 1) {
+        if (recKey) ambiguousReceiptKeys[recKey] = true;
+        ambiguousItems.push({
+          code: 'AMBIGUOUS_DUPLICATE_LOG_ROW_ID',
+          ref: lIdRaw,
+          detail: 'Paper log Row ID "' + lIdRaw + '" is duplicated.'
+        });
+        continue;
+      }
+      if (!recKey) {
+        ambiguousItems.push({
+          code: 'UNREFERENCED_PAPER_LOG_ROW',
+          ref: vRaw || lIdRaw,
+          detail: 'Paper log entry "' + (vRaw || lIdRaw) + '" (' + (pRed.ok ? fmtDisplayDollars(pRed.cents) : String(lr.redeemedCert || '')) + ') has no Receipt_Ref — held separately rather than guessing which till receipt used it.'
+        });
+        continue;
+      }
+      if (!pRed.ok || pRed.cents <= 0) {
+        ambiguousReceiptKeys[recKey] = true;
+        ambiguousItems.push({
+          code: 'INVALID_PAPER_LOG_AMOUNT',
+          ref: recRaw,
+          detail: 'Paper log entry "' + lIdRaw + '" on receipt "' + recRaw + '" has an invalid or non-positive certificate amount.'
+        });
+        continue;
+      }
+      if (vKey && voucherRefCounts[vKey] > 1) {
+        ambiguousReceiptKeys[recKey] = true;
+        ambiguousItems.push({
+          code: 'AMBIGUOUS_DUPLICATE_VOUCHER_REF',
+          ref: vRaw + ' (' + recRaw + ')',
+          detail: 'Voucher "' + vRaw + '" is logged ' + voucherRefCounts[vKey] + ' times in this close (including receipt "' + recRaw + '") — held separately for physical slip check.'
+        });
+        continue;
+      }
+      if (ambiguousReceiptKeys[recKey]) {
+        continue;
+      }
+
+      registerReceiptKey(recKey, recRaw);
+      validTillByReceipt[recKey].logCertCents += pRed.cents;
+      validTillByReceipt[recKey].logVoucherCount += 1;
+      if (vRaw) validTillByReceipt[recKey].voucherRefs.push(vRaw);
+      validPaperLogTotalCents += pRed.cents;
+    }
+
+    // If a receipt later got tainted by a duplicate voucher on its 2nd log row, remove its partial sums from clean comparison
+    var cleanTillTotalCents = 0;
+    var cleanLogTotalCents = 0;
+    var matchedReceipts = [];
+    var amountDisagreements = [];
+    var unmatchedReceipts = [];
+
+    for (var ri = 0; ri < receiptOrder.length; ri++) {
+      var rk = receiptOrder[ri];
+      if (ambiguousReceiptKeys[rk]) continue;
+      var item = validTillByReceipt[rk];
+      cleanTillTotalCents += item.tillCertCents;
+      cleanLogTotalCents += item.logCertCents;
+
+      var diffCents = item.logCertCents - item.tillCertCents;
+      var cashNote = item.cashExcludedCents > 0 ? ('; ' + fmtDisplayDollars(item.cashExcludedCents) + ' cash/other tender excluded') : '';
+
+      if (item.hasTill && item.logVoucherCount > 0) {
+        if (diffCents === 0) {
+          matchedReceipts.push({
+            category: 'MATCHED',
+            receiptRef: item.receiptRef,
+            tillCertCents: item.tillCertCents,
+            cashExcludedCents: item.cashExcludedCents,
+            logCertCents: item.logCertCents,
+            logVoucherCount: item.logVoucherCount,
+            voucherRefs: item.voucherRefs.slice(),
+            diffCents: 0,
+            formattedTillCert: fmtDisplayDollars(item.tillCertCents),
+            formattedCashExcluded: fmtDisplayDollars(item.cashExcludedCents),
+            formattedLogCert: fmtDisplayDollars(item.logCertCents),
+            formattedDiff: '$0.00',
+            detail: 'Matched at ' + fmtDisplayDollars(item.tillCertCents) +
+              (item.logVoucherCount > 1 ? (' across ' + item.logVoucherCount + ' summed vouchers') : '') + cashNote
+          });
+        } else {
+          var absDiffStr = fmtDisplayDollars(Math.abs(diffCents));
+          var dirText = diffCents < 0 ? (absDiffStr + ' short in paper log') : (absDiffStr + ' over in paper log');
+          amountDisagreements.push({
+            category: 'AMOUNT_DISAGREEMENT',
+            direction: diffCents < 0 ? 'LOG_SHORT' : 'LOG_OVER',
+            receiptRef: item.receiptRef,
+            tillCertCents: item.tillCertCents,
+            cashExcludedCents: item.cashExcludedCents,
+            logCertCents: item.logCertCents,
+            logVoucherCount: item.logVoucherCount,
+            voucherRefs: item.voucherRefs.slice(),
+            diffCents: diffCents,
+            plainTillCert: fmtPlainDollars(item.tillCertCents),
+            plainCashExcluded: fmtPlainDollars(item.cashExcludedCents),
+            plainLogCert: fmtPlainDollars(item.logCertCents),
+            plainSignedDiff: fmtSignedPlainDollars(diffCents),
+            formattedTillCert: fmtDisplayDollars(item.tillCertCents),
+            formattedCashExcluded: fmtDisplayDollars(item.cashExcludedCents),
+            formattedLogCert: fmtDisplayDollars(item.logCertCents),
+            formattedDiff: (diffCents < 0 ? '-' : '+') + absDiffStr,
+            detail: dirText + ' (till ' + fmtDisplayDollars(item.tillCertCents) + ' vs log ' + fmtDisplayDollars(item.logCertCents) + cashNote + ')'
+          });
+        }
+      } else if (item.hasTill && item.logVoucherCount === 0) {
+        unmatchedReceipts.push({
+          category: 'UNMATCHED_MISSING_IN_LOG',
+          receiptRef: item.receiptRef,
+          tillCertCents: item.tillCertCents,
+          cashExcludedCents: item.cashExcludedCents,
+          logCertCents: 0,
+          logVoucherCount: 0,
+          diffCents: -item.tillCertCents,
+          plainTillCert: fmtPlainDollars(item.tillCertCents),
+          plainCashExcluded: fmtPlainDollars(item.cashExcludedCents),
+          plainLogCert: '0.00',
+          plainSignedDiff: fmtSignedPlainDollars(-item.tillCertCents),
+          formattedTillCert: fmtDisplayDollars(item.tillCertCents),
+          formattedLogCert: '$0.00',
+          detail: 'Missing in paper log — till shows ' + fmtDisplayDollars(item.tillCertCents) + ' paid by certificate' + cashNote
+        });
+      } else if (!item.hasTill && item.logVoucherCount > 0) {
+        unmatchedReceipts.push({
+          category: 'UNMATCHED_MISSING_ON_TILL',
+          receiptRef: item.receiptRef,
+          tillCertCents: 0,
+          cashExcludedCents: 0,
+          logCertCents: item.logCertCents,
+          logVoucherCount: item.logVoucherCount,
+          diffCents: item.logCertCents,
+          plainTillCert: '0.00',
+          plainCashExcluded: '0.00',
+          plainLogCert: fmtPlainDollars(item.logCertCents),
+          plainSignedDiff: fmtSignedPlainDollars(item.logCertCents),
+          formattedTillCert: '$0.00',
+          formattedLogCert: fmtDisplayDollars(item.logCertCents),
+          detail: 'Missing on till — paper log shows ' + fmtDisplayDollars(item.logCertCents) + ' (' + item.logVoucherCount + ' voucher(s))'
+        });
+      }
+    }
+
+    var netDailyDiffCents = cleanLogTotalCents - cleanTillTotalCents;
+    var totalsAgreeTrap = (
+      cleanTillTotalCents > 0 &&
+      netDailyDiffCents === 0 &&
+      (amountDisagreements.length > 0 || unmatchedReceipts.length > 0)
+    );
+
+    var status = 'ALL_RECEIPTS_MATCHED';
+    if (ambiguousItems.length > 0 || amountDisagreements.length > 0 || unmatchedReceipts.length > 0) {
+      status = 'EXCEPTIONS_FOUND';
+    }
+
+    return {
+      status: status,
+      cleanTillTotalCents: cleanTillTotalCents,
+      cleanLogTotalCents: cleanLogTotalCents,
+      totalCashExcludedCents: totalCashExcludedCents,
+      netDailyDiffCents: netDailyDiffCents,
+      totalsAgreeTrap: totalsAgreeTrap,
+      formattedTillTotal: fmtDisplayDollars(cleanTillTotalCents),
+      formattedLogTotal: fmtDisplayDollars(cleanLogTotalCents),
+      formattedCashExcluded: fmtDisplayDollars(totalCashExcludedCents),
+      formattedNetDailyDiff: (netDailyDiffCents < 0 ? '-' : (netDailyDiffCents > 0 ? '+' : '')) + fmtDisplayDollars(Math.abs(netDailyDiffCents)),
+      amountDisagreements: amountDisagreements,
+      unmatchedReceipts: unmatchedReceipts,
+      ambiguousItems: ambiguousItems,
+      matchedReceipts: matchedReceipts
+    };
+  }
+
+  function csvSafeCell(v) {
+    var s = String(v === null || v === undefined ? '' : v);
+    if (/^[=+\-@]/.test(s) && !/^[+-]?\d+(?:\.\d+)?$/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+
+  function serializeExceptionShortlistCsv(res) {
+    var r = res || {};
+    var lines = [[
+      'Category', 'Receipt_Ref', 'Till_Cert_USD', 'Cash_Excluded_USD',
+      'Paper_Log_Cert_USD', 'Log_Voucher_Count', 'Log_Minus_Till_USD', 'Detail'
+    ].map(csvSafeCell).join(',')];
+
+    var dis = Array.isArray(r.amountDisagreements) ? r.amountDisagreements : [];
+    for (var i = 0; i < dis.length; i++) {
+      var d = dis[i];
+      lines.push([
+        d.category, d.receiptRef, d.plainTillCert, d.plainCashExcluded,
+        d.plainLogCert, String(d.logVoucherCount), d.plainSignedDiff, d.detail
+      ].map(csvSafeCell).join(','));
+    }
+    var unm = Array.isArray(r.unmatchedReceipts) ? r.unmatchedReceipts : [];
+    for (var j = 0; j < unm.length; j++) {
+      var u = unm[j];
+      lines.push([
+        u.category, u.receiptRef, u.plainTillCert, u.plainCashExcluded,
+        u.plainLogCert, String(u.logVoucherCount), u.plainSignedDiff, u.detail
+      ].map(csvSafeCell).join(','));
+    }
+    var amb = Array.isArray(r.ambiguousItems) ? r.ambiguousItems : [];
+    for (var k = 0; k < amb.length; k++) {
+      var a = amb[k];
+      lines.push([
+        a.code, a.ref, '', '', '', '', '', a.detail
+      ].map(csvSafeCell).join(','));
+    }
+    return lines.join('\r\n');
+  }
+
+  return {
+    parseTillRows: parseTillRows,
+    parsePaperLogRows: parsePaperLogRows,
+    reconcileGiftCertClose: reconcileGiftCertClose,
+    serializeExceptionShortlistCsv: serializeExceptionShortlistCsv
+  };
+})();
+
+
+    function renderGiftCertReconcilerSandbox() {
+      var tRows = GiftCertTillReconciler.parseTillRows(document.getElementById("gcTillInput").value);
+      var lRows = GiftCertTillReconciler.parsePaperLogRows(document.getElementById("gcLogInput").value);
+      var res = GiftCertTillReconciler.reconcileGiftCertClose(tRows, lRows);
+
+      var trapEl = document.getElementById("gcEqualTrapBanner");
+      if (res.totalsAgreeTrap) {
+        trapEl.style.display = "block";
+        trapEl.textContent = isZh()
+          ? ("⚠️ 全天礼券总额相等陷阱：收银机与核销本均为 " + res.formattedTillTotal + "，但仍有单据不一致！")
+          : ("⚠️ Equal-Totals Trap Caught: Till & paper log both total " + res.formattedTillTotal + ", yet individual receipts disagree!");
+      } else {
+        trapEl.style.display = "none";
+        trapEl.textContent = "";
+      }
+
+      var tbody = document.getElementById("gcResultsBody");
+      while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+
+      function addGcRow(col1, col2, col3, colorHex) {
+        var tr = document.createElement("tr");
+        var vals = [col1, col2, col3];
+        for (var i = 0; i < vals.length; i++) {
+          var td = document.createElement("td");
+          td.style.padding = "5px 6px";
+          td.style.borderBottom = "1px solid #1e293b";
+          if (i === 0 || i === 2) td.style.fontWeight = "700";
+          if (i === 2 && colorHex) td.style.color = colorHex;
+          td.textContent = vals[i];
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+
+      for (var d = 0; d < res.amountDisagreements.length; d++) {
+        var dis = res.amountDisagreements[d];
+        addGcRow(
+          dis.receiptRef,
+          "Till " + dis.formattedTillCert + " vs Log " + dis.formattedLogCert,
+          dis.direction === "LOG_SHORT" ? ("SHORT IN LOG " + dis.formattedDiff) : ("OVER IN LOG " + dis.formattedDiff),
+          "#fcd34d"
+        );
+      }
+      for (var u = 0; u < res.unmatchedReceipts.length; u++) {
+        var unm = res.unmatchedReceipts[u];
+        addGcRow(
+          unm.receiptRef,
+          "Till " + unm.formattedTillCert + " / Log " + unm.formattedLogCert,
+          unm.category,
+          "#fca5a5"
+        );
+      }
+      for (var a = 0; a < res.ambiguousItems.length; a++) {
+        var amb = res.ambiguousItems[a];
+        addGcRow(amb.ref, amb.code, "HELD SEPARATELY (NO GUESS)", "#fca5a5");
+      }
+      for (var m = 0; m < res.matchedReceipts.length; m++) {
+        var mat = res.matchedReceipts[m];
+        addGcRow(
+          mat.receiptRef,
+          "Matched " + mat.formattedTillCert + " (" + mat.logVoucherCount + " voucher(s))",
+          "MATCHED",
+          "#6ee7b7"
+        );
+      }
+
+      document.getElementById("gcSummaryBadge").textContent =
+        "TILL " + res.formattedTillTotal + " vs LOG " + res.formattedLogTotal +
+        " · DISAGREE " + res.amountDisagreements.length +
+        " · UNMATCHED " + res.unmatchedReceipts.length +
+        " · AMBIG " + res.ambiguousItems.length;
+    }
+    function trackVal99SampleViewOnce() {
+      if (isZh()) return;
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && !sessionStorage.getItem("craftleaf_val99_viewed")) {
+          sessionStorage.setItem("craftleaf_val99_viewed", "1");
+          if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+            window.CraftLeafSDK.trackEvent("idea99-view", "Idea 99 Gift Certificate Close Example View");
+          }
+        }
+      } catch (_e) {}
+    }
+    function submitValidationVote99(choice) {
+      var msgEl = document.getElementById("val99Msg");
+      try {
+        if (typeof sessionStorage !== "undefined" && sessionStorage && sessionStorage.getItem("craftleaf_val99_voted")) {
+          msgEl.textContent = "Recorded once for this session — thank you!";
+          return;
+        }
+        if (typeof sessionStorage !== "undefined" && sessionStorage) {
+          sessionStorage.setItem("craftleaf_val99_voted", choice);
+        }
+      } catch (_e) {}
+      if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === "function") {
+        window.CraftLeafSDK.trackEvent("idea99-" + choice, "Idea 99 Gift Certificate Close Vote: " + choice);
+      }
+      msgEl.textContent = "Thank you — anonymous response recorded for this session.";
+    }
+    document.getElementById("gcTillInput").addEventListener("input", renderGiftCertReconcilerSandbox);
+    document.getElementById("gcLogInput").addEventListener("input", renderGiftCertReconcilerSandbox);
+    document.getElementById("gcWorked30Btn").addEventListener("click", function(){
+      document.getElementById("gcTillInput").value = "R17 | 18.00 | 7.00\nR25 | 12.00 | 0.00";
+      document.getElementById("gcLogInput").value = "LOG-01 | GC-041 | R17 | 12.00\nLOG-02 | GC-058 | R25 | 18.00";
+      renderGiftCertReconcilerSandbox();
+    });
+    document.getElementById("gcSplitEdgeBtn").addEventListener("click", function(){
+      document.getElementById("gcTillInput").value = "R17 | 18.00 | 7.00\nR25 | 12.00 | 0.00\nR31 | 25.00 | 7.50\nR44 | 20.00 | 0.00\nR52 | 15.00 | 0.00\nR52 | 15.00 | 0.00";
+      document.getElementById("gcLogInput").value = "LOG-01 | GC-041 | R17 | 12.00\nLOG-02 | GC-058 | R25 | 18.00\nLOG-03 | GC-061 | R31 | 10.00\nLOG-04 | GC-062 | R31 | 15.00\nLOG-05 | GC-077 | R49 | 15.00\nLOG-06 | GC-088 | R60 | 10.00\nLOG-07 | GC-088 | R61 | 10.00\nLOG-08 | GC-091 |  | 20.00";
+      renderGiftCertReconcilerSandbox();
+    });
+    document.getElementById("val99BuyBtn").addEventListener("click", function(){ submitValidationVote99("buy"); });
+    document.getElementById("val99KeepBtn").addEventListener("click", function(){ submitValidationVote99("keep"); });
 
     
 var ConsignmentPayoutEngine = (function () {
@@ -5714,9 +6372,11 @@ var ShopifyCsvOverwriteGuard = (function () {
     renderShrinkflationSandbox();
     renderKitPackListSandbox();
     renderCashDrawerSandbox();
+    renderGiftCertReconcilerSandbox();
     renderConsignmentPayoutSandbox();
     renderCraftFairBoothSandbox();
     trackVal83SampleViewOnce();
+    trackVal99SampleViewOnce();
     trackVal84SampleViewOnce();
     trackVal86SampleViewOnce();
     trackVal88SampleViewOnce();

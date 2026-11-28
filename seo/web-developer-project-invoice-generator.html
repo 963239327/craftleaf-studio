@@ -124,6 +124,36 @@
       </div>
     </section>
     <section class="section-card">
+      <h2>Worked Pro Example: Catch an Overbilled Deliverable Line Before Sending the Next Progress Invoice ($600 Design + $400 Build)</h2>
+      <div style="overflow-x:auto;">
+        <table class="spec-table">
+          <thead><tr><th>Line ID &amp; Deliverable</th><th>Accepted Quote (Pre-Tax)</th><th>Prior Invoices / Drafts</th><th>Avail. Before Next Draft</th><th>Proposed Next Draft</th><th>Check Sheet Verdict</th></tr></thead>
+          <tbody><tr><td><code>L-DESIGN</code> · UI/UX Design</td><td>$600.00</td><td><code>INV-2026-101</code> (Sent, Unpaid): <strong>$500.00</strong></td><td><strong>$100.00</strong></td><td>$150.00</td><td><strong>Flagged: $50.00 Excess on Design</strong></td></tr><tr><td><code>L-BUILD</code> · Frontend Build</td><td>$400.00</td><td><code>DRF-2026-099</code> (Unsent Draft): $120.00 → <strong>$0.00 consumed</strong></td><td><strong>$400.00</strong></td><td>$200.00</td><td><strong>Within Allowance ($200.00 left)</strong></td></tr><tr><td><strong>Project Total (<code>Q-2026-040</code>)</strong></td><td><strong>$1,000.00</strong></td><td><strong>$500.00 Issued Consumed</strong></td><td><strong>$500.00</strong></td><td><strong>$350.00</strong></td><td><strong>$850.00 / $1,000.00 (Hides $50 Design Overage!)</strong></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <section id="progressQuoteAllowanceSection" class="section-card" style="border-color:#6ee7b7;background:linear-gradient(135deg,#ffffff 0%,#ecfdf5 100%);">
+      <span class="kicker" style="background:#d1fae5;color:#065f46;">INCLUDED IN INVOICE STUDIO PRO ($9 ONCE) · FIXED-QUOTE PROGRESS CHECK SHEET</span>
+      <h2>Billing a Fixed-Price Quote in Stages? Check Per-Line Allowance Before Sending the Next Milestone Invoice</h2>
+      <p style="margin:0 0 14px;color:#334155;font-size:14.5px;">When billing from separate invoice files, an unpaid sent invoice already consumes its deliverable allowance while an unsent draft does not — and a project still at $850 of $1,000 can hide a $50 overage on one deliverable line. Test your next draft locally in browser RAM against one accepted quote (stable Line IDs, 1 currency, pre-tax amounts): missing mappings, credit notes, or changed quotes hold for manual review rather than being guessed, and no invoice is edited or sent.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="../tools/invoice/index.html?template=webdev&amp;mode=progress">Try Live $50 Design Excess Check →</a>
+        <a class="cta-btn-secondary" href="../previews/progress_quote_allowance_sample_preview.pdf">1-Page Allowance Guide PDF →</a>
+      </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #cbd5e1;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-size:12.5px;color:#334155;">Workflow feedback poll (no quote data, email, or checkout — recorded once per session):</span>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:#1e293b;font-weight:600;width:100%;cursor:pointer;">
+          <input type="checkbox" id="idea98EligChk" />
+          <span>I bill fixed-price quotes across staged milestone invoices</span>
+        </label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="cta-btn-secondary" style="padding:7px 12px;font-size:12.5px;cursor:pointer;" id="idea98BuyBtn">👍 I&#x27;d use this check in the $9 pack</button>
+          <button type="button" class="cta-btn-secondary" style="padding:7px 12px;font-size:12.5px;cursor:pointer;" id="idea98KeepBtn">↔️ I&#x27;ll keep my current method</button>
+        </div>
+        <span id="idea98VoteMsg" style="font-size:12px;font-weight:700;color:#059669;width:100%;"></span>
+      </div>
+    </section>
+    <section class="section-card">
       <h2>Developer IP Transfer &amp; Warranty Clauses</h2>
       <div class="checklist-box">
         <ul class="checklist-list"><li>IP Transfer Clause: &#x27;Full intellectual property and Git repository admin ownership transfer upon full settlement of Balance Due.&#x27;</li><li>Warranty Boundary: &#x27;Includes 14-day bugfix warranty on delivered scope; new feature enhancements billed at $135/hr.&#x27;</li><li>Tax Deduction Tip: Cloud sandboxes (AWS/Vercel/Render), Apple Developer $99/yr membership, JetBrains/Cursor licenses, and test devices are deductible business expenses.</li></ul>
@@ -181,6 +211,31 @@
       var lang = (localStorage.getItem('craftleaf_lang') === 'zh') ? 'zh' : 'en';
       window.CraftLeafSDK.renderAffiliateBar(document.getElementById('seoAffiliateMount'), 'print-craft', lang);
     }
+    (function() {
+      function recordVote_idea98(choice) {
+        var msg = document.getElementById('idea98VoteMsg');
+
+        var elig = document.getElementById('idea98EligChk');
+        var eligTag = (elig && elig.checked) ? '-eligible' : '-unfiltered';
+        try {
+          if (typeof sessionStorage !== 'undefined' && sessionStorage && sessionStorage.getItem('craftleaf_idea98_voted')) {
+            if (msg) msg.textContent = 'Recorded once for this session — thank you!';
+            return;
+          }
+          if (typeof sessionStorage !== 'undefined' && sessionStorage) {
+            sessionStorage.setItem('craftleaf_idea98_voted', choice + eligTag);
+          }
+        } catch (_e) {}
+        if (window.CraftLeafSDK && typeof window.CraftLeafSDK.trackEvent === 'function') {
+          window.CraftLeafSDK.trackEvent('idea98-' + choice + eligTag, 'idea98 validation vote: ' + choice + eligTag);
+        }
+        if (msg) msg.textContent = 'Thank you — anonymous response recorded for this session.';
+      }
+      var b1 = document.getElementById('idea98BuyBtn');
+      var b2 = document.getElementById('idea98KeepBtn');
+      if (b1) b1.addEventListener('click', function() { recordVote_idea98('buy'); });
+      if (b2) b2.addEventListener('click', function() { recordVote_idea98('keep'); });
+    })();
   </script>
 </body>
 </html>

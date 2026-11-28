@@ -1531,6 +1531,511 @@
   }
 
   // =========================================================================
+  // Issue #98: Fixed-Quote Progress Invoice Allowance Checker (Read-Only)
+  // =========================================================================
+  var SAMPLE_PROGRESS_QUOTE = [
+    { rowNum: 2, quoteId: 'Q-2026-040', lineId: 'L-DESIGN', deliverable: 'UI/UX Design & Component System', currency: 'USD', preTaxAmount: '600.00', taxBasis: 'PRE_TAX' },
+    { rowNum: 3, quoteId: 'Q-2026-040', lineId: 'L-BUILD', deliverable: 'Frontend & API Implementation', currency: 'USD', preTaxAmount: '400.00', taxBasis: 'PRE_TAX' }
+  ];
+
+  var SAMPLE_PROGRESS_HISTORY = [
+    { rowNum: 2, docId: 'INV-2026-101', quoteId: 'Q-2026-040', lineId: 'L-DESIGN', status: 'UNPAID', currency: 'USD', preTaxAmount: '500.00', taxBasis: 'PRE_TAX', note: 'Sent Stage 1 invoice (unpaid still consumes $500 design allowance)' },
+    { rowNum: 3, docId: 'DRF-2026-099', quoteId: 'Q-2026-040', lineId: 'L-BUILD', status: 'DRAFT', currency: 'USD', preTaxAmount: '120.00', taxBasis: 'PRE_TAX', note: 'Unsent internal scratch draft (excluded — drafts do not consume allowance)' }
+  ];
+
+  var SAMPLE_PROGRESS_DRAFT_OVER = [
+    { rowNum: 2, docId: 'DRAFT-2026-102', quoteId: 'Q-2026-040', lineId: 'L-DESIGN', status: 'PROPOSED_DRAFT', currency: 'USD', preTaxAmount: '150.00', taxBasis: 'PRE_TAX', note: 'Stage 2 design wrap-up (exceeds $100 remaining design allowance by $50)' },
+    { rowNum: 3, docId: 'DRAFT-2026-102', quoteId: 'Q-2026-040', lineId: 'L-BUILD', status: 'PROPOSED_DRAFT', currency: 'USD', preTaxAmount: '200.00', taxBasis: 'PRE_TAX', note: 'Stage 2 frontend build milestone (within $400 build allowance)' }
+  ];
+
+  var SAMPLE_PROGRESS_DRAFT_CLEAN = [
+    { rowNum: 2, docId: 'DRAFT-2026-102B', quoteId: 'Q-2026-040', lineId: 'L-DESIGN', status: 'PROPOSED_DRAFT', currency: 'USD', preTaxAmount: '100.00', taxBasis: 'PRE_TAX', note: 'Final remaining $100 of design allowance' },
+    { rowNum: 3, docId: 'DRAFT-2026-102B', quoteId: 'Q-2026-040', lineId: 'L-BUILD', status: 'PROPOSED_DRAFT', currency: 'USD', preTaxAmount: '250.00', taxBasis: 'PRE_TAX', note: '62.5% frontend milestone ($150 build allowance remains)' }
+  ];
+
+  var SAMPLE_PROGRESS_HOLD_HISTORY = [
+    { rowNum: 2, docId: 'INV-2026-101', quoteId: 'Q-2026-040', lineId: 'L-DESIGN', status: 'PAID', currency: 'USD', preTaxAmount: '300.00', taxBasis: 'PRE_TAX', note: 'Valid paid kickoff invoice' },
+    { rowNum: 3, docId: 'CN-2026-004', quoteId: 'Q-2026-040', lineId: 'L-DESIGN', status: 'CREDIT_NOTE', currency: 'USD', preTaxAmount: '-50.00', taxBasis: 'PRE_TAX', note: 'Credit note — hold for review' },
+    { rowNum: 4, docId: 'INV-2026-105', quoteId: 'Q-2026-040-REV2', lineId: 'L-BUILD', status: 'SENT', currency: 'USD', preTaxAmount: '150.00', taxBasis: 'PRE_TAX', note: 'References revised quote Q-2026-040-REV2' },
+    { rowNum: 5, docId: 'INV-2026-106', quoteId: 'Q-2026-040', lineId: 'L-HOSTING', status: 'UNPAID', currency: 'USD', preTaxAmount: '80.00', taxBasis: 'PRE_TAX', note: 'Unmapped LineID L-HOSTING' }
+  ];
+
+  var PQ_ISSUED_STATUSES = { SENT: true, UNPAID: true, SENT_UNPAID: true, PAID: true, PARTIAL: true, PARTIALLY_PAID: true, ISSUED: true, OVERDUE: true, OPEN: true };
+  var PQ_EXCLUDED_DRAFT_OR_VOID_STATUSES = { DRAFT: true, UNSENT: true, UNSENT_DRAFT: true, SAVED_DRAFT: true, VOID: true, VOIDED: true, CANCELLED: true, CANCELED: true };
+  var PQ_PROPOSED_DRAFT_STATUSES = { PROPOSED: true, PROPOSED_DRAFT: true, NEXT_DRAFT: true };
+  var PQ_CREDIT_STATUSES = { CREDIT: true, CREDIT_NOTE: true, CREDIT_MEMO: true, REFUND: true, REBATE: true, CN: true };
+  var PQ_CHANGED_QUOTE_STATUSES = { CHANGE_ORDER: true, REVISED_QUOTE: true, SUPERSEDED: true, AMENDED_QUOTE: true };
+
+  function normIdPq(s) { return String(s == null ? '' : s).trim().replace(/\s+/g, ' ').toUpperCase(); }
+  function normCurPq(s) { return String(s == null ? '' : s).trim().toUpperCase(); }
+  function normStatusPq(s) { return String(s == null ? '' : s).trim().toUpperCase().replace(/[\s\-]+/g, '_'); }
+
+  function normTaxBasisPq(s) {
+    var v = String(s == null ? '' : s).trim().toUpperCase().replace(/[\s\-]+/g, '_');
+    if (!v || v === 'PRE_TAX' || v === 'PRETAX' || v === 'EX_TAX' || v === 'NET' || v === 'EXCLUSIVE' || v === 'NO' || v === 'FALSE') return 'PRE_TAX';
+    if (v === 'TAX_INCLUDED' || v === 'INC_TAX' || v === 'GROSS' || v === 'INCLUSIVE' || v === 'WITH_TAX' || v === 'YES' || v === 'TRUE') return 'TAX_INCLUDED';
+    return 'AMBIGUOUS_TAX_BASIS';
+  }
+
+  function parseMinorAmountPq(raw, currencyCode) {
+    var cur = CURRENCIES[currencyCode] || { decimals: 2 };
+    var dec = cur.decimals;
+    if (raw === null || raw === undefined || String(raw).trim() === '') {
+      return { ok: false, reason: 'Amount is blank.' };
+    }
+    var clean = String(raw).trim().replace(/[,$\u20ac\u00a3\u00a5\s]/g, '').replace(/^(?:CA|A)/i, '');
+    if (!/^[+-]?\d+(?:\.\d+)?$/.test(clean)) {
+      return { ok: false, reason: 'Invalid numeric amount "' + String(raw).trim() + '".' };
+    }
+    var neg = clean.charAt(0) === '-';
+    var unsigned = clean.replace(/^[+-]/, '');
+    var parts = unsigned.split('.');
+    var frac = parts[1] || '';
+    if (frac.length > dec) {
+      return { ok: false, reason: 'Amount "' + String(raw).trim() + '" has more than ' + dec + ' decimal place(s) for ' + currencyCode + '.' };
+    }
+    var scale = dec === 0 ? 1 : 100;
+    while (frac.length < dec) frac += '0';
+    var minor = parseInt(parts[0], 10) * scale + (dec > 0 ? parseInt(frac, 10) : 0);
+    if (!isFinite(minor)) return { ok: false, reason: 'Amount overflow in "' + String(raw).trim() + '".' };
+    return { ok: true, minor: neg ? -minor : minor, negative: neg && minor > 0 };
+  }
+
+  function fmtPlainMinorPq(minor, currencyCode) {
+    var cur = CURRENCIES[currencyCode] || { decimals: 2 };
+    var sign = minor < 0 ? '-' : '';
+    var abs = Math.abs(Math.round(minor));
+    if (cur.decimals === 0) return sign + String(abs);
+    var whole = Math.floor(abs / 100);
+    var cents = abs % 100;
+    return sign + String(whole) + '.' + (cents < 10 ? '0' + cents : String(cents));
+  }
+
+  function fmtDisplayMinorPq(minor, currencyCode) {
+    return formatMoney(fromMinorUnits(minor, currencyCode), currencyCode);
+  }
+
+  function mapHeaderIdxPq(hdrRow) {
+    var map = {};
+    for (var i = 0; i < hdrRow.length; i++) {
+      var k = String(hdrRow[i] || '').trim().toLowerCase().replace(/[\s_\-]+/g, '');
+      map[k] = i;
+    }
+    return map;
+  }
+
+  function pickColPq(row, hmap, candidates, fallbackIdx) {
+    for (var i = 0; i < candidates.length; i++) {
+      var key = candidates[i];
+      if (Object.prototype.hasOwnProperty.call(hmap, key)) {
+        var idx = hmap[key];
+        return idx < row.length ? String(row[idx] || '').trim() : '';
+      }
+    }
+    if (fallbackIdx !== undefined && fallbackIdx !== null && fallbackIdx < row.length) {
+      return String(row[fallbackIdx] || '').trim();
+    }
+    return '';
+  }
+
+  function parseAcceptedQuoteCsvPq(csvText) {
+    var raw = parseCsvRows(String(csvText || '').replace(/^\uFEFF/, ''));
+    if (raw.length === 0) return [];
+    var hmap = mapHeaderIdxPq(raw[0]);
+    var hasHeader = Object.prototype.hasOwnProperty.call(hmap, 'lineid') ||
+      Object.prototype.hasOwnProperty.call(hmap, 'quoteid') ||
+      Object.prototype.hasOwnProperty.call(hmap, 'deliverable') ||
+      Object.prototype.hasOwnProperty.call(hmap, 'pretaxamount');
+    var startIdx = hasHeader ? 1 : 0;
+    var out = [];
+    for (var r = startIdx; r < raw.length; r++) {
+      var row = raw[r];
+      out.push({
+        rowNum: r + 1,
+        quoteId: hasHeader ? pickColPq(row, hmap, ['quoteid', 'quote', 'acceptedquoteid'], 0) : String(row[0] || '').trim(),
+        lineId: hasHeader ? pickColPq(row, hmap, ['lineid', 'quotelineid', 'deliverableid', 'id'], 1) : String(row[1] || '').trim(),
+        deliverable: hasHeader ? pickColPq(row, hmap, ['deliverable', 'description', 'item', 'line'], 2) : String(row[2] || '').trim(),
+        currency: hasHeader ? pickColPq(row, hmap, ['currency', 'curr'], 3) : String(row[3] || '').trim(),
+        preTaxAmount: hasHeader ? pickColPq(row, hmap, ['pretaxamount', 'quotedpretaxamount', 'amount', 'quotedamount'], 4) : String(row[4] || '').trim(),
+        taxBasis: hasHeader ? pickColPq(row, hmap, ['taxbasis', 'taxincluded', 'taxmode'], null) : String(row[5] || '').trim(),
+        quoteStatus: hasHeader ? pickColPq(row, hmap, ['quotestatus', 'status', 'version'], null) : ''
+      });
+    }
+    return out;
+  }
+
+  function parseProgressInvoiceCsvPq(csvText, defaultRole) {
+    var raw = parseCsvRows(String(csvText || '').replace(/^\uFEFF/, ''));
+    if (raw.length === 0) return [];
+    var hmap = mapHeaderIdxPq(raw[0]);
+    var hasHeader = Object.prototype.hasOwnProperty.call(hmap, 'lineid') ||
+      Object.prototype.hasOwnProperty.call(hmap, 'invoiceid') ||
+      Object.prototype.hasOwnProperty.call(hmap, 'draftid') ||
+      Object.prototype.hasOwnProperty.call(hmap, 'status') ||
+      Object.prototype.hasOwnProperty.call(hmap, 'pretaxamount');
+    var startIdx = hasHeader ? 1 : 0;
+    var isDraftFeed = defaultRole === 'PROPOSED_DRAFT';
+    var out = [];
+    for (var r = startIdx; r < raw.length; r++) {
+      var row = raw[r];
+      if (hasHeader) {
+        var rawStatus = pickColPq(row, hmap, ['status', 'invoicestatus', 'state'], null);
+        out.push({
+          rowNum: r + 1,
+          docId: pickColPq(row, hmap, ['invoiceid', 'draftid', 'docid', 'invoicenumber', 'id'], 0),
+          quoteId: pickColPq(row, hmap, ['quoteid', 'quote', 'acceptedquoteid'], 1),
+          lineId: pickColPq(row, hmap, ['lineid', 'quotelineid', 'deliverableid'], 2),
+          status: rawStatus || (isDraftFeed ? 'PROPOSED_DRAFT' : ''),
+          currency: pickColPq(row, hmap, ['currency', 'curr'], isDraftFeed ? 3 : 4),
+          preTaxAmount: pickColPq(row, hmap, ['pretaxamount', 'amount', 'lineamount'], isDraftFeed ? 4 : 5),
+          taxBasis: pickColPq(row, hmap, ['taxbasis', 'taxincluded', 'taxmode'], null),
+          note: pickColPq(row, hmap, ['note', 'description', 'memo'], null)
+        });
+      } else if (isDraftFeed) {
+        out.push({
+          rowNum: r + 1,
+          docId: String(row[0] || '').trim(),
+          quoteId: String(row[1] || '').trim(),
+          lineId: String(row[2] || '').trim(),
+          status: 'PROPOSED_DRAFT',
+          currency: String(row[3] || '').trim(),
+          preTaxAmount: String(row[4] || '').trim(),
+          taxBasis: String(row[5] || '').trim(),
+          note: String(row[6] || '').trim()
+        });
+      } else {
+        out.push({
+          rowNum: r + 1,
+          docId: String(row[0] || '').trim(),
+          quoteId: String(row[1] || '').trim(),
+          lineId: String(row[2] || '').trim(),
+          status: String(row[3] || '').trim(),
+          currency: String(row[4] || '').trim(),
+          preTaxAmount: String(row[5] || '').trim(),
+          taxBasis: String(row[6] || '').trim(),
+          note: String(row[7] || '').trim()
+        });
+      }
+    }
+    return out;
+  }
+
+  function evaluateProgressQuoteAllowance(quoteInput, historyInput, proposedDraftInput) {
+    var qRows = Array.isArray(quoteInput) ? quoteInput : [];
+    var hRows = Array.isArray(historyInput) ? historyInput : [];
+    var dRows = Array.isArray(proposedDraftInput) ? proposedDraftInput : [];
+
+    var reviewIssues = [];
+    var quoteIdsSeen = {};
+    var currenciesSeen = {};
+    var quoteLineOrder = [];
+    var quoteLineMap = {};
+
+    if (qRows.length === 0) {
+      reviewIssues.push({ code: 'EMPTY_ACCEPTED_QUOTE', refId: '(quote)', detail: 'Provide one accepted fixed-price quote with stable LineIDs and pre-tax amounts.' });
+    }
+
+    for (var qi = 0; qi < qRows.length; qi++) {
+      var qr = qRows[qi] || {};
+      var qLabel = 'Quote Row ' + (qr.rowNum !== undefined ? qr.rowNum : (qi + 1));
+      var qIdRaw = String(qr.quoteId == null ? '' : qr.quoteId).trim();
+      var qIdKey = normIdPq(qIdRaw);
+      var lIdRaw = String(qr.lineId == null ? '' : qr.lineId).trim();
+      var lIdKey = normIdPq(lIdRaw);
+      var delivRaw = String(qr.deliverable == null ? '' : qr.deliverable).trim() || lIdRaw || ('Line ' + (qi + 1));
+      var curCode = normCurPq(qr.currency);
+      var qStat = normStatusPq(qr.quoteStatus || '');
+
+      if (!qIdKey) {
+        reviewIssues.push({ code: 'MISSING_QUOTE_ID', refId: qLabel, detail: qLabel + ' is missing QuoteID.' });
+        continue;
+      }
+      quoteIdsSeen[qIdKey] = qIdRaw;
+
+      if (qStat && PQ_CHANGED_QUOTE_STATUSES[qStat]) {
+        reviewIssues.push({ code: 'CHANGED_OR_MULTIPLE_QUOTES', refId: qIdRaw, detail: qLabel + ' is marked "' + qr.quoteStatus + '" — changed quotes go to manual review.' });
+        continue;
+      }
+      if (!lIdKey) {
+        reviewIssues.push({ code: 'MISSING_OR_UNMAPPED_LINE_ID', refId: qLabel, detail: qLabel + ' has a blank LineID.' });
+        continue;
+      }
+      if (quoteLineMap[lIdKey]) {
+        reviewIssues.push({ code: 'CHANGED_OR_MULTIPLE_QUOTES', refId: lIdRaw, detail: 'Duplicate LineID "' + lIdRaw + '" appears multiple times in the quote table.' });
+        continue;
+      }
+      if (!curCode || !CURRENCIES[curCode]) {
+        reviewIssues.push({ code: 'MIXED_OR_MISSING_CURRENCY', refId: lIdRaw, detail: qLabel + ' (' + lIdRaw + ') must specify a supported currency.' });
+        continue;
+      }
+      currenciesSeen[curCode] = true;
+
+      if (normTaxBasisPq(qr.taxBasis) !== 'PRE_TAX') {
+        reviewIssues.push({ code: 'NON_PRE_TAX_OR_INVALID_AMOUNT', refId: lIdRaw, detail: qLabel + ' (' + lIdRaw + ') must use pre-tax amounts only.' });
+        continue;
+      }
+      var parsedQ = parseMinorAmountPq(qr.preTaxAmount, curCode);
+      if (!parsedQ.ok || parsedQ.minor < 0) {
+        reviewIssues.push({ code: 'NON_PRE_TAX_OR_INVALID_AMOUNT', refId: lIdRaw, detail: qLabel + ' (' + lIdRaw + '): ' + (parsedQ.ok ? 'Negative quote line requires review.' : parsedQ.reason) });
+        continue;
+      }
+
+      quoteLineOrder.push(lIdKey);
+      quoteLineMap[lIdKey] = {
+        quoteId: qIdRaw,
+        lineId: lIdRaw,
+        lineKey: lIdKey,
+        deliverable: delivRaw,
+        currency: curCode,
+        quotedMinor: parsedQ.minor,
+        issuedConsumedMinor: 0,
+        proposedDraftMinor: 0,
+        issuedDocIds: [],
+        proposedDocIds: []
+      };
+    }
+
+    var quoteIdKeys = Object.keys(quoteIdsSeen);
+    var acceptedQuoteKey = quoteIdKeys.length === 1 ? quoteIdKeys[0] : '';
+    var acceptedQuoteId = acceptedQuoteKey ? quoteIdsSeen[acceptedQuoteKey] : (quoteIdKeys.length > 1 ? '(multiple)' : '');
+    if (quoteIdKeys.length > 1) {
+      reviewIssues.push({ code: 'CHANGED_OR_MULTIPLE_QUOTES', refId: quoteIdKeys.join(', '), detail: 'Quote input mixes ' + quoteIdKeys.length + ' QuoteIDs; check one accepted quote at a time.' });
+    }
+
+    var curKeysInitial = Object.keys(currenciesSeen);
+    var primaryCurrency = curKeysInitial.length === 1 ? curKeysInitial[0] : (curKeysInitial[0] || 'USD');
+    var excludedDraftOrVoidRows = [];
+    var issuedConsumedRows = [];
+    var proposedCheckedRows = [];
+
+    function inspectInvoiceRow(ir, feedName, forceProposed) {
+      var rowObj = ir || {};
+      var docRaw = String(rowObj.docId == null ? '' : rowObj.docId).trim();
+      var rLabel = docRaw || (feedName + ' Row ' + (rowObj.rowNum !== undefined ? rowObj.rowNum : '?'));
+      if (!docRaw) {
+        reviewIssues.push({ code: 'MISSING_DOCUMENT_ID', refId: rLabel, detail: rLabel + ' has a blank InvoiceID / DraftID.' });
+        return;
+      }
+      var stKey = forceProposed ? normStatusPq(rowObj.status || 'PROPOSED_DRAFT') : normStatusPq(rowObj.status);
+      if (PQ_CREDIT_STATUSES[stKey]) {
+        reviewIssues.push({ code: 'CREDIT_NOTE_REQUIRES_REVIEW', refId: docRaw, detail: 'Row "' + docRaw + '" is marked "' + (rowObj.status || stKey) + '" — credit notes go to manual review rather than being guessed.' });
+        return;
+      }
+      if (PQ_CHANGED_QUOTE_STATUSES[stKey]) {
+        reviewIssues.push({ code: 'CHANGED_OR_MULTIPLE_QUOTES', refId: docRaw, detail: 'Row "' + docRaw + '" is marked "' + (rowObj.status || stKey) + '" — changed quotes go to manual review.' });
+        return;
+      }
+      var isIssued = !!PQ_ISSUED_STATUSES[stKey];
+      var isExcludedDraft = !!PQ_EXCLUDED_DRAFT_OR_VOID_STATUSES[stKey];
+      var isProposed = forceProposed ? (!isExcludedDraft && !isIssued && (!stKey || !!PQ_PROPOSED_DRAFT_STATUSES[stKey])) : !!PQ_PROPOSED_DRAFT_STATUSES[stKey];
+      if (!isIssued && !isExcludedDraft && !isProposed) {
+        reviewIssues.push({ code: 'AMBIGUOUS_INVOICE_STATUS', refId: docRaw, detail: 'Row "' + docRaw + '" has unrecognized Status "' + String(rowObj.status || '') + '".' });
+        return;
+      }
+
+      var rowQRaw = String(rowObj.quoteId == null ? '' : rowObj.quoteId).trim();
+      var rowQKey = normIdPq(rowQRaw);
+      if (!rowQKey) {
+        reviewIssues.push({ code: 'CHANGED_OR_MULTIPLE_QUOTES', refId: docRaw, detail: 'Row "' + docRaw + '" has a blank QuoteID; link every progress row to the accepted QuoteID.' });
+        return;
+      }
+      if (acceptedQuoteKey && rowQKey !== acceptedQuoteKey) {
+        reviewIssues.push({ code: 'CHANGED_OR_MULTIPLE_QUOTES', refId: docRaw, detail: 'Row "' + docRaw + '" references QuoteID "' + rowQRaw + '", differing from accepted quote "' + acceptedQuoteId + '".' });
+        return;
+      }
+
+      var rowCur = normCurPq(rowObj.currency);
+      if (!rowCur || !CURRENCIES[rowCur]) {
+        reviewIssues.push({ code: 'MIXED_OR_MISSING_CURRENCY', refId: docRaw, detail: 'Row "' + docRaw + '" is missing a valid currency code.' });
+        return;
+      }
+      currenciesSeen[rowCur] = true;
+
+      if (normTaxBasisPq(rowObj.taxBasis) !== 'PRE_TAX') {
+        reviewIssues.push({ code: 'NON_PRE_TAX_OR_INVALID_AMOUNT', refId: docRaw, detail: 'Row "' + docRaw + '" is not pre-tax.' });
+        return;
+      }
+      var parsedAmt = parseMinorAmountPq(rowObj.preTaxAmount, rowCur);
+      if (!parsedAmt.ok) {
+        reviewIssues.push({ code: 'NON_PRE_TAX_OR_INVALID_AMOUNT', refId: docRaw, detail: 'Row "' + docRaw + '": ' + parsedAmt.reason });
+        return;
+      }
+      if (parsedAmt.negative || parsedAmt.minor < 0) {
+        reviewIssues.push({ code: 'CREDIT_NOTE_REQUIRES_REVIEW', refId: docRaw, detail: 'Row "' + docRaw + '" has a negative amount — credit notes/deductions go to manual review.' });
+        return;
+      }
+
+      var rowLineRaw = String(rowObj.lineId == null ? '' : rowObj.lineId).trim();
+      var rowLineKey = normIdPq(rowLineRaw);
+      if (isExcludedDraft) {
+        excludedDraftOrVoidRows.push({
+          docId: docRaw,
+          quoteId: rowQRaw,
+          lineId: rowLineRaw || '(unmapped)',
+          status: stKey,
+          currency: rowCur,
+          amountMinor: parsedAmt.minor,
+          formattedAmount: fmtDisplayMinorPq(parsedAmt.minor, rowCur),
+          note: String(rowObj.note || '')
+        });
+        return;
+      }
+      if (!rowLineKey || !quoteLineMap[rowLineKey]) {
+        reviewIssues.push({
+          code: 'MISSING_OR_UNMAPPED_LINE_ID',
+          refId: docRaw,
+          detail: 'Row "' + docRaw + '" has ' + (rowLineKey ? ('unmapped LineID "' + rowLineRaw + '"') : 'a blank LineID') + '; map it explicitly before billing.'
+        });
+        return;
+      }
+
+      var targetLine = quoteLineMap[rowLineKey];
+      if (isIssued) {
+        targetLine.issuedConsumedMinor += parsedAmt.minor;
+        if (targetLine.issuedDocIds.indexOf(docRaw) === -1) targetLine.issuedDocIds.push(docRaw);
+        issuedConsumedRows.push({ docId: docRaw, lineId: targetLine.lineId, status: stKey, amountMinor: parsedAmt.minor, formattedAmount: fmtDisplayMinorPq(parsedAmt.minor, rowCur), note: String(rowObj.note || '') });
+      } else if (isProposed) {
+        targetLine.proposedDraftMinor += parsedAmt.minor;
+        if (targetLine.proposedDocIds.indexOf(docRaw) === -1) targetLine.proposedDocIds.push(docRaw);
+        proposedCheckedRows.push({ docId: docRaw, lineId: targetLine.lineId, status: stKey || 'PROPOSED_DRAFT', amountMinor: parsedAmt.minor, formattedAmount: fmtDisplayMinorPq(parsedAmt.minor, rowCur), note: String(rowObj.note || '') });
+      }
+    }
+
+    for (var hi = 0; hi < hRows.length; hi++) inspectInvoiceRow(hRows[hi], 'History', false);
+    for (var di = 0; di < dRows.length; di++) inspectInvoiceRow(dRows[di], 'Proposed Draft', true);
+
+    var allCurKeys = Object.keys(currenciesSeen);
+    if (allCurKeys.length > 1) {
+      reviewIssues.push({ code: 'MIXED_OR_MISSING_CURRENCY', refId: allCurKeys.join(', '), detail: 'Rows mix multiple currencies (' + allCurKeys.join(', ') + ').' });
+    }
+    if (allCurKeys.length === 1) primaryCurrency = allCurKeys[0];
+
+    var lineResults = [];
+    var totalQuotedMinor = 0;
+    var totalIssuedConsumedMinor = 0;
+    var totalAvailableBeforeDraftMinor = 0;
+    var totalProposedDraftMinor = 0;
+    var totalRemainingAfterDraftMinor = 0;
+    var totalOverbilledMinor = 0;
+    var overbilledLineCount = 0;
+
+    for (var li = 0; li < quoteLineOrder.length; li++) {
+      var item = quoteLineMap[quoteLineOrder[li]];
+      var rawAvailBefore = item.quotedMinor - item.issuedConsumedMinor;
+      var priorExcessMinor = rawAvailBefore < 0 ? (-rawAvailBefore) : 0;
+      var availBeforeMinor = rawAvailBefore > 0 ? rawAvailBefore : 0;
+      var cumulativeAfterDraftMinor = item.issuedConsumedMinor + item.proposedDraftMinor;
+      var rawAfter = item.quotedMinor - cumulativeAfterDraftMinor;
+      var remainingAfterDraftMinor = rawAfter > 0 ? rawAfter : 0;
+      var overbilledExcessMinor = rawAfter < 0 ? (-rawAfter) : 0;
+
+      var verdict = 'WITHIN_ALLOWANCE';
+      if (overbilledExcessMinor > 0) {
+        verdict = priorExcessMinor > 0 && item.proposedDraftMinor === 0 ? 'PRIOR_ALREADY_OVER_QUOTE_LINE' : 'OVER_QUOTE_LINE';
+        overbilledLineCount += 1;
+      }
+
+      totalQuotedMinor += item.quotedMinor;
+      totalIssuedConsumedMinor += item.issuedConsumedMinor;
+      totalAvailableBeforeDraftMinor += availBeforeMinor;
+      totalProposedDraftMinor += item.proposedDraftMinor;
+      totalRemainingAfterDraftMinor += remainingAfterDraftMinor;
+      totalOverbilledMinor += overbilledExcessMinor;
+
+      lineResults.push({
+        quoteId: item.quoteId,
+        lineId: item.lineId,
+        deliverable: item.deliverable,
+        currency: primaryCurrency,
+        quotedMinor: item.quotedMinor,
+        issuedConsumedMinor: item.issuedConsumedMinor,
+        priorExcessMinor: priorExcessMinor,
+        availableBeforeDraftMinor: availBeforeMinor,
+        proposedDraftMinor: item.proposedDraftMinor,
+        cumulativeAfterDraftMinor: cumulativeAfterDraftMinor,
+        remainingAfterDraftMinor: remainingAfterDraftMinor,
+        overbilledExcessMinor: overbilledExcessMinor,
+        formattedQuoted: fmtDisplayMinorPq(item.quotedMinor, primaryCurrency),
+        formattedIssuedConsumed: fmtDisplayMinorPq(item.issuedConsumedMinor, primaryCurrency),
+        formattedAvailableBeforeDraft: fmtDisplayMinorPq(availBeforeMinor, primaryCurrency),
+        formattedProposedDraft: fmtDisplayMinorPq(item.proposedDraftMinor, primaryCurrency),
+        formattedRemainingAfterDraft: fmtDisplayMinorPq(remainingAfterDraftMinor, primaryCurrency),
+        formattedOverbilledExcess: fmtDisplayMinorPq(overbilledExcessMinor, primaryCurrency),
+        plainQuoted: fmtPlainMinorPq(item.quotedMinor, primaryCurrency),
+        plainIssuedConsumed: fmtPlainMinorPq(item.issuedConsumedMinor, primaryCurrency),
+        plainAvailableBeforeDraft: fmtPlainMinorPq(availBeforeMinor, primaryCurrency),
+        plainProposedDraft: fmtPlainMinorPq(item.proposedDraftMinor, primaryCurrency),
+        plainRemainingAfterDraft: fmtPlainMinorPq(remainingAfterDraftMinor, primaryCurrency),
+        plainOverbilledExcess: fmtPlainMinorPq(overbilledExcessMinor, primaryCurrency),
+        issuedDocIds: item.issuedDocIds.slice(),
+        proposedDocIds: item.proposedDocIds.slice(),
+        verdict: verdict
+      });
+    }
+
+    var projectCumulativeAfterDraftMinor = totalIssuedConsumedMinor + totalProposedDraftMinor;
+    var projectHeadroomMinor = totalQuotedMinor - projectCumulativeAfterDraftMinor;
+    var projectMasksLineOverage = overbilledLineCount > 0 && projectCumulativeAfterDraftMinor <= totalQuotedMinor;
+
+    var status = 'READY_WITHIN_ALLOWANCE';
+    if (reviewIssues.length > 0) status = 'HOLD_FOR_REVIEW';
+    else if (overbilledLineCount > 0) status = 'OVERBILLED_LINES_FLAGGED';
+
+    return {
+      status: status,
+      quoteId: acceptedQuoteId,
+      currency: primaryCurrency,
+      lineResults: lineResults,
+      issuedConsumedRows: issuedConsumedRows,
+      proposedCheckedRows: proposedCheckedRows,
+      excludedDraftOrVoidRows: excludedDraftOrVoidRows,
+      reviewIssues: reviewIssues,
+      overbilledLineCount: overbilledLineCount,
+      totalQuotedMinor: totalQuotedMinor,
+      totalIssuedConsumedMinor: totalIssuedConsumedMinor,
+      totalAvailableBeforeDraftMinor: totalAvailableBeforeDraftMinor,
+      totalProposedDraftMinor: totalProposedDraftMinor,
+      projectCumulativeAfterDraftMinor: projectCumulativeAfterDraftMinor,
+      projectHeadroomMinor: projectHeadroomMinor,
+      totalRemainingAfterDraftMinor: totalRemainingAfterDraftMinor,
+      totalOverbilledMinor: totalOverbilledMinor,
+      projectMasksLineOverage: projectMasksLineOverage,
+      formattedTotalQuoted: fmtDisplayMinorPq(totalQuotedMinor, primaryCurrency),
+      formattedTotalIssuedConsumed: fmtDisplayMinorPq(totalIssuedConsumedMinor, primaryCurrency),
+      formattedTotalAvailableBeforeDraft: fmtDisplayMinorPq(totalAvailableBeforeDraftMinor, primaryCurrency),
+      formattedTotalProposedDraft: fmtDisplayMinorPq(totalProposedDraftMinor, primaryCurrency),
+      formattedProjectCumulativeAfterDraft: fmtDisplayMinorPq(projectCumulativeAfterDraftMinor, primaryCurrency),
+      formattedTotalRemainingAfterDraft: fmtDisplayMinorPq(totalRemainingAfterDraftMinor, primaryCurrency),
+      formattedTotalOverbilled: fmtDisplayMinorPq(totalOverbilledMinor, primaryCurrency)
+    };
+  }
+
+  function serializeProgressCheckCsv(evalRes) {
+    function csvCellPq(val) {
+      var s = String(val == null ? '' : val);
+      if (/^[=+\-@]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    var res = evalRes || {};
+    var lines = [[
+      'QuoteID', 'LineID', 'Deliverable', 'Currency',
+      'QuotedPreTax', 'IssuedConsumedPreTax', 'AvailableBeforeDraftPreTax',
+      'ProposedDraftPreTax', 'RemainingAfterDraftPreTax', 'OverbilledExcessPreTax', 'LineVerdict'
+    ].map(csvCellPq).join(',')];
+    var rows = Array.isArray(res.lineResults) ? res.lineResults : [];
+    for (var i = 0; i < rows.length; i++) {
+      var lr = rows[i];
+      var rowVerdict = res.status === 'HOLD_FOR_REVIEW' ? ('HOLD_FOR_REVIEW_' + lr.verdict) : lr.verdict;
+      lines.push([
+        lr.quoteId, lr.lineId, lr.deliverable, lr.currency,
+        lr.plainQuoted, lr.plainIssuedConsumed, lr.plainAvailableBeforeDraft,
+        lr.plainProposedDraft, lr.plainRemainingAfterDraft, lr.plainOverbilledExcess, rowVerdict
+      ].map(csvCellPq).join(','));
+    }
+    return lines.join('\r\n');
+  }
+
+  // =========================================================================
   // Pure-JS ISO/IEC 18004 Scannable QR Code Matrix & Vector SVG Generator
   // Supports Versions 1–6 (ECC Level L, Byte Mode, up to 134 UTF-8 bytes)
   // =========================================================================
@@ -1841,6 +2346,7 @@
       tabStatement: 'Open Statement',
       tabUnbilled: 'Unbilled Hours',
       tabOverlap: 'Time Overlap',
+      tabProgress: 'Quote Progress',
       btnSaveClient: '+ Save Current Client',
       btnSaveItem: '+ Save First Line Item',
       btnSaveLedger: '+ Save Invoice to Ledger',
@@ -1874,6 +2380,15 @@
       btnOvCsvB: '📂 Optional Log B CSV',
       btnExportOvCsv: '⬇ Overlap Review CSV',
       btnPrintOv: '🖨️ Print Review Sheet',
+      pqIntro: 'Check remaining allowance per fixed-price quote line before sending the next progress invoice (sent/unpaid consume; drafts do not).',
+      btnPqOver50: '🧪 $50 Design Excess ($850/$1k)',
+      btnPqClean: '✅ Within Allowance',
+      btnPqHold: '⚠️ Unmapped / Credit / Changed Quote',
+      btnPqQuoteCsv: '📂 Quote CSV',
+      btnPqHistCsv: '📂 Prior Invoices CSV',
+      btnPqDraftCsv: '📂 Next Draft CSV',
+      btnExportPqCsv: '⬇ Check Sheet CSV',
+      btnPrintPq: '🖨️ Print Check Sheet',
       tipText: 'Get paid faster with zero monthly SaaS fees? Support independent offline software:',
       tipCta: '☕ Support CraftLeaf Studio',
       guidesFooterTitle: 'Free Industry Invoice & Receipt Templates:',
@@ -1944,6 +2459,7 @@
       tabStatement: '未结对账单',
       tabUnbilled: '未开票工时核查',
       tabOverlap: '时段重叠核查',
+      tabProgress: '报价分期超额核查',
       btnSaveClient: '+ 保存当前客户',
       btnSaveItem: '+ 保存首行服务项',
       btnSaveLedger: '+ 归档当前账单至台账',
@@ -1977,6 +2493,15 @@
       btnOvCsvB: '📂 可选导入客户B CSV',
       btnExportOvCsv: '⬇ 导出重叠核查 CSV',
       btnPrintOv: '🖨️ 打印核查清单',
+      pqIntro: '发送下一张里程碑进度发票前，逐行核查固定总价报价单剩余额度（已发未付计入消耗，草稿不占额度）。',
+      btnPqOver50: '🧪 设计行超额$50示例 ($850/$1k)',
+      btnPqClean: '✅ 额度内通过示例',
+      btnPqHold: '⚠️ 漏映射/冲红/改报价拦截',
+      btnPqQuoteCsv: '📂 导入报价单 CSV',
+      btnPqHistCsv: '📂 导入历史发票 CSV',
+      btnPqDraftCsv: '📂 导入拟发草稿 CSV',
+      btnExportPqCsv: '⬇ 导出额度核查 CSV',
+      btnPrintPq: '🖨️ 打印额度核查单',
       tipText: '省下了每月 $15 的海外 SaaS 账单软件月费？欢迎支持纯本地独立工具：',
       tipCta: '☕ 赞助支持青叶工坊',
       guidesFooterTitle: '出海自由职业者与独立开发者常用发票模板指南：',
@@ -2104,6 +2629,15 @@
     SAMPLE_OVERLAP_WORKED_ROWS: SAMPLE_OVERLAP_WORKED_ROWS,
     SAMPLE_OVERLAP_NESTED_ROWS: SAMPLE_OVERLAP_NESTED_ROWS,
     SAMPLE_OVERLAP_AMBIGUOUS_ROWS: SAMPLE_OVERLAP_AMBIGUOUS_ROWS,
+    parseAcceptedQuoteCsvPq: parseAcceptedQuoteCsvPq,
+    parseProgressInvoiceCsvPq: parseProgressInvoiceCsvPq,
+    evaluateProgressQuoteAllowance: evaluateProgressQuoteAllowance,
+    serializeProgressCheckCsv: serializeProgressCheckCsv,
+    SAMPLE_PROGRESS_QUOTE: SAMPLE_PROGRESS_QUOTE,
+    SAMPLE_PROGRESS_HISTORY: SAMPLE_PROGRESS_HISTORY,
+    SAMPLE_PROGRESS_DRAFT_OVER: SAMPLE_PROGRESS_DRAFT_OVER,
+    SAMPLE_PROGRESS_DRAFT_CLEAN: SAMPLE_PROGRESS_DRAFT_CLEAN,
+    SAMPLE_PROGRESS_HOLD_HISTORY: SAMPLE_PROGRESS_HOLD_HISTORY,
     generateQRSvg: generateQRSvg
   };
 
@@ -2231,6 +2765,12 @@
       useDemo: true,
       feedARows: SAMPLE_OVERLAP_WORKED_ROWS.slice(),
       feedBRows: []
+    },
+    pq: {
+      useDemo: true,
+      quoteRows: SAMPLE_PROGRESS_QUOTE.slice(),
+      historyRows: SAMPLE_PROGRESS_HISTORY.slice(),
+      draftRows: SAMPLE_PROGRESS_DRAFT_OVER.slice()
     },
     doc: {
       docType: 'invoice',
@@ -2960,6 +3500,161 @@
     paperEl.appendChild(botWrap);
   }
 
+  function renderProgressPaperDom(paperEl) {
+    while (paperEl.firstChild) paperEl.removeChild(paperEl.firstChild);
+    var unlocked = isPro();
+    var d = state.doc;
+    var isZh = d.docLang === 'zh';
+    var effectiveAccent = unlocked ? (d.accentColor || '#1e3a8a') : '#1e3a8a';
+    paperEl.style.setProperty('--inv-accent', effectiveAccent);
+    paperEl.classList.toggle('paper-letter', state.paper === 'letter');
+
+    var res = evaluateProgressQuoteAllowance(state.pq.quoteRows, state.pq.historyRows, state.pq.draftRows);
+
+    var topWrap = document.createElement('div');
+    var header = document.createElement('div');
+    header.className = 'inv-header';
+    var brandDiv = document.createElement('div');
+    var titleH2 = document.createElement('h2');
+    titleH2.className = 'inv-sender-name';
+    titleH2.textContent = d.senderName || 'Studio';
+    brandDiv.appendChild(titleH2);
+    var subPre = document.createElement('div');
+    subPre.className = 'inv-sender-meta';
+    subPre.textContent = isZh
+      ? '固定总价报价单分期进度额度核查表（只读核查单 · 绝不自动修改或发送发票）'
+      : 'Pre-Send Fixed-Price Quote Progress Allowance Check Sheet (Read-Only · Never Edits or Sends Invoices)';
+    brandDiv.appendChild(subPre);
+
+    var rightDiv = document.createElement('div');
+    rightDiv.className = 'inv-doc-badge-wrap';
+    var badge = document.createElement('div');
+    badge.className = 'inv-doc-type-badge';
+    badge.textContent = isZh ? '报价分期核查单' : 'QUOTE ALLOWANCE CHECK';
+    rightDiv.appendChild(badge);
+    var metaLine = document.createElement('div');
+    metaLine.className = 'inv-doc-meta';
+    metaLine.textContent = (isZh ? '基准报价单: ' : 'Accepted Quote: ') + (res.quoteId || '—') + ' (' + res.currency + ' Pre-Tax)';
+    rightDiv.appendChild(metaLine);
+
+    header.appendChild(brandDiv);
+    header.appendChild(rightDiv);
+    topWrap.appendChild(header);
+
+    if (res.reviewIssues.length > 0) {
+      var holdBanner = document.createElement('div');
+      holdBanner.style.cssText = 'background:#fef2f2;border:1.5px solid #fca5a5;color:#7f1d1d;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:12px;';
+      var holdTitle = document.createElement('strong');
+      holdTitle.textContent = isZh
+        ? ('🛑 已拦截人工复核（共 ' + res.reviewIssues.length + ' 项：漏映射 LineID / 贷项冲红 / 改版报价不自动猜测）：')
+        : ('🛑 Held for Review (' + res.reviewIssues.length + ' item(s) — unmapped LineIDs, credit notes & changed quotes are never guessed):');
+      holdBanner.appendChild(holdTitle);
+      res.reviewIssues.forEach(function (iss) {
+        var line = document.createElement('div');
+        line.style.marginTop = '4px';
+        line.textContent = '• [' + iss.code + '] ' + iss.detail;
+        holdBanner.appendChild(line);
+      });
+      topWrap.appendChild(holdBanner);
+    } else if (res.projectMasksLineOverage) {
+      var maskBanner = document.createElement('div');
+      maskBanner.style.cssText = 'background:#fffbeb;border:1.5px solid #fcd34d;color:#78350f;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:12px;font-weight:600;';
+      maskBanner.textContent = isZh
+        ? ('⚠️ 总价掩盖分项超额预警：项目累计 (' + res.formattedProjectCumulativeAfterDraft + ') 仍低于总报价 (' + res.formattedTotalQuoted + ')，但单行已超出核准额度 ' + res.formattedTotalOverbilled + '！')
+        : ('⚠️ Project-Total Trap Caught: Project cumulative (' + res.formattedProjectCumulativeAfterDraft + ' of ' + res.formattedTotalQuoted + ') looks under budget, but hides a ' + res.formattedTotalOverbilled + ' deliverable-line overage!');
+      topWrap.appendChild(maskBanner);
+    }
+
+    var kpiBar = document.createElement('div');
+    kpiBar.style.cssText = 'display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 12px;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;margin-bottom:12px;font-size:12px;';
+    var kpiL = document.createElement('strong');
+    kpiL.textContent = (isZh ? '报价总额: ' : 'Accepted Quote: ') + res.formattedTotalQuoted +
+      (isZh ? ' · 已发消耗: ' : ' · Issued Consumed: ') + res.formattedTotalIssuedConsumed +
+      (isZh ? ' · 本次拟开: ' : ' · Proposed Draft: ') + res.formattedTotalProposedDraft;
+    var kpiR = document.createElement('strong');
+    kpiR.style.color = (res.status === 'READY_WITHIN_ALLOWANCE') ? '#047857' : '#b91c1c';
+    kpiR.textContent = res.status === 'HOLD_FOR_REVIEW'
+      ? (isZh ? '状态：待人工复核' : 'STATUS: HOLD FOR REVIEW')
+      : (res.overbilledLineCount > 0
+        ? ((isZh ? '分项超额: ' : 'EXCESS FLAGGED: ') + res.formattedTotalOverbilled)
+        : ((isZh ? '开票后剩余可开: ' : 'REMAINING AFTER DRAFT: ') + res.formattedTotalRemainingAfterDraft));
+    kpiBar.appendChild(kpiL);
+    kpiBar.appendChild(kpiR);
+    topWrap.appendChild(kpiBar);
+
+    var tbl = document.createElement('table');
+    tbl.className = 'inv-items-table';
+    var thead = document.createElement('thead');
+    var hr = document.createElement('tr');
+    var hdrs = isZh
+      ? ['行编码与交付项', '核准税前额', '已发消耗', '本次前可用', '拟开草稿', '结果/超额']
+      : ['Line ID & Deliverable', 'Quoted Pre-Tax', 'Issued Billed', 'Avail. Before', 'Next Draft', 'After / Excess'];
+    hdrs.forEach(function (lbl, idx) {
+      var th = document.createElement('th');
+      if (idx >= 1) th.className = 'num';
+      th.textContent = lbl;
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    tbl.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+    res.lineResults.forEach(function (lr) {
+      var tr = document.createElement('tr');
+      if (lr.overbilledExcessMinor > 0) tr.style.background = '#fef2f2';
+      var outLabel = res.status === 'HOLD_FOR_REVIEW'
+        ? 'HOLD FOR REVIEW'
+        : (lr.overbilledExcessMinor > 0
+          ? ('⚠️ OVER BY ' + lr.formattedOverbilledExcess)
+          : ('✓ ' + lr.formattedRemainingAfterDraft + ' left'));
+      var cols = [
+        lr.lineId + ' · ' + lr.deliverable,
+        lr.formattedQuoted,
+        lr.formattedIssuedConsumed,
+        lr.formattedAvailableBeforeDraft,
+        lr.formattedProposedDraft,
+        outLabel
+      ];
+      cols.forEach(function (val, cIdx) {
+        var td = document.createElement('td');
+        if (cIdx >= 1) td.className = 'num';
+        if (cIdx === 0 || cIdx === 5) td.style.fontWeight = '700';
+        if (cIdx === 5 && lr.overbilledExcessMinor > 0) td.style.color = '#b91c1c';
+        if (cIdx === 5 && lr.overbilledExcessMinor === 0 && res.status === 'READY_WITHIN_ALLOWANCE') td.style.color = '#047857';
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody);
+    topWrap.appendChild(tbl);
+
+    if (res.excludedDraftOrVoidRows.length > 0) {
+      var exNote = document.createElement('div');
+      exNote.style.cssText = 'margin-top:10px;font-size:11.5px;color:#475569;';
+      exNote.textContent = (isZh ? '已自动忽略未发送草稿/作废行（不扣减额度）：' : 'Excluded unsent draft/void rows ($0 consumed): ') +
+        res.excludedDraftOrVoidRows.map(function (x) { return x.docId + ' [' + x.status + ' ' + x.formattedAmount + ']'; }).join(', ');
+      topWrap.appendChild(exNote);
+    }
+
+    var disc = document.createElement('div');
+    disc.style.cssText = 'margin-top:12px;font-size:11px;color:#64748b;';
+    disc.textContent = isZh
+      ? '免责声明：仅供发单前操作核对参考（不构成法律、税务、财务或会计准则意见），不会修改或发送任何账单。'
+      : 'Operational check sheet only (Not Legal, Tax, Financial, or Accounting Advice). Does not edit or send invoices.';
+    topWrap.appendChild(disc);
+
+    var botWrap = document.createElement('div');
+    if (!unlocked || !d.hideFooter) {
+      var ftr = document.createElement('div');
+      ftr.className = 'inv-footer-brand';
+      ftr.textContent = (DOC_LABELS[d.docLang] || DOC_LABELS.en).freeFooter;
+      botWrap.appendChild(ftr);
+    }
+    paperEl.appendChild(topWrap);
+    paperEl.appendChild(botWrap);
+  }
+
   function updateInvoicePreview() {
     if (state.previewMode === 'statement') {
       renderStatementPaperDom($('invoicePaper'));
@@ -2971,6 +3666,10 @@
     }
     if (state.previewMode === 'overlap') {
       renderOverlapPaperDom($('invoicePaper'));
+      return;
+    }
+    if (state.previewMode === 'progress') {
+      renderProgressPaperDom($('invoicePaper'));
       return;
     }
     var unlocked = isPro();
@@ -3273,6 +3972,39 @@
     }
   }
 
+  function syncProgressControls() {
+    var res = evaluateProgressQuoteAllowance(state.pq.quoteRows, state.pq.historyRows, state.pq.draftRows);
+    if ($('pqSummaryBanner')) {
+      if (res.status === 'HOLD_FOR_REVIEW') {
+        $('pqSummaryBanner').textContent = state.lang === 'zh'
+          ? ('🛑 已挂起人工复核（共 ' + res.reviewIssues.length + ' 项：漏映射 LineID / 贷项冲红 / 多版本报价不猜测）')
+          : ('🛑 Held for review (' + res.reviewIssues.length + ' item(s): unmapped LineIDs, credit notes, or changed quotes)');
+      } else if (res.overbilledLineCount > 0) {
+        $('pqSummaryBanner').textContent = state.lang === 'zh'
+          ? ('⚠️ 分项超额拦截：' + res.overbilledLineCount + ' 行超出报价额度 ' + res.formattedTotalOverbilled + '（项目累计 ' + res.formattedProjectCumulativeAfterDraft + ' / ' + res.formattedTotalQuoted + '）')
+          : ('⚠️ Flagged: ' + res.overbilledLineCount + ' line(s) over quote by ' + res.formattedTotalOverbilled + ' (project at ' + res.formattedProjectCumulativeAfterDraft + ' of ' + res.formattedTotalQuoted + ')');
+      } else {
+        $('pqSummaryBanner').textContent = state.lang === 'zh'
+          ? ('✓ 全部 ' + res.lineResults.length + ' 行在核准额度内 · 本次后剩余可开 ' + res.formattedTotalRemainingAfterDraft)
+          : ('✓ All ' + res.lineResults.length + ' quote line(s) within allowance · ' + res.formattedTotalRemainingAfterDraft + ' remaining after draft');
+      }
+    }
+    var pBox = $('pqIssueBox');
+    if (pBox) {
+      while (pBox.firstChild) pBox.removeChild(pBox.firstChild);
+      if (res.reviewIssues.length > 0) {
+        pBox.style.display = 'block';
+        res.reviewIssues.forEach(function (iss) {
+          var div = document.createElement('div');
+          div.textContent = '⚠️ [' + iss.code + '] ' + iss.detail;
+          pBox.appendChild(div);
+        });
+      } else {
+        pBox.style.display = 'none';
+      }
+    }
+  }
+
   function renderCrmPanel() {
     var listEl = $('crmSavedList');
     listEl.innerHTML = '';
@@ -3284,6 +4016,7 @@
     if ($('crmTabStatement')) $('crmTabStatement').classList.toggle('active', state.crmTab === 'statement');
     if ($('crmTabUnbilled')) $('crmTabUnbilled').classList.toggle('active', state.crmTab === 'unbilled');
     if ($('crmTabOverlap')) $('crmTabOverlap').classList.toggle('active', state.crmTab === 'overlap');
+    if ($('crmTabProgress')) $('crmTabProgress').classList.toggle('active', state.crmTab === 'progress');
 
     $('crmActionsClients').style.display = state.crmTab === 'clients' ? 'flex' : 'none';
     $('crmActionsCatalog').style.display = state.crmTab === 'catalog' ? 'flex' : 'none';
@@ -3291,7 +4024,8 @@
     if ($('crmStatementPane')) $('crmStatementPane').style.display = state.crmTab === 'statement' ? 'block' : 'none';
     if ($('crmUnbilledPane')) $('crmUnbilledPane').style.display = state.crmTab === 'unbilled' ? 'block' : 'none';
     if ($('crmOverlapPane')) $('crmOverlapPane').style.display = state.crmTab === 'overlap' ? 'block' : 'none';
-    listEl.style.display = (state.crmTab === 'statement' || state.crmTab === 'unbilled' || state.crmTab === 'overlap') ? 'none' : 'flex';
+    if ($('crmProgressPane')) $('crmProgressPane').style.display = state.crmTab === 'progress' ? 'block' : 'none';
+    listEl.style.display = (state.crmTab === 'statement' || state.crmTab === 'unbilled' || state.crmTab === 'overlap' || state.crmTab === 'progress') ? 'none' : 'flex';
 
     if (state.crmTab === 'statement') {
       if (!state.stmt.useDemo && !crmData.ledger.length) {
@@ -3310,6 +4044,11 @@
 
     if (state.crmTab === 'overlap') {
       syncOverlapControls();
+      return;
+    }
+
+    if (state.crmTab === 'progress') {
+      syncProgressControls();
       return;
     }
 
@@ -3681,6 +4420,7 @@
     var startInStatementMode = false;
     var startInUnbilledMode = false;
     var startInOverlapMode = false;
+    var startInProgressMode = false;
     try {
       var params = new URLSearchParams(window.location.search || '');
       if (params.get('template')) {
@@ -3693,6 +4433,8 @@
         startInUnbilledMode = true;
       } else if (params.get('mode') === 'overlap') {
         startInOverlapMode = true;
+      } else if (params.get('mode') === 'progress') {
+        startInProgressMode = true;
       }
       var savedLang = localStorage.getItem('craftleaf_lang');
       if (params.get('lang') === 'zh' || params.get('lang') === 'en') {
@@ -4178,6 +4920,107 @@
       });
     }
 
+    if ($('crmTabProgress')) {
+      $('crmTabProgress').addEventListener('click', function () {
+        state.crmTab = 'progress';
+        state.previewMode = 'progress';
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+    if ($('loadPqOver50Btn')) {
+      $('loadPqOver50Btn').addEventListener('click', function () {
+        state.pq.useDemo = true;
+        state.pq.quoteRows = SAMPLE_PROGRESS_QUOTE.slice();
+        state.pq.historyRows = SAMPLE_PROGRESS_HISTORY.slice();
+        state.pq.draftRows = SAMPLE_PROGRESS_DRAFT_OVER.slice();
+        state.previewMode = 'progress';
+        syncProgressControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('loadPqCleanBtn')) {
+      $('loadPqCleanBtn').addEventListener('click', function () {
+        state.pq.useDemo = true;
+        state.pq.quoteRows = SAMPLE_PROGRESS_QUOTE.slice();
+        state.pq.historyRows = SAMPLE_PROGRESS_HISTORY.slice();
+        state.pq.draftRows = SAMPLE_PROGRESS_DRAFT_CLEAN.slice();
+        state.previewMode = 'progress';
+        syncProgressControls();
+        updateInvoicePreview();
+      });
+    }
+    if ($('loadPqHoldBtn')) {
+      $('loadPqHoldBtn').addEventListener('click', function () {
+        state.pq.useDemo = true;
+        state.pq.quoteRows = SAMPLE_PROGRESS_QUOTE.slice();
+        state.pq.historyRows = SAMPLE_PROGRESS_HOLD_HISTORY.slice();
+        state.pq.draftRows = SAMPLE_PROGRESS_DRAFT_CLEAN.slice();
+        state.previewMode = 'progress';
+        syncProgressControls();
+        updateInvoicePreview();
+      });
+    }
+    function bindPqCsvLoader(btnId, inpId, applyFn) {
+      if ($(btnId) && $(inpId)) {
+        $(btnId).addEventListener('click', function () {
+          if (!isPro()) { openUnlockModal(); return; }
+          $(inpId).click();
+        });
+        $(inpId).addEventListener('change', function (e) {
+          if (!e.target.files || !e.target.files[0]) return;
+          var rd = new FileReader();
+          rd.onload = function (ev) {
+            state.pq.useDemo = false;
+            applyFn(String(ev.target.result || ''));
+            syncProgressControls();
+            updateInvoicePreview();
+            e.target.value = '';
+          };
+          rd.readAsText(e.target.files[0]);
+        });
+      }
+    }
+    bindPqCsvLoader('importPqQuoteCsvBtn', 'pqQuoteCsvFileInput', function (txt) {
+      state.pq.quoteRows = parseAcceptedQuoteCsvPq(txt);
+    });
+    bindPqCsvLoader('importPqHistCsvBtn', 'pqHistCsvFileInput', function (txt) {
+      state.pq.historyRows = parseProgressInvoiceCsvPq(txt, 'HISTORY');
+    });
+    bindPqCsvLoader('importPqDraftCsvBtn', 'pqDraftCsvFileInput', function (txt) {
+      state.pq.draftRows = parseProgressInvoiceCsvPq(txt, 'PROPOSED_DRAFT');
+    });
+    if ($('exportPqCheckCsvBtn')) {
+      $('exportPqCheckCsvBtn').addEventListener('click', function () {
+        if (!state.pq.useDemo && !isPro()) { openUnlockModal(); return; }
+        var csvRaw = serializeProgressCheckCsv(evaluateProgressQuoteAllowance(state.pq.quoteRows, state.pq.historyRows, state.pq.draftRows));
+        var blob = new Blob(['\uFEFF' + csvRaw], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'progress-quote-allowance-check-' + todayIso + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      });
+    }
+    if ($('printPqCheckBtn')) {
+      $('printPqCheckBtn').addEventListener('click', function () {
+        if (!state.pq.useDemo && !isPro()) { openUnlockModal(); return; }
+        prepareVectorPrint();
+        window.print();
+      });
+    }
+    if ($('backFromProgressBtn')) {
+      $('backFromProgressBtn').addEventListener('click', function () {
+        state.previewMode = 'invoice';
+        state.crmTab = 'clients';
+        renderCrmPanel();
+        updateInvoicePreview();
+      });
+    }
+
     if ($('importLedgerCsvBtn') && $('ledgerCsvFileInput')) {
       $('importLedgerCsvBtn').addEventListener('click', function () {
         if (!isPro()) { openUnlockModal(); return; }
@@ -4317,6 +5160,9 @@
       } else if (startInOverlapMode) {
         state.crmTab = 'overlap';
         state.previewMode = 'overlap';
+      } else if (startInProgressMode) {
+        state.crmTab = 'progress';
+        state.previewMode = 'progress';
       }
       renderCrmPanel();
       updateInvoicePreview();
